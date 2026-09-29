@@ -9,58 +9,38 @@ const posts = (await getCollection('posts', ({ data }) => !data.draft))
 ---
 
 <BaseLayout>
-	<section class="hero shell">
-		<div>
-			<div class="hero-identity">
-				<img src="/images/avatar.jpg" alt="King of Water 的头像" />
-				<p class="eyebrow">King of Water · 个人博客</p>
-			</div>
-			<h1>记录技术，<br /><span>也记录创造。</span></h1>
-			<p class="hero-copy">这里沉淀后端工程、Agent 探索和个人项目，也留下一些关于自己的长期记录。</p>
+	<section class="home-intro shell">
+		<div class="intro-main">
+			<p class="eyebrow">个人技术档案 · 2026</p>
+			<h1>后端、Agent<br />与个人项目。</h1>
+			<p>这里记录正在学习和实践的技术，也整理那些值得长期保留的项目过程。</p>
 		</div>
-		<aside class="hero-note">
-			<strong>现在正在做</strong>
-			<p>搭建自己的技术档案：把零散的学习、实践和项目，整理成能持续积累的内容。</p>
+		<aside class="intro-aside">
+			<img src="/images/avatar.jpg" alt="King of Water 的头像" />
+			<div>
+				<strong>King of Water</strong>
+				<p>持续学习，持续输出。</p>
+			</div>
 		</aside>
 	</section>
 
 	<section class="section shell" aria-labelledby="site-navigation-title">
-		<div class="section-head">
-			<h2 id="site-navigation-title">探索方向</h2>
-			<p>从一个方向开始阅读</p>
+		<div class="section-label">
+			<h2 id="site-navigation-title">栏目</h2>
+			<span>从一个方向开始</span>
 		</div>
-		<div class="section-grid">
-			<a class="section-card section-card-featured" href="/backend/">
-				<span>01 · BACKEND</span>
-				<h3>后端</h3>
-				<p>Java、服务端架构、数据库与工程实践。</p>
-				<b>查看文章 →</b>
-			</a>
-			<a class="section-card" href="/agent/">
-				<span>02 · AGENT</span>
-				<h3>Agent</h3>
-				<p>AI Agent、工作流、工具调用与应用探索。</p>
-				<b>查看文章 →</b>
-			</a>
-			<a class="section-card" href="/projects/">
-				<span>03 · PROJECTS</span>
-				<h3>个人项目</h3>
-				<p>从想法、设计到落地的项目记录。</p>
-				<b>查看项目 →</b>
-			</a>
-			<a class="section-card" href="/about/">
-				<span>04 · ABOUT</span>
-				<h3>个人介绍</h3>
-				<p>了解我正在关注什么，以及如何找到我。</p>
-				<b>认识我 →</b>
-			</a>
+		<div class="topic-list">
+			<a class="topic-row" href="/backend/"><span>01</span><h3>后端</h3><p>Java、服务端架构、数据库与工程实践。</p><b>→</b></a>
+			<a class="topic-row" href="/agent/"><span>02</span><h3>Agent</h3><p>AI Agent、工作流、工具调用与应用探索。</p><b>→</b></a>
+			<a class="topic-row" href="/projects/"><span>03</span><h3>个人项目</h3><p>从灵感、设计到上线的完整记录。</p><b>→</b></a>
+			<a class="topic-row" href="/about/"><span>04</span><h3>个人介绍</h3><p>了解这个站点，以及如何找到我。</p><b>→</b></a>
 		</div>
 	</section>
 
 	<section class="section shell">
-		<div class="section-head">
+		<div class="section-label">
 			<h2>最近更新</h2>
-			<p>最新的思考与实践记录</p>
+			<a href="/posts/">全部文章 →</a>
 		</div>
 		<div class="post-list">{posts.map((post) => <PostCard post={post} />)}</div>
 	</section>

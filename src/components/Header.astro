@@ -6,7 +6,10 @@ import { SITE } from '../config';
 	<nav class="nav shell" aria-label="主导航">
 		<a class="brand" href="/">
 			<img class="brand-mark" src="/images/avatar.jpg" alt={`${SITE.author} 的头像`} />
-			<span>{SITE.title}</span>
+			<span class="brand-copy">
+				<strong>{SITE.title}</strong>
+				<small>technical notes & projects</small>
+			</span>
 		</a>
 		<div class="nav-links">
 			<a href="/backend/">后端</a>
