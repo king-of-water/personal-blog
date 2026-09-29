@@ -6,6 +6,8 @@ import PostCard from '../components/PostCard.astro';
 const posts = (await getCollection('posts', ({ data }) => !data.draft))
 	.sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf())
 	.slice(0, 6);
+const featuredPost = posts.find((post) => post.data.featured);
+const recentPosts = posts.filter((post) => post.id !== featuredPost?.id);
 ---
 
 <BaseLayout>
@@ -18,11 +20,20 @@ const posts = (await getCollection('posts', ({ data }) => !data.draft))
 		<aside class="intro-aside">
 			<img src="/images/avatar.jpg" alt="King of Water 的头像" />
 			<div>
-				<strong>King of Water</strong>
-				<p>持续学习，持续输出。</p>
+				<span>NOW</span>
+				<strong>正在搭建个人技术档案</strong>
+				<p>从这个博客开始，把实践留下来。</p>
 			</div>
 		</aside>
 	</section>
+
+	{featuredPost && <section class="featured shell">
+		<div class="section-label"><h2>置顶</h2><span>从这里开始</span></div>
+		<a class="featured-post" href={`/posts/${featuredPost.id}/`}>
+			<div><span class="post-category">{featuredPost.data.category}</span><h2>{featuredPost.data.title}</h2><p>{featuredPost.data.description}</p></div>
+			<span aria-hidden="true">阅读 →</span>
+		</a>
+	</section>}
 
 	<section class="section shell" aria-labelledby="site-navigation-title">
 		<div class="section-label">
@@ -42,6 +53,6 @@ const posts = (await getCollection('posts', ({ data }) => !data.draft))
 			<h2>最近更新</h2>
 			<a href="/posts/">全部文章 →</a>
 		</div>
-		<div class="post-list">{posts.map((post) => <PostCard post={post} />)}</div>
+		<div class="post-list">{recentPosts.map((post) => <PostCard post={post} />)}</div>
 	</section>
 </BaseLayout>

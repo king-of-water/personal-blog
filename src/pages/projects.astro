@@ -1,5 +1,29 @@
 ---
-import CategoryPage from '../components/CategoryPage.astro';
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+
+const posts = (await getCollection('posts', ({ data }) => !data.draft && data.category === '个人项目'))
+	.sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
 ---
 
-<CategoryPage title="个人项目" eyebrow="Personal projects" description="从灵感、设计到上线，记录每个自己动手完成的项目。" />
+<BaseLayout title="个人项目" description="从灵感、设计到上线，记录每个自己动手完成的项目。">
+	<header class="page-intro shell">
+		<p class="eyebrow">Personal projects</p>
+		<h1>个人项目</h1>
+		<p>从灵感、设计到上线，记录每个自己动手完成的项目。</p>
+	</header>
+	<section class="project-section shell">
+		<a class="project-entry" href="/posts/how-this-blog-works/">
+			<div class="project-entry-top"><span>进行中</span><time>2026</time></div>
+			<h2>个人博客</h2>
+			<p>一个使用 Astro、GitHub 和 Cloudflare Pages 搭建的静态博客。它是这个站点的第一个长期项目。</p>
+			<div class="project-stack"><span>Astro</span><span>GitHub</span><span>Cloudflare Pages</span></div>
+			<b>项目记录 →</b>
+		</a>
+	</section>
+	<section class="section shell">
+		<div class="section-label"><h2>项目笔记</h2><span>过程与复盘</span></div>
+		<div class="post-list">{posts.map((post) => <PostCard post={post} />)}</div>
+	</section>
+</BaseLayout>
