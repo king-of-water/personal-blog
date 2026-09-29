@@ -1,0 +1,34 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from './PostCard.astro';
+
+interface Props {
+	title: '后端' | 'Agent' | '个人项目';
+	eyebrow: string;
+	description: string;
+}
+
+const { title, eyebrow, description } = Astro.props;
+const posts = (await getCollection('posts', ({ data }) => !data.draft && data.category === title))
+	.sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
+---
+
+<BaseLayout title={title} description={description}>
+	<header class="page-intro shell">
+		<p class="eyebrow">{eyebrow}</p>
+		<h1>{title}</h1>
+		<p>{description}</p>
+	</header>
+	<section class="category-content shell">
+		{posts.length > 0 ? (
+			<div class="post-list">{posts.map((post) => <PostCard post={post} />)}</div>
+		) : (
+			<div class="empty-state">
+				<p class="eyebrow">Coming soon</p>
+				<h2>内容正在整理</h2>
+				<p>第一篇 {title} 文章很快会出现在这里。</p>
+			</div>
+		)}
+	</section>
+</BaseLayout>

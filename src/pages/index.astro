@@ -11,19 +11,55 @@ const posts = (await getCollection('posts', ({ data }) => !data.draft))
 <BaseLayout>
 	<section class="hero shell">
 		<div>
-			<p class="eyebrow">Personal notes · 个人博客</p>
-			<h1>保持好奇，<br /><span>持续创造。</span></h1>
-			<p class="hero-copy">记录技术实践、问题拆解，以及那些值得反复思考的事情。</p>
+			<div class="hero-identity">
+				<img src="/images/avatar.jpg" alt="King of Water 的头像" />
+				<p class="eyebrow">King of Water · 个人博客</p>
+			</div>
+			<h1>记录技术，<br /><span>也记录创造。</span></h1>
+			<p class="hero-copy">这里沉淀后端工程、Agent 探索和个人项目，也留下一些关于自己的长期记录。</p>
 		</div>
 		<aside class="hero-note">
 			<strong>现在正在做</strong>
-			<p>搭建这个博客，并把零散的学习过程整理成可以长期积累的文章。</p>
+			<p>搭建自己的技术档案：把零散的学习、实践和项目，整理成能持续积累的内容。</p>
 		</aside>
+	</section>
+
+	<section class="section shell" aria-labelledby="site-navigation-title">
+		<div class="section-head">
+			<h2 id="site-navigation-title">探索方向</h2>
+			<p>从一个方向开始阅读</p>
+		</div>
+		<div class="section-grid">
+			<a class="section-card section-card-featured" href="/backend/">
+				<span>01 · BACKEND</span>
+				<h3>后端</h3>
+				<p>Java、服务端架构、数据库与工程实践。</p>
+				<b>查看文章 →</b>
+			</a>
+			<a class="section-card" href="/agent/">
+				<span>02 · AGENT</span>
+				<h3>Agent</h3>
+				<p>AI Agent、工作流、工具调用与应用探索。</p>
+				<b>查看文章 →</b>
+			</a>
+			<a class="section-card" href="/projects/">
+				<span>03 · PROJECTS</span>
+				<h3>个人项目</h3>
+				<p>从想法、设计到落地的项目记录。</p>
+				<b>查看项目 →</b>
+			</a>
+			<a class="section-card" href="/about/">
+				<span>04 · ABOUT</span>
+				<h3>个人介绍</h3>
+				<p>了解我正在关注什么，以及如何找到我。</p>
+				<b>认识我 →</b>
+			</a>
+		</div>
 	</section>
 
 	<section class="section shell">
 		<div class="section-head">
-			<h2>最近文章</h2>
+			<h2>最近更新</h2>
 			<p>最新的思考与实践记录</p>
 		</div>
 		<div class="post-list">{posts.map((post) => <PostCard post={post} />)}</div>
