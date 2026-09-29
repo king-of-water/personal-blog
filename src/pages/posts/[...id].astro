@@ -17,7 +17,19 @@ const allPosts = (await getCollection('posts', ({ data }) => !data.draft))
 const currentIndex = allPosts.findIndex((item) => item.id === post.id);
 const newerPost = allPosts[currentIndex - 1];
 const olderPost = allPosts[currentIndex + 1];
-const readingMinutes = Math.max(1, Math.ceil(post.body.length / 500));
+const articleText = post.body
+	.replace(/```[\s\S]*?```/g, ' ')
+	.replace(/<[^>]+>/g, ' ')
+	.replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
+	.replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+	.replace(/[`#>*_|~]/g, ' ');
+const hanCharacterCount = articleText.match(/\p{Script=Han}/gu)?.length ?? 0;
+const latinWordCount = articleText
+	.replace(/\p{Script=Han}/gu, ' ')
+	.match(/[A-Za-z0-9]+(?:[-'][A-Za-z0-9]+)*/g)?.length ?? 0;
+const exactWordCount = hanCharacterCount + latinWordCount;
+const approximateWordCount = Math.max(100, Math.round(exactWordCount / 100) * 100);
+const readingMinutes = Math.max(1, Math.ceil(exactWordCount / 500));
 ---
 
 <BaseLayout title={post.data.title} description={post.data.description}>
@@ -34,7 +46,7 @@ const readingMinutes = Math.max(1, Math.ceil(post.body.length / 500));
 		)}
 		<article class="article">
 			<header class="article-header">
-				<div class="article-meta"><span>{post.data.category}</span><span>·</span><time datetime={post.data.publishedAt.toISOString()}>{date}</time><span>·</span><span>约 {readingMinutes} 分钟阅读</span><span class="article-view-stat" data-view-stat hidden><span>·</span><span data-view-count>0 次浏览</span></span></div>
+				<div class="article-meta"><span>{post.data.category}</span><span>·</span><time datetime={post.data.publishedAt.toISOString()}>{date}</time><span>·</span><span>约 {approximateWordCount.toLocaleString('zh-CN')} 字</span><span>·</span><span>约 {readingMinutes} 分钟阅读</span><span class="article-view-stat" data-view-stat hidden><span>·</span><span data-view-count>0 次浏览</span></span></div>
 				<h1>{post.data.title}</h1>
 				<p class="article-description">{post.data.description}</p>
 			</header>
