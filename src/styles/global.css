@@ -29,8 +29,8 @@ img { max-width: 100%; height: auto; }
 main { min-height: calc(100vh - 150px); }
 
 .eyebrow { margin: 0; color: var(--accent); font-size: 11px; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; }
-.home-intro { display: grid; grid-template-columns: 1fr 270px; gap: 70px; align-items: end; padding: 92px 0 78px; border-bottom: 1px solid var(--line); }
-.intro-main h1 { margin: 15px 0 22px; font-size: clamp(43px, 6.2vw, 75px); font-weight: 720; line-height: 1.08; letter-spacing: -0.065em; }
+.home-intro { display: grid; grid-template-columns: 1fr 300px; gap: 70px; align-items: end; padding: 60px 0 52px; border-bottom: 1px solid var(--line); }
+.intro-main h1 { margin: 13px 0 16px; font-size: clamp(36px, 4.5vw, 56px); font-weight: 720; line-height: 1.08; letter-spacing: -0.06em; }
 .intro-main > p:last-child { max-width: 550px; margin: 0; color: var(--muted); font-size: 17px; }
 .intro-aside { display: flex; align-items: center; gap: 14px; padding: 18px 0; border-top: 2px solid var(--text); }
 .intro-aside img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; }
@@ -128,8 +128,8 @@ main { min-height: calc(100vh - 150px); }
 	.shell { width: min(calc(100% - 32px), var(--max-width)); }
 	.nav { min-height: auto; align-items: flex-start; flex-direction: column; gap: 13px; padding: 17px 0; }
 	.nav-links { width: 100%; gap: 14px; overflow-x: auto; white-space: nowrap; padding-bottom: 2px; }
-	.home-intro { grid-template-columns: 1fr; gap: 34px; padding: 58px 0 52px; }
-	.intro-main h1 { font-size: clamp(40px, 12vw, 58px); }
+	.home-intro { grid-template-columns: 1fr; gap: 30px; padding: 48px 0 42px; }
+	.intro-main h1 { font-size: clamp(36px, 11vw, 52px); }
 	.intro-aside { max-width: 280px; }
 	.featured { padding-top: 24px; }
 	.featured-post { display: block; padding: 20px 0; }

@@ -6,34 +6,24 @@ import PostCard from '../components/PostCard.astro';
 const posts = (await getCollection('posts', ({ data }) => !data.draft))
 	.sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf())
 	.slice(0, 6);
-const featuredPost = posts.find((post) => post.data.featured);
-const recentPosts = posts.filter((post) => post.id !== featuredPost?.id);
 ---
 
 <BaseLayout>
 	<section class="home-intro shell">
 		<div class="intro-main">
-			<p class="eyebrow">个人技术档案 · 2026</p>
-			<h1>后端、Agent<br />与个人项目。</h1>
-			<p>这里记录正在学习和实践的技术，也整理那些值得长期保留的项目过程。</p>
+			<p class="eyebrow">King of Water · 个人博客</p>
+			<h1>你好，我是<br />King of Water。</h1>
+			<p>这里记录后端、Agent 实践和个人项目，也记录我如何把想法做出来。</p>
 		</div>
 		<aside class="intro-aside">
 			<img src="/images/avatar.jpg" alt="King of Water 的头像" />
 			<div>
-				<span>NOW</span>
-				<strong>正在搭建个人技术档案</strong>
-				<p>从这个博客开始，把实践留下来。</p>
+				<span>ABOUT THIS SITE</span>
+				<strong>一个持续更新的个人空间</strong>
+				<p>从一篇文章、一个项目开始。</p>
 			</div>
 		</aside>
 	</section>
-
-	{featuredPost && <section class="featured shell">
-		<div class="section-label"><h2>置顶</h2><span>从这里开始</span></div>
-		<a class="featured-post" href={`/posts/${featuredPost.id}/`}>
-			<div><span class="post-category">{featuredPost.data.category}</span><h2>{featuredPost.data.title}</h2><p>{featuredPost.data.description}</p></div>
-			<span aria-hidden="true">阅读 →</span>
-		</a>
-	</section>}
 
 	<section class="section shell" aria-labelledby="site-navigation-title">
 		<div class="section-label">
@@ -53,6 +43,6 @@ const recentPosts = posts.filter((post) => post.id !== featuredPost?.id);
 			<h2>最近更新</h2>
 			<a href="/posts/">全部文章 →</a>
 		</div>
-		<div class="post-list">{recentPosts.map((post) => <PostCard post={post} />)}</div>
+		<div class="post-list">{posts.map((post) => <PostCard post={post} />)}</div>
 	</section>
 </BaseLayout>
