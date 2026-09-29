@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE } from '../config';
+---
+
+<BaseLayout title="关于">
+	<header class="page-intro shell">
+		<p class="eyebrow">About</p>
+		<h1>关于这个博客</h1>
+		<p>这是 {SITE.author} 的个人空间，用来沉淀学习、实践与思考。</p>
+	</header>
+	<section class="about-grid shell">
+		<div class="info-card">
+			<h2>为什么写</h2>
+			<p>写作让模糊的想法变得具体，也让解决过的问题不必从头再来。这里的内容会保持真实、清晰，并持续修订。</p>
+		</div>
+		<div class="info-card">
+			<h2>找到我</h2>
+			<p>代码和公开项目会同步到 GitHub。</p>
+			<a class="text-link" href={SITE.github} target="_blank" rel="noreferrer">访问 GitHub ↗</a>
+		</div>
+	</section>
+</BaseLayout>

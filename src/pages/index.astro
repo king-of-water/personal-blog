@@ -1,0 +1,31 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+
+const posts = (await getCollection('posts', ({ data }) => !data.draft))
+	.sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf())
+	.slice(0, 6);
+---
+
+<BaseLayout>
+	<section class="hero shell">
+		<div>
+			<p class="eyebrow">Personal notes · 个人博客</p>
+			<h1>保持好奇，<br /><span>持续创造。</span></h1>
+			<p class="hero-copy">记录技术实践、问题拆解，以及那些值得反复思考的事情。</p>
+		</div>
+		<aside class="hero-note">
+			<strong>现在正在做</strong>
+			<p>搭建这个博客，并把零散的学习过程整理成可以长期积累的文章。</p>
+		</aside>
+	</section>
+
+	<section class="section shell">
+		<div class="section-head">
+			<h2>最近文章</h2>
+			<p>最新的思考与实践记录</p>
+		</div>
+		<div class="post-list">{posts.map((post) => <PostCard post={post} />)}</div>
+	</section>
+</BaseLayout>

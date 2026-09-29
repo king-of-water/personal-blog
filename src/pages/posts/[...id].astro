@@ -1,0 +1,25 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+	const posts = await getCollection('posts', ({ data }) => !data.draft);
+	return posts.map((post) => ({ params: { id: post.id }, props: { post } }));
+}
+
+interface Props { post: CollectionEntry<'posts'> }
+const { post } = Astro.props;
+const { Content } = await render(post);
+const date = new Intl.DateTimeFormat('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' }).format(post.data.publishedAt);
+---
+
+<BaseLayout title={post.data.title} description={post.data.description}>
+	<article class="article">
+		<header class="article-header">
+			<div class="article-meta"><time datetime={post.data.publishedAt.toISOString()}>{date}</time><span>·</span><span>{post.data.tags.join(' / ')}</span></div>
+			<h1>{post.data.title}</h1>
+			<p class="article-description">{post.data.description}</p>
+		</header>
+		<div class="prose"><Content /></div>
+	</article>
+</BaseLayout>

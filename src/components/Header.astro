@@ -1,0 +1,17 @@
+---
+import { SITE } from '../config';
+---
+
+<header class="site-header">
+	<nav class="nav shell" aria-label="主导航">
+		<a class="brand" href="/">
+			<span class="brand-mark" aria-hidden="true"></span>
+			<span>{SITE.title}</span>
+		</a>
+		<div class="nav-links">
+			<a href="/posts/">文章</a>
+			<a href="/about/">关于</a>
+			<a href={SITE.github} target="_blank" rel="noreferrer">GitHub</a>
+		</div>
+	</nav>
+</header>
