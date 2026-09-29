@@ -91,6 +91,7 @@ main { min-height: calc(100vh - 150px); }
 .article-header h1 { margin: 14px 0 16px; font-size: clamp(36px, 5vw, 58px); line-height: 1.12; letter-spacing: -0.05em; }
 .article-description { color: var(--muted); font-size: 18px; }
 .article-meta { display: flex; gap: 12px; color: var(--muted); font-size: 12px; }
+.article-view-stat { display: contents; }
 .prose { font-size: 16px; }
 .prose h2 { margin: 2.4em 0 0.7em; font-size: 28px; letter-spacing: -0.035em; }
 .prose h3 { margin: 2em 0 0.6em; font-size: 21px; }
@@ -121,6 +122,14 @@ main { min-height: calc(100vh - 150px); }
 .article-sidebar a:hover { color: var(--accent); }
 .article-sidebar a.is-active { border-left-color: var(--accent); background: var(--accent-soft); color: var(--accent); font-weight: 650; }
 .article-sidebar li:has(a.is-active)::before { color: var(--accent); font-weight: 700; }
+.article-reactions { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-top: 64px; padding: 22px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.article-reactions[hidden] { display: none; }
+.article-reactions p { margin: 0; color: var(--muted); font-size: 13px; }
+.like-button { display: inline-flex; align-items: center; gap: 7px; padding: 8px 13px; border: 1px solid var(--line); border-radius: 999px; background: transparent; color: var(--text); font: inherit; font-size: 13px; cursor: pointer; transition: color 150ms ease, border-color 150ms ease, background-color 150ms ease; }
+.like-button:hover, .like-button.is-liked { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+.like-button:disabled { cursor: wait; opacity: 0.65; }
+.like-button b { min-width: 1ch; font-size: 12px; font-variant-numeric: tabular-nums; }
+.like-icon { font-size: 17px; line-height: 1; }
 .article-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line); }
 .article-nav a:last-child { text-align: right; }
 .article-nav small { display: block; color: var(--muted); font-size: 11px; }
@@ -170,7 +179,9 @@ main { min-height: calc(100vh - 150px); }
 	.page-intro { padding: 54px 0 32px; }
 	.article-layout { width: min(calc(100% - 32px), 720px); }
 	.article { padding: 52px 0 72px; }
+	.article-meta { flex-wrap: wrap; gap: 7px 10px; }
 	.article-toc ol { grid-template-columns: 1fr; }
+	.article-reactions { align-items: flex-start; flex-direction: column; gap: 12px; }
 	.article-nav { grid-template-columns: 1fr; gap: 16px; margin-top: 46px; }
 	.article-nav a:last-child { text-align: left; }
 	.about-grid { grid-template-columns: 1fr; gap: 30px; padding: 40px 0 70px; }

@@ -1,0 +1,16 @@
+CREATE TABLE IF NOT EXISTS post_stats (
+	slug TEXT PRIMARY KEY,
+	views INTEGER NOT NULL DEFAULT 0,
+	likes INTEGER NOT NULL DEFAULT 0,
+	updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS post_likes (
+	slug TEXT NOT NULL,
+	visitor_hash TEXT NOT NULL,
+	created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY (slug, visitor_hash),
+	FOREIGN KEY (slug) REFERENCES post_stats(slug) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_post_likes_slug ON post_likes(slug);

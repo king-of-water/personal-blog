@@ -34,11 +34,19 @@ const readingMinutes = Math.max(1, Math.ceil(post.body.length / 500));
 		)}
 		<article class="article">
 			<header class="article-header">
-				<div class="article-meta"><span>{post.data.category}</span><span>·</span><time datetime={post.data.publishedAt.toISOString()}>{date}</time><span>·</span><span>约 {readingMinutes} 分钟阅读</span></div>
+				<div class="article-meta"><span>{post.data.category}</span><span>·</span><time datetime={post.data.publishedAt.toISOString()}>{date}</time><span>·</span><span>约 {readingMinutes} 分钟阅读</span><span class="article-view-stat" data-view-stat hidden><span>·</span><span data-view-count>0 次浏览</span></span></div>
 				<h1>{post.data.title}</h1>
 				<p class="article-description">{post.data.description}</p>
 			</header>
 			<div class="prose"><Content /></div>
+			<div class="article-reactions" data-post-stats data-slug={post.id} hidden>
+				<p>如果这篇文章对你有帮助</p>
+				<button type="button" class="like-button" data-like-button aria-pressed="false">
+					<span class="like-icon" aria-hidden="true">♡</span>
+					<span data-like-label>赞一下</span>
+					<b data-like-count>0</b>
+				</button>
+			</div>
 			<nav class="article-nav" aria-label="文章导航">
 				{newerPost ? <a href={`/posts/${newerPost.id}/`}><small>较新文章</small><strong>← {newerPost.data.title}</strong></a> : <span />}
 				{olderPost ? <a href={`/posts/${olderPost.id}/`}><small>较早文章</small><strong>{olderPost.data.title} →</strong></a> : <span />}
@@ -83,4 +91,64 @@ const readingMinutes = Math.max(1, Math.ceil(post.body.length / 500));
 			updateActiveSection();
 		</script>
 	)}
+	<script>
+		const statsRoot = document.querySelector<HTMLElement>('[data-post-stats]');
+		const viewStat = document.querySelector<HTMLElement>('[data-view-stat]');
+		const viewCount = document.querySelector<HTMLElement>('[data-view-count]');
+		const likeButton = document.querySelector<HTMLButtonElement>('[data-like-button]');
+		const likeLabel = document.querySelector<HTMLElement>('[data-like-label]');
+		const likeCount = document.querySelector<HTMLElement>('[data-like-count]');
+
+		if (statsRoot && viewStat && viewCount && likeButton && likeLabel && likeCount) {
+			const slug = statsRoot.dataset.slug;
+			const visitorStorageKey = 'king-of-water:visitor';
+			let visitorId = localStorage.getItem(visitorStorageKey);
+			if (!visitorId) {
+				visitorId = crypto.randomUUID();
+				localStorage.setItem(visitorStorageKey, visitorId);
+			}
+
+			const renderStats = (stats: { views: number; likes: number; liked: boolean }) => {
+				viewCount.textContent = `${stats.views.toLocaleString('zh-CN')} 次浏览`;
+				likeCount.textContent = stats.likes.toLocaleString('zh-CN');
+				likeLabel.textContent = stats.liked ? '已点赞' : '赞一下';
+				likeButton.setAttribute('aria-pressed', String(stats.liked));
+				likeButton.classList.toggle('is-liked', stats.liked);
+				likeButton.querySelector('.like-icon')!.textContent = stats.liked ? '♥' : '♡';
+				viewStat.hidden = false;
+				statsRoot.hidden = false;
+			};
+
+			const requestStats = async (action?: 'view' | 'like') => {
+				const endpoint = `/api/stats/${encodeURIComponent(slug!)}${action ? '' : `?visitor=${encodeURIComponent(visitorId!)}`}`;
+				const response = await fetch(endpoint, action ? {
+					method: 'POST',
+					headers: { 'content-type': 'application/json' },
+					body: JSON.stringify({ action, visitorId }),
+				} : undefined);
+				if (!response.ok) throw new Error('statistics unavailable');
+				return response.json();
+			};
+
+			const today = new Date().toISOString().slice(0, 10);
+			const viewStorageKey = `king-of-water:view:${slug}:${today}`;
+			requestStats(localStorage.getItem(viewStorageKey) ? undefined : 'view')
+				.then((stats) => {
+					renderStats(stats);
+					localStorage.setItem(viewStorageKey, '1');
+				})
+				.catch(() => {});
+
+			likeButton.addEventListener('click', async () => {
+				likeButton.disabled = true;
+				try {
+					renderStats(await requestStats('like'));
+				} catch {
+					// Keep the article usable if the statistics service is temporarily unavailable.
+				} finally {
+					likeButton.disabled = false;
+				}
+			});
+		}
+	</script>
 </BaseLayout>
