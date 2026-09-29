@@ -1,7 +1,7 @@
 export const SITE = {
-	title: 'King of Water',
+	title: 'king-of-water',
 	description: '记录技术、思考与持续创造。',
-	author: 'King of Water',
+	author: 'king-of-water',
 	url: 'https://example.com',
 	github: 'https://github.com/king-of-water',
 };

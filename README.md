@@ -1,4 +1,4 @@
-# King of Water Blog
+# king-of-water Blog
 
 个人博客，使用 Astro 构建，面向 Cloudflare Pages 静态部署。
 
