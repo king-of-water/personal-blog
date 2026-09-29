@@ -22,6 +22,16 @@ const readingMinutes = Math.max(1, Math.ceil(post.body.length / 500));
 
 <BaseLayout title={post.data.title} description={post.data.description}>
 	<div class="article-layout">
+		{tableOfContents.length >= 3 && (
+			<aside class="article-sidebar" aria-label="文章目录">
+				<div class="article-sidebar-inner">
+					<strong>本文目录</strong>
+					<ol>
+						{tableOfContents.map((heading) => <li><a href={`#${heading.slug}`} data-toc-link>{heading.text}</a></li>)}
+					</ol>
+				</div>
+			</aside>
+		)}
 		<article class="article">
 			<header class="article-header">
 				<div class="article-meta"><span>{post.data.category}</span><span>·</span><time datetime={post.data.publishedAt.toISOString()}>{date}</time><span>·</span><span>约 {readingMinutes} 分钟阅读</span></div>
@@ -34,15 +44,43 @@ const readingMinutes = Math.max(1, Math.ceil(post.body.length / 500));
 				{olderPost ? <a href={`/posts/${olderPost.id}/`}><small>较早文章</small><strong>{olderPost.data.title} →</strong></a> : <span />}
 			</nav>
 		</article>
-		{tableOfContents.length >= 3 && (
-			<aside class="article-sidebar" aria-label="文章目录">
-				<div class="article-sidebar-inner">
-					<strong>本文目录</strong>
-					<ol>
-						{tableOfContents.map((heading) => <li><a href={`#${heading.slug}`}>{heading.text}</a></li>)}
-					</ol>
-				</div>
-			</aside>
-		)}
 	</div>
+	{tableOfContents.length >= 3 && (
+		<script>
+			const tocLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]'));
+			const sections = tocLinks
+				.map((link) => document.getElementById(decodeURIComponent(link.hash.slice(1))))
+				.filter((section): section is HTMLElement => section !== null);
+			let ticking = false;
+
+			const updateActiveSection = () => {
+				const marker = window.scrollY + Math.min(180, window.innerHeight * 0.28);
+				let activeSection = sections[0];
+				for (const section of sections) {
+					if (section.offsetTop <= marker) activeSection = section;
+					else break;
+				}
+
+				for (const link of tocLinks) {
+					const isActive = activeSection !== undefined && decodeURIComponent(link.hash.slice(1)) === activeSection.id;
+					link.classList.toggle('is-active', isActive);
+					if (isActive) link.setAttribute('aria-current', 'location');
+					else link.removeAttribute('aria-current');
+				}
+				ticking = false;
+			};
+
+			const requestUpdate = () => {
+				if (!ticking) {
+					ticking = true;
+					window.requestAnimationFrame(updateActiveSection);
+				}
+			};
+
+			window.addEventListener('scroll', requestUpdate, { passive: true });
+			window.addEventListener('resize', requestUpdate);
+			window.addEventListener('hashchange', requestUpdate);
+			updateActiveSection();
+		</script>
+	)}
 </BaseLayout>
