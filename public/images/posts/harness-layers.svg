@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Prompt、Context 与 Harness 的层次关系</title>
+  <desc id="desc">Prompt 位于 Context 内部，Context 由 Harness 组织，Harness 还连接状态、工具、权限与验证。</desc>
+  <rect width="1200" height="720" fill="#f7f7f4"/>
+  <text x="80" y="82" fill="#1d201e" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="34" font-weight="700">Prompt、Context 与 Harness</text>
+  <text x="80" y="118" fill="#70756f" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="18">从一次指令，到一个能够持续行动并接受约束的系统</text>
+
+  <rect x="80" y="160" width="1040" height="470" rx="28" fill="#e6f0eb" stroke="#17684f" stroke-width="3"/>
+  <text x="112" y="207" fill="#17684f" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="18" font-weight="700">HARNESS</text>
+  <text x="112" y="239" fill="#285f4d" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="17">循环 · 工具 · 状态 · 权限 · 验证 · 编排</text>
+
+  <rect x="280" y="276" width="640" height="274" rx="24" fill="#fcfcfa" stroke="#70756f" stroke-width="2"/>
+  <text x="312" y="320" fill="#555b56" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="18" font-weight="700">CONTEXT</text>
+  <text x="312" y="351" fill="#70756f" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="16">模型本轮真正看见的信息</text>
+
+  <rect x="420" y="388" width="360" height="108" rx="20" fill="#1d201e"/>
+  <text x="452" y="432" fill="#fcfcfa" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="18" font-weight="700">PROMPT</text>
+  <text x="452" y="466" fill="#cfd4cf" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="16">当前任务、规则与表达方式</text>
+
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="16" fill="#1d201e">
+    <rect x="112" y="300" width="132" height="54" rx="13" fill="#fcfcfa" stroke="#b9c9c0"/><text x="148" y="334">项目状态</text>
+    <rect x="112" y="376" width="132" height="54" rx="13" fill="#fcfcfa" stroke="#b9c9c0"/><text x="148" y="410">工具执行</text>
+    <rect x="112" y="452" width="132" height="54" rx="13" fill="#fcfcfa" stroke="#b9c9c0"/><text x="148" y="486">权限边界</text>
+    <rect x="956" y="300" width="132" height="54" rx="13" fill="#fcfcfa" stroke="#b9c9c0"/><text x="992" y="334">外部记忆</text>
+    <rect x="956" y="376" width="132" height="54" rx="13" fill="#fcfcfa" stroke="#b9c9c0"/><text x="992" y="410">环境反馈</text>
+    <rect x="956" y="452" width="132" height="54" rx="13" fill="#fcfcfa" stroke="#b9c9c0"/><text x="992" y="486">完成验证</text>
+  </g>
+
+  <path d="M244 327 H280 M244 403 H280 M244 479 H280 M920 327 H956 M920 403 H956 M920 479 H956" stroke="#17684f" stroke-width="3" stroke-linecap="round"/>
+  <text x="80" y="682" fill="#70756f" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="16">模型负责生成候选动作；Harness 决定动作在什么状态、权限与验证条件下发生。</text>
+</svg>
