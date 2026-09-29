@@ -85,7 +85,8 @@ main { min-height: calc(100vh - 150px); }
 .empty-state h2 { margin: 0 0 5px; font-size: 22px; letter-spacing: -0.035em; }
 .empty-state p:last-child { margin: 0; color: var(--muted); }
 
-.article { width: min(calc(100% - 48px), 720px); margin: 0 auto; padding: 72px 0 96px; }
+.article-layout { display: grid; grid-template-columns: minmax(0, 720px) 220px; justify-content: center; gap: 58px; width: min(calc(100% - 48px), 1080px); margin: 0 auto; }
+.article { width: 100%; margin: 0; padding: 72px 0 96px; }
 .article-header { padding-bottom: 40px; margin-bottom: 42px; border-bottom: 1px solid var(--line); }
 .article-header h1 { margin: 14px 0 16px; font-size: clamp(36px, 5vw, 58px); line-height: 1.12; letter-spacing: -0.05em; }
 .article-description { color: var(--muted); font-size: 18px; }
@@ -104,12 +105,20 @@ main { min-height: calc(100vh - 150px); }
 .prose th, .prose td { min-width: 130px; padding: 10px 12px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
 .prose th { background: #eceee9; font-weight: 650; }
 .prose img { display: block; width: 100%; margin: 2em 0; border: 1px solid var(--line); background: var(--paper); }
-.article-toc { margin: 36px 0 46px; padding: 22px 24px; border-top: 2px solid var(--text); border-bottom: 1px solid var(--line); background: rgba(252, 252, 250, 0.55); }
+.article-toc { display: none; margin: 36px 0 46px; padding: 22px 24px; border-top: 2px solid var(--text); border-bottom: 1px solid var(--line); background: rgba(252, 252, 250, 0.55); }
 .article-toc > strong { display: block; margin-bottom: 10px; font-size: 13px; letter-spacing: 0.1em; }
 .article-toc ol { display: grid; grid-template-columns: 1fr 1fr; gap: 7px 30px; margin: 0; padding-left: 22px; }
 .article-toc li { padding-left: 3px; color: var(--muted); font-size: 14px; }
 .article-toc a { color: var(--text); text-decoration: none; }
 .article-toc a:hover { color: var(--accent); }
+.article-sidebar { min-width: 0; padding-top: 198px; }
+.article-sidebar-inner { position: sticky; top: 28px; max-height: calc(100vh - 56px); overflow-y: auto; padding: 17px 0 18px; border-top: 2px solid var(--text); border-bottom: 1px solid var(--line); }
+.article-sidebar strong { display: block; margin-bottom: 11px; color: var(--accent); font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0.1em; }
+.article-sidebar ol { margin: 0; padding: 0; list-style: none; counter-reset: toc; }
+.article-sidebar li { position: relative; margin: 0; padding: 6px 0 6px 26px; counter-increment: toc; color: var(--muted); font-size: 12px; line-height: 1.45; }
+.article-sidebar li::before { content: counter(toc, decimal-leading-zero); position: absolute; left: 0; top: 7px; color: #a2a7a1; font: 10px ui-monospace, SFMono-Regular, Menlo, monospace; }
+.article-sidebar a { display: block; color: inherit; transition: color 150ms ease, transform 150ms ease; }
+.article-sidebar a:hover { color: var(--accent); transform: translateX(2px); }
 .article-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line); }
 .article-nav a:last-child { text-align: right; }
 .article-nav small { display: block; color: var(--muted); font-size: 11px; }
@@ -135,6 +144,12 @@ main { min-height: calc(100vh - 150px); }
 .footer-links { display: flex; flex-wrap: wrap; gap: 16px; }
 .footer-links a:hover { color: var(--accent); }
 
+@media (max-width: 1080px) {
+	.article-layout { display: block; width: min(calc(100% - 48px), 720px); }
+	.article-sidebar { display: none; }
+	.article-toc { display: block; }
+}
+
 @media (max-width: 760px) {
 	.shell { width: min(calc(100% - 32px), var(--max-width)); }
 	.nav { min-height: auto; align-items: flex-start; flex-direction: column; gap: 13px; padding: 17px 0; }
@@ -151,7 +166,8 @@ main { min-height: calc(100vh - 150px); }
 	.post-card { grid-template-columns: 1fr; gap: 8px; padding: 18px 0; }
 	.post-date { padding: 0; }
 	.page-intro { padding: 54px 0 32px; }
-	.article { width: min(calc(100% - 32px), 720px); padding: 52px 0 72px; }
+	.article-layout { width: min(calc(100% - 32px), 720px); }
+	.article { padding: 52px 0 72px; }
 	.article-toc ol { grid-template-columns: 1fr; }
 	.article-nav { grid-template-columns: 1fr; gap: 16px; margin-top: 46px; }
 	.article-nav a:last-child { text-align: left; }

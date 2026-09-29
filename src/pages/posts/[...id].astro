@@ -9,7 +9,8 @@ export async function getStaticPaths() {
 
 interface Props { post: CollectionEntry<'posts'> }
 const { post } = Astro.props;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
+const tableOfContents = headings.filter((heading) => heading.depth === 2);
 const date = new Intl.DateTimeFormat('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' }).format(post.data.publishedAt);
 const allPosts = (await getCollection('posts', ({ data }) => !data.draft))
 	.sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
@@ -20,16 +21,28 @@ const readingMinutes = Math.max(1, Math.ceil(post.body.length / 500));
 ---
 
 <BaseLayout title={post.data.title} description={post.data.description}>
-	<article class="article">
-		<header class="article-header">
-			<div class="article-meta"><span>{post.data.category}</span><span>·</span><time datetime={post.data.publishedAt.toISOString()}>{date}</time><span>·</span><span>约 {readingMinutes} 分钟阅读</span></div>
-			<h1>{post.data.title}</h1>
-			<p class="article-description">{post.data.description}</p>
-		</header>
-		<div class="prose"><Content /></div>
-		<nav class="article-nav" aria-label="文章导航">
-			{newerPost ? <a href={`/posts/${newerPost.id}/`}><small>较新文章</small><strong>← {newerPost.data.title}</strong></a> : <span />}
-			{olderPost ? <a href={`/posts/${olderPost.id}/`}><small>较早文章</small><strong>{olderPost.data.title} →</strong></a> : <span />}
-		</nav>
-	</article>
+	<div class="article-layout">
+		<article class="article">
+			<header class="article-header">
+				<div class="article-meta"><span>{post.data.category}</span><span>·</span><time datetime={post.data.publishedAt.toISOString()}>{date}</time><span>·</span><span>约 {readingMinutes} 分钟阅读</span></div>
+				<h1>{post.data.title}</h1>
+				<p class="article-description">{post.data.description}</p>
+			</header>
+			<div class="prose"><Content /></div>
+			<nav class="article-nav" aria-label="文章导航">
+				{newerPost ? <a href={`/posts/${newerPost.id}/`}><small>较新文章</small><strong>← {newerPost.data.title}</strong></a> : <span />}
+				{olderPost ? <a href={`/posts/${olderPost.id}/`}><small>较早文章</small><strong>{olderPost.data.title} →</strong></a> : <span />}
+			</nav>
+		</article>
+		{tableOfContents.length >= 3 && (
+			<aside class="article-sidebar" aria-label="文章目录">
+				<div class="article-sidebar-inner">
+					<strong>本文目录</strong>
+					<ol>
+						{tableOfContents.map((heading) => <li><a href={`#${heading.slug}`}>{heading.text}</a></li>)}
+					</ol>
+				</div>
+			</aside>
+		)}
+	</div>
 </BaseLayout>
