@@ -361,7 +361,33 @@ maxmemory-clients 5%
 
 `allkeys-lru` 适合数据可重新生成的纯缓存。当 Redis 中的数据承担状态或快照源角色时，淘汰任意 Key 可能直接造成不完整结果。
 
-`noeviction` 会在内存不足时拒绝可能增加内存的命令，让错误更显式，但客户端必须正确处理失败。选择策略前先定义 Redis 里的数据能否丢失，以及丢失后由谁重建。
+这里还有一个容易被忽略的风险：同一实例里可能不只有缓存，还放着分布式锁。典型的 Redis 锁会通过下面的命令写入一个带过期时间的 Key：
+
+```text
+SET lock:order:123 6f19c8... NX PX 30000
+```
+
+假设线程 A 拿到锁后开始处理订单，锁的租约是 30 秒。5 秒后，大批量读取产生的客户端缓冲区把实例推过 `maxmemory`，锁 Key 被淘汰。线程 B 此时再次执行 `SET ... NX` 会成功，因为从 Redis 看，这个 Key 已经不存在。A 并不知道自己的锁提前消失，仍会继续执行，于是两个线程同时进入临界区。
+
+这和“业务执行超过 30 秒，锁自然过期”不是一回事。后者属于租约设计问题，前者则是内存淘汰绕过了原本约定的有效期。排查时可以用 `expired_keys` 与 `evicted_keys` 区分两条路径：前者增长表示 TTL 到期，后者增长表示 Key 因内存压力被主动删除。
+
+不同淘汰策略对锁的影响如下：
+
+| 策略 | 锁 Key 是否可能被淘汰 | 原因 |
+| --- | --- | --- |
+| `allkeys-lru` | 会 | 所有 Key 都在候选集合中 |
+| `allkeys-lfu` / `allkeys-random` | 会 | 策略不同，但同样允许淘汰任意 Key |
+| `volatile-lru` | 会 | 正确的锁通常带 TTL，恰好属于 `volatile` Key |
+| `volatile-lfu` / `volatile-random` / `volatile-ttl` | 会 | 只要锁带过期时间，就可能进入候选集合 |
+| `noeviction` | 不会因内存策略被删除 | 内存不足时，可能增加内存的写命令会失败 |
+
+因此，把锁改成带 TTL 后再使用 `volatile-lru`，并不能保护它。LRU 中的“最近使用”也不是生存承诺；Redis 使用近似 LRU，内存持续紧张时，即使锁刚被访问过，也不能把正确性建立在它“大概率不会被选中”上。
+
+更稳妥的做法是把锁与可淘汰缓存放在不同的 Redis 实例中，而不是只分到不同逻辑 DB。逻辑 DB 仍共享同一份内存上限和淘汰策略。锁实例使用 `noeviction`，预留足够内存余量，并对写入失败、`used_memory`、`evicted_keys` 做报警。普通缓存实例则可以根据数据是否可重建选择 LRU 或 LFU。
+
+`noeviction` 只消除了“锁被淘汰”这一条故障路径，并不会让分布式锁自动变得可靠。业务执行超过 TTL、续期失败、主从切换丢失尚未复制的锁状态，都可能破坏互斥。释放锁时还必须校验随机值，不能直接 `DEL`，否则一个执行缓慢的旧线程可能删掉后来线程刚获得的新锁。对于订单、支付、库存等不能接受重复提交的操作，还应在数据库或下游资源中加入幂等键、版本号或 fencing token。
+
+选择淘汰策略前，先把 Redis 中的 Key 分成两类：丢失后能够重建的缓存，以及丢失会破坏业务正确性的状态。两类 Key 混在同一个会淘汰数据的实例里，容量问题最终可能变成一致性问题。
 
 ## 九、监控应该覆盖哪些信号
 
@@ -409,6 +435,7 @@ Pipeline 是一个很好用的吞吐工具。批次大小、并发实例数和�
 - [Redis pipelining](https://redis.io/docs/latest/develop/using-commands/pipelining/)
 - [Redis client handling 与输出缓冲区](https://redis.io/docs/latest/develop/reference/clients/)
 - [Redis key eviction](https://redis.io/docs/latest/develop/reference/eviction/)
+- [Redis distributed locks](https://redis.io/docs/latest/develop/clients/patterns/distributed-locks/)
 - [CLIENT LIST 字段说明](https://redis.io/docs/latest/commands/client-list/)
 - [Redis INFO 指标说明](https://redis.io/docs/latest/commands/info/)
 - [Redis replication 与副本 maxmemory 行为](https://redis.io/docs/latest/operate/oss_and_stack/management/replication/)
