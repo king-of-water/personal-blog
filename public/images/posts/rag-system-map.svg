@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="820" viewBox="0 0 1440 820" role="img" aria-labelledby="title desc">
+  <title id="title">RAG 技术体系图</title>
+  <desc id="desc">从数据层、索引层、检索层、控制层到生成与评测层的 RAG 系统结构。</desc>
+  <rect width="1440" height="820" fill="#f7f7f3"/>
+  <style>
+    .title{font:700 34px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#1d201e}
+    .sub{font:400 17px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#69716d}
+    .layer{font:700 18px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#17684f;letter-spacing:1px}
+    .h{font:700 21px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#1d201e}
+    .p{font:400 16px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#59605d}
+    .chip{font:600 15px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#17684f}
+  </style>
+  <text x="90" y="76" class="title">RAG 不是一个向量库，而是一套可观测的知识流水线</text>
+  <text x="90" y="111" class="sub">不同 RAG 路线，分别改变知识结构、检索方法或运行时控制方式</text>
+
+  <text x="90" y="174" class="layer">01 · 数据与索引</text>
+  <rect x="90" y="195" width="1260" height="112" rx="10" fill="#ffffff" stroke="#d8ddd9"/>
+  <text x="122" y="236" class="h">文档清洗与版本</text><text x="122" y="270" class="p">来源、权限、时间、删除与更新</text>
+  <line x1="390" y1="218" x2="390" y2="284" stroke="#d8ddd9"/>
+  <text x="425" y="236" class="h">文本索引</text><text x="425" y="270" class="p">BM25、向量、父子块、元数据</text>
+  <line x1="715" y1="218" x2="715" y2="284" stroke="#d8ddd9"/>
+  <text x="750" y="236" class="h">图索引</text><text x="750" y="270" class="p">实体、关系、社区与摘要</text>
+  <line x1="1015" y1="218" x2="1015" y2="284" stroke="#d8ddd9"/>
+  <text x="1050" y="236" class="h">结构化数据</text><text x="1050" y="270" class="p">SQL、API、搜索引擎与业务工具</text>
+
+  <text x="90" y="363" class="layer">02 · 检索与知识组织</text>
+  <rect x="90" y="384" width="294" height="126" rx="10" fill="#fff" stroke="#d8ddd9"/>
+  <text x="122" y="426" class="h">基础 / 混合 RAG</text><text x="122" y="460" class="p">关键词 + 稠密向量 + 重排</text><text x="122" y="486" class="p">适合明确事实与局部问答</text>
+  <rect x="412" y="384" width="294" height="126" rx="10" fill="#fff" stroke="#d8ddd9"/>
+  <text x="444" y="426" class="h">GraphRAG</text><text x="444" y="460" class="p">社区报告支持全局归纳</text><text x="444" y="486" class="p">实体图支持局部关系查询</text>
+  <rect x="734" y="384" width="294" height="126" rx="10" fill="#fff" stroke="#d8ddd9"/>
+  <text x="766" y="426" class="h">LightRAG</text><text x="766" y="460" class="p">图结构 + 双层关键词检索</text><text x="766" y="486" class="p">兼顾局部实体与全局主题</text>
+  <rect x="1056" y="384" width="294" height="126" rx="10" fill="#fff" stroke="#d8ddd9"/>
+  <text x="1088" y="426" class="h">多模态 / 结构化 RAG</text><text x="1088" y="460" class="p">图片、表格、SQL 与 API</text><text x="1088" y="486" class="p">让证据保持原始结构</text>
+
+  <text x="90" y="566" class="layer">03 · 运行时控制</text>
+  <rect x="90" y="587" width="1260" height="102" rx="10" fill="#e9f2ee" stroke="#b8d1c7"/>
+  <text x="122" y="628" class="h">Agentic RAG</text>
+  <text x="122" y="661" class="p">根据任务决定是否检索、拆成哪些子问题、调用哪个数据源、何时重试、何时停止，以及证据不足时是否拒答</text>
+  <rect x="1045" y="615" width="94" height="34" rx="17" fill="#fff"/><text x="1069" y="638" class="chip">规划</text>
+  <rect x="1150" y="615" width="94" height="34" rx="17" fill="#fff"/><text x="1174" y="638" class="chip">反思</text>
+  <rect x="1255" y="615" width="62" height="34" rx="17" fill="#fff"/><text x="1270" y="638" class="chip">路由</text>
+
+  <text x="90" y="746" class="layer">04 · 生成、引用与评测</text>
+  <text x="300" y="746" class="p">证据包 → 带引用回答 → 事实一致性 / 检索召回 / 拒答 / 延迟 / 成本 → 反馈回流</text>
+  <path d="M1318 741h28m-10-10 10 10-10 10" fill="none" stroke="#17684f" stroke-width="2"/>
+</svg>
