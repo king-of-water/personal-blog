@@ -1,5 +1,27 @@
 ---
 import { SITE } from '../config';
+
+interface Props { activePath?: string }
+
+const { activePath } = Astro.props;
+const pathname = Astro.url.pathname;
+const resolvedActivePath = activePath ?? (
+	pathname === '/' ? '/' :
+	pathname.startsWith('/backend/') ? '/backend/' :
+	pathname.startsWith('/agent/') ? '/agent/' :
+	pathname.startsWith('/projects/') ? '/projects/' :
+	pathname.startsWith('/about/') ? '/about/' :
+	pathname.startsWith('/posts/') ? '/posts/' : ''
+);
+
+const navItems = [
+	{ href: '/', label: '首页' },
+	{ href: '/backend/', label: '后端' },
+	{ href: '/agent/', label: 'Agent' },
+	{ href: '/projects/', label: '个人项目' },
+	{ href: '/about/', label: '关于作者' },
+	{ href: '/posts/', label: '归档' },
+];
 ---
 
 <header class="site-header">
@@ -12,12 +34,13 @@ import { SITE } from '../config';
 			</span>
 		</a>
 		<div class="nav-links">
-			<a href="/">首页</a>
-			<a href="/backend/">后端</a>
-			<a href="/agent/">Agent</a>
-			<a href="/projects/">个人项目</a>
-			<a href="/about/">关于作者</a>
-			<a href="/posts/">归档</a>
+			{navItems.map((item) => (
+				<a
+					href={item.href}
+					class:list={{ 'is-active': resolvedActivePath === item.href }}
+					aria-current={resolvedActivePath === item.href ? 'page' : undefined}
+				>{item.label}</a>
+			))}
 			<a href={SITE.github} target="_blank" rel="noreferrer">GitHub</a>
 		</div>
 	</nav>

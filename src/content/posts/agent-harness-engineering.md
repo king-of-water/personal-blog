@@ -1107,7 +1107,3 @@ Agent 出错后，除了修正当前产物，还要回到运行环境中寻找�
 | Verification | 用外部证据判断任务是否达到验收条件 |
 | Evaluation harness | 批量运行任务、记录轨迹并评分的评测系统 |
 | Agent harness | 让 Agent 实际运行、受控执行并持续改进的系统 |
-
-### 延伸阅读
-
-- [Harness Engineering 看这一篇就够了](https://kstack.corp.kuaishou.com/article/17057)

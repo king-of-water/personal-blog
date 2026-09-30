@@ -30,9 +30,14 @@ const latinWordCount = articleText
 const exactWordCount = hanCharacterCount + latinWordCount;
 const approximateWordCount = Math.max(100, Math.round(exactWordCount / 100) * 100);
 const readingMinutes = Math.max(1, Math.ceil(exactWordCount / 500));
+const categoryNavPath = post.data.category === '后端'
+	? '/backend/'
+	: post.data.category === 'Agent'
+		? '/agent/'
+		: '/projects/';
 ---
 
-<BaseLayout title={post.data.title} description={post.data.description}>
+<BaseLayout title={post.data.title} description={post.data.description} activeNav={categoryNavPath}>
 	<div class="article-layout">
 		{tableOfContents.length >= 3 && (
 			<aside class="article-sidebar" aria-label="文章目录">
@@ -65,6 +70,10 @@ const readingMinutes = Math.max(1, Math.ceil(exactWordCount / 500));
 			</nav>
 		</article>
 	</div>
+	<button class="back-to-top" type="button" data-back-to-top aria-label="回到页面顶部" title="回到顶部">
+		<span aria-hidden="true">↑</span>
+		<small>顶部</small>
+	</button>
 	{tableOfContents.length >= 3 && (
 		<script>
 			const tocLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]'));
@@ -104,6 +113,19 @@ const readingMinutes = Math.max(1, Math.ceil(exactWordCount / 500));
 		</script>
 	)}
 	<script>
+		const backToTop = document.querySelector<HTMLButtonElement>('[data-back-to-top]');
+		if (backToTop) {
+			const updateBackToTop = () => {
+				backToTop.classList.toggle('is-visible', window.scrollY > 560);
+			};
+
+			backToTop.addEventListener('click', () => {
+				window.scrollTo({ top: 0, behavior: 'auto' });
+			});
+			window.addEventListener('scroll', updateBackToTop, { passive: true });
+			updateBackToTop();
+		}
+
 		const statsRoot = document.querySelector<HTMLElement>('[data-post-stats]');
 		const viewStat = document.querySelector<HTMLElement>('[data-view-stat]');
 		const viewCount = document.querySelector<HTMLElement>('[data-view-count]');
