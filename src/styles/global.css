@@ -106,7 +106,7 @@ main { min-height: calc(100vh - 150px); }
 .empty-state h2 { margin: 0 0 5px; font-size: 22px; letter-spacing: -0.035em; }
 .empty-state p:last-child { margin: 0; color: var(--muted); }
 
-.article-layout { display: grid; grid-template-columns: minmax(140px, 230px) minmax(0, 780px) minmax(140px, 230px); gap: clamp(18px, 3vw, 58px); width: min(calc(100% - 48px), 1450px); margin: 0 auto; }
+.article-layout { display: grid; grid-template-columns: clamp(118px, 13vw, 190px) minmax(0, 880px) clamp(118px, 13vw, 190px); justify-content: center; gap: clamp(16px, 2vw, 36px); width: min(calc(100% - 48px), 1450px); margin: 0 auto; }
 .article { grid-column: 2; width: 100%; margin: 0; padding: 72px 0 96px; }
 .article-header { padding-bottom: 40px; margin-bottom: 42px; border-bottom: 1px solid var(--line); }
 .article-header h1 { margin: 14px 0 16px; font-size: clamp(36px, 5vw, 58px); line-height: 1.12; letter-spacing: -0.05em; text-wrap: balance; }
