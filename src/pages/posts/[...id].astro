@@ -60,9 +60,10 @@ const librarySections = categorySections.map((section) => ({
 				{librarySections.length > 0 ? (
 					<ul class="library-sections">
 						{librarySections.map((section) => (
-							<li class:list={{ 'is-current-section': post.data.subcategory === section.name }}>
-								<a class="library-section-link" href={`${categoryNavPath}${section.slug}/`}>{section.name}</a>
-								{section.posts.length > 0 && (
+							<li>
+								{section.posts.length > 0 ? (
+									<details open={post.data.subcategory === section.name} class:list={{ 'is-current-section': post.data.subcategory === section.name }}>
+										<summary>{section.name}</summary>
 									<ul>
 										{section.posts.map((item) => (
 											<li>
@@ -74,7 +75,8 @@ const librarySections = categorySections.map((section) => ({
 											</li>
 										))}
 									</ul>
-								)}
+									</details>
+								) : <span class="library-section-empty">{section.name}</span>}
 							</li>
 						))}
 					</ul>
@@ -146,10 +148,33 @@ const librarySections = categorySections.map((section) => ({
 	{tableOfContents.length >= 3 && (
 		<script>
 			const tocLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]'));
+			const desktopTocScroller = document.querySelector<HTMLElement>('.article-toc-sidebar-inner');
 			const sections = tocLinks
 				.map((link) => document.getElementById(decodeURIComponent(link.hash.slice(1))))
 				.filter((section): section is HTMLElement => section !== null);
 			let ticking = false;
+			let lastActiveId = '';
+
+			const keepActiveLinkVisible = (activeId: string) => {
+				if (!desktopTocScroller || activeId === lastActiveId) return;
+				const activeLink = tocLinks.find((link) => (
+					link.closest('.article-toc-sidebar')
+					&& decodeURIComponent(link.hash.slice(1)) === activeId
+				));
+				if (!activeLink) return;
+
+				const scrollerRect = desktopTocScroller.getBoundingClientRect();
+				const linkRect = activeLink.getBoundingClientRect();
+				const safeTop = scrollerRect.top + 12;
+				const safeBottom = scrollerRect.bottom - 12;
+				if (linkRect.top < safeTop || linkRect.bottom > safeBottom) {
+					desktopTocScroller.scrollTo({
+						top: Math.max(0, desktopTocScroller.scrollTop + linkRect.top - scrollerRect.top - desktopTocScroller.clientHeight * 0.28),
+						behavior: 'auto',
+					});
+				}
+				lastActiveId = activeId;
+			};
 
 			const updateActiveSection = () => {
 				const marker = window.scrollY + Math.min(180, window.innerHeight * 0.28);
@@ -165,6 +190,17 @@ const librarySections = categorySections.map((section) => ({
 					if (isActive) link.setAttribute('aria-current', 'location');
 					else link.removeAttribute('aria-current');
 				}
+				if (activeSection) {
+					keepActiveLinkVisible(activeSection.id);
+					const nextHash = `#${encodeURIComponent(activeSection.id)}`;
+					if (window.location.hash !== nextHash) {
+						window.history.replaceState(
+							window.history.state,
+							'',
+							`${window.location.pathname}${window.location.search}${nextHash}`,
+						);
+					}
+				}
 				ticking = false;
 			};
 
@@ -178,6 +214,7 @@ const librarySections = categorySections.map((section) => ({
 			window.addEventListener('scroll', requestUpdate, { passive: true });
 			window.addEventListener('resize', requestUpdate);
 			window.addEventListener('hashchange', requestUpdate);
+			window.addEventListener('load', requestUpdate, { once: true });
 			updateActiveSection();
 		</script>
 	)}
