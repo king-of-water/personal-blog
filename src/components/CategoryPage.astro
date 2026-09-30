@@ -4,14 +4,23 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from './PostCard.astro';
 
 interface Props {
-	title: '后端' | 'Agent' | '个人项目';
+	title: '系统工程' | 'Agent' | '个人项目';
 	eyebrow: string;
 	description: string;
+	subcategories?: Array<{
+		name: string;
+		slug: string;
+		description: string;
+	}>;
 }
 
-const { title, eyebrow, description } = Astro.props;
+const { title, eyebrow, description, subcategories = [] } = Astro.props;
 const posts = (await getCollection('posts', ({ data }) => !data.draft && data.category === title))
 	.sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
+const sections = subcategories.map((subcategory) => ({
+	...subcategory,
+	posts: posts.filter((post) => post.data.subcategory === subcategory.name),
+}));
 ---
 
 <BaseLayout title={title} description={description}>
@@ -21,8 +30,33 @@ const posts = (await getCollection('posts', ({ data }) => !data.draft && data.ca
 		<p>{description}</p>
 	</header>
 	<section class="category-content shell">
+		{subcategories.length > 0 && (
+			<nav class="subcategory-grid" aria-label={`${title} 子专栏`}>
+				{sections.map((section, index) => (
+					<a href={`#${section.slug}`} class:list={{ 'is-empty': section.posts.length === 0 }}>
+						<span>{String(index + 1).padStart(2, '0')}</span>
+						<div>
+							<h2>{section.name}</h2>
+							<p>{section.description}</p>
+						</div>
+						<small>{section.posts.length} 篇</small>
+					</a>
+				))}
+			</nav>
+		)}
+
 		{posts.length > 0 ? (
-			<div class="post-list">{posts.map((post) => <PostCard post={post} />)}</div>
+			<div class="subcategory-sections">
+				{sections.length > 0 ? sections.map((section) => (
+					<section class="subcategory-section" id={section.slug}>
+						<div class="subcategory-heading">
+							<h2>{section.name}</h2>
+							<span>{section.posts.length > 0 ? `${section.posts.length} 篇文章` : '内容正在整理'}</span>
+						</div>
+						{section.posts.length > 0 && <div class="post-list">{section.posts.map((post) => <PostCard post={post} />)}</div>}
+					</section>
+				)) : <div class="post-list">{posts.map((post) => <PostCard post={post} />)}</div>}
+			</div>
 		) : (
 			<div class="empty-state">
 				<p class="eyebrow">Coming soon</p>

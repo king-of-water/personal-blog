@@ -9,7 +9,7 @@ const date = new Intl.DateTimeFormat('zh-CN', { year: 'numeric', month: '2-digit
 <a class="post-card" href={`/posts/${post.id}/`}>
 	<time class="post-date" datetime={post.data.publishedAt.toISOString()}>{date}</time>
 	<div class="post-main">
-		<span class="post-category">{post.data.category}</span>
+		<span class="post-category">{post.data.category}{post.data.subcategory && ` · ${post.data.subcategory}`}</span>
 		<h3>{post.data.title}<span class="post-arrow" aria-hidden="true">↗</span></h3>
 		<p>{post.data.description}</p>
 		{post.data.tags.length > 0 && <div class="tag-row">{post.data.tags.map((tag) => <span class="tag">{tag}</span>)}</div>}

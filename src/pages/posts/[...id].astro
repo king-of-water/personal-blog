@@ -30,7 +30,7 @@ const latinWordCount = articleText
 const exactWordCount = hanCharacterCount + latinWordCount;
 const approximateWordCount = Math.max(100, Math.round(exactWordCount / 100) * 100);
 const readingMinutes = Math.max(1, Math.ceil(exactWordCount / 500));
-const categoryNavPath = post.data.category === '后端'
+const categoryNavPath = post.data.category === '系统工程'
 	? '/backend/'
 	: post.data.category === 'Agent'
 		? '/agent/'
