@@ -194,6 +194,8 @@ main { min-height: calc(100vh - 150px); }
 .tool-usage b { flex: 0 0 auto; }
 .tool-usage span { color: var(--muted); }
 .tool-footer { display: flex; justify-content: space-between; gap: 18px; margin-top: 20px; padding-top: 13px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+.tool-footer > div { display: flex; flex-wrap: wrap; gap: 5px 16px; }
+.tool-footer > div span { color: var(--text); font-variant-numeric: tabular-nums; }
 .tool-footer a { color: var(--accent); font-weight: 600; }
 .site-footer { padding: 28px 0 34px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
 .footer-inner { display: flex; justify-content: space-between; gap: 20px; }

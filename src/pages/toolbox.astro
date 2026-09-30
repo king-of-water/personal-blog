@@ -9,6 +9,8 @@ const tools = [
 		status: '正在使用',
 		date: '2026-09-30',
 		source: 'https://github.com/blader/humanizer',
+		repository: 'blader/humanizer',
+		stars: '52.9k',
 		description: '检查文章里的模板化句式、空泛总结和过度包装，让文字更接近真实作者的表达，同时保留原意。',
 		usage: '用于技术文章定稿前的语言检查。',
 	},
@@ -18,9 +20,59 @@ const tools = [
 		kind: '图示',
 		status: '正在使用',
 		date: '2026-09-30',
-		source: 'https://github.com/markdown-viewer/skills/tree/main/documd-visuals',
+		source: 'https://github.com/markdown-viewer/skills',
+		repository: 'markdown-viewer/skills',
+		stars: '3.3k',
 		description: '为技术文档设计架构图、流程图和对比图，重点是让每张图只回答一个明确问题。',
 		usage: '用于 RAG 技术地图等长文的结构图和方案对比图。',
+	},
+	{
+		id: 'frontend-design',
+		name: 'frontend-design',
+		kind: '视觉设计',
+		status: '已安装',
+		date: '2026-09-30',
+		source: 'https://github.com/anthropics/skills',
+		repository: 'anthropics/skills',
+		stars: '179k',
+		description: 'Anthropic 官方的前端设计 Skill，用明确的视觉方向、排版和布局减少千篇一律的 AI 页面感。',
+		usage: '后续博客页面新增或整体改版时，用它先确定视觉方向再写代码。',
+	},
+	{
+		id: 'web-design-guidelines',
+		name: 'web-design-guidelines',
+		kind: '界面审查',
+		status: '已安装',
+		date: '2026-09-30',
+		source: 'https://github.com/vercel-labs/agent-skills',
+		repository: 'vercel-labs/agent-skills',
+		stars: '31.7k',
+		description: 'Vercel 官方的 Web 界面检查清单，覆盖无障碍、响应式、交互、排版和性能等一百多项规则。',
+		usage: '页面完成后做一次系统审查，补齐键盘操作、焦点状态和移动端细节。',
+	},
+	{
+		id: 'writing-guidelines',
+		name: 'writing-guidelines',
+		kind: '技术写作',
+		status: '已安装',
+		date: '2026-09-30',
+		source: 'https://github.com/vercel-labs/agent-skills',
+		repository: 'vercel-labs/agent-skills',
+		stars: '31.7k',
+		description: 'Vercel 的技术写作规范，检查标题、结构、代码示例、术语和不同类型文档的语气。',
+		usage: '用于技术文章的结构审查，和负责语言质感的 humanizer 配合使用。',
+	},
+	{
+		id: 'systematic-debugging',
+		name: 'systematic-debugging',
+		kind: '工程调试',
+		status: '已安装',
+		date: '2026-09-30',
+		source: 'https://github.com/obra/superpowers',
+		repository: 'obra/superpowers',
+		stars: '291k',
+		description: '用复现、证据、单一假设和最小验证定位根因，避免看到报错后连续尝试互不相关的修补。',
+		usage: '构建失败、页面异常或后端故障排查时使用。',
 	},
 ];
 ---
@@ -29,13 +81,13 @@ const tools = [
 	<section class="page-intro shell">
 		<p class="eyebrow">TOOLS I ACTUALLY USE</p>
 		<h1>工具箱</h1>
-		<p>只记录我真正用过、知道它能解决什么问题的工具。后续新增 Skill、写作辅助或开发工具，也会继续整理在这里。</p>
+		<p>这里记录已经安装并准备实际使用的 Skill，以及它们解决什么问题、适合用在什么地方。</p>
 	</section>
 
 	<section class="toolbox shell" aria-label="工具列表">
 		<div class="toolbox-note">
 			<strong>收录原则</strong>
-			<p>不是收藏夹，也不按热度堆名单。每个条目都会写清用途、实际使用位置和来源。</p>
+			<p>只收录已经安装或实际用过的工具。Star 数来自来源仓库，记录时会核验，之后可能变化。</p>
 		</div>
 		<div class="tool-list">
 			{tools.map((tool, index) => (
@@ -52,8 +104,11 @@ const tools = [
 						<p>{tool.description}</p>
 						<div class="tool-usage"><b>我怎么用</b><span>{tool.usage}</span></div>
 						<div class="tool-footer">
-							<time datetime={tool.date}>记录于 {tool.date}</time>
-							<a href={tool.source} target="_blank" rel="noreferrer">查看来源 ↗</a>
+							<div>
+								<time datetime={tool.date}>记录于 {tool.date}</time>
+								<span>{tool.repository} · ★ {tool.stars}</span>
+							</div>
+							<a href={tool.source} target="_blank" rel="noreferrer">仓库主页 ↗</a>
 						</div>
 					</div>
 				</article>
