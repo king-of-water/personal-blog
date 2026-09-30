@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="650" viewBox="0 0 1200 650" role="img" aria-labelledby="title desc">
+  <title id="title">RAG 的离线索引与在线查询流程</title>
+  <desc id="desc">上半部分展示文档从解析、切块、向量化到索引的离线过程，下半部分展示问题从查询处理、召回重排、证据编排到生成回答的在线过程。</desc>
+  <rect width="1200" height="650" fill="#f7f7f3"/>
+  <text x="64" y="64" fill="#1d201e" font-family="sans-serif" font-size="28" font-weight="700">一条 RAG 请求，离线和在线分别做什么？</text>
+  <text x="64" y="96" fill="#69716d" font-family="sans-serif" font-size="15">索引决定知识怎样保存，查询链路决定证据怎样进入回答。</text>
+
+  <rect x="64" y="134" width="1072" height="188" rx="10" fill="#ffffff" stroke="#d8ddd9"/>
+  <rect x="64" y="134" width="142" height="188" rx="10" fill="#17684f"/>
+  <text x="94" y="211" fill="#ffffff" font-family="sans-serif" font-size="15" font-weight="700">OFFLINE</text>
+  <text x="94" y="241" fill="#ffffff" font-family="sans-serif" font-size="24" font-weight="700">离线索引</text>
+  <text x="94" y="272" fill="#d8eee6" font-family="sans-serif" font-size="13">文档变化时执行</text>
+
+  <g font-family="sans-serif">
+    <rect x="244" y="180" width="144" height="96" rx="8" fill="#e9f2ee"/>
+    <text x="316" y="219" text-anchor="middle" fill="#17684f" font-size="14" font-weight="700">原始知识</text>
+    <text x="316" y="244" text-anchor="middle" fill="#69716d" font-size="12">文档 · 网页 · 表格</text>
+    <path d="M400 228H438" stroke="#69716d" stroke-width="2"/><path d="M432 222l8 6-8 6" fill="none" stroke="#69716d" stroke-width="2"/>
+    <rect x="452" y="180" width="144" height="96" rx="8" fill="#ffffff" stroke="#d8ddd9"/>
+    <text x="524" y="219" text-anchor="middle" fill="#1d201e" font-size="14" font-weight="700">解析与切块</text>
+    <text x="524" y="244" text-anchor="middle" fill="#69716d" font-size="12">结构 · 元数据 · 权限</text>
+    <path d="M608 228H646" stroke="#69716d" stroke-width="2"/><path d="M640 222l8 6-8 6" fill="none" stroke="#69716d" stroke-width="2"/>
+    <rect x="660" y="180" width="144" height="96" rx="8" fill="#ffffff" stroke="#d8ddd9"/>
+    <text x="732" y="219" text-anchor="middle" fill="#1d201e" font-size="14" font-weight="700">表示与抽取</text>
+    <text x="732" y="244" text-anchor="middle" fill="#69716d" font-size="12">Embedding · 实体关系</text>
+    <path d="M816 228H854" stroke="#69716d" stroke-width="2"/><path d="M848 222l8 6-8 6" fill="none" stroke="#69716d" stroke-width="2"/>
+    <rect x="868" y="180" width="220" height="96" rx="8" fill="#e9f2ee"/>
+    <text x="978" y="219" text-anchor="middle" fill="#17684f" font-size="14" font-weight="700">可检索索引</text>
+    <text x="978" y="244" text-anchor="middle" fill="#69716d" font-size="12">向量 · 关键词 · 图 · 元数据</text>
+  </g>
+
+  <rect x="64" y="354" width="1072" height="232" rx="10" fill="#ffffff" stroke="#d8ddd9"/>
+  <rect x="64" y="354" width="142" height="232" rx="10" fill="#1d201e"/>
+  <text x="94" y="445" fill="#ffffff" font-family="sans-serif" font-size="15" font-weight="700">ONLINE</text>
+  <text x="94" y="475" fill="#ffffff" font-family="sans-serif" font-size="24" font-weight="700">在线查询</text>
+  <text x="94" y="506" fill="#c9cfcb" font-family="sans-serif" font-size="13">每次提问时执行</text>
+  <g font-family="sans-serif">
+    <rect x="244" y="405" width="144" height="126" rx="8" fill="#e9f2ee"/>
+    <text x="316" y="448" text-anchor="middle" fill="#17684f" font-size="14" font-weight="700">用户问题</text>
+    <text x="316" y="475" text-anchor="middle" fill="#69716d" font-size="12">意图 · 改写 · 过滤</text>
+    <path d="M400 468H438" stroke="#69716d" stroke-width="2"/><path d="M432 462l8 6-8 6" fill="none" stroke="#69716d" stroke-width="2"/>
+    <rect x="452" y="405" width="144" height="126" rx="8" fill="#ffffff" stroke="#d8ddd9"/>
+    <text x="524" y="448" text-anchor="middle" fill="#1d201e" font-size="14" font-weight="700">候选召回</text>
+    <text x="524" y="475" text-anchor="middle" fill="#69716d" font-size="12">向量 + BM25 + 图</text>
+    <text x="524" y="497" text-anchor="middle" fill="#69716d" font-size="12">尽量不漏</text>
+    <path d="M608 468H646" stroke="#69716d" stroke-width="2"/><path d="M640 462l8 6-8 6" fill="none" stroke="#69716d" stroke-width="2"/>
+    <rect x="660" y="405" width="144" height="126" rx="8" fill="#ffffff" stroke="#d8ddd9"/>
+    <text x="732" y="448" text-anchor="middle" fill="#1d201e" font-size="14" font-weight="700">重排与编排</text>
+    <text x="732" y="475" text-anchor="middle" fill="#69716d" font-size="12">相关性 · 去重 · 冲突</text>
+    <text x="732" y="497" text-anchor="middle" fill="#69716d" font-size="12">只留下可用证据</text>
+    <path d="M816 468H854" stroke="#69716d" stroke-width="2"/><path d="M848 462l8 6-8 6" fill="none" stroke="#69716d" stroke-width="2"/>
+    <rect x="868" y="405" width="220" height="126" rx="8" fill="#e9f2ee"/>
+    <text x="978" y="448" text-anchor="middle" fill="#17684f" font-size="14" font-weight="700">带引用的回答</text>
+    <text x="978" y="475" text-anchor="middle" fill="#69716d" font-size="12">生成 · 核验 · 拒答</text>
+    <text x="978" y="497" text-anchor="middle" fill="#69716d" font-size="12">结论能回到原始来源</text>
+  </g>
+  <text x="64" y="622" fill="#69716d" font-family="sans-serif" font-size="13">关键边界：Embedding 和索引属于知识准备；召回、重排和生成属于请求执行。</text>
+</svg>

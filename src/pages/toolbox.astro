@@ -1,0 +1,63 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const tools = [
+	{
+		id: 'humanizer',
+		name: 'humanizer',
+		kind: '写作',
+		status: '正在使用',
+		date: '2026-09-30',
+		source: 'https://github.com/blader/humanizer',
+		description: '检查文章里的模板化句式、空泛总结和过度包装，让文字更接近真实作者的表达，同时保留原意。',
+		usage: '用于技术文章定稿前的语言检查。',
+	},
+	{
+		id: 'documd-visuals',
+		name: 'documd-visuals',
+		kind: '图示',
+		status: '正在使用',
+		date: '2026-09-30',
+		source: 'https://github.com/markdown-viewer/skills/tree/main/documd-visuals',
+		description: '为技术文档设计架构图、流程图和对比图，重点是让每张图只回答一个明确问题。',
+		usage: '用于 RAG 技术地图等长文的结构图和方案对比图。',
+	},
+];
+---
+
+<BaseLayout title="工具箱" description="记录 king-of-water 实际使用过的 Skills、写作工具和开发工具。" activeNav="/toolbox/">
+	<section class="page-intro shell">
+		<p class="eyebrow">TOOLS I ACTUALLY USE</p>
+		<h1>工具箱</h1>
+		<p>只记录我真正用过、知道它能解决什么问题的工具。后续新增 Skill、写作辅助或开发工具，也会继续整理在这里。</p>
+	</section>
+
+	<section class="toolbox shell" aria-label="工具列表">
+		<div class="toolbox-note">
+			<strong>收录原则</strong>
+			<p>不是收藏夹，也不按热度堆名单。每个条目都会写清用途、实际使用位置和来源。</p>
+		</div>
+		<div class="tool-list">
+			{tools.map((tool, index) => (
+				<article class="tool-card" id={tool.id}>
+					<div class="tool-number">{String(index + 1).padStart(2, '0')}</div>
+					<div class="tool-main">
+						<div class="tool-heading">
+							<div>
+								<span>{tool.kind}</span>
+								<h2>{tool.name}</h2>
+							</div>
+							<small>{tool.status}</small>
+						</div>
+						<p>{tool.description}</p>
+						<div class="tool-usage"><b>我怎么用</b><span>{tool.usage}</span></div>
+						<div class="tool-footer">
+							<time datetime={tool.date}>记录于 {tool.date}</time>
+							<a href={tool.source} target="_blank" rel="noreferrer">查看来源 ↗</a>
+						</div>
+					</div>
+				</article>
+			))}
+		</div>
+	</section>
+</BaseLayout>

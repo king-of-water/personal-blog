@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">GraphRAG 与 LightRAG 的工程对比</title>
+  <desc id="desc">按索引、全局知识、查询和更新四个维度对比 GraphRAG 与 LightRAG，并给出选择提示。</desc>
+  <rect width="1200" height="760" fill="#f7f7f3"/>
+  <text x="64" y="64" fill="#1d201e" font-family="sans-serif" font-size="28" font-weight="700">GraphRAG 和 LightRAG，差异落在哪些工程环节？</text>
+  <text x="64" y="96" fill="#69716d" font-family="sans-serif" font-size="15">二者都利用图结构，但索引产物、全局信息组织方式和更新路径并不相同。</text>
+
+  <g font-family="sans-serif">
+    <rect x="64" y="138" width="152" height="66" fill="#1d201e"/>
+    <rect x="216" y="138" width="456" height="66" fill="#17684f"/>
+    <rect x="672" y="138" width="464" height="66" fill="#255548"/>
+    <text x="84" y="179" fill="#ffffff" font-size="13" font-weight="700">对比维度</text>
+    <text x="242" y="179" fill="#ffffff" font-size="19" font-weight="700">GraphRAG</text>
+    <text x="698" y="179" fill="#ffffff" font-size="19" font-weight="700">LightRAG</text>
+
+    <rect x="64" y="204" width="1072" height="108" fill="#ffffff" stroke="#d8ddd9"/>
+    <line x1="216" y1="204" x2="216" y2="312" stroke="#d8ddd9"/><line x1="672" y1="204" x2="672" y2="312" stroke="#d8ddd9"/>
+    <text x="84" y="246" fill="#17684f" font-size="13" font-weight="700">01</text><text x="84" y="275" fill="#1d201e" font-size="18" font-weight="700">索引</text>
+    <text x="242" y="243" fill="#1d201e" font-size="15" font-weight="700">实体关系 + 社区检测 + 社区报告</text>
+    <text x="242" y="272" fill="#69716d" font-size="13">离线阶段组织层级化主题，为全局归纳准备摘要。</text>
+    <text x="698" y="243" fill="#1d201e" font-size="15" font-weight="700">实体关系 + 双层关键词 + 图/向量索引</text>
+    <text x="698" y="272" fill="#69716d" font-size="13">抽取后合并节点与边，同时保留局部和高层语义。</text>
+
+    <rect x="64" y="312" width="1072" height="108" fill="#f1f3f0" stroke="#d8ddd9"/>
+    <line x1="216" y1="312" x2="216" y2="420" stroke="#d8ddd9"/><line x1="672" y1="312" x2="672" y2="420" stroke="#d8ddd9"/>
+    <text x="84" y="354" fill="#17684f" font-size="13" font-weight="700">02</text><text x="84" y="383" fill="#1d201e" font-size="18" font-weight="700">全局知识</text>
+    <text x="242" y="351" fill="#1d201e" font-size="15" font-weight="700">社区报告是独立索引产物</text>
+    <text x="242" y="380" fill="#69716d" font-size="13">Global Search 汇总多个社区的局部回答。</text>
+    <text x="698" y="351" fill="#1d201e" font-size="15" font-weight="700">高层关键词进入相关实体和关系</text>
+    <text x="698" y="380" fill="#69716d" font-size="13">不依赖 GraphRAG 的同一套社区报告流程。</text>
+
+    <rect x="64" y="420" width="1072" height="108" fill="#ffffff" stroke="#d8ddd9"/>
+    <line x1="216" y1="420" x2="216" y2="528" stroke="#d8ddd9"/><line x1="672" y1="420" x2="672" y2="528" stroke="#d8ddd9"/>
+    <text x="84" y="462" fill="#17684f" font-size="13" font-weight="700">03</text><text x="84" y="491" fill="#1d201e" font-size="18" font-weight="700">查询</text>
+    <text x="242" y="459" fill="#1d201e" font-size="15" font-weight="700">Local / Global / DRIFT 等模式</text>
+    <text x="242" y="488" fill="#69716d" font-size="13">分别面向实体邻域、全局主题和探索式搜索。</text>
+    <text x="698" y="459" fill="#1d201e" font-size="15" font-weight="700">naive / local / global / hybrid</text>
+    <text x="698" y="488" fill="#69716d" font-size="13">通过关键词层级选择局部、全局或组合上下文。</text>
+
+    <rect x="64" y="528" width="1072" height="108" fill="#f1f3f0" stroke="#d8ddd9"/>
+    <line x1="216" y1="528" x2="216" y2="636" stroke="#d8ddd9"/><line x1="672" y1="528" x2="672" y2="636" stroke="#d8ddd9"/>
+    <text x="84" y="570" fill="#17684f" font-size="13" font-weight="700">04</text><text x="84" y="599" fill="#1d201e" font-size="18" font-weight="700">更新</text>
+    <text x="242" y="567" fill="#1d201e" font-size="15" font-weight="700">支持更新，但社区与报告也要维护</text>
+    <text x="242" y="596" fill="#69716d" font-size="13">新增知识可能改变社区结构和下游摘要。</text>
+    <text x="698" y="567" fill="#1d201e" font-size="15" font-weight="700">偏向增量抽取后合并</text>
+    <text x="698" y="596" fill="#69716d" font-size="13">仍需处理实体冲突、删除、时效和错误传播。</text>
+  </g>
+  <rect x="64" y="674" width="1072" height="48" rx="6" fill="#e9f2ee"/>
+  <text x="88" y="704" fill="#17684f" font-family="sans-serif" font-size="14" font-weight="700">选择提示</text>
+  <text x="174" y="704" fill="#1d201e" font-family="sans-serif" font-size="14">先拿真实问题做 A/B；重点观察全局问答质量、索引成本、更新延迟、删除一致性和可解释性。</text>
+</svg>

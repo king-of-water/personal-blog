@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
+  <title id="title">RAG 的召回与重排漏斗</title>
+  <desc id="desc">多路召回先扩大候选集合，融合去重后由交叉编码器重排，最后只把少量高质量证据交给生成模型。</desc>
+  <rect width="1200" height="620" fill="#f7f7f3"/>
+  <text x="64" y="64" fill="#1d201e" font-family="sans-serif" font-size="28" font-weight="700">为什么召回和重排要分成两步？</text>
+  <text x="64" y="96" fill="#69716d" font-family="sans-serif" font-size="15">第一步追求“不漏”，第二步追求“把能回答问题的证据排到前面”。</text>
+  <g font-family="sans-serif">
+    <rect x="64" y="146" width="226" height="86" rx="8" fill="#ffffff" stroke="#d8ddd9"/>
+    <text x="86" y="179" fill="#17684f" font-size="12" font-weight="700">DENSE</text>
+    <text x="86" y="207" fill="#1d201e" font-size="16" font-weight="700">向量召回</text>
+    <text x="180" y="207" fill="#69716d" font-size="12">语义相近</text>
+    <rect x="64" y="250" width="226" height="86" rx="8" fill="#ffffff" stroke="#d8ddd9"/>
+    <text x="86" y="283" fill="#17684f" font-size="12" font-weight="700">LEXICAL</text>
+    <text x="86" y="311" fill="#1d201e" font-size="16" font-weight="700">BM25 召回</text>
+    <text x="190" y="311" fill="#69716d" font-size="12">精确词项</text>
+    <rect x="64" y="354" width="226" height="86" rx="8" fill="#ffffff" stroke="#d8ddd9"/>
+    <text x="86" y="387" fill="#17684f" font-size="12" font-weight="700">STRUCTURED</text>
+    <text x="86" y="415" fill="#1d201e" font-size="16" font-weight="700">过滤 / 图 / SQL</text>
+    <text x="208" y="415" fill="#69716d" font-size="12">约束与关系</text>
+    <text x="64" y="484" fill="#69716d" font-size="12">每一路可以取回数十个候选</text>
+
+    <path d="M310 188H374V283H414" fill="none" stroke="#69716d" stroke-width="2"/>
+    <path d="M310 292H414" fill="none" stroke="#69716d" stroke-width="2"/>
+    <path d="M310 396H374V301H414" fill="none" stroke="#69716d" stroke-width="2"/>
+    <path d="M408 277l8 6-8 6M408 286l8 6-8 6M408 295l8 6-8 6" fill="none" stroke="#69716d" stroke-width="2"/>
+
+    <rect x="428" y="219" width="206" height="148" rx="8" fill="#e9f2ee"/>
+    <text x="531" y="263" text-anchor="middle" fill="#17684f" font-size="13" font-weight="700">RECALL</text>
+    <text x="531" y="294" text-anchor="middle" fill="#1d201e" font-size="19" font-weight="700">融合与去重</text>
+    <text x="531" y="322" text-anchor="middle" fill="#69716d" font-size="13">RRF / 规则 / 分数归一化</text>
+    <text x="531" y="344" text-anchor="middle" fill="#69716d" font-size="13">候选池：30–100 条（示例）</text>
+    <path d="M646 293H700" stroke="#69716d" stroke-width="2"/><path d="M694 287l8 6-8 6" fill="none" stroke="#69716d" stroke-width="2"/>
+
+    <rect x="714" y="219" width="206" height="148" rx="8" fill="#ffffff" stroke="#17684f" stroke-width="2"/>
+    <text x="817" y="263" text-anchor="middle" fill="#17684f" font-size="13" font-weight="700">RERANK</text>
+    <text x="817" y="294" text-anchor="middle" fill="#1d201e" font-size="19" font-weight="700">交叉编码重排</text>
+    <text x="817" y="322" text-anchor="middle" fill="#69716d" font-size="13">query 与候选联合打分</text>
+    <text x="817" y="344" text-anchor="middle" fill="#69716d" font-size="13">更准，但不适合扫描全库</text>
+    <path d="M932 293H986" stroke="#69716d" stroke-width="2"/><path d="M980 287l8 6-8 6" fill="none" stroke="#69716d" stroke-width="2"/>
+
+    <rect x="1000" y="219" width="136" height="148" rx="8" fill="#17684f"/>
+    <text x="1068" y="263" text-anchor="middle" fill="#d8eee6" font-size="12" font-weight="700">CONTEXT</text>
+    <text x="1068" y="294" text-anchor="middle" fill="#ffffff" font-size="18" font-weight="700">证据包</text>
+    <text x="1068" y="322" text-anchor="middle" fill="#ffffff" font-size="13">5–10 条</text>
+    <text x="1068" y="344" text-anchor="middle" fill="#d8eee6" font-size="12">进入生成模型</text>
+  </g>
+  <line x1="64" y1="530" x2="1136" y2="530" stroke="#d8ddd9"/>
+  <text x="64" y="568" fill="#1d201e" font-family="sans-serif" font-size="14" font-weight="700">数值只是起点</text>
+  <text x="184" y="568" fill="#69716d" font-family="sans-serif" font-size="14">候选池和最终证据数应由自己的语料、问题类型、延迟预算与 Recall@K 评测决定。</text>
+</svg>
