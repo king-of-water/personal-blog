@@ -7,7 +7,7 @@ const posts = defineCollection({
 	schema: z.object({
 		title: z.string(),
 		description: z.string(),
-		category: z.enum(['系统工程', 'Agent', '个人项目']).default('个人项目'),
+		category: z.enum(['后端', 'Agent', '项目']).default('项目'),
 		subcategory: z.enum([
 			'Agent 开发',
 			'RAG 与知识库',

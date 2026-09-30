@@ -1,0 +1,14 @@
+---
+import SubcategoryPage from '../../components/SubcategoryPage.astro';
+import { agentSubcategories, type Subcategory } from '../../config/sections';
+
+export function getStaticPaths() {
+	return agentSubcategories.map((section) => ({ params: { section: section.slug }, props: { section } }));
+}
+
+interface Props { section: Subcategory }
+const { section } = Astro.props;
+---
+
+<SubcategoryPage category="Agent" name={section.name} description={section.description} />
+

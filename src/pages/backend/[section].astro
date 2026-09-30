@@ -1,0 +1,14 @@
+---
+import SubcategoryPage from '../../components/SubcategoryPage.astro';
+import { backendSubcategories, type Subcategory } from '../../config/sections';
+
+export function getStaticPaths() {
+	return backendSubcategories.map((section) => ({ params: { section: section.slug }, props: { section } }));
+}
+
+interface Props { section: Subcategory }
+const { section } = Astro.props;
+---
+
+<SubcategoryPage category="后端" name={section.name} description={section.description} />
+

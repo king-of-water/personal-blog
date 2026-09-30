@@ -17,9 +17,9 @@ const resolvedActivePath = activePath ?? (
 
 const navItems = [
 	{ href: '/', label: '首页' },
-	{ href: '/backend/', label: '系统工程' },
+	{ href: '/backend/', label: '后端' },
 	{ href: '/agent/', label: 'Agent' },
-	{ href: '/projects/', label: '个人项目' },
+	{ href: '/projects/', label: '项目' },
 	{ href: '/toolbox/', label: '工具箱' },
 	{ href: '/about/', label: '关于作者' },
 	{ href: '/posts/', label: '归档' },
@@ -29,7 +29,7 @@ const navItems = [
 <header class="site-header">
 	<nav class="nav shell" aria-label="主导航">
 		<a class="brand" href="/">
-			<img class="brand-mark" src="/images/avatar.jpg" alt={`${SITE.author} 的头像`} />
+			<img class="brand-mark" src="/images/avatar.jpg" alt={`${SITE.author} 的头像`} width="36" height="36" />
 			<span class="brand-copy">
 				<strong>{SITE.title}</strong>
 				<small>technical notes & projects</small>

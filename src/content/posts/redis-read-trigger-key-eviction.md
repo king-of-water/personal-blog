@@ -1,7 +1,7 @@
 ---
 title: 只读请求为什么也会触发 Redis Key 淘汰
 description: 从一次本地缓存重建异常出发，拆解 Pipeline、客户端输出缓冲区、maxmemory 与淘汰策略之间的连锁反应。
-category: 系统工程
+category: 后端
 subcategory: Redis
 featured: true
 publishedAt: 2026-09-30

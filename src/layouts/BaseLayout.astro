@@ -21,8 +21,9 @@ const pageTitle = title ? `${title} · ${SITE.title}` : SITE.title;
 		<title>{pageTitle}</title>
 	</head>
 	<body>
+		<a class="skip-link" href="#main-content">跳到正文</a>
 		<Header activePath={activeNav} />
-		<main><slot /></main>
+		<main id="main-content"><slot /></main>
 		<Footer />
 	</body>
 </html>

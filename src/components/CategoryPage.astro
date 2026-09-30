@@ -1,10 +1,10 @@
 ---
-import { getCollection, type CollectionEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PostCard from './PostCard.astro';
+import { categoryPath, type MainCategory } from '../config/sections';
 
 interface Props {
-	title: '系统工程' | 'Agent' | '个人项目';
+	title: MainCategory;
 	eyebrow: string;
 	description: string;
 	subcategories?: Array<{
@@ -29,12 +29,12 @@ const sections = subcategories.map((subcategory) => ({
 		<h1>{title}</h1>
 		<p>{description}</p>
 	</header>
-	<section class="category-content shell">
+	<section class="category-content shell" aria-labelledby="subcategory-title">
+		<h2 class="visually-hidden" id="subcategory-title">{title}的二级专栏</h2>
 		{subcategories.length > 0 && (
 			<nav class="subcategory-grid" aria-label={`${title} 子专栏`}>
-				{sections.map((section, index) => (
-					<a href={`#${section.slug}`} class:list={{ 'is-empty': section.posts.length === 0 }}>
-						<span>{String(index + 1).padStart(2, '0')}</span>
+				{sections.map((section) => (
+					<a href={`${categoryPath(title)}${section.slug}/`} class:list={{ 'is-empty': section.posts.length === 0 }}>
 						<div>
 							<h2>{section.name}</h2>
 							<p>{section.description}</p>
@@ -43,26 +43,6 @@ const sections = subcategories.map((subcategory) => ({
 					</a>
 				))}
 			</nav>
-		)}
-
-		{posts.length > 0 ? (
-			<div class="subcategory-sections">
-				{sections.length > 0 ? sections.map((section) => (
-					<section class="subcategory-section" id={section.slug}>
-						<div class="subcategory-heading">
-							<h2>{section.name}</h2>
-							<span>{section.posts.length > 0 ? `${section.posts.length} 篇文章` : '内容正在整理'}</span>
-						</div>
-						{section.posts.length > 0 && <div class="post-list">{section.posts.map((post) => <PostCard post={post} />)}</div>}
-					</section>
-				)) : <div class="post-list">{posts.map((post) => <PostCard post={post} />)}</div>}
-			</div>
-		) : (
-			<div class="empty-state">
-				<p class="eyebrow">Coming soon</p>
-				<h2>内容正在整理</h2>
-				<p>第一篇 {title} 文章很快会出现在这里。</p>
-			</div>
 		)}
 	</section>
 </BaseLayout>

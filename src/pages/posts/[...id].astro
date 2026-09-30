@@ -1,6 +1,13 @@
 ---
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import {
+	agentSubcategories,
+	backendSubcategories,
+	categoryPath,
+	subcategoryPath,
+	type MainCategory,
+} from '../../config/sections';
 
 export async function getStaticPaths() {
 	const posts = await getCollection('posts', ({ data }) => !data.draft);
@@ -10,7 +17,7 @@ export async function getStaticPaths() {
 interface Props { post: CollectionEntry<'posts'> }
 const { post } = Astro.props;
 const { Content, headings } = await render(post);
-const tableOfContents = headings.filter((heading) => heading.depth === 2);
+const tableOfContents = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
 const date = new Intl.DateTimeFormat('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' }).format(post.data.publishedAt);
 const allPosts = (await getCollection('posts', ({ data }) => !data.draft))
 	.sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
@@ -30,27 +37,72 @@ const latinWordCount = articleText
 const exactWordCount = hanCharacterCount + latinWordCount;
 const approximateWordCount = Math.max(100, Math.round(exactWordCount / 100) * 100);
 const readingMinutes = Math.max(1, Math.ceil(exactWordCount / 500));
-const categoryNavPath = post.data.category === '系统工程'
-	? '/backend/'
-	: post.data.category === 'Agent'
-		? '/agent/'
-		: '/projects/';
+const category = post.data.category as MainCategory;
+const categoryNavPath = categoryPath(category);
+const currentSubcategoryPath = subcategoryPath(category, post.data.subcategory);
+const categoryPosts = allPosts.filter((item) => item.data.category === category);
+const categorySections = category === 'Agent'
+	? agentSubcategories
+	: category === '后端'
+		? backendSubcategories
+		: [];
+const librarySections = categorySections.map((section) => ({
+	...section,
+	posts: categoryPosts.filter((item) => item.data.subcategory === section.name),
+}));
 ---
 
 <BaseLayout title={post.data.title} description={post.data.description} activeNav={categoryNavPath}>
 	<div class="article-layout">
+		<aside class="article-library-sidebar" aria-label="文章所属专栏">
+			<nav class="article-library-inner">
+				<a class="library-root" href={categoryNavPath}>{category}</a>
+				{librarySections.length > 0 ? (
+					<ul class="library-sections">
+						{librarySections.map((section) => (
+							<li class:list={{ 'is-current-section': post.data.subcategory === section.name }}>
+								<a class="library-section-link" href={`${categoryNavPath}${section.slug}/`}>{section.name}</a>
+								{section.posts.length > 0 && (
+									<ul>
+										{section.posts.map((item) => (
+											<li>
+												<a
+													href={`/posts/${item.id}/`}
+													class:list={{ 'is-active': item.id === post.id }}
+													aria-current={item.id === post.id ? 'page' : undefined}
+												>{item.data.title}</a>
+											</li>
+										))}
+									</ul>
+								)}
+							</li>
+						))}
+					</ul>
+				) : (
+					<ul class="library-projects">
+						{categoryPosts.map((item) => (
+							<li><a href={`/posts/${item.id}/`} class:list={{ 'is-active': item.id === post.id }} aria-current={item.id === post.id ? 'page' : undefined}>{item.data.title}</a></li>
+						))}
+					</ul>
+				)}
+			</nav>
+		</aside>
 		{tableOfContents.length >= 3 && (
-			<aside class="article-sidebar" aria-label="文章目录">
-				<div class="article-sidebar-inner">
+			<aside class="article-toc-sidebar" aria-label="本文目录">
+				<div class="article-toc-sidebar-inner">
 					<strong>本文目录</strong>
 					<ol>
-						{tableOfContents.map((heading) => <li><a href={`#${heading.slug}`} data-toc-link>{heading.text}</a></li>)}
+						{tableOfContents.map((heading) => <li data-depth={heading.depth}><a href={`#${heading.slug}`} data-toc-link>{heading.text}</a></li>)}
 					</ol>
 				</div>
 			</aside>
 		)}
 		<article class="article">
 			<header class="article-header">
+				<nav class="article-location" aria-label="文章位置">
+					<a href={categoryNavPath}>{category}</a>
+					{post.data.subcategory && <><span aria-hidden="true">/</span><a href={currentSubcategoryPath}>{post.data.subcategory}</a></>}
+				</nav>
 				<div class="article-meta"><span>{post.data.category}</span><span>·</span><time datetime={post.data.publishedAt.toISOString()}>{date}</time><span>·</span><span>约 {approximateWordCount.toLocaleString('zh-CN')} 字</span><span>·</span><span>约 {readingMinutes} 分钟阅读</span><span class="article-view-stat" data-view-stat hidden><span>·</span><span data-view-count>0 次浏览</span></span></div>
 				<h1>{post.data.title}</h1>
 				<p class="article-description">{post.data.description}</p>
@@ -64,6 +116,14 @@ const categoryNavPath = post.data.category === '系统工程'
 					</div>
 				)}
 			</header>
+			{tableOfContents.length >= 3 && (
+				<nav class="article-toc" aria-label="本文目录">
+					<strong>本文目录</strong>
+					<ol>
+						{tableOfContents.map((heading) => <li data-depth={heading.depth}><a href={`#${heading.slug}`} data-toc-link>{heading.text}</a></li>)}
+					</ol>
+				</nav>
+			)}
 			<div class="prose"><Content /></div>
 			<div class="article-reactions" data-post-stats data-slug={post.id} hidden>
 				<p>如果这篇文章对你有帮助</p>

@@ -1,18 +1,11 @@
 ---
 import CategoryPage from '../components/CategoryPage.astro';
-
-const subcategories = [
-	{ name: 'Java', slug: 'java', description: '语言、JVM、并发与常用框架。' },
-	{ name: 'Redis', slug: 'redis', description: '缓存、数据结构、集群与稳定性。' },
-	{ name: 'MySQL', slug: 'mysql', description: '索引、事务、执行计划与数据库工程。' },
-	{ name: '消息队列', slug: 'message-queue', description: '异步通信、削峰、顺序与消息可靠性。' },
-	{ name: '分布式', slug: 'distributed-systems', description: '一致性、容错、协调与系统设计。' },
-];
+import { backendSubcategories } from '../config/sections';
 ---
 
 <CategoryPage
-	title="系统工程"
-	eyebrow="SYSTEMS ENGINEERING"
+	title="后端"
+	eyebrow="BACKEND ENGINEERING"
 	description="在不可靠的硬件、网络与并发之上，构建可靠系统。"
-	{subcategories}
+	subcategories={backendSubcategories}
 />

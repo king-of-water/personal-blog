@@ -1,7 +1,7 @@
 ---
 title: 这个博客是如何工作的
 description: 用 Astro、GitHub 和 Cloudflare Pages 搭建一个无需维护服务器的个人博客。
-category: 个人项目
+category: 项目
 featured: true
 publishedAt: 2026-09-28
 tags: [Astro, Cloudflare]

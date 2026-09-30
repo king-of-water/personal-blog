@@ -1,0 +1,44 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from './PostCard.astro';
+import { categoryPath, type MainCategory } from '../config/sections';
+
+interface Props {
+	category: MainCategory;
+	name: string;
+	description: string;
+}
+
+const { category, name, description } = Astro.props;
+const posts = (await getCollection('posts', ({ data }) => (
+	!data.draft && data.category === category && data.subcategory === name
+))).sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
+---
+
+<BaseLayout title={`${name} · ${category}`} description={description} activeNav={categoryPath(category)}>
+	<header class="page-intro shell subcategory-intro">
+		<nav class="breadcrumb" aria-label="面包屑导航">
+			<a href={categoryPath(category)}>{category}</a>
+			<span aria-hidden="true">/</span>
+			<span aria-current="page">{name}</span>
+		</nav>
+		<h1>{name}</h1>
+		<p>{description}</p>
+	</header>
+	<section class="section shell" aria-labelledby="subcategory-articles-title">
+		<div class="section-label">
+			<h2 id="subcategory-articles-title">文章</h2>
+			<span>{posts.length > 0 ? `${posts.length} 篇` : '内容正在整理'}</span>
+		</div>
+		{posts.length > 0 ? (
+			<div class="post-list">{posts.map((post) => <PostCard post={post} />)}</div>
+		) : (
+			<div class="empty-state compact-empty-state">
+				<h2>这里还没有文章</h2>
+				<p>内容整理完成后，会从这里开始出现。</p>
+			</div>
+		)}
+	</section>
+</BaseLayout>
+
