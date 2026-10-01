@@ -43,6 +43,12 @@ A practical test is to count what the article must contain:
 
 Write fewer, longer sections. A section (H2 or H3) should carry roughly 350 to 600 words, not two sentences. Do not reach a word target by adding many small headings; that turns the article into a glossary and the sidebar into a long list of one-line topics. When a draft ends up with dozens of two-sentence subsections, merge them into a handful of substantial ones. The audit warns when a flagship article averages fewer than 350 words per heading.
 
+### Write each section once
+
+Decide the outline and roughly how much each section needs before drafting, then write every section to completion the first time. Do not run an "audit, top up, audit again" loop: repeatedly appending paragraphs to a section produces stitched-together text that reads as a pile of additions rather than one article, and it pads sections that were already complete.
+
+Length is the natural result of covering the topic, not a target to chase. If a section only needs three paragraphs, leave it at three. The audit is a check applied once at the end, not a driver that keeps adding until a number is reached. If the finished draft is short, that is a signal to deepen the reasoning in the outline, not to bolt on more paragraphs.
+
 The floor is a floor; treat the middle-to-upper part of the range as the target. A draft that only clears the floor is usually under-developed: add mechanisms, examples, failure modes, comparisons, and sources until the topic is genuinely covered. Never add filler to hit a number, and never lower the class to finish sooner.
 
 Examples by scope, across categories:
