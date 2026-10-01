@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="820" viewBox="0 0 1440 820" role="img" aria-labelledby="title desc">
+  <title id="title">Transformer 中一个 Token 的运行路径</title>
+  <desc id="desc">文本先变成 Token 和向量，多层 Decoder Block 使用因果自注意力与前馈网络更新表示，输出层产生下一个 Token 概率并重复生成。</desc>
+  <defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#5b5245"/></marker><style>.h{font:700 30px system-ui,"PingFang SC";fill:#2b2620}.s{font:16px system-ui,"PingFang SC";fill:#6f6659}.t{font:700 18px system-ui,"PingFang SC";fill:#2b2620}.b{font:15px system-ui,"PingFang SC";fill:#554d42}.x{font:13px ui-monospace,SFMono-Regular,monospace;fill:#6f6659}.l{stroke:#5b5245;stroke-width:2.5;fill:none;marker-end:url(#a)}</style></defs>
+  <rect width="1440" height="820" rx="28" fill="#fdfaf3"/>
+  <text class="h" x="64" y="64">从文字到下一个 Token</text><text class="s" x="64" y="94">Transformer 的稳定骨架：表示、交换信息、逐位置变换，再映射回词表。</text>
+  <rect x="64" y="166" width="220" height="150" rx="18" fill="#ebe4d4" stroke="#8a7f6d"/>
+  <text class="t" x="174" y="205" text-anchor="middle">文本与模板</text><text class="b" x="174" y="242" text-anchor="middle">system · user · history</text><text class="x" x="174" y="280" text-anchor="middle">“Redis 为什么…”</text>
+  <rect x="350" y="166" width="220" height="150" rx="18" fill="#d8dee0" stroke="#2f5d8a"/>
+  <text class="t" x="460" y="205" text-anchor="middle">Tokenizer</text><text class="b" x="460" y="242" text-anchor="middle">子词切分与特殊 Token</text><text class="x" x="460" y="280" text-anchor="middle">[71, 2048, 93, ...]</text>
+  <rect x="636" y="166" width="220" height="150" rx="18" fill="#dee3d6" stroke="#4f7a52"/>
+  <text class="t" x="746" y="205" text-anchor="middle">Embedding + 位置</text><text class="b" x="746" y="242" text-anchor="middle">ID 变成连续向量</text><text class="x" x="746" y="280" text-anchor="middle">x₁, x₂, ... xₙ</text>
+  <path class="l" d="M284 241H342"/><path class="l" d="M570 241H628"/>
+
+  <rect x="922" y="126" width="454" height="384" rx="24" fill="#f5f0e4" stroke="#8a7f6d"/>
+  <text class="t" x="1149" y="164" text-anchor="middle">Decoder Block × N</text>
+  <rect x="954" y="192" width="390" height="94" rx="14" fill="#d8dee0" stroke="#2f5d8a"/>
+  <text class="t" x="1149" y="224" text-anchor="middle">Causal Self-Attention</text><text class="b" x="1149" y="252" text-anchor="middle">Q 找 K，按权重聚合 V；只读取左侧历史</text><text class="x" x="1149" y="274" text-anchor="middle">softmax(QKᵀ / √d) V</text>
+  <rect x="954" y="314" width="390" height="72" rx="14" fill="#fbf8f1" stroke="#8a7f6d"/>
+  <text class="t" x="1149" y="344" text-anchor="middle">Residual + Norm</text><text class="b" x="1149" y="370" text-anchor="middle">保留输入并控制数值尺度</text>
+  <rect x="954" y="414" width="390" height="72" rx="14" fill="#dee3d6" stroke="#4f7a52"/>
+  <text class="t" x="1149" y="444" text-anchor="middle">Feed-Forward Network</text><text class="b" x="1149" y="470" text-anchor="middle">每个位置独立完成非线性变换</text>
+  <path class="l" d="M856 241H914"/>
+  <path class="l" d="M1149 286V306"/><path class="l" d="M1149 386V406"/>
+
+  <rect x="922" y="574" width="220" height="150" rx="18" fill="#eed9d3" stroke="#a8433f"/>
+  <text class="t" x="1032" y="613" text-anchor="middle">输出层</text><text class="b" x="1032" y="650" text-anchor="middle">隐藏状态 → 词表 logits</text><text class="x" x="1032" y="688" text-anchor="middle">P(next token)</text>
+  <rect x="1208" y="574" width="168" height="150" rx="18" fill="#ebe4d4" stroke="#8a7f6d"/>
+  <text class="t" x="1292" y="613" text-anchor="middle">采样</text><text class="b" x="1292" y="650" text-anchor="middle">选出一个 Token</text><text class="x" x="1292" y="688" text-anchor="middle">追加并重复</text>
+  <path class="l" d="M1149 510V550H1032V566"/><path class="l" d="M1142 649H1200"/>
+  <path d="M1292 574V542H746V324" stroke="#5b5245" stroke-width="2.5" fill="none" marker-end="url(#a)"/>
+  <rect x="64" y="430" width="670" height="294" rx="22" fill="#fbf8f1" stroke="#8a7f6d"/>
+  <text class="t" x="96" y="470">读图时记住三件事</text>
+  <text class="b" x="96" y="516">1. Attention 在位置之间交换信息，前馈网络在每个位置内部变换表示。</text>
+  <text class="b" x="96" y="558">2. 训练并行预测许多位置；在线生成仍然一次追加一个 Token。</text>
+  <text class="b" x="96" y="600">3. 每层 K/V 可以在 Decode 时缓存，避免反复计算整段前文。</text>
+  <text class="b" x="96" y="642">4. 输出是概率分布；流畅、确定和事实正确是不同属性。</text>
+  <text class="x" x="96" y="687">模型家族会替换 Norm、位置编码、激活函数和注意力变体，但主路径不变。</text>
+</svg>

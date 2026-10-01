@@ -4,14 +4,30 @@ export interface Subcategory {
 	name: string;
 	slug: string;
 	description: string;
+	plannedTopics?: string[];
 }
 
 export const agentSubcategories: Subcategory[] = [
-	{ name: 'Agent 工程', slug: 'agent-engineering', description: '拆解 Agent Runtime、Harness、工具、记忆、权限与可靠执行。' },
+	{ name: 'Agent 开发', slug: 'agent-development', description: '学习 Harness、Prompt、Context、ReAct、工具、记忆与可靠执行。' },
+	{ name: 'Agent 产品与架构', slug: 'agent-products', description: '拆解 Codex、Claude Code、Hermes、OpenClaw 等具体系统。' },
 	{ name: 'AI Coding', slug: 'ai-coding', description: '在需求、编码、Review、测试与交付中更好地使用 AI。' },
 	{ name: 'RAG 与知识工程', slug: 'rag-knowledge', description: '让知识可检索、可理解、可维护，并成为模型能够使用的上下文。' },
 	{ name: 'Agent 方法与评测', slug: 'agent-methods', description: '规划、反思、自进化、多 Agent 协作，以及效果如何被可靠评估。' },
-	{ name: 'LLM 原理与训练', slug: 'llm-fundamentals', description: 'Transformer、Attention、训练、微调、后训练与推理优化。' },
+	{
+		name: 'LLM 原理与训练',
+		slug: 'llm-fundamentals',
+		description: '从零理解 Token、Transformer、训练、后训练与推理。',
+		plannedTopics: [
+			'《Attention Is All You Need》精读：Transformer 解决了什么',
+			'现代 LLM 的 Transformer：从 Token 输入到下一个 Token',
+			'Tokenization：模型看到的文字为什么和人不一样',
+			'KV Cache：大模型生成为什么越来越占显存',
+			'LLM 预训练：数据、目标函数与 Scaling Law',
+			'大模型微调：Full Fine-tuning、LoRA 与 QLoRA',
+			'LLM 后训练：从 SFT、RLHF、DPO 到 GRPO',
+			'推理优化：Continuous Batching、PagedAttention、量化与投机解码',
+		],
+	},
 ];
 
 export const backendSubcategories: Subcategory[] = [

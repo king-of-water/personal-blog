@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="820" viewBox="0 0 1440 820" role="img" aria-labelledby="title desc">
+  <title id="title">大语言模型完整生命周期</title>
+  <desc id="desc">数据经过清洗和 Tokenization 进入预训练，随后经过监督微调与偏好优化，部署后由 Prompt、检索和工具提供运行时信息。</desc>
+  <defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#5b5245"/></marker><style>.h{font:700 30px system-ui,"PingFang SC";fill:#2b2620}.s{font:16px system-ui,"PingFang SC";fill:#6f6659}.t{font:700 18px system-ui,"PingFang SC";fill:#2b2620}.b{font:15px system-ui,"PingFang SC";fill:#554d42}.x{font:13px system-ui,"PingFang SC";fill:#6f6659}.l{stroke:#5b5245;stroke-width:2.5;fill:none;marker-end:url(#a)}</style></defs>
+  <rect width="1440" height="820" rx="28" fill="#fdfaf3"/>
+  <text class="h" x="64" y="64">大模型的一生：离线改变参数，在线改变输入与状态</text>
+  <text class="s" x="64" y="94">训练阶段产生权重；推理阶段加载权重，每次请求通过 Context、KV Cache 和工具完成任务。</text>
+
+  <text class="t" x="64" y="154">离线训练</text>
+  <rect x="64" y="182" width="240" height="168" rx="18" fill="#ebe4d4" stroke="#8a7f6d"/>
+  <text class="t" x="184" y="220" text-anchor="middle">数据与 Tokenizer</text><text class="b" x="184" y="257" text-anchor="middle">网页 · 书籍 · 代码 · 对话</text><text class="b" x="184" y="286" text-anchor="middle">清洗 · 去重 · 配比</text><text class="x" x="184" y="322" text-anchor="middle">文本 → Token ID</text>
+  <rect x="360" y="182" width="240" height="168" rx="18" fill="#d8dee0" stroke="#2f5d8a"/>
+  <text class="t" x="480" y="220" text-anchor="middle">预训练</text><text class="b" x="480" y="257" text-anchor="middle">预测下一个 Token</text><text class="b" x="480" y="286" text-anchor="middle">反向传播更新参数</text><text class="x" x="480" y="322" text-anchor="middle">得到 Base Model</text>
+  <rect x="656" y="182" width="240" height="168" rx="18" fill="#dee3d6" stroke="#4f7a52"/>
+  <text class="t" x="776" y="220" text-anchor="middle">SFT</text><text class="b" x="776" y="257" text-anchor="middle">指令与示范回答</text><text class="b" x="776" y="286" text-anchor="middle">学习对话和任务格式</text><text class="x" x="776" y="322" text-anchor="middle">更会遵循指令</text>
+  <rect x="952" y="182" width="240" height="168" rx="18" fill="#eed9d3" stroke="#a8433f"/>
+  <text class="t" x="1072" y="220" text-anchor="middle">偏好与安全训练</text><text class="b" x="1072" y="257" text-anchor="middle">RLHF · DPO · 可验证奖励</text><text class="b" x="1072" y="286" text-anchor="middle">塑造回答行为</text><text class="x" x="1072" y="322" text-anchor="middle">得到可部署模型</text>
+  <path class="l" d="M304 266H352"/><path class="l" d="M600 266H648"/><path class="l" d="M896 266H944"/>
+  <path class="l" d="M1192 266H1290V430H1130"/>
+
+  <text class="t" x="64" y="446">在线推理</text>
+  <rect x="64" y="478" width="256" height="176" rx="18" fill="#ebe4d4" stroke="#8a7f6d"/>
+  <text class="t" x="192" y="516" text-anchor="middle">运行时输入</text><text class="b" x="192" y="553" text-anchor="middle">Prompt · 历史 · RAG</text><text class="b" x="192" y="582" text-anchor="middle">工具定义与结果</text><text class="x" x="192" y="622" text-anchor="middle">只影响当前 Context</text>
+  <rect x="394" y="478" width="300" height="176" rx="18" fill="#d8dee0" stroke="#2f5d8a"/>
+  <text class="t" x="544" y="516" text-anchor="middle">加载固定权重</text><text class="b" x="544" y="553" text-anchor="middle">Prefill 处理输入</text><text class="b" x="544" y="582" text-anchor="middle">Decode 逐 Token 生成</text><text class="x" x="544" y="622" text-anchor="middle">不做梯度更新</text>
+  <rect x="768" y="478" width="300" height="176" rx="18" fill="#dee3d6" stroke="#4f7a52"/>
+  <text class="t" x="918" y="516" text-anchor="middle">临时推理状态</text><text class="b" x="918" y="553" text-anchor="middle">KV Cache · batch · 采样</text><text class="b" x="918" y="582" text-anchor="middle">随请求增长与释放</text><text class="x" x="918" y="622" text-anchor="middle">不等于长期记忆</text>
+  <rect x="1142" y="478" width="234" height="176" rx="18" fill="#fbf8f1" stroke="#8a7f6d"/>
+  <text class="t" x="1259" y="516" text-anchor="middle">输出与行动</text><text class="b" x="1259" y="553" text-anchor="middle">文本或工具调用</text><text class="b" x="1259" y="582" text-anchor="middle">应用负责执行与验证</text><text class="x" x="1259" y="622" text-anchor="middle">下一请求重新装配</text>
+  <path class="l" d="M320 566H386"/><path class="l" d="M694 566H760"/><path class="l" d="M1068 566H1134"/>
+  <rect x="64" y="708" width="1312" height="58" rx="14" fill="#f5f0e4" stroke="#8a7f6d"/>
+  <text class="b" x="720" y="743" text-anchor="middle">判断一个技术改变了什么：权重、当前 Context、外部知识，还是一次请求的临时状态。</text>
+</svg>

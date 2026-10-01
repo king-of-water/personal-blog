@@ -8,9 +8,10 @@ interface Props {
 	category: MainCategory;
 	name: string;
 	description: string;
+	plannedTopics?: string[];
 }
 
-const { category, name, description } = Astro.props;
+const { category, name, description, plannedTopics = [] } = Astro.props;
 const posts = (await getCollection('posts', ({ data }) => (
 	!data.draft && data.category === category && data.subcategory === name
 ))).sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
@@ -40,5 +41,15 @@ const posts = (await getCollection('posts', ({ data }) => (
 			</div>
 		)}
 	</section>
+	{plannedTopics.length > 0 && (
+		<section class="section shell topic-roadmap" aria-labelledby="planned-topics-title">
+			<div class="section-label">
+				<h2 id="planned-topics-title">后续专题</h2>
+				<span>{plannedTopics.length} 个选题</span>
+			</div>
+			<ol>
+				{plannedTopics.map((topic) => <li><span>{topic}</span><small>待深入</small></li>)}
+			</ol>
+		</section>
+	)}
 </BaseLayout>
-

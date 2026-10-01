@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="800" viewBox="0 0 1440 800" role="img" aria-labelledby="title desc">
+  <title id="title">Prompt、RAG、微调与工具的作用层</title>
+  <desc id="desc">Prompt 和 RAG 改变本次上下文，微调改变模型参数，工具连接外部事实和动作，四者有不同更新频率与验证方式。</desc>
+  <defs><style>.h{font:700 30px system-ui,"PingFang SC";fill:#2b2620}.s{font:16px system-ui,"PingFang SC";fill:#6f6659}.t{font:700 20px system-ui,"PingFang SC";fill:#2b2620}.b{font:15px system-ui,"PingFang SC";fill:#554d42}.x{font:13px system-ui,"PingFang SC";fill:#6f6659}</style></defs>
+  <rect width="1440" height="800" rx="28" fill="#fdfaf3"/>
+  <text class="h" x="64" y="64">同样是“让模型更懂业务”，改变的层可能完全不同</text><text class="s" x="64" y="94">先判断信息变化多快、是否需要来源、能否由外部系统验证，再选择技术。</text>
+  <rect x="64" y="150" width="1312" height="118" rx="20" fill="#ebe4d4" stroke="#8a7f6d"/>
+  <text class="t" x="96" y="188">外部世界</text><text class="b" x="96" y="223">数据库、搜索引擎、代码仓库、业务 API 与真实动作</text>
+  <rect x="1008" y="172" width="330" height="72" rx="14" fill="#eed9d3" stroke="#a8433f"/>
+  <text class="t" x="1173" y="201" text-anchor="middle">工具</text><text class="x" x="1173" y="225" text-anchor="middle">实时观察或执行 · 需要权限与验收</text>
+  <rect x="64" y="312" width="1312" height="200" rx="22" fill="#f5f0e4" stroke="#8a7f6d"/>
+  <text class="t" x="96" y="350">本次请求的 Context</text><text class="b" x="96" y="380">只在当前调用中存在，下一次请求需要重新装配</text>
+  <rect x="96" y="410" width="570" height="72" rx="14" fill="#d8dee0" stroke="#2f5d8a"/>
+  <text class="t" x="381" y="439" text-anchor="middle">Prompt</text><text class="x" x="381" y="464" text-anchor="middle">任务说明 · 格式 · 少量示例 · 更新最快</text>
+  <rect x="704" y="410" width="634" height="72" rx="14" fill="#dee3d6" stroke="#4f7a52"/>
+  <text class="t" x="1021" y="439" text-anchor="middle">RAG</text><text class="x" x="1021" y="464" text-anchor="middle">检索当前证据 · 可附来源 · 质量取决于召回与资料</text>
+  <rect x="64" y="556" width="1312" height="160" rx="22" fill="#d8dee0" stroke="#2f5d8a"/>
+  <text class="t" x="96" y="596">模型参数</text><text class="b" x="96" y="630">预训练与微调改变权重；部署后的普通请求只读取权重</text>
+  <rect x="854" y="582" width="484" height="104" rx="14" fill="#fbf8f1" stroke="#8a7f6d"/>
+  <text class="t" x="1096" y="618" text-anchor="middle">微调 / 后训练</text><text class="x" x="1096" y="647" text-anchor="middle">稳定行为与领域适配 · 更新慢 · 需要回归评测</text><text class="x" x="1096" y="670" text-anchor="middle">不适合作为频繁变化事实的数据库</text>
+  <path d="M1173 244V304" stroke="#5b5245" stroke-width="2" stroke-dasharray="6 6"/>
+  <path d="M720 512V548" stroke="#5b5245" stroke-width="2" stroke-dasharray="6 6"/>
+  <text class="x" x="64" y="760">组合方式：Prompt 规定任务，RAG 提供证据，微调塑造稳定行为，工具连接可验证的外部状态。</text>
+</svg>

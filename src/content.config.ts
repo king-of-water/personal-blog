@@ -9,7 +9,8 @@ const posts = defineCollection({
 		description: z.string(),
 		category: z.enum(['后端', 'Agent', '项目']).default('项目'),
 		subcategory: z.enum([
-			'Agent 工程',
+			'Agent 开发',
+			'Agent 产品与架构',
 			'AI Coding',
 			'RAG 与知识工程',
 			'Agent 方法与评测',

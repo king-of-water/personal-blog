@@ -105,6 +105,12 @@ main { min-height: calc(100vh - 150px); }
 .empty-state .eyebrow { margin-bottom: 8px; }
 .empty-state h2 { margin: 0 0 5px; font-size: 22px; letter-spacing: -0.035em; }
 .empty-state p:last-child { margin: 0; color: var(--muted); }
+.topic-roadmap { padding-top: 0; padding-bottom: 88px; }
+.topic-roadmap ol { margin: 0; padding: 0; border-top: 1px solid var(--line); list-style: none; counter-reset: topic; }
+.topic-roadmap li { counter-increment: topic; display: grid; grid-template-columns: 32px 1fr auto; gap: 14px; align-items: baseline; padding: 15px 0; border-bottom: 1px solid var(--line); }
+.topic-roadmap li::before { content: counter(topic, decimal-leading-zero); color: var(--muted); font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; }
+.topic-roadmap li span { font-size: 15px; }
+.topic-roadmap li small { color: var(--muted); font-size: 11px; }
 
 .article-layout { display: grid; grid-template-columns: clamp(126px, 14vw, 210px) minmax(0, 850px) clamp(126px, 14vw, 210px); justify-content: center; gap: clamp(24px, 3.5vw, 70px); width: min(calc(100% - 48px), 1450px); margin: 0 auto; }
 .article { grid-column: 2; width: 100%; margin: 0; padding: 72px 0 96px; }
