@@ -6,7 +6,7 @@ subcategory: Agent 开发
 articleClass: flagship
 featured: false
 publishedAt: 2026-10-01
-updatedAt: 2026-10-01
+updatedAt: 2026-10-02
 tags: [Claude Code, Agent Harness, Query Loop, Compact, Memory, Context Engineering, SubAgent]
 tools:
   - name: humanizer
@@ -130,13 +130,13 @@ System Instructions
 
 这些内容不是同一种数据，也不该有同一个生命周期。
 
-### 项目规则是确定性输入
+**项目规则是确定性输入。**
 
 构建命令、代码规范、禁止修改的目录和验收方式，应该写进 `CLAUDE.md`、`AGENTS.md` 或条件规则。它们由人维护，适合稳定、可审查的约束。
 
 项目越大，越不能把所有规则一次性塞进 Prompt。Claude Code 支持在 `.claude/rules/` 中按路径匹配规则。只有任务触及对应文件时，前端或后端规范才进入上下文。
 
-### Skills 是按需知识
+**Skills 是按需知识。**
 
 会话开始时，模型只需要知道有哪些 Skill 及其用途。选中某个 Skill 后再加载完整说明。这个两阶段设计很重要：
 
@@ -147,7 +147,7 @@ System Instructions
 
 它既节省窗口，也让专业知识保留独立版本和维护边界。
 
-### System Reminder 是运行时信息
+**System Reminder 是运行时信息。**
 
 有些信息不适合写进用户消息，也不是永久系统规则，例如权限变化、记忆老化提示或任务状态。运行时可以用明确的提醒块注入，告诉模型这是系统提供的环境事实，而不是用户刚刚说的话。
 
@@ -177,6 +177,10 @@ tool_result 回到 Query Loop
 ```
 
 Checkpoint 解决另一类问题：操作已经被允许并执行，但用户想撤回 Agent 的文件改动。权限、防护和回滚分别应对事前授权、执行边界与事后恢复，不能只靠一个“自动模式”覆盖。
+
+官方 Agent SDK 文档把权限评估顺序写得更具体：先运行 Hooks，再检查拒绝规则，然后应用当前权限模式，接着检查允许规则，仍未决时才进入交互式回调。这个顺序带来两个重要结果。第一，`allow` Hook 不能覆盖后续的明确拒绝；第二，所谓自动批准模式也不该越过组织设置的拒绝规则。权限系统不是一张平铺规则表，而是一条有优先级的决策管线。
+
+子 Agent 的权限继承也值得单独检查。父会话进入高权限模式后，子 Agent 可能继承相同模式，但它拥有不同的 System Prompt 和更窄的任务上下文。把高权限无条件传给所有委派任务，会把“主 Agent 值得信任”错误地等同于“每个子任务都需要完整访问”。设计自己的 Harness 时，权限应作为委派契约的一部分显式收窄。
 
 ## 六、上下文为什么会爆
 
@@ -245,19 +249,19 @@ Claude Code 用多层减压处理这个问题。官方文档确认它会先清�
 
 完整压缩会丢弃早期消息。要继续工作，系统还需要重建一些不能只靠摘要承载的内容。
 
-### 项目规则重新加载
+**项目规则重新加载。**
 
 `CLAUDE.md` 不必永久塞进摘要。它是磁盘上的权威规则，下一轮可以重新发现并加载。这样项目规则更新后，Agent 读到的是新版本，而不是摘要里的旧副本。
 
-### 当前文件按预算恢复
+**当前文件按预算恢复。**
 
 还原资料显示，Compact 后可能重新附加少量关键文件，并受单文件和总 token 预算限制。完整历史没有回来，但最可能继续编辑的文件仍在手边。
 
-### 子任务和后台任务重新挂接
+**子任务和后台任务重新挂接。**
 
 异步任务、子 Agent 状态和工具环境不能只变成一句自然语言。运行时需要重新附加结构化状态，确保下一轮知道哪些任务仍存在。
 
-### 手动 Compact 与自动 Compact 目标不同
+**手动 Compact 与自动 Compact 目标不同。**
 
 用户执行 `/compact` 时，可以给出希望保留的重点。自动 Compact 更强调无交互继续运行，不能突然向用户追问摘要偏好。
 
@@ -302,7 +306,7 @@ Anthropic 官方文档把 Auto Memory 分为四类：
 
 下面继续使用第三方实现线索，不把具体细节视为官方稳定接口。
 
-### 每条记忆独立成文件，索引常驻
+**每条记忆独立成文件，索引常驻。**
 
 还原资料显示，每条记忆可以保存为带 frontmatter 的 Markdown 文件，目录中的 `MEMORY.md` 充当索引。
 
@@ -315,19 +319,19 @@ release-date.md 完整内容，按需读取
 
 这个设计在两个极端之间取得平衡：所有正文常驻会浪费 token，完全不暴露索引又让模型不知道有什么可用。
 
-### 写入交给独立抽取过程
+**写入交给独立抽取过程。**
 
 还原文章描述了一个在主 Query 完成后触发的记忆抽取过程。它扫描本轮对话，判断是否出现新的用户信息、纠正、项目事实或引用，再与现有记忆去重。
 
 把写入与主任务分开有两个好处：主模型不必一边修代码一边思考该记什么；记忆 schema 也能由专门流程严格执行。
 
-### 小模型从索引中做选择
+**小模型从索引中做选择。**
 
 在被还原版本中，检索不依赖向量数据库。系统扫描记忆文件的头部描述，再让模型从候选列表里选择少量相关文件。
 
 这不代表向量检索没有价值。候选只有几十到几百条、描述质量高时，LLM 选择器可解释、好调试；候选达到百万级，多阶段检索仍然必要。
 
-### 老记忆要带时间意识
+**老记忆要带时间意识。**
 
 还原资料显示，较旧记忆在注入时会附带提醒，要求模型在行动前验证。具体天数属于版本细节，原则更重要：记忆是历史快照，不是当前真相。
 
@@ -360,6 +364,8 @@ Anthropic 官方文档说明，Subagent 拥有自己的上下文窗口、System 
 
 子 Agent 不是免费的。委派提示不清楚时，它会重复主任务已经做过的搜索；结果摘要过短时，又会丢掉证据。好的委派要写清目标、输出格式、可用工具和验收条件。
 
+官方扩展能力总览把 Subagent 描述为“在隔离上下文中运行自己的循环并返回摘要”。这个边界很关键：子 Agent 解决的是上下文隔离和职责分工，Agent Team 才进一步引入独立会话、共享任务与点对点消息。若工作只有一条强依赖链，把它拆成多个 Agent 往往增加交接成本；若多个探索分支能独立产出证据，隔离上下文才会真正节省主窗口。
+
 ## 十四、Hooks、Permissions、Sandbox 与 Checkpoint
 
 这四套能力经常被混成一个“安全系统”，它们实际解决四类不同问题。
@@ -375,33 +381,67 @@ Hooks 可以阻止危险命令，却不是不可绕过的操作系统隔离。Sa
 
 可信 Harness 需要把这几层组合起来，而不是让一个“全自动”开关承担全部责任。
 
-## 十五、从 Claude Code 里能抄走什么
+Hooks 和 Skills 也不应混用。官方文档的区分很实用：Hook 在生命周期事件上确定触发，适合格式化、阻断危险命令、记录审计；Skill 由模型根据描述选择并解释执行，适合需要推理的工作流与参考知识。把“每次编辑后必须运行格式化”只写进 Skill，会留下漏触发概率；把“怎样排查一次复杂线上故障”硬编码成 Hook，又失去了模型判断空间。
 
-### 1. 先按生命周期管理上下文
+## 十五、一次长任务怎样跨过 Compact 继续执行
+
+假设用户要求把一个旧的鉴权中间件迁移到新接口，同时保持三种登录方式兼容。Claude Code 先读取入口、类型定义和测试，随后让子 Agent 调查历史兼容逻辑。主会话又运行完整测试，得到数千行日志，窗口迅速接近阈值。
+
+在压缩前，运行时应先判断哪些信息能重建。早期文件全文可以再次读取，成功测试的大段日志只需保留命令和退出状态，失败堆栈则要留下首个根因与相关用例。子 Agent 的调查结论不能只保留“已研究”，至少要留下涉及的入口、兼容分支和证据文件。用户明确要求“保留三种登录方式”属于任务约束，优先级高于任何可重读内容。
+
+候选摘要可以写成结构化接力状态：
+
+```yaml
+goal: migrate auth middleware without removing password, SSO, or token login
+decisions:
+  - keep legacy token decoder behind compatibility adapter
+  - do not change public session schema
+changed_files:
+  - src/auth/middleware.ts
+  - src/auth/compat.ts
+evidence:
+  - unit tests passed before integration change
+  - SSO integration still failing at callback fixture
+unresolved:
+  - confirm whether expired legacy tokens should map to 401 or 403
+next:
+  - inspect callback fixture
+  - rerun auth integration suite
+```
+
+完成 Compact 后，项目规则从磁盘重新加载，关键文件按预算再次读取，仍在运行的后台任务通过结构化句柄挂回会话。下一次模型请求看到的是一份较短但可执行的状态，而不是一段文学化总结。它先检查工作区和测试现状，再继续处理 SSO 用例，避免把摘要中的“当时事实”误当成当前事实。
+
+任务结束后，只有跨会话仍有价值且无法从仓库直接推导的信息才进入 Auto Memory。例如用户确认“兼容期内 401/403 语义不能变”若是团队长期约束，更适合写进项目规则或测试；“今天集成环境证书过期”只是临时状态，不应永久记忆；“用户希望所有迁移先给兼容矩阵”则可能成为反馈类记忆。
+
+这个例子把 Context、Compact、Memory 的边界连在一起：Context 服务当前循环，Compact迁移当前状态，Memory 选择少量长期经验。三者共享信息，却承担不同保存期限和验证责任。
+
+## 十六、从 Claude Code 里能抄走什么
+
+**先按生命周期管理上下文。**
 
 项目规则、当前观察、临时日志和长期记忆不能混成一坨。它们应该有不同的来源、更新方式和淘汰策略。
 
-### 2. 先裁剪可重建信息
+**先裁剪可重建信息。**
 
 旧文件内容和日志可以再次读取，用户决定和昂贵探索结论不容易恢复。Compact 的第一原则应是可重建性，而不是字符长度。
 
-### 3. Compact 要输出接力状态
+**Compact 要输出接力状态。**
 
 摘要必须包含目标、文件、错误、决定、未完成事项和下一步。它要给下一轮 Agent 提供运行状态，写法和面向人的会议纪要不同。
 
-### 4. 长期记忆先约束写入
+**长期记忆先约束写入。**
 
 记忆系统的问题常常不在召回算法，而在垃圾信息被永久写入。限定类型、要求原因和应用条件，比盲目更换 Embedding 更重要。
 
-### 5. 索引常驻，正文按需
+**索引常驻，正文按需。**
 
 这种两阶段加载不只适合 Memory，也适合 Skills、工具文档和大型知识库。模型先知道“有什么”，再为真正需要的内容支付 token。
 
-### 6. 记忆必须允许怀疑
+**记忆必须允许怀疑。**
 
 注入时间、来源和验证建议，让模型知道这是一份历史快照。Agent 应该先对照当前代码与外部事实，再依据记忆行动。
 
-## 十六、哪些结论不要从逆向文章里照搬
+## 十七、哪些结论不要从逆向文章里照搬
 
 第三方还原资料很有价值，但使用时要给每条结论标注置信度。
 
@@ -414,7 +454,9 @@ source map 中的具体函数和常量    中置信，只代表特定版本
 
 尤其不要把某个 token 阈值、模型名称、内部函数名或 feature flag 写成长期稳定承诺。真正适合沉淀进架构文章的，是多层减压、索引与正文分离、记忆老化和独立上下文这些设计原则。
 
-## 十七、最后：Claude Code 管的是信息的生命周期
+版本变化还会使“已经观察到”和“产品保证”之间出现缝隙。文档明确说明 `/compact` 会总结并释放上下文，可以作为稳定行为；环境变量暴露的自动压缩窗口，只说明当前客户端提供相关控制，不代表内部每层算法长期不变；source map 中的函数名和常量只能标注到被还原版本。读者据此实现集成时，应依赖公开命令与配置，避免把逆向细节当 API。
+
+## 十八、最后：Claude Code 管的是信息的生命周期
 
 Query Loop 只是骨架。Claude Code 的工程价值，在于它不断回答四个问题：
 
@@ -432,6 +474,9 @@ Agent 开发可以概括为管理模型每一步看见的信息，并在概率�
 - [Anthropic：Create custom subagents](https://code.claude.com/docs/en/sub-agents)
 - [Anthropic：Security](https://code.claude.com/docs/en/security)
 - [Anthropic：Automate actions with hooks](https://code.claude.com/docs/en/hooks-guide)
+- [Anthropic：扩展能力总览](https://code.claude.com/docs/en/features-overview)
+- [Anthropic Agent SDK：权限评估顺序](https://code.claude.com/docs/en/agent-sdk/permissions)
+- [Anthropic：内置命令与 Compact](https://code.claude.com/docs/en/commands)
 - [小林面试笔记：Claude Code 源码拆解](https://xiaolinnote.com/claudecode/source/cc_source.html)
 - [小林面试笔记：Claude Code Compact 压缩机制](https://xiaolinnote.com/claudecode/source/cc_compact.html)
 - [小林面试笔记：Claude Code 记忆机制](https://xiaolinnote.com/claudecode/source/cc_memory.html)
