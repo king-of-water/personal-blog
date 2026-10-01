@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="820" viewBox="0 0 1440 820" role="img" aria-labelledby="title desc">
+  <title id="title">我的 Codex 协作循环</title>
+  <desc id="desc">从任务契约开始，经过计划、隔离实现、真实验证和差异审查；证据不足时回到实现或计划继续修正。</desc>
+  <rect width="1440" height="820" fill="#fdfaf3"/>
+  <style>
+    .title{font:700 32px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2b2620}
+    .sub{font:400 16px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#6f6659}
+    .k{font:700 13px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2f5d8a;letter-spacing:1px}
+    .h{font:700 21px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2b2620}
+    .p{font:400 14px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#554d42}
+    .small{font:600 13px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#943b37}
+  </style>
+  <text x="80" y="70" class="title">Codex 协作循环：让证据决定什么时候完成</text>
+  <text x="80" y="103" class="sub">任务规模决定流程重量，复杂工作再增加 Plan、Worktree、状态文件或 Goal</text>
+
+  <rect x="80" y="158" width="1280" height="104" rx="12" fill="#ebe4d4" stroke="#8a7f6d"/>
+  <text x="112" y="193" class="k">TASK CONTRACT</text>
+  <text x="112" y="232" class="h">结果 · 上下文 · 边界 · 证据 · 升级条件</text>
+  <text x="1005" y="225" class="p">先固定终点，再允许自主探索路径</text>
+
+  <rect x="80" y="340" width="220" height="170" rx="12" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+  <text x="108" y="375" class="k">01 · PLAN</text>
+  <text x="108" y="415" class="h">调查与收敛</text>
+  <text x="108" y="450" class="p">读取真实实现</text>
+  <text x="108" y="478" class="p">暴露未决问题</text>
+
+  <line x1="300" y1="425" x2="350" y2="425" stroke="#5b5245" stroke-width="2"/>
+  <path d="M340 417l10 8-10 8" fill="none" stroke="#5b5245" stroke-width="2"/>
+
+  <rect x="350" y="340" width="220" height="170" rx="12" fill="#f5f0e4" stroke="#8a7f6d"/>
+  <text x="378" y="375" class="k">02 · IMPLEMENT</text>
+  <text x="378" y="415" class="h">隔离并小步实现</text>
+  <text x="378" y="450" class="p">线程保持单一目标</text>
+  <text x="378" y="478" class="p">必要时使用 Worktree</text>
+
+  <line x1="570" y1="425" x2="620" y2="425" stroke="#5b5245" stroke-width="2"/>
+  <path d="M610 417l10 8-10 8" fill="none" stroke="#5b5245" stroke-width="2"/>
+
+  <rect x="620" y="340" width="220" height="170" rx="12" fill="#f5f0e4" stroke="#8a7f6d"/>
+  <text x="648" y="375" class="k">03 · VERIFY</text>
+  <text x="648" y="415" class="h">取得真实反馈</text>
+  <text x="648" y="450" class="p">测试、构建、页面</text>
+  <text x="648" y="478" class="p">日志、基准与产物</text>
+
+  <line x1="840" y1="425" x2="890" y2="425" stroke="#5b5245" stroke-width="2"/>
+  <path d="M880 417l10 8-10 8" fill="none" stroke="#5b5245" stroke-width="2"/>
+
+  <rect x="890" y="340" width="220" height="170" rx="12" fill="#f5f0e4" stroke="#8a7f6d"/>
+  <text x="918" y="375" class="k">04 · REVIEW</text>
+  <text x="918" y="415" class="h">对照目标审查</text>
+  <text x="918" y="450" class="p">范围、风险、回归</text>
+  <text x="918" y="478" class="p">留下人工检查点</text>
+
+  <line x1="1110" y1="425" x2="1160" y2="425" stroke="#5b5245" stroke-width="2"/>
+  <path d="M1150 417l10 8-10 8" fill="none" stroke="#5b5245" stroke-width="2"/>
+
+  <rect x="1160" y="340" width="200" height="170" rx="12" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+  <text x="1188" y="375" class="k">05 · SHIP</text>
+  <text x="1188" y="415" class="h">交付并沉淀</text>
+  <text x="1188" y="450" class="p">提交可审查结果</text>
+  <text x="1188" y="478" class="p">更新规则或 Skill</text>
+
+  <path d="M1000 510 V615 H460 V545" fill="none" stroke="#a8433f" stroke-width="2" stroke-dasharray="8 7"/>
+  <path d="M452 555l8-10 8 10" fill="none" stroke="#a8433f" stroke-width="2"/>
+  <text x="600" y="646" class="small">证据不足：回到实现；方案假设错误：回到 Plan</text>
+
+  <rect x="80" y="692" width="1280" height="70" rx="10" fill="#fbf8f1" stroke="#8a7f6d"/>
+  <text x="112" y="721" class="k">DURABLE CONTEXT</text>
+  <text x="112" y="749" class="p">AGENTS.md 保存长期规则 · Skills 保存可复用方法 · Spec / Plan / STATUS 保存当前任务状态</text>
+</svg>
