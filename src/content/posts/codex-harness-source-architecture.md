@@ -6,7 +6,7 @@ subcategory: Agent 开发
 articleClass: flagship
 featured: false
 publishedAt: 2026-10-01
-updatedAt: 2026-10-01
+updatedAt: 2026-10-02
 tags: [Codex, Agent Harness, Rust, Agent Loop, App Server, Sandbox, Context Engineering]
 tools:
   - name: humanizer
@@ -246,19 +246,19 @@ tool result
 
 这层至少承担四项责任。
 
-### 参数必须先校验
+**参数必须先校验。**
 
 模型输出仍然是不可信输入。即使 JSON 语法正确，路径可能越界，枚举值可能不存在，组合参数也可能互相冲突。工具实现不能假设“模型应该懂”。
 
-### 并发不能靠猜
+**并发不能靠猜。**
 
 两个只读搜索可以并行，两个修改同一文件的补丁则可能互相覆盖。是否并发应由工具元数据和运行时策略决定，不应完全交给模型自由发挥。
 
-### 长任务需要句柄
+**长任务需要句柄。**
 
 测试、构建和服务器进程可能运行数分钟。统一执行层会返回会话或进程标识，后续工具可以继续读取输出、写 stdin 或终止进程。模型不用在一次 Tool Call 里等待到超时。
 
-### 结果需要控制体积
+**结果需要控制体积。**
 
 巨量日志不应该原样进入上下文。运行时可以保留尾部、摘要或外部 artifact 引用，同时告诉模型内容被截断。隐藏截断会让模型误以为它已经看到了全部事实。
 
@@ -279,6 +279,10 @@ Prompt 是软约束，模型可能误解，也可能受到仓库内容中的提�
 Codex 在 macOS、Linux 等环境中接入不同的隔离实现。对 Harness 来说，上层只需要表达文件、网络和进程策略，底层再映射到相应平台能力。
 
 这个分层还解释了为什么 `.git` 或 `.codex` 可以在普通 workspace-write 模式下被保护：工作目录可写，不代表目录里的所有敏感区域都自动可写。
+
+当前源码把审批结果进一步建模为 `Skip`、`NeedsApproval` 与 `Forbidden`。这比一个布尔值更接近真实决策：某条命令可能无需询问但仍在沙箱内运行，可能需要用户批准一次越界，也可能因为策略禁止弹窗而直接拒绝。`AskForApproval` 还区分不可信项目、按请求审批、细粒度审批和永不询问等模式。策略负责决定能不能问，沙箱继续决定最终能访问什么。
+
+命令本身也不能作为一整段字符串粗略放行。Shell 中的管道、逻辑运算符和子命令会形成多个执行片段，每段都可能拥有不同风险。一个看似安全的读取命令后面接写文件操作时，审批系统需要分别判断，而不是因为前缀命中就授权整行。Codex 仓库中的审批测试覆盖危险命令、动态 Shell 词、沙箱越界和用户拒绝等分支，这说明权限系统必须靠测试固定语义，不能只靠 Prompt 告诉模型“谨慎一点”。
 
 ## 九、Exec Server：为什么执行环境要独立
 
@@ -332,6 +336,10 @@ Codex 会把用户输入、模型输出、工具调用和工具结果写入 Roll
 
 因此 Compact 不是简单的“让模型总结聊天”。它是一种有损状态迁移。好的迁移至少保住：目标、约束、已改文件、关键判断、失败原因、验收证据和下一步。
 
+从 [`compact.rs`](https://github.com/openai/codex/blob/main/codex-rs/core/src/compact.rs) 还能看到一个容易忽略的工程要求：压缩成功后才提交摘要，失败时要让内存历史和持久化 Rollout 保持原样。否则网络错误可能留下半份新摘要和半份旧历史，下一轮既无法可靠续接，也很难判断哪些记录已经生效。
+
+这是一种事务语义。压缩输入可以有损，状态切换却不能含糊。实现自己的 Harness 时，至少要把“生成候选摘要”和“替换活动上下文”分成两个阶段，并记录压缩发生在哪个历史边界。摘要还应带上源范围或检查点，方便恢复时识别后续新增事件。
+
 ## 十二、中断、恢复和 Fork 为什么能工作
 
 中断不是删除最后一条消息。它应该终止当前正在推进的 Turn，同时保留已经发生的 Item 和工作区变化。
@@ -356,33 +364,57 @@ Worktree 提供的是物理隔离：
 
 最终仍可能发生 Git 冲突，但冲突出现在清晰的合并边界，而不是运行到一半时互相覆盖文件。
 
-## 十四、从 Codex 源码里能抄走什么
+## 十四、沿一条失败链看 Harness 怎样收口
 
-### 1. 协议先于界面
+正常路径容易让架构显得抽象。换成一个常见失败场景：用户要求升级依赖并提交，模型修改清单后执行测试，测试需要下载包，沙箱默认禁止网络，随后又发现锁文件被另一个进程改过。
+
+第一步，模型发出测试命令。Tool Router 完成参数解析，执行策略允许它在当前沙箱中运行。进程启动后，客户端收到命令 Item，而不是等待整个 Turn 结束。网络访问失败被执行层规范化为受限环境错误，退出码、stderr 和截断状态一起回到 Core。
+
+第二步，模型判断这不是代码失败，而是权限不足，于是请求额外网络权限。Approval Policy 决定这类请求能否展示；用户批准后，仅本次命令获得相应能力。批准不会把整个 Thread 永久切换成无限制模式，后续命令仍按自己的参数重新判断。
+
+第三步，依赖安装完成，但补丁应用前发现锁文件内容与早先读取的不一致。正确行为不是强行覆盖。工具返回冲突，Core 把它作为新的环境事实追加到历史。模型重新读取 diff，判断变化来自用户、后台进程还是自己的上一条命令，再决定合并或请求确认。
+
+第四步，测试通过也不等于允许提交。Git 提交和推送分别经过权限与审批策略；模型最终消息只汇总已经发生的动作和证据。若推送被拒绝，Turn 可以以“本地提交已完成、远端未更新”的明确状态结束，而不是把所有步骤压成一句“基本完成”。
+
+这条链路同时用到了事件、结构化错误、最小权限、环境重读和完成证据。缺少任何一层，模型都可能把基础设施失败当成代码错误，把旧文件当成当前事实，或在未推送时声称任务已经交付。
+
+## 十五、怎样验证自己的理解没有停在架构图
+
+阅读 Agent 源码最常见的偏差，是看到类型名就推断整个运行时。更可靠的办法是把一个协议对象沿四类证据交叉验证：定义它的数据结构、产生它的 Core 路径、消费它的客户端路径，以及覆盖边界情况的测试。
+
+以命令审批为例，只看 `AskForApproval` 枚举会误以为策略就是几个模式；继续读 `exec_policy.rs` 才能看到危险命令、不可信项目与沙箱类型如何共同决定 `Allow`、`Prompt` 或 `Forbidden`；再看工具 schema，才能确认模型如何请求越权；最后看审批测试，才能知道用户拒绝、动态 Shell 语法和不同执行工具是否遵守同一语义。
+
+分析结论最好注明版本和边界。Codex 仓库变化很快，协议字段、工具名和实验功能会调整。稳定结论应落在职责关系上：App Server 承担客户端协议，Core 推进状态，Router 连接模型能力与实现，审批表达人的授权，沙箱强制环境边界。具体字段则保留源码链接，让读者以当前分支为准。
+
+如果要把源码研究转成自己的实现，可以先做一条最小竖切：一个 Thread、一个 Turn、文本 Item、命令 Item、一次审批、一个可恢复记录。用集成测试验证事件顺序、拒绝路径和进程退出，再增加补丁、MCP、压缩与多 Agent。先复制模块目录通常只会得到相似的名字，复制不出这些模块之间的状态契约。
+
+## 十六、从 Codex 源码里能抄走什么
+
+**协议先于界面。**
 
 先定义 Thread、Turn、Item 和事件，再做终端或网页。否则每加一个界面，就会复制一套模糊状态。
 
-### 2. 状态放在程序里
+**状态放在程序里。**
 
 进程句柄、审批结果、当前目录、文件变更和未完成调用是程序状态。不要让模型靠聊天文字“记住”。
 
-### 3. 工具必须有契约
+**工具必须有契约。**
 
 输入 schema、输出结构、副作用、并发性、超时和错误类型都应该显式定义。工具不是随手暴露的函数。
 
-### 4. 权限与执行环境解耦
+**权限与执行环境解耦。**
 
 用户是否同意和操作系统是否允许是两件事。审批和沙箱各自负责一层，远程执行再由独立协议承载。
 
-### 5. 流式事件是一等公民
+**流式事件是一等公民。**
 
 文本、计划、命令、补丁、审批和错误都需要类型。日志字符串很容易写，后续却无法可靠恢复和重放。
 
-### 6. 完成需要外部证据
+**完成需要外部证据。**
 
 模型说“已修复”只是一个 Agent Message。测试退出码、构建产物、diff 和用户定义的验收条件，才是 Turn 可以结束的证据。
 
-## 十五、最后：Agent Loop 短，Harness 很长
+## 十七、最后：Agent Loop 短，Harness 很长
 
 Codex 的模型循环可以浓缩成几行伪代码，源码的大部分价值却在循环周围：协议、上下文、工具契约、执行隔离、事件、持久化和恢复。
 
@@ -397,6 +429,9 @@ Codex 的模型循环可以浓缩成几行伪代码，源码的大部分价值�
 - [Codex Protocol v1](https://github.com/openai/codex/blob/main/codex-rs/docs/protocol_v1.md)
 - [Codex Exec Server README](https://github.com/openai/codex/blob/main/codex-rs/exec-server/README.md)
 - [Codex Tool Router 源码](https://github.com/openai/codex/blob/main/codex-rs/core/src/tools/router.rs)
+- [Codex 执行审批与沙箱决策](https://github.com/openai/codex/blob/main/codex-rs/core/src/tools/sandboxing.rs)
+- [Codex 上下文压缩实现](https://github.com/openai/codex/blob/main/codex-rs/core/src/compact.rs)
+- [Codex 审批策略测试](https://github.com/openai/codex/blob/main/codex-rs/core/tests/suite/approvals.rs)
 - [App Server v2 Turn 数据结构](https://github.com/openai/codex/blob/main/codex-rs/app-server-protocol/src/protocol/v2/thread_data.rs)
 - [App Server 通知事件类型](https://github.com/openai/codex/blob/main/codex-rs/app-server-protocol/schema/typescript/ServerNotificationEnvelope.ts)
 - [OpenAI Agents API：Architecture](https://developers.openai.com/api/docs/guides/agents-api/architecture)
