@@ -1,0 +1,7 @@
+interface:
+  display_name: "king-of-water 技术长文"
+  short_description: "按博客既有标准研究、撰写、扩展并验收高质量技术长文"
+  default_prompt: "Use $king-of-water-tech-writing to research, write, and verify a long-form technical article for the king-of-water blog."
+
+policy:
+  allow_implicit_invocation: true

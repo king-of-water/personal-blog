@@ -20,3 +20,10 @@ Consult these guides before working on related tasks:
 - [Adding or managing content](https://docs.astro.build/en/guides/content-collections/)
 - [Adding styles or using Tailwind](https://docs.astro.build/en/guides/styling/)
 - [Supporting multiple languages](https://docs.astro.build/en/guides/internationalization/)
+
+## Blog writing
+
+For new technical articles or substantial article rewrites, read and follow
+`.agents/skills/king-of-water-tech-writing/SKILL.md`. Treat
+`src/content/posts/agent-harness-engineering.md` as the local quality reference.
+Run the skill's article audit before building and committing.
