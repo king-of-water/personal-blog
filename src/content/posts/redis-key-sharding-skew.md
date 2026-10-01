@@ -3,6 +3,7 @@ title: Redis 分片为什么会倾斜：从 Key 设计追到哈希函数
 description: 用一个可复现的实验拆解 Redis 代理分片中的数据倾斜，分析 Key 结构、FNV-1a 实现与取模路由如何共同影响分布。
 category: 后端
 subcategory: Redis
+articleClass: field-note
 featured: true
 publishedAt: 2026-09-30
 tags: [Redis, 分布式系统, 哈希, 稳定性, Java]

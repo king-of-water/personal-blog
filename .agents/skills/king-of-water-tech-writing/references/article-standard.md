@@ -34,6 +34,18 @@ Do not cite a secondary article when the linked primary source is available. Pro
 
 For every benchmark number, keep enough context to avoid turning it into advertising: task set, comparison, metric, and the limitation that affects interpretation.
 
+## Length follows scope
+
+Do not apply one length to every article. Decide how much of the system the piece has to explain.
+
+| Class | Words | Use when | Typical examples |
+| --- | --- | --- | --- |
+| Flagship | 12,000–20,000+ | a whole architecture, ecosystem, technology map, or cross-cutting method | Agent harness, RAG map, coding-agent source walkthrough |
+| Focused | 6,000–12,000 | one mechanism, paper, subsystem, or workflow | FastCode, Repo Map, SDD, a Redis subsystem |
+| Field note | 2,000–6,000 | one specific question, one bug, one narrow behavior | a single Redis eviction issue, one config trap |
+
+AI and Agent topics lean longer because they usually require a system view; narrow backend issues lean shorter. Padding a small topic to flagship length is an error, and leaving a broad AI topic at a few thousand words is also an error.
+
 ## Outline patterns
 
 Choose the pattern that matches the subject.

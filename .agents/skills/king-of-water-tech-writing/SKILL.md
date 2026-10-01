@@ -25,13 +25,21 @@ Do not inflate a vendor statement into an independent fact. Label paper results 
 
 Read the relevant existing blog posts so the new article adds a new layer instead of re-explaining material already covered.
 
-## Choose the article class
+## Choose the article class by scope
 
-- **Flagship explainer:** default for a major technology or architecture. Target 12,000 to 20,000 site-counted words. A topic as broad as Harness Engineering may exceed this range.
-- **Focused deep dive:** one narrow mechanism, paper, or source path. Target 8,000 to 14,000 site-counted words.
-- **Field note:** use only when the user explicitly asks for a short observation. Target 3,000 to 6,000 site-counted words.
+Length follows how much of the system the article has to explain, not the category alone. Pick the class first, then write to it. Do not pad a narrow topic to flagship length, and do not let a broad AI topic stop at a few thousand words.
 
-The site counts each Han character and each Latin token as one word. Length is a diagnostic, not permission to repeat. If the source material cannot support the target, narrow the title or research further.
+- **Flagship (12,000 to 20,000+):** the article explains a whole architecture, ecosystem, technology map, or cross-cutting method. AI and Agent core topics default here when they cover a system rather than a single point: an Agent harness, a RAG technology map, a coding-agent source walkthrough, a new control layer.
+- **Focused (6,000 to 12,000):** the article zooms into one mechanism, one paper, one subsystem, or one workflow. A broad topic narrowed to a single question also belongs here.
+- **Field note (2,000 to 6,000):** the article answers one specific question, reproduces one bug, or documents one narrow behavior, such as a single Redis eviction problem or one configuration trap.
+
+Defaults by section:
+
+- Agent / AI Coding / RAG 与知识库 / Agent 前沿 / Agent 算法: flagship when the topic is a system or a map; focused when it is a single technique.
+- 后端 (Java, Redis, MySQL, 消息队列, 分布式): focused for a subsystem; field-note for a single issue or one reproduction.
+- 项目: focused for a build log; field-note for a short announcement or note.
+
+Declare the intended class in frontmatter with `articleClass: flagship | focused | field-note`. When an article does not declare one, the audit infers it from the section. The site counts each Han character and each Latin token as one word. Length is a diagnostic, not permission to repeat; if the source cannot support the target, narrow the title instead of padding.
 
 ## Build the article around five jobs
 
@@ -77,7 +85,7 @@ Use the `documd-visuals` skill when a relationship, sequence, or comparison mate
 
 Before committing:
 
-1. Run `node .agents/skills/king-of-water-tech-writing/scripts/audit-article.mjs <article.md> --class=flagship`. Use `focused` or `field-note` only when the chosen article class warrants it.
+1. Run `node .agents/skills/king-of-water-tech-writing/scripts/audit-article.mjs <article.md> --class=auto`. Use an explicit `--class=flagship|focused|field-note` only when overriding the declared or inferred class.
 2. Review every warning. Do not pad the article merely to silence a length warning.
 3. Run `xmllint --noout` for new SVG files.
 4. Run `npm run build` and `git diff --check`.

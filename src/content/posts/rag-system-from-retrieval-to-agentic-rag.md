@@ -3,6 +3,7 @@ title: RAG 技术地图：从向量检索到 GraphRAG、LightRAG 与 Agentic RAG
 description: RAG 早已不只是“切块、向量检索、拼进 Prompt”。本文从失败模式出发，梳理混合检索、GraphRAG、LightRAG、Self-RAG、Corrective RAG 与 Agentic RAG 的关系，并给出可落地的选型与评测方法。
 category: Agent
 subcategory: RAG 与知识库
+articleClass: flagship
 featured: false
 publishedAt: 2026-09-30
 updatedAt: 2026-09-30

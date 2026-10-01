@@ -20,6 +20,7 @@ const posts = defineCollection({
 			'消息队列',
 			'分布式',
 		]).optional(),
+		articleClass: z.enum(['flagship', 'focused', 'field-note']).optional(),
 		featured: z.boolean().default(false),
 		publishedAt: z.coerce.date(),
 		updatedAt: z.coerce.date().optional(),

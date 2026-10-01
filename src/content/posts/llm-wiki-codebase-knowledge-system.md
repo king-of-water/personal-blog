@@ -3,6 +3,7 @@ title: LLM Wiki：把代码仓库编译成可阅读、可检索的知识系统
 description: LLM Wiki 不该停在批量生成代码摘要。本文从结构解析、页面规划、证据组装、分层生成和增量更新出发，说明它与 RAG、FastCode 的关系，以及怎样构建一套能被人和 Agent 共同使用的代码知识库。
 category: Agent
 subcategory: RAG 与知识库
+articleClass: focused
 featured: false
 publishedAt: 2026-10-01
 updatedAt: 2026-10-01
@@ -473,4 +474,3 @@ LLM Wiki 可以看成一种面向代码仓库的知识编译器。
 - Nguyen Hoang Anh 等，[CodeWiki: Automated Repository-Level Documentation at Scale](https://arxiv.org/abs/2510.24428)
 - Meta Research，[DocAgent: Agentic Hierarchical Docstring Generation System](https://github.com/facebookresearch/DocAgent)
 - Zhonghang Li 等，[FastCode: Fast and Cost-Efficient Code Understanding and Reasoning](https://arxiv.org/abs/2603.01012)
-

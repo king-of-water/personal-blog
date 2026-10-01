@@ -3,23 +3,67 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+// Length follows scope, not category. AI and system-level topics are expected to
+// be substantial; a narrow single-issue note is not padded to flagship length.
+const WIDTHS = {
+  flagship: { min: 12000, minH2: 6, minImages: 2, minCode: 2, minLinks: 3, label: '旗舰长文' },
+  focused: { min: 6000, minH2: 4, minImages: 1, minCode: 1, minLinks: 2, label: '专题深潜' },
+  'field-note': { min: 2000, minH2: 2, minImages: 0, minCode: 0, minLinks: 0, label: '问题笔记' },
+};
+
+const AI_SUBCATEGORIES = new Set([
+  'Agent 开发',
+  'RAG 与知识库',
+  'AI Coding',
+  'Agent 前沿',
+  'Agent 算法',
+]);
+
 const file = process.argv[2];
 if (!file) {
-  console.error('Usage: node audit-article.mjs <article.md> [--class=flagship|focused|field-note]');
+  console.error('Usage: node audit-article.mjs <article.md> [--class=flagship|focused|field-note|auto] [--min=N]');
   process.exit(2);
 }
 
-const articleClass = process.argv
-  .slice(3)
-  .find((arg) => arg.startsWith('--class='))
-  ?.slice('--class='.length) ?? 'flagship';
-const minimumWords = { flagship: 12000, focused: 8000, 'field-note': 3000 }[articleClass];
-if (!minimumWords) {
-  console.error(`Unknown article class: ${articleClass}`);
+const args = process.argv.slice(3);
+const explicitClass = args.find((arg) => arg.startsWith('--class='))?.slice('--class='.length);
+const explicitMinArg = args.find((arg) => arg.startsWith('--min='))?.slice('--min='.length);
+const explicitMin = explicitMinArg === undefined ? undefined : Number(explicitMinArg);
+if (explicitMin !== undefined && !Number.isFinite(explicitMin)) {
+  console.error(`Invalid --min value: ${explicitMinArg}`);
   process.exit(2);
 }
 
 const source = fs.readFileSync(file, 'utf8');
+const frontmatter = source.match(/^---\s*\n([\s\S]*?)\n---/)?.[1] ?? '';
+const declaredClass = frontmatter.match(/^articleClass:\s*(\S+)/m)?.[1];
+const category = frontmatter.match(/^category:\s*(.+)$/m)?.[1]?.trim();
+const subcategory = frontmatter.match(/^subcategory:\s*(.+)$/m)?.[1]?.trim();
+
+// Precedence: explicit --class, then the article's own declaration, then a
+// scope default inferred from the section it lives in.
+function inferClass() {
+  if (declaredClass && WIDTHS[declaredClass]) return declaredClass;
+  if (subcategory && AI_SUBCATEGORIES.has(subcategory)) return 'flagship';
+  if (subcategory) return 'focused';
+  if (category === 'Agent') return 'flagship';
+  return 'focused';
+}
+
+const requestedClass = explicitClass && explicitClass !== 'auto' ? explicitClass : inferClass();
+const width = WIDTHS[requestedClass];
+if (!width) {
+  console.error(`Unknown article class: ${requestedClass}`);
+  process.exit(2);
+}
+
+const classSource = explicitClass && explicitClass !== 'auto'
+  ? 'flag'
+  : declaredClass && WIDTHS[declaredClass]
+    ? 'frontmatter'
+    : 'inferred';
+const minimumWords = explicitMin ?? width.min;
+
 const body = source.replace(/^---[\s\S]*?---\s*/, '');
 const prose = body
   .replace(/```[\s\S]*?```/g, ' ')
@@ -42,7 +86,9 @@ const tableSeparators = (body.match(/^\|(?:\s*:?-+:?\s*\|)+\s*$/gm) ?? []).lengt
 
 const result = {
   file: path.relative(process.cwd(), file),
-  articleClass,
+  articleClass: requestedClass,
+  classLabel: width.label,
+  classSource,
   minimumWords,
   siteCountedWords: words,
   estimatedMinutes: Math.max(1, Math.ceil(words / 500)),
@@ -57,11 +103,17 @@ const result = {
 console.log(JSON.stringify(result, null, 2));
 
 const warnings = [];
-if (words < minimumWords) warnings.push(`Below ${articleClass} minimum (${minimumWords.toLocaleString('en-US')} site-counted words).`);
-if (h2 < 6) warnings.push('Fewer than 6 H2 sections; confirm the topic is intentionally narrow.');
-if (images < 1) warnings.push('No article image found.');
-if (fences < 2) warnings.push('Fewer than 2 code/protocol/example blocks.');
-if (links < 3) warnings.push('Fewer than 3 external primary-source links.');
+if (words < minimumWords) {
+  warnings.push(`Below ${width.label} minimum (${minimumWords.toLocaleString('en-US')} site-counted words).`);
+}
+if (h2 < width.minH2) warnings.push(`Fewer than ${width.minH2} H2 sections for a ${width.label}.`);
+if (images < width.minImages) warnings.push(`Expect at least ${width.minImages} figure(s) for a ${width.label}.`);
+if (fences < width.minCode) warnings.push(`Expect at least ${width.minCode} code/example block(s) for a ${width.label}.`);
 
 for (const warning of warnings) console.warn(`WARN: ${warning}`);
+// Links are a hint, not a hard requirement: conceptual pieces may cite nothing
+// external, while research notes should prefer primary sources.
+if (links < width.minLinks) {
+  console.warn(`NOTE: ${links} external link(s); ${width.minLinks}+ expected when the article makes external implementation or research claims.`);
+}
 process.exitCode = warnings.length ? 1 : 0;
