@@ -178,7 +178,7 @@ const librarySections = categorySections.map((section) => ({
 
 			const updateActiveSection = () => {
 				const marker = window.scrollY + Math.min(180, window.innerHeight * 0.28);
-				let activeSection = sections[0];
+				let activeSection: HTMLElement | undefined;
 				for (const section of sections) {
 					if (section.offsetTop <= marker) activeSection = section;
 					else break;
