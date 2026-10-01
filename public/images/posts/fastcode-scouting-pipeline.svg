@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="760" viewBox="0 0 1440 760" role="img" aria-labelledby="title desc">
+  <title id="title">FastCode 先侦察再读取的仓库理解流程</title>
+  <desc id="desc">问题先进入轻量的语义结构地图，通过混合检索、代码概览和关系图定位目标，然后在预算约束下加载少量完整代码供模型回答。</desc>
+  <rect width="1440" height="760" fill="#fdfaf3"/>
+  <style>
+    .title{font:700 32px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2b2620}
+    .sub{font:400 16px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#6f6659}
+    .step{font:700 13px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2f5d8a;letter-spacing:1px}
+    .h{font:700 21px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2b2620}
+    .p{font:400 15px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#554d42}
+    .small{font:400 13px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#6f6659}
+  </style>
+  <text x="80" y="68" class="title">FastCode：先用结构侦察，再为完整代码支付 Token</text>
+  <text x="80" y="101" class="sub">探索阶段只消费轻量元数据，候选收敛后一次组装高价值上下文</text>
+
+  <rect x="80" y="150" width="1280" height="116" rx="10" fill="#fbf8f1" stroke="#8a7f6d"/>
+  <text x="110" y="184" class="step">离线索引 · SEMANTIC-STRUCTURAL MAP</text>
+  <rect x="110" y="202" width="275" height="42" rx="6" fill="#f5f0e4" stroke="#8a7f6d"/><text x="150" y="229" class="p">文件 / 类 / 函数 / 文档层级</text>
+  <rect x="410" y="202" width="275" height="42" rx="6" fill="#f5f0e4" stroke="#8a7f6d"/><text x="470" y="229" class="p">BM25 + 语义向量</text>
+  <rect x="710" y="202" width="275" height="42" rx="6" fill="#f5f0e4" stroke="#8a7f6d"/><text x="765" y="229" class="p">调用图 + 依赖图</text>
+  <rect x="1010" y="202" width="320" height="42" rx="6" fill="#f5f0e4" stroke="#8a7f6d"/><text x="1085" y="229" class="p">继承图 + 代码概览</text>
+
+  <line x1="720" y1="266" x2="720" y2="315" stroke="#5b5245" stroke-width="2"/><path d="M712 305l8 10 8-10" fill="none" stroke="#5b5245" stroke-width="2"/>
+
+  <text x="80" y="351" class="step">在线查询 · SCOUT FIRST</text>
+  <rect x="80" y="373" width="250" height="150" rx="10" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+  <text x="110" y="415" class="h">1. 找入口</text>
+  <text x="110" y="448" class="p">关键词与语义召回</text><text x="110" y="477" class="p">得到候选符号和文件</text>
+
+  <line x1="330" y1="448" x2="375" y2="448" stroke="#5b5245" stroke-width="2"/><path d="M365 440l10 8-10 8" fill="none" stroke="#5b5245" stroke-width="2"/>
+  <rect x="375" y="373" width="250" height="150" rx="10" fill="#f5f0e4" stroke="#8a7f6d"/>
+  <text x="405" y="415" class="h">2. 沿图导航</text>
+  <text x="405" y="448" class="p">追踪调用、依赖和继承</text><text x="405" y="477" class="p">限制跳数，持续裁剪空间</text>
+
+  <line x1="625" y1="448" x2="670" y2="448" stroke="#5b5245" stroke-width="2"/><path d="M660 440l10 8-10 8" fill="none" stroke="#5b5245" stroke-width="2"/>
+  <rect x="670" y="373" width="250" height="150" rx="10" fill="#f5f0e4" stroke="#8a7f6d"/>
+  <text x="700" y="415" class="h">3. 先看概览</text>
+  <text x="700" y="448" class="p">函数名、签名、类型提示</text><text x="700" y="477" class="p">暂不加载完整文件</text>
+
+  <line x1="920" y1="448" x2="965" y2="448" stroke="#5b5245" stroke-width="2"/><path d="M955 440l10 8-10 8" fill="none" stroke="#5b5245" stroke-width="2"/>
+  <rect x="965" y="373" width="395" height="150" rx="10" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+  <text x="995" y="415" class="h">4. 组装最小充分上下文</text>
+  <text x="995" y="448" class="p">按置信度、问题复杂度与 Token 预算选择</text><text x="995" y="477" class="p">只加载能够支撑结论的完整代码</text>
+
+  <rect x="80" y="582" width="1280" height="102" rx="10" fill="#fbf8f1" stroke="#8a7f6d"/>
+  <text x="110" y="619" class="step">交给回答模型或 CODING AGENT</text>
+  <text x="110" y="655" class="h">带来源的回答 / 影响分析 / 修改计划</text>
+  <text x="890" y="653" class="small">定位之后仍需读取代码、运行测试并验证动态行为</text>
+</svg>

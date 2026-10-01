@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="760" viewBox="0 0 1440 760" role="img" aria-labelledby="title desc">
+  <title id="title">代码仓库上下文获取策略对比</title>
+  <desc id="desc">比较普通代码 RAG、固定 Repo Map、FastCode 结构侦察和通用 Coding Agent 在线探索四种方式。</desc>
+  <rect width="1440" height="760" fill="#fdfaf3"/>
+  <style>
+    .title{font:700 32px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2b2620}
+    .sub{font:400 16px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#6f6659}
+    .n{font:700 13px ui-monospace,SFMono-Regular,Consolas,monospace;fill:#2f5d8a}
+    .h{font:700 22px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2b2620}
+    .p{font:400 15px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#554d42}
+    .tag{font:600 13px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2b2620}
+  </style>
+  <text x="80" y="68" class="title">四种代码仓库上下文获取方式</text>
+  <text x="80" y="101" class="sub">区别不在最终是否把代码交给 LLM，而在找到这些代码之前消费了多少信息</text>
+
+  <rect x="80" y="150" width="610" height="230" rx="10" fill="#fbf8f1" stroke="#8a7f6d"/>
+  <text x="110" y="188" class="n">01</text><text x="155" y="191" class="h">普通 Code RAG</text>
+  <text x="110" y="232" class="p">代码切块 → 向量 / BM25 → Top K → LLM</text>
+  <text x="110" y="270" class="p">优点：简单，适合局部实现问答</text>
+  <text x="110" y="300" class="p">缺点：调用、继承等结构关系容易断裂</text>
+  <rect x="110" y="325" width="150" height="31" rx="15" fill="#d8dee0"/><text x="145" y="346" class="tag">一次性召回</text>
+
+  <rect x="750" y="150" width="610" height="230" rx="10" fill="#fbf8f1" stroke="#8a7f6d"/>
+  <text x="780" y="188" class="n">02</text><text x="825" y="191" class="h">固定 Repo Map</text>
+  <text x="780" y="232" class="p">AST 定义 / 引用 → 图排名 → 压缩仓库地图</text>
+  <text x="780" y="270" class="p">优点：始终保留全局符号轮廓</text>
+  <text x="780" y="300" class="p">缺点：固定预算下需要舍弃大量细节</text>
+  <rect x="780" y="325" width="150" height="31" rx="15" fill="#d8dee0"/><text x="815" y="346" class="tag">常驻式概览</text>
+
+  <rect x="80" y="420" width="610" height="230" rx="10" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+  <text x="110" y="458" class="n">03</text><text x="155" y="461" class="h">FastCode</text>
+  <text x="110" y="502" class="p">混合检索 → 结构导航 → skim → 按预算读取</text>
+  <text x="110" y="540" class="p">优点：先收窄候选，再消费完整代码</text>
+  <text x="110" y="570" class="p">缺点：依赖索引质量，动态关系仍可能缺失</text>
+  <rect x="110" y="595" width="150" height="31" rx="15" fill="#f5f0e4"/><text x="145" y="616" class="tag">侦察式组装</text>
+
+  <rect x="750" y="420" width="610" height="230" rx="10" fill="#fbf8f1" stroke="#8a7f6d"/>
+  <text x="780" y="458" class="n">04</text><text x="825" y="461" class="h">通用 Coding Agent</text>
+  <text x="780" y="502" class="p">目录 / grep / LSP / 终端 → 多轮读取 → 测试</text>
+  <text x="780" y="540" class="p">优点：灵活，能继续修改、执行和验证</text>
+  <text x="780" y="570" class="p">缺点：探索循环会反复消费上下文</text>
+  <rect x="780" y="595" width="150" height="31" rx="15" fill="#d8dee0"/><text x="815" y="616" class="tag">运行时探索</text>
+
+  <line x1="80" y1="700" x2="1360" y2="700" stroke="#8a7f6d"/>
+  <text x="80" y="730" class="sub">实践中可以组合：FastCode 负责仓库定位，Coding Agent 负责修改、测试与交付。</text>
+</svg>
