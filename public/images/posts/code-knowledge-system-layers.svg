@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="780" viewBox="0 0 1440 780" role="img" aria-labelledby="title desc">
+  <title id="title">LLM Wiki、RAG 与 FastCode 在代码知识系统中的分工</title>
+  <desc id="desc">共同的代码事实层之上，LLM Wiki负责可阅读解释，RAG负责按问题取回证据，FastCode负责结构导航与最小上下文组装，最终共同服务开发者和Coding Agent。</desc>
+  <defs><style>
+    .t{font-family:Inter,"PingFang SC","Microsoft YaHei",sans-serif;fill:#2b2620}.h{font-size:34px;font-weight:700}.sub{font-size:18px;fill:#6f6659}.k{font-size:16px;font-weight:700;letter-spacing:.08em;fill:#2f5d8a}.nh{font-size:23px;font-weight:700}.b{font-size:16px;fill:#554d42}.small{font-size:14px;fill:#6f6659}.box{fill:#f5f0e4;stroke:#8a7f6d;stroke-width:2}.wiki{fill:#d8dee0;stroke:#295279;stroke-width:2}.base{fill:#ebe4d4;stroke:#5b5245;stroke-width:2}.line{stroke:#8a7f6d;stroke-width:2;fill:none}
+  </style></defs>
+  <rect width="1440" height="780" fill="#fdfaf3"/>
+  <text x="72" y="68" class="t h">同一套代码知识，三种使用方式</text>
+  <text x="72" y="104" class="t sub">Wiki、RAG 和 FastCode 可以共用事实层，差别在于交付给模型与人的表示</text>
+
+  <text x="72" y="166" class="t k">面向使用者</text>
+  <rect x="72" y="188" width="614" height="82" rx="10" class="box"/><text x="100" y="224" class="t nh">开发者</text><text x="100" y="252" class="t b">浏览、学习、评审、追溯设计</text>
+  <rect x="754" y="188" width="614" height="82" rx="10" class="box"/><text x="782" y="224" class="t nh">Coding Agent</text><text x="782" y="252" class="t b">查询、定位、规划、修改与验证</text>
+
+  <text x="72" y="324" class="t k">知识产品层</text>
+  <rect x="72" y="346" width="398" height="188" rx="10" class="wiki"/>
+  <text x="100" y="388" class="t nh">LLM Wiki</text><text x="100" y="426" class="t b">把代码事实组织成可阅读解释</text><text x="100" y="462" class="t small">稳定目录、页面、图、交叉链接</text><text x="100" y="492" class="t small">适合先建立整体心智模型</text>
+  <rect x="521" y="346" width="398" height="188" rx="10" class="box"/>
+  <text x="549" y="388" class="t nh">RAG</text><text x="549" y="426" class="t b">围绕当前问题取回相关证据</text><text x="549" y="462" class="t small">切块、索引、召回、重排、引用</text><text x="549" y="492" class="t small">适合开放式问答与私有资料</text>
+  <rect x="970" y="346" width="398" height="188" rx="10" class="box"/>
+  <text x="998" y="388" class="t nh">FastCode</text><text x="998" y="426" class="t b">沿代码结构侦察并组装上下文</text><text x="998" y="462" class="t small">符号、调用、依赖、继承与预算</text><text x="998" y="492" class="t small">适合定位、链路与影响分析</text>
+
+  <path d="M280 270V322" class="line"/><path d="M1160 270V322" class="line"/><path d="M280 322H1160" class="line"/><path d="M271 322V346" class="line"/><path d="M720 322V346" class="line"/><path d="M1169 322V346" class="line"/>
+
+  <text x="72" y="590" class="t k">共享事实层</text>
+  <rect x="72" y="612" width="1296" height="96" rx="10" class="base"/>
+  <text x="100" y="652" class="t nh">代码知识模型</text><text x="100" y="684" class="t b">源码与版本 · AST 与符号 · 调用和依赖关系 · README / ADR / Skills · 权限、来源、更新时间</text>
+  <path d="M271 612V560" class="line"/><path d="M720 612V560" class="line"/><path d="M1169 612V560" class="line"/>
+  <text x="72" y="750" class="t small">读图：三者可以分开实现，也可以共享索引与关系图；最容易浪费的是为每个产品重复解析一遍仓库。</text>
+</svg>

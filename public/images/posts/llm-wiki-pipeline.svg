@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="820" viewBox="0 0 1440 820" role="img" aria-labelledby="title desc">
+  <title id="title">LLM Wiki 从代码仓库到可追溯知识页的生成流水线</title>
+  <desc id="desc">代码、文档和版本历史先经过结构解析与关系抽取，再生成有来源锚点的页面，最后通过差异检测和评审持续更新。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#5b5245"/></marker>
+    <style>
+      .t{font-family:Inter,"PingFang SC","Microsoft YaHei",sans-serif;fill:#2b2620}.h{font-size:34px;font-weight:700}.sub{font-size:18px;fill:#6f6659}.k{font-size:16px;font-weight:700;letter-spacing:.08em;fill:#2f5d8a}.nh{font-size:22px;font-weight:700}.b{font-size:16px;fill:#554d42}.small{font-size:14px;fill:#6f6659}.box{fill:#f5f0e4;stroke:#8a7f6d;stroke-width:2}.accent{fill:#d8dee0;stroke:#295279;stroke-width:2}.selected{fill:#dee3d6;stroke:#466b48;stroke-width:2}.line{stroke:#5b5245;stroke-width:2.5;fill:none;marker-end:url(#arrow)}
+    </style>
+  </defs>
+  <rect width="1440" height="820" fill="#fdfaf3"/>
+  <text x="72" y="68" class="t h">LLM Wiki 的知识生产流水线</text>
+  <text x="72" y="104" class="t sub">页面只是产物，真正需要维护的是从代码事实到页面结论的映射</text>
+
+  <text x="72" y="166" class="t k">01 原始事实</text>
+  <rect x="72" y="192" width="246" height="116" rx="10" class="box"/>
+  <text x="96" y="226" class="t nh">代码与配置</text><text x="96" y="258" class="t b">文件、符号、接口、依赖</text><text x="96" y="284" class="t small">绑定 commit / branch</text>
+  <rect x="72" y="328" width="246" height="116" rx="10" class="box"/>
+  <text x="96" y="362" class="t nh">仓库文档</text><text x="96" y="394" class="t b">README、ADR、注释、示例</text><text x="96" y="420" class="t small">补充代码解释不了的意图</text>
+  <rect x="72" y="464" width="246" height="116" rx="10" class="box"/>
+  <text x="96" y="498" class="t nh">版本变化</text><text x="96" y="530" class="t b">提交差异、重命名、删除</text><text x="96" y="556" class="t small">确定增量更新范围</text>
+
+  <text x="408" y="166" class="t k">02 结构编译</text>
+  <rect x="408" y="192" width="274" height="388" rx="10" class="accent"/>
+  <text x="436" y="232" class="t nh">仓库结构模型</text>
+  <text x="436" y="278" class="t b">• AST / 符号表</text><text x="436" y="314" class="t b">• 调用与依赖关系</text><text x="436" y="350" class="t b">• 模块与目录层级</text><text x="436" y="386" class="t b">• 关键词与向量索引</text><text x="436" y="422" class="t b">• 文档和代码引用</text>
+  <line x1="436" y1="458" x2="654" y2="458" stroke="#8a7f6d"/>
+  <text x="436" y="492" class="t small">先恢复关系，再让模型写作</text><text x="436" y="520" class="t small">避免逐文件独立总结</text>
+
+  <text x="772" y="166" class="t k">03 分层生成</text>
+  <rect x="772" y="192" width="274" height="116" rx="10" class="box"/>
+  <text x="800" y="226" class="t nh">页面规划</text><text x="800" y="258" class="t b">读者问题 → 目录与页面边界</text><text x="800" y="284" class="t small">架构、模块、流程、概念</text>
+  <rect x="772" y="328" width="274" height="116" rx="10" class="box"/>
+  <text x="800" y="362" class="t nh">证据组装</text><text x="800" y="394" class="t b">目标符号 + 邻接关系 + 文档</text><text x="800" y="420" class="t small">每段结论保留来源锚点</text>
+  <rect x="772" y="464" width="274" height="116" rx="10" class="box"/>
+  <text x="800" y="498" class="t nh">页面合成</text><text x="800" y="530" class="t b">正文、交叉链接、结构图</text><text x="800" y="556" class="t small">从局部页面向上汇总</text>
+
+  <text x="1136" y="166" class="t k">04 可用知识</text>
+  <rect x="1136" y="192" width="232" height="252" rx="10" class="selected"/>
+  <text x="1164" y="232" class="t nh">可阅读 Wiki</text><text x="1164" y="274" class="t b">架构总览</text><text x="1164" y="310" class="t b">模块说明</text><text x="1164" y="346" class="t b">关键流程</text><text x="1164" y="382" class="t b">源码引用</text><text x="1164" y="418" class="t b">版本与置信度</text>
+  <rect x="1136" y="464" width="232" height="116" rx="10" class="box"/>
+  <text x="1164" y="498" class="t nh">检索与问答</text><text x="1164" y="530" class="t b">人浏览，Agent 按需取回</text><text x="1164" y="556" class="t small">同一事实层，两种入口</text>
+
+  <path d="M318 386H382" class="line"/><path d="M682 386H746" class="line"/><path d="M1046 386H1110" class="line"/>
+
+  <rect x="408" y="654" width="960" height="92" rx="10" fill="#ebe4d4" stroke="#8a7f6d" stroke-width="2"/>
+  <text x="438" y="690" class="t nh">更新闭环</text><text x="438" y="721" class="t b">Git diff 定位受影响实体 → 只重建相关页面 → 校验失效引用 → 人工确认高风险结论</text>
+  <path d="M1252 580V628H546V604" class="line"/>
+  <text x="72" y="782" class="t small">读图：如果页面无法回到具体代码与版本，它更像一次性总结，不是可维护的代码知识库。</text>
+</svg>
