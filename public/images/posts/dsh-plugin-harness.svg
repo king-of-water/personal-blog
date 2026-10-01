@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900" role="img" aria-labelledby="title desc">
+  <title id="title">DSH 插件化装配</title><desc id="desc">Cordis Context 中的服务定义连接多个 Provider 与 Consumer，子 Scope 可以继承和覆盖能力。</desc>
+  <defs><style>.bg{fill:#f5f4ef}.ink{fill:#1c201d}.muted{fill:#6f7670}.green{fill:#176f55}.accent{fill:#e4f1eb}.box{fill:#fff;stroke:#d8dcd6;stroke-width:2}.dark{fill:#222825}.white{fill:#fff}.sans{font-family:Inter,"PingFang SC","Microsoft YaHei",sans-serif}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}</style><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#176f55"/></marker></defs>
+  <rect width="1440" height="900" class="bg"/><text x="88" y="78" class="mono green" font-size="19" font-weight="700" letter-spacing="3">EVERYTHING IS A PLUGIN</text><text x="88" y="137" class="sans ink" font-size="46" font-weight="760">DSH 用 Scope 装配 Agent</text><text x="88" y="180" class="sans muted" font-size="21">定义保持稳定，Provider 可替换，Consumer 只依赖能力契约。</text>
+  <rect x="85" y="225" width="1270" height="555" rx="16" fill="#fff" stroke="#d8dcd6" stroke-width="2"/><text x="120" y="270" class="mono green" font-size="18">CORDIS APPLICATION SCOPE</text>
+  <g transform="translate(120 315)">
+    <rect width="330" height="130" rx="10" class="accent"/><text x="24" y="42" class="mono green" font-size="16">SERVICE DEFINITION</text><text x="24" y="79" class="sans ink" font-size="25" font-weight="700">稳定能力契约</text><text x="24" y="108" class="sans muted" font-size="17">类型、事件与生命周期</text>
+    <path d="M330 65H450" stroke="#176f55" stroke-width="3" marker-end="url(#a)"/>
+    <rect x="460" width="330" height="130" rx="10" class="dark"/><text x="484" y="42" class="mono" fill="#9bd4bd" font-size="16">SERVICE PROVIDER</text><text x="484" y="79" class="sans white" font-size="25" font-weight="700">具体能力实现</text><text x="484" y="108" class="sans" fill="#c9d2cd" font-size="17">Model · Loop · Tool · Session</text>
+    <path d="M790 65H910" stroke="#176f55" stroke-width="3" marker-end="url(#a)"/>
+    <rect x="920" width="300" height="130" rx="10" class="accent"/><text x="944" y="42" class="mono green" font-size="16">CONSUMER</text><text x="944" y="79" class="sans ink" font-size="25" font-weight="700">UI / Hook / Agent</text><text x="944" y="108" class="sans muted" font-size="17">不穿透具体 Provider</text>
+  </g>
+  <g transform="translate(120 510)">
+    <rect width="570" height="205" rx="12" class="box"/><text x="25" y="42" class="mono green" font-size="16">MAIN AGENT SCOPE</text><text x="25" y="83" class="sans ink" font-size="24" font-weight="700">继承应用服务</text><text x="25" y="121" class="sans muted" font-size="18">Strong Model · Full Tools · Durable Session</text><rect x="25" y="150" width="205" height="34" rx="17" class="accent"/><text x="45" y="173" class="sans green" font-size="16">运行结束后统一释放</text>
+    <rect x="650" width="570" height="205" rx="12" class="box"/><text x="675" y="42" class="mono green" font-size="16">CHILD SCOPE</text><text x="675" y="83" class="sans ink" font-size="24" font-weight="700">局部覆盖能力</text><text x="675" y="121" class="sans muted" font-size="18">Cheap Model · Read-only Tools · Replay</text><rect x="675" y="150" width="240" height="34" rx="17" class="accent"/><text x="695" y="173" class="sans green" font-size="16">权限跟随任务边界</text>
+  </g>
+  <text x="90" y="850" class="sans muted" font-size="17">同一份 Service Definition 可以在不同 Scope 中连接不同 Provider，Loop 与 UI 因此无需复制。</text>
+</svg>

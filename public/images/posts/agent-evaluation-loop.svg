@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900" role="img" aria-labelledby="title desc">
+  <title id="title">Agent 评测与发布闭环</title><desc id="desc">候选变更在隔离环境中经过结果、轨迹和运行指标评测，通过准入后灰度发布，异常时回滚。</desc>
+  <defs><style>.bg{fill:#f5f4ef}.ink{fill:#1c201d}.muted{fill:#6f7670}.green{fill:#176f55}.accent{fill:#e4f1eb}.box{fill:#fff;stroke:#d8dcd6;stroke-width:2}.dark{fill:#222825}.white{fill:#fff}.sans{font-family:Inter,"PingFang SC","Microsoft YaHei",sans-serif}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}</style><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#176f55"/></marker></defs>
+  <rect width="1440" height="900" class="bg"/><text x="88" y="78" class="mono green" font-size="19" font-weight="700" letter-spacing="3">EVALUATION GATES</text><text x="88" y="137" class="sans ink" font-size="46" font-weight="760">候选版本不能给自己判卷</text><text x="88" y="180" class="sans muted" font-size="21">确定性证据优先，Judge 提供补充判断，发布仍需灰度和回滚。</text>
+  <g transform="translate(70 270)">
+    <rect width="220" height="135" rx="10" class="box"/><text x="24" y="42" class="mono green" font-size="15">01 PROPOSE</text><text x="24" y="80" class="sans ink" font-size="24" font-weight="700">候选变更</text><text x="24" y="110" class="sans muted" font-size="17">Prompt · Skill · Code</text><path d="M220 67H305" stroke="#176f55" stroke-width="3" marker-end="url(#a)"/>
+    <rect x="315" width="230" height="135" rx="10" class="box"/><text x="339" y="42" class="mono green" font-size="15">02 ISOLATE</text><text x="339" y="80" class="sans ink" font-size="24" font-weight="700">冻结环境</text><text x="339" y="110" class="sans muted" font-size="17">任务 · 数据 · 依赖</text><path d="M545 67H630" stroke="#176f55" stroke-width="3" marker-end="url(#a)"/>
+    <rect x="640" width="300" height="135" rx="10" class="dark"/><text x="664" y="42" class="mono" fill="#9bd4bd" font-size="15">03 EVALUATE</text><text x="664" y="80" class="sans white" font-size="24" font-weight="700">三层证据</text><text x="664" y="110" class="sans" fill="#c9d2cd" font-size="17">Outcome · Trajectory · Ops</text><path d="M940 67H1025" stroke="#176f55" stroke-width="3" marker-end="url(#a)"/>
+    <rect x="1035" width="260" height="135" rx="10" class="accent"/><text x="1059" y="42" class="mono green" font-size="15">04 ADMISSION</text><text x="1059" y="80" class="sans ink" font-size="24" font-weight="700">分层门禁</text><text x="1059" y="110" class="sans muted" font-size="17">硬约束先于总分</text>
+    <path d="M1165 135V235" stroke="#176f55" stroke-width="3" marker-end="url(#a)"/>
+    <rect x="955" y="245" width="340" height="135" rx="10" class="box"/><text x="979" y="287" class="mono green" font-size="15">05 CANARY</text><text x="979" y="325" class="sans ink" font-size="24" font-weight="700">灰度发布</text><text x="979" y="355" class="sans muted" font-size="17">真实流量与旧版本对照</text>
+    <path d="M955 312H855" stroke="#176f55" stroke-width="3" marker-end="url(#a)"/>
+    <rect x="515" y="245" width="330" height="135" rx="10" class="box"/><text x="539" y="287" class="mono green" font-size="15">06 OBSERVE</text><text x="539" y="325" class="sans ink" font-size="24" font-weight="700">线上监控</text><text x="539" y="355" class="sans muted" font-size="17">成功率 · 接管 · 成本 · 风险</text>
+    <path d="M515 312H415" stroke="#176f55" stroke-width="3" marker-end="url(#a)"/>
+    <rect x="75" y="245" width="330" height="135" rx="10" class="box"/><text x="99" y="287" class="mono green" font-size="15">07 RECOVER</text><text x="99" y="325" class="sans ink" font-size="24" font-weight="700">接受或回滚</text><text x="99" y="355" class="sans muted" font-size="17">版本快照与失败样本回流</text>
+    <path d="M75 312H15V67H0" stroke="#176f55" stroke-width="3" fill="none" marker-end="url(#a)"/>
+  </g>
+  <g transform="translate(190 720)"><rect width="1060" height="74" rx="10" class="accent"/><text x="28" y="47" class="sans ink" font-size="20" font-weight="650">确定性断言 ＞ 权限与安全规则 ＞ 冻结回归集 ＞ LLM Judge ＞ 线上指标</text></g>
+  <text x="90" y="850" class="sans muted" font-size="17">评测不是排行榜截图，而是一条能阻止退化版本进入生产的发布链路。</text>
+</svg>
