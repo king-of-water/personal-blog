@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900" role="img" aria-labelledby="title desc">
+  <title id="title">Agent 自进化的可控闭环</title><desc id="desc">闭环从采集轨迹，到定位重复失败、生成候选、隔离评测、准入发布、监控回滚，缺少任何一步都会产生典型问题。</desc>
+  <defs><style>.bg{fill:#f5f4ef}.ink{fill:#1c201d}.muted{fill:#6f7670}.green{fill:#176f55}.accent{fill:#e4f1eb}.box{fill:#fff;stroke:#d8dcd6;stroke-width:2}.dark{fill:#222825}.white{fill:#fff}.sans{font-family:Inter,"PingFang SC","Microsoft YaHei",sans-serif}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}</style><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#176f55"/></marker></defs>
+  <rect width="1440" height="900" class="bg"/><text x="88" y="78" class="mono green" font-size="19" font-weight="700" letter-spacing="3">SELF-EVOLUTION LOOP</text><text x="88" y="137" class="sans ink" font-size="46" font-weight="760">产生修改不难，筛掉退化才难</text><text x="88" y="180" class="sans muted" font-size="21">线上轨迹提出问题，离线管道生成与评测，达到门槛后再发布。</text>
+  <g transform="translate(80 275)">
+    <rect x="0" y="0" width="230" height="140" rx="12" class="box"/><text x="24" y="44" class="mono green" font-size="15">01 TRACE</text><text x="24" y="82" class="sans ink" font-size="23" font-weight="700">采集轨迹</text><text x="24" y="112" class="sans muted" font-size="16">命令 · diff · 结果</text>
+    <path d="M230 70H320" stroke="#176f55" stroke-width="3" marker-end="url(#a)"/>
+    <rect x="330" y="0" width="230" height="140" rx="12" class="box"/><text x="354" y="44" class="mono green" font-size="15">02 FAIL</text><text x="354" y="82" class="sans ink" font-size="23" font-weight="700">定位重复失败</text><text x="354" y="112" class="sans muted" font-size="16">区分偶发与模式</text>
+    <path d="M560 70H650" stroke="#176f55" stroke-width="3" marker-end="url(#a)"/>
+    <rect x="660" y="0" width="230" height="140" rx="12" class="dark"/><text x="684" y="44" class="mono" fill="#9bd4bd" font-size="15">03 PROPOSE</text><text x="684" y="82" class="sans white" font-size="23" font-weight="700">生成候选</text><text x="684" y="112" class="sans" fill="#c9d2cd" font-size="16">Context · Skill · Code</text>
+    <path d="M890 70H980" stroke="#176f55" stroke-width="3" marker-end="url(#a)"/>
+    <rect x="990" y="0" width="230" height="140" rx="12" class="accent"/><text x="1014" y="44" class="mono green" font-size="15">04 EVAL</text><text x="1014" y="82" class="sans ink" font-size="23" font-weight="700">隔离评测</text><text x="1014" y="112" class="sans muted" font-size="16">固定集 + 隐藏集</text>
+    <path d="M1105 140V230H980" stroke="#176f55" stroke-width="3" fill="none" marker-end="url(#a)"/>
+    <rect x="750" y="235" width="230" height="140" rx="12" class="box"/><text x="774" y="279" class="mono green" font-size="15">05 ADMIT</text><text x="774" y="317" class="sans ink" font-size="23" font-weight="700">准入发布</text><text x="774" y="347" class="sans muted" font-size="16">达标才进入运行时</text>
+    <path d="M750 305H640" stroke="#176f55" stroke-width="3" marker-end="url(#a)"/>
+    <rect x="410" y="235" width="230" height="140" rx="12" class="box"/><text x="434" y="279" class="mono green" font-size="15">06 MONITOR</text><text x="434" y="317" class="sans ink" font-size="23" font-weight="700">监控与回滚</text><text x="434" y="347" class="sans muted" font-size="16">退化时恢复上一版</text>
+    <path d="M410 305H300" stroke="#176f55" stroke-width="3" marker-end="url(#a)"/>
+    <rect x="70" y="235" width="230" height="140" rx="12" class="accent"/><text x="94" y="279" class="mono green" font-size="15">FEEDBACK</text><text x="94" y="317" class="sans ink" font-size="23" font-weight="700">失败回流</text><text x="94" y="347" class="sans muted" font-size="16">进入回归集再迭代</text>
+  </g>
+  <text x="90" y="850" class="sans muted" font-size="17">读取顺序：线上发现问题，离线生成与筛选，发布后继续监控并允许回滚。</text>
+</svg>
