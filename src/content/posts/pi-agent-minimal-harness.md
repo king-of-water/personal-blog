@@ -2,7 +2,7 @@
 title: Pi Agent：一个 Agent Harness 最小可以小到什么程度
 description: 沿 Pi 的公开源码拆解一个可用 Agent Harness 的必要组成部分：统一模型接口、Agent Loop、消息模型、工具契约、steering 队列、会话树与扩展边界，并回答哪些责任必须留在运行时之外。
 category: Agent
-subcategory: Agent 前沿
+subcategory: Agent 工程
 articleClass: flagship
 featured: false
 publishedAt: 2026-10-01T20:05:00+08:00

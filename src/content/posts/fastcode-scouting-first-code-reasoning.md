@@ -2,7 +2,7 @@
 title: FastCode：先侦察代码结构，再把上下文交给模型
 description: 从语义结构地图、查询增强、图导航和成本策略出发，拆解 FastCode 的 scouting-first 代码推理方法，并说明它何时比普通 Code RAG 与在线搜索更合适。
 category: Agent
-subcategory: RAG 与知识库
+subcategory: RAG 与知识工程
 articleClass: flagship
 featured: false
 publishedAt: 2026-10-01

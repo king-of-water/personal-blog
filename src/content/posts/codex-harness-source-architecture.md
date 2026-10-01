@@ -2,7 +2,7 @@
 title: Codex 源码拆解：从 App Server 到 Agent Loop
 description: 沿 OpenAI 官方 Rust 仓库追踪一次 Codex 任务，拆开 App Server、Core、Responses API、工具路由、审批、沙箱、执行服务、Rollout 与恢复机制。
 category: Agent
-subcategory: Agent 开发
+subcategory: Agent 工程
 articleClass: flagship
 featured: false
 publishedAt: 2026-10-01

@@ -2,7 +2,7 @@
 title: LLM Wiki：把仓库编译成能读、能查、能更新的知识
 description: 从知识模型、页面规划、证据组装、分层生成到更新、评测与治理，讲清怎样把代码仓库编译成一套可追溯、可维护的知识页，以及它和 RAG、Repo Map 的分工。
 category: Agent
-subcategory: RAG 与知识库
+subcategory: RAG 与知识工程
 articleClass: flagship
 featured: false
 publishedAt: 2026-10-01T20:00:00+08:00

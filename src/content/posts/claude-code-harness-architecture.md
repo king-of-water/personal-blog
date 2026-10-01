@@ -2,7 +2,7 @@
 title: Claude Code 架构拆解：Query Loop、Compact 与 Memory
 description: 以 Anthropic 官方文档为事实边界，结合特定版本的客户端还原资料，拆解 Claude Code 的主循环、上下文装配、五层压缩、自动记忆、工具权限与子 Agent。
 category: Agent
-subcategory: Agent 开发
+subcategory: Agent 工程
 articleClass: flagship
 featured: false
 publishedAt: 2026-10-01
@@ -465,7 +465,7 @@ Query Loop 只是骨架。Claude Code 的工程价值，在于它不断回答四
 3. 哪些经验值得跨会话保存；
 4. 模型的动作怎样受到权限、沙箱和生命周期控制。
 
-Agent 开发可以概括为管理模型每一步看见的信息，并在概率模型的不确定性之上构建可信系统。Claude Code 的 Compact 和 Memory 正好展示了这句话的两面：当前任务需要在有限窗口里续航，长期经验又不能变成一堆过期但权威的错误。
+Agent 工程可以概括为管理模型每一步看见的信息，并在概率模型的不确定性之上构建可信系统。Claude Code 的 Compact 和 Memory 正好展示了这句话的两面：当前任务需要在有限窗口里续航，长期经验又不能变成一堆过期但权威的错误。
 
 ## 参考资料
 

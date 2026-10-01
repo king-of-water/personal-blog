@@ -2,7 +2,7 @@
 title: RAG 技术地图：从向量检索到 Agentic RAG
 description: 把 RAG 看成一条可评测、可降级、可审计的知识流水线，系统梳理解析与切块、混合召回、重排、查询改写、GraphRAG、LightRAG、Self-RAG、Corrective RAG 与 Agentic RAG 的定位、取舍和失败模式。
 category: Agent
-subcategory: RAG 与知识库
+subcategory: RAG 与知识工程
 articleClass: flagship
 featured: false
 publishedAt: 2026-10-01T20:00:00+08:00

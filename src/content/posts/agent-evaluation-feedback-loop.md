@@ -2,7 +2,7 @@
 title: Agent 评测闭环：决定进化是否真的有效
 description: 从任务契约、结果与轨迹评测、LLM Judge、数据分层到 reward hacking、统计显著性、准入门禁和灰度回滚，搭建一套能判断 Agent 改动是否真的更好的评测闭环。
 category: Agent
-subcategory: Agent 前沿
+subcategory: Agent 方法与评测
 articleClass: flagship
 featured: false
 publishedAt: 2026-10-01T20:01:00+08:00

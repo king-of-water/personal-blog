@@ -2,7 +2,7 @@
 title: Repo Map：让模型在动手前先看清仓库
 description: 拆解 Repo Map 的符号抽取、图排序、预算渲染与增量维护，说明它怎样把仓库结构压缩成模型能用的上下文，以及它在哪些地方会失灵。
 category: Agent
-subcategory: RAG 与知识库
+subcategory: RAG 与知识工程
 articleClass: flagship
 featured: false
 publishedAt: 2026-09-30

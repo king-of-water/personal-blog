@@ -2,7 +2,7 @@
 title: Jev：为什么 Agent 需要一个比 LLM 更快的控制层
 description: Jev 不生成长文本，而是对有限答案返回类型化决策与概率。本文沿 TypeSafe 官方资料、REFLEX、Jev-Mem 和评测 Judge 三项研究，拆解这种 System One 模型怎样进入 Agent 控制平面，以及它在哪些决策上可靠、在哪些边界上会失效。
 category: Agent
-subcategory: Agent 前沿
+subcategory: Agent 工程
 articleClass: flagship
 featured: false
 publishedAt: 2026-10-01T20:03:00+08:00

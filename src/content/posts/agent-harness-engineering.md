@@ -2,7 +2,7 @@
 title: Harness Engineering：从 Agent Loop 到可靠执行
 description: 从概念演进和模型边界出发，拆解循环、工具、规划、上下文、记忆、权限、验证与多 Agent 编排。
 category: Agent
-subcategory: Agent 开发
+subcategory: Agent 工程
 articleClass: flagship
 featured: true
 publishedAt: 2026-09-30

@@ -2,7 +2,7 @@
 title: Hermes Agent 架构拆解：记忆、Skills 与执行经验如何形成学习闭环
 description: 从 Agent Loop、会话压缩、持久记忆、Skill 生成、execute_code、委派与安全边界出发，拆解 Nous Research Hermes Agent 所谓“自改进”究竟如何发生，以及怎样把它用成一个可验证的长期执行系统。
 category: Agent
-subcategory: Agent 开发
+subcategory: Agent 工程
 articleClass: flagship
 featured: false
 publishedAt: 2026-10-02

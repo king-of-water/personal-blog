@@ -7,11 +7,11 @@ export interface Subcategory {
 }
 
 export const agentSubcategories: Subcategory[] = [
-	{ name: 'Agent 开发', slug: 'agent-development', description: 'Context、工具、状态、权限与可靠执行。' },
-	{ name: 'RAG 与知识库', slug: 'rag-knowledge', description: '让知识可检索、可理解、可维护，并成为 Agent 能够使用的上下文。' },
-	{ name: 'AI Coding', slug: 'ai-coding', description: 'Codex、SDD、上下文管理与 AI 研发工作流。' },
-	{ name: 'Agent 前沿', slug: 'agent-frontier', description: '新模型、新框架与新型 Agent 产品观察。' },
-	{ name: 'Agent 算法', slug: 'agent-algorithms', description: '规划、记忆、反思、搜索与多 Agent 协作。' },
+	{ name: 'Agent 工程', slug: 'agent-engineering', description: '拆解 Agent Runtime、Harness、工具、记忆、权限与可靠执行。' },
+	{ name: 'AI Coding', slug: 'ai-coding', description: '在需求、编码、Review、测试与交付中更好地使用 AI。' },
+	{ name: 'RAG 与知识工程', slug: 'rag-knowledge', description: '让知识可检索、可理解、可维护，并成为模型能够使用的上下文。' },
+	{ name: 'Agent 方法与评测', slug: 'agent-methods', description: '规划、反思、自进化、多 Agent 协作，以及效果如何被可靠评估。' },
+	{ name: 'LLM 原理与训练', slug: 'llm-fundamentals', description: 'Transformer、Attention、训练、微调、后训练与推理优化。' },
 ];
 
 export const backendSubcategories: Subcategory[] = [
