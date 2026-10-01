@@ -66,6 +66,8 @@ const latin = prose
 const words = han + latin;
 const h2 = (body.match(/^## /gm) ?? []).length;
 const h3 = (body.match(/^### /gm) ?? []).length;
+const headings = h2 + h3;
+const wordsPerHeading = headings > 0 ? Math.round(words / headings) : words;
 const images = (body.match(/^!\[[^\]]*\]\([^)]+\)/gm) ?? []).length;
 const fences = Math.floor((body.match(/^```/gm) ?? []).length / 2);
 const links = (body.match(/\[[^\]]+\]\(https?:\/\/[^)]+\)/g) ?? []).length;
@@ -82,6 +84,8 @@ const result = {
   estimatedMinutes: Math.max(1, Math.ceil(words / 500)),
   h2,
   h3,
+  headings,
+  wordsPerHeading,
   images,
   codeBlocks: fences,
   tables: tableSeparators,
@@ -95,6 +99,11 @@ if (words < minimumWords) {
   warnings.push(`Below ${width.label} minimum (${minimumWords.toLocaleString('en-US')} site-counted words).`);
 }
 if (h2 < width.minH2) warnings.push(`Fewer than ${width.minH2} H2 sections for a ${width.label}.`);
+// A long article built from many two-sentence subsections reads like a glossary
+// and turns the sidebar into a huge list. Keep sections substantial.
+if (requestedClass === 'flagship' && headings > 0 && wordsPerHeading < 350) {
+  warnings.push(`Heading density too high: ${headings} sections for ${words} words (~${wordsPerHeading} words/section). Merge micro-sections so each H3 carries roughly 350-600 words.`);
+}
 if (images < width.minImages) warnings.push(`Expect at least ${width.minImages} figure(s) for a ${width.label}.`);
 if (fences < width.minCode) warnings.push(`Expect at least ${width.minCode} code/example block(s) for a ${width.label}.`);
 
