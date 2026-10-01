@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="760" viewBox="0 0 1440 760" role="img" aria-labelledby="title desc">
+  <title id="title">静态目录、全局 Repo Map 与任务相关 Repo Map 的差异</title>
+  <desc id="desc">静态目录只展示文件位置，全局地图按仓库中心性选择符号，任务相关地图再用当前文件和用户提及的标识符调整排名。</desc>
+  <rect width="1440" height="760" fill="#fdfaf3"/>
+  <style>
+    .title{font:700 32px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2b2620}
+    .sub{font:400 16px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#6f6659}
+    .n{font:700 13px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2f5d8a;letter-spacing:1px}
+    .h{font:700 22px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2b2620}
+    .p{font:400 15px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#554d42}
+    .item{font:500 15px ui-monospace,SFMono-Regular,Menlo,"PingFang SC",monospace;fill:#2b2620}
+  </style>
+  <text x="80" y="68" class="title">同一个仓库，可以生成三种完全不同的视图</text>
+  <text x="80" y="101" class="sub">越靠右越接近当前任务，代价是需要更多结构分析和会话信号</text>
+
+  <rect x="80" y="155" width="390" height="470" rx="12" fill="#fbf8f1" stroke="#8a7f6d"/>
+  <text x="110" y="193" class="n">01 · PHYSICAL</text>
+  <text x="110" y="234" class="h">静态目录树</text>
+  <text x="110" y="270" class="p">回答“文件放在哪里”</text>
+  <rect x="110" y="304" width="330" height="266" rx="8" fill="#f5f0e4" stroke="#8a7f6d"/>
+  <text x="136" y="344" class="item">src/</text>
+  <text x="156" y="382" class="item">├── order/</text>
+  <text x="176" y="420" class="item">│   ├── controller/</text>
+  <text x="176" y="458" class="item">│   └── service/</text>
+  <text x="156" y="496" class="item">├── inventory/</text>
+  <text x="156" y="534" class="item">└── coupon/</text>
+  <text x="110" y="600" class="p">便宜，但没有符号和依赖信息</text>
+
+  <rect x="525" y="155" width="390" height="470" rx="12" fill="#fbf8f1" stroke="#8a7f6d"/>
+  <text x="555" y="193" class="n">02 · GLOBAL</text>
+  <text x="555" y="234" class="h">全局 Repo Map</text>
+  <text x="555" y="270" class="p">回答“仓库有哪些重要能力”</text>
+  <rect x="555" y="304" width="330" height="266" rx="8" fill="#f5f0e4" stroke="#8a7f6d"/>
+  <text x="581" y="344" class="item">OrderService</text>
+  <text x="581" y="382" class="item">Money</text>
+  <text x="581" y="420" class="item">EventPublisher</text>
+  <text x="581" y="458" class="item">InventoryClient</text>
+  <text x="581" y="496" class="item">IdempotencyService</text>
+  <text x="581" y="534" class="item">TransactionTemplate</text>
+  <text x="555" y="600" class="p">依据引用关系和中心性排序</text>
+
+  <rect x="970" y="155" width="390" height="470" rx="12" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+  <text x="1000" y="193" class="n">03 · TASK-AWARE</text>
+  <text x="1000" y="234" class="h">“取消订单”任务地图</text>
+  <text x="1000" y="270" class="p">回答“这次最值得看什么”</text>
+  <rect x="1000" y="304" width="330" height="266" rx="8" fill="#fbf8f1" stroke="#295279"/>
+  <text x="1026" y="344" class="item">OrderController.cancel</text>
+  <text x="1026" y="382" class="item">OrderService.cancelOrder</text>
+  <text x="1026" y="420" class="item">InventoryClient.release</text>
+  <text x="1026" y="458" class="item">CouponService.returnCoupon</text>
+  <text x="1026" y="496" class="item">IdempotencyService</text>
+  <text x="1026" y="534" class="item">OrderCancelConsumerTest</text>
+  <text x="1000" y="600" class="p">加入当前文件、问题和提及符号</text>
+
+  <line x1="470" y1="390" x2="525" y2="390" stroke="#5b5245" stroke-width="2"/><path d="M515 382l10 8-10 8" fill="none" stroke="#5b5245" stroke-width="2"/>
+  <line x1="915" y1="390" x2="970" y2="390" stroke="#5b5245" stroke-width="2"/><path d="M960 382l10 8-10 8" fill="none" stroke="#5b5245" stroke-width="2"/>
+  <text x="80" y="700" class="sub">Repo Map 在预算内保留最能帮助模型继续行动的信息，无须描述全部代码。</text>
+</svg>

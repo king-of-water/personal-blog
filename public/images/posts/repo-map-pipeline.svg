@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="760" viewBox="0 0 1440 760" role="img" aria-labelledby="title desc">
+  <title id="title">Repo Map 从代码仓库生成预算内上下文的流程</title>
+  <desc id="desc">源文件经过语法解析、符号提取、引用建图、上下文相关排序和 Token 预算裁剪，生成供大模型导航的仓库地图。</desc>
+  <rect width="1440" height="760" fill="#fdfaf3"/>
+  <style>
+    .title{font:700 32px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2b2620}
+    .sub{font:400 16px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#6f6659}
+    .step{font:700 13px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2f5d8a;letter-spacing:1px}
+    .h{font:700 20px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2b2620}
+    .p{font:400 14px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#554d42}
+    .code{font:500 14px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}
+  </style>
+  <text x="80" y="68" class="title">Repo Map：从整个仓库里选出最值得常驻的坐标</text>
+  <text x="80" y="101" class="sub">解析结构，按任务重排，再把符号和签名压进固定 Token 预算</text>
+
+  <rect x="80" y="155" width="220" height="146" rx="10" fill="#fbf8f1" stroke="#8a7f6d"/>
+  <text x="106" y="190" class="step">01 · SOURCE</text>
+  <text x="106" y="229" class="h">Git 仓库</text>
+  <text x="106" y="260" class="p">Java / Python / TS</text>
+  <text x="106" y="284" class="p">只处理允许进入地图的文件</text>
+
+  <line x1="300" y1="228" x2="345" y2="228" stroke="#5b5245" stroke-width="2"/><path d="M335 220l10 8-10 8" fill="none" stroke="#5b5245" stroke-width="2"/>
+  <rect x="345" y="155" width="220" height="146" rx="10" fill="#f5f0e4" stroke="#8a7f6d"/>
+  <text x="371" y="190" class="step">02 · PARSE</text>
+  <text x="371" y="229" class="h">Tree-sitter</text>
+  <text x="371" y="260" class="p">提取定义与引用</text>
+  <text x="371" y="284" class="p">记录文件、符号与行号</text>
+
+  <line x1="565" y1="228" x2="610" y2="228" stroke="#5b5245" stroke-width="2"/><path d="M600 220l10 8-10 8" fill="none" stroke="#5b5245" stroke-width="2"/>
+  <rect x="610" y="155" width="220" height="146" rx="10" fill="#f5f0e4" stroke="#8a7f6d"/>
+  <text x="636" y="190" class="step">03 · GRAPH</text>
+  <text x="636" y="229" class="h">文件引用图</text>
+  <text x="636" y="260" class="p">定义连接引用方</text>
+  <text x="636" y="284" class="p">公共符号获得全局权重</text>
+
+  <line x1="830" y1="228" x2="875" y2="228" stroke="#5b5245" stroke-width="2"/><path d="M865 220l10 8-10 8" fill="none" stroke="#5b5245" stroke-width="2"/>
+  <rect x="875" y="155" width="220" height="146" rx="10" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+  <text x="901" y="190" class="step">04 · RANK</text>
+  <text x="901" y="229" class="h">个性化 PageRank</text>
+  <text x="901" y="260" class="p">结合当前文件与提及符号</text>
+  <text x="901" y="284" class="p">每次任务得到不同排序</text>
+
+  <line x1="1095" y1="228" x2="1140" y2="228" stroke="#5b5245" stroke-width="2"/><path d="M1130 220l10 8-10 8" fill="none" stroke="#5b5245" stroke-width="2"/>
+  <rect x="1140" y="155" width="220" height="146" rx="10" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+  <text x="1166" y="190" class="step">05 · BUDGET</text>
+  <text x="1166" y="229" class="h">Token 裁剪</text>
+  <text x="1166" y="260" class="p">优先保留高分符号</text>
+  <text x="1166" y="284" class="p">尽量贴近可用预算</text>
+
+  <rect x="80" y="370" width="1280" height="270" rx="12" fill="#fbf8f1" stroke="#8a7f6d"/>
+  <text x="110" y="407" class="step">OUTPUT · MODEL-FACING REPOSITORY MAP</text>
+  <rect x="110" y="432" width="760" height="174" rx="8" fill="#f5f0e4" stroke="#8a7f6d"/>
+  <text x="136" y="466" class="code">src/order/OrderService.java:</text>
+  <text x="156" y="495" class="code">│interface OrderService</text>
+  <text x="176" y="524" class="code">│  Order createOrder(CreateOrderCommand command)</text>
+  <text x="176" y="553" class="code">│  void cancelOrder(Long orderId)</text>
+  <text x="136" y="582" class="code">src/inventory/InventoryClient.java: ...</text>
+
+  <rect x="910" y="432" width="420" height="174" rx="8" fill="#dee3d6" stroke="#466b48"/>
+  <text x="940" y="469" class="h">LLM 获得两种视野</text>
+  <text x="940" y="508" class="p">完整文件：理解细节并执行修改</text>
+  <text x="940" y="540" class="p">仓库地图：发现其他模块和已有抽象</text>
+  <text x="940" y="572" class="p">信息不足时，再按地图选择下一批文件</text>
+
+  <text x="80" y="700" class="sub">地图用于导航。涉及业务语义、动态调用和修改验证时，仍需读取真实代码、测试与运行时证据。</text>
+</svg>
