@@ -24,7 +24,7 @@ tools:
 
 这篇文章记录我的具体做法。它不是一套必须照抄的仪式。小改动直接做，复杂任务才增加 Plan、状态文件、Worktree 或 Goal。流程的重量应当跟着不确定性增长。
 
-![我的 Codex 协作循环：从任务契约到证据验收](/images/posts/codex-practice-loop.svg)
+![我的 Codex 协作循环：从任务契约到证据验收](/images/posts/codex-practice-loop.svg?v=20261001)
 
 ## 一、先写任务契约，不追求万能 Prompt
 
