@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="820" viewBox="0 0 1440 820" role="img" aria-labelledby="title desc">
+  <title id="title">四种 AI 编程工具的工作中心</title>
+  <desc id="desc">Cursor 以编辑器为中心，Claude Code 以终端为中心，Codex 以任务工作台为中心，GitHub Copilot 以代码托管与组织协作为中心。</desc>
+  <rect width="1440" height="820" fill="#fdfaf3"/>
+  <text x="92" y="92" fill="#2b2620" font-family="Inter, system-ui, sans-serif" font-size="34" font-weight="700">同样是 Coding Agent，默认工作中心不同</text>
+  <text x="92" y="134" fill="#6f6659" font-family="Inter, system-ui, sans-serif" font-size="18">模型能力会变化，产品把上下文、执行和审查放在哪里，决定了每天怎样使用它。</text>
+  <line x1="92" y1="170" x2="1348" y2="170" stroke="#8a7f6d" stroke-width="1"/>
+
+  <rect x="92" y="220" width="284" height="430" rx="4" fill="#f5f0e4" stroke="#295279" stroke-width="2"/>
+  <text x="120" y="268" fill="#2f5d8a" font-family="ui-monospace, monospace" font-size="15" font-weight="700" letter-spacing="2">EDITOR</text>
+  <text x="120" y="320" fill="#2b2620" font-family="Inter, system-ui, sans-serif" font-size="30" font-weight="700">Cursor</text>
+  <text x="120" y="366" fill="#554d42" font-family="Inter, system-ui, sans-serif" font-size="18">在代码旁边对话、改动、</text>
+  <text x="120" y="396" fill="#554d42" font-family="Inter, system-ui, sans-serif" font-size="18">预览差异并继续调整。</text>
+  <line x1="120" y1="436" x2="348" y2="436" stroke="#8a7f6d"/>
+  <text x="120" y="480" fill="#2b2620" font-family="Inter, system-ui, sans-serif" font-size="16">适合：高频交互式开发</text>
+  <text x="120" y="516" fill="#2b2620" font-family="Inter, system-ui, sans-serif" font-size="16">优势：低切换成本</text>
+  <text x="120" y="552" fill="#2b2620" font-family="Inter, system-ui, sans-serif" font-size="16">注意：容易边聊边扩大改动</text>
+
+  <rect x="416" y="220" width="284" height="430" rx="4" fill="#f5f0e4" stroke="#466b48" stroke-width="2"/>
+  <text x="444" y="268" fill="#3d6340" font-family="ui-monospace, monospace" font-size="15" font-weight="700" letter-spacing="2">TERMINAL</text>
+  <text x="444" y="320" fill="#2b2620" font-family="Inter, system-ui, sans-serif" font-size="30" font-weight="700">Claude Code</text>
+  <text x="444" y="366" fill="#554d42" font-family="Inter, system-ui, sans-serif" font-size="18">把 Agent 接进 Shell、脚本、</text>
+  <text x="444" y="396" fill="#554d42" font-family="Inter, system-ui, sans-serif" font-size="18">CI、Hooks 与子 Agent。</text>
+  <line x1="444" y1="436" x2="672" y2="436" stroke="#8a7f6d"/>
+  <text x="444" y="480" fill="#2b2620" font-family="Inter, system-ui, sans-serif" font-size="16">适合：终端与自动化重度用户</text>
+  <text x="444" y="516" fill="#2b2620" font-family="Inter, system-ui, sans-serif" font-size="16">优势：可组合、可脚本化</text>
+  <text x="444" y="552" fill="#2b2620" font-family="Inter, system-ui, sans-serif" font-size="16">注意：需要自己设计工作流</text>
+
+  <rect x="740" y="220" width="284" height="430" rx="4" fill="#f5f0e4" stroke="#5e5083" stroke-width="2"/>
+  <text x="768" y="268" fill="#6b5b95" font-family="ui-monospace, monospace" font-size="15" font-weight="700" letter-spacing="2">WORKSPACE</text>
+  <text x="768" y="320" fill="#2b2620" font-family="Inter, system-ui, sans-serif" font-size="30" font-weight="700">Codex</text>
+  <text x="768" y="366" fill="#554d42" font-family="Inter, system-ui, sans-serif" font-size="18">用线程、Worktree、Goal</text>
+  <text x="768" y="396" fill="#554d42" font-family="Inter, system-ui, sans-serif" font-size="18">和 Review 管理完整任务。</text>
+  <line x1="768" y1="436" x2="996" y2="436" stroke="#8a7f6d"/>
+  <text x="768" y="480" fill="#2b2620" font-family="Inter, system-ui, sans-serif" font-size="16">适合：并行委派与长任务</text>
+  <text x="768" y="516" fill="#2b2620" font-family="Inter, system-ui, sans-serif" font-size="16">优势：任务隔离与审查闭环</text>
+  <text x="768" y="552" fill="#2b2620" font-family="Inter, system-ui, sans-serif" font-size="16">注意：任务契约要写清楚</text>
+
+  <rect x="1064" y="220" width="284" height="430" rx="4" fill="#f5f0e4" stroke="#943b37" stroke-width="2"/>
+  <text x="1092" y="268" fill="#943b37" font-family="ui-monospace, monospace" font-size="15" font-weight="700" letter-spacing="2">PLATFORM</text>
+  <text x="1092" y="320" fill="#2b2620" font-family="Inter, system-ui, sans-serif" font-size="30" font-weight="700">GitHub Copilot</text>
+  <text x="1092" y="366" fill="#554d42" font-family="Inter, system-ui, sans-serif" font-size="18">从 IDE 延伸到 Issue、PR、</text>
+  <text x="1092" y="396" fill="#554d42" font-family="Inter, system-ui, sans-serif" font-size="18">组织策略与云端 Agent。</text>
+  <line x1="1092" y1="436" x2="1320" y2="436" stroke="#8a7f6d"/>
+  <text x="1092" y="480" fill="#2b2620" font-family="Inter, system-ui, sans-serif" font-size="16">适合：GitHub 中心团队</text>
+  <text x="1092" y="516" fill="#2b2620" font-family="Inter, system-ui, sans-serif" font-size="16">优势：组织接入与治理</text>
+  <text x="1092" y="552" fill="#2b2620" font-family="Inter, system-ui, sans-serif" font-size="16">注意：能力分散在多种界面</text>
+
+  <rect x="92" y="694" width="1256" height="62" rx="3" fill="#ebe4d4"/>
+  <text x="720" y="733" text-anchor="middle" fill="#2b2620" font-family="Inter, system-ui, sans-serif" font-size="19" font-weight="600">先选你想工作的地方，再比较模型、价格和功能。</text>
+</svg>
