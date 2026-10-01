@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900" role="img" aria-labelledby="title desc">
+  <title id="title">Pi Agent Loop 状态机</title><desc id="desc">Agent 从等待输入，经过请求模型、流式事件、工具预检、执行与结果收集，再根据 steering 决定继续或结束。</desc>
+  <defs><style>.bg{fill:#f5f4ef}.ink{fill:#1c201d}.muted{fill:#6f7670}.green{fill:#176f55}.accent{fill:#e4f1eb}.box{fill:#fff;stroke:#d8dcd6;stroke-width:2}.dark{fill:#222825}.white{fill:#fff}.sans{font-family:Inter,"PingFang SC","Microsoft YaHei",sans-serif}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}</style><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#176f55"/></marker></defs>
+  <rect width="1440" height="900" class="bg"/><text x="88" y="78" class="mono green" font-size="19" font-weight="700" letter-spacing="3">AGENT LOOP</text><text x="88" y="137" class="sans ink" font-size="46" font-weight="760">一次 Turn 穿过八段状态</text><text x="88" y="180" class="sans muted" font-size="21">运行时在两次模型生成之间完成预检、执行、结果收集和中断处理。</text>
+  <g transform="translate(90 250)">
+    <rect x="0" y="0" width="300" height="130" rx="12" class="box"/><text x="28" y="45" class="mono green" font-size="16">01 WAIT</text><text x="28" y="82" class="sans ink" font-size="25" font-weight="700">等待用户输入</text><text x="28" y="112" class="sans muted" font-size="17">新 Turn 或继续既有 Turn</text>
+    <path d="M300 65H390" stroke="#176f55" stroke-width="3" marker-end="url(#a)"/>
+    <rect x="400" y="0" width="310" height="130" rx="12" class="dark"/><text x="428" y="45" class="mono" fill="#9bd4bd" font-size="16">02 REQUEST</text><text x="428" y="82" class="sans white" font-size="25" font-weight="700">请求模型</text><text x="428" y="112" class="sans" fill="#c9d2cd" font-size="17">system + 历史 + 工具声明</text>
+    <path d="M710 65H800" stroke="#176f55" stroke-width="3" marker-end="url(#a)"/>
+    <rect x="810" y="0" width="300" height="130" rx="12" class="accent"/><text x="838" y="45" class="mono green" font-size="16">03 STREAM</text><text x="838" y="82" class="sans ink" font-size="25" font-weight="700">流式事件</text><text x="838" y="112" class="sans muted" font-size="17">thinking · 文本 · 工具调用</text>
+    <path d="M1110 65H1210V300H960" stroke="#176f55" stroke-width="3" fill="none" marker-end="url(#a)"/>
+    <rect x="650" y="200" width="310" height="130" rx="12" class="box"/><text x="678" y="245" class="mono green" font-size="16">04 PREFLIGHT</text><text x="678" y="282" class="sans ink" font-size="25" font-weight="700">工具预检</text><text x="678" y="312" class="sans muted" font-size="17">校验参数、权限与执行模式</text>
+    <path d="M650 265H390" stroke="#176f55" stroke-width="3" marker-end="url(#a)"/>
+    <rect x="80" y="200" width="300" height="130" rx="12" class="box"/><text x="108" y="245" class="mono green" font-size="16">05 EXECUTE</text><text x="108" y="282" class="sans ink" font-size="25" font-weight="700">执行工具</text><text x="108" y="312" class="sans muted" font-size="17">串行或并行，失败抛异常</text>
+    <path d="M230 330V450" stroke="#176f55" stroke-width="3" marker-end="url(#a)"/>
+    <rect x="80" y="455" width="300" height="130" rx="12" class="box"/><text x="108" y="500" class="mono green" font-size="16">06 COLLECT</text><text x="108" y="537" class="sans ink" font-size="25" font-weight="700">结果写回 transcript</text><text x="108" y="567" class="sans muted" font-size="17">成功内容或 isError 结果</text>
+    <path d="M380 520H560" stroke="#176f55" stroke-width="3" marker-end="url(#a)"/>
+    <rect x="570" y="455" width="320" height="130" rx="12" class="accent"/><text x="598" y="500" class="mono green" font-size="16">07 STEERING</text><text x="598" y="537" class="sans ink" font-size="25" font-weight="700">处理中途输入</text><text x="598" y="567" class="sans muted" font-size="17">steering 打断，follow-up 排队</text>
+    <path d="M890 520H1100" stroke="#176f55" stroke-width="3" marker-end="url(#a)"/>
+    <rect x="1110" y="455" width="250" height="130" rx="12" class="dark"/><text x="1138" y="500" class="mono" fill="#9bd4bd" font-size="16">08 DECIDE</text><text x="1138" y="537" class="sans white" font-size="25" font-weight="700">继续或结束</text><text x="1138" y="567" class="sans" fill="#c9d2cd" font-size="17">再请求模型，或 agent_end</text>
+    <path d="M1235 585V650H290" stroke="#176f55" stroke-width="3" fill="none" marker-end="url(#a)"/>
+  </g>
+  <text x="90" y="850" class="sans muted" font-size="17">读取顺序：先看状态如何流动，再看失败与中断在哪一步回到决策点。</text>
+</svg>

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900" role="img" aria-labelledby="title desc">
+  <title id="title">Pi Session 树与分叉</title><desc id="desc">会话是一条 JSONL 条目树，从 header 出发，可沿历史继续、压缩或分叉出独立叶子。</desc>
+  <defs><style>.bg{fill:#f5f4ef}.ink{fill:#1c201d}.muted{fill:#6f7670}.green{fill:#176f55}.accent{fill:#e4f1eb}.box{fill:#fff;stroke:#d8dcd6;stroke-width:2}.dark{fill:#222825}.white{fill:#fff}.sans{font-family:Inter,"PingFang SC","Microsoft YaHei",sans-serif}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}</style><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#176f55"/></marker></defs>
+  <rect width="1440" height="900" class="bg"/><text x="88" y="78" class="mono green" font-size="19" font-weight="700" letter-spacing="3">SESSION TREE</text><text x="88" y="137" class="sans ink" font-size="46" font-weight="760">会话不是一条直线</text><text x="88" y="180" class="sans muted" font-size="21">每个条目带 id 和 parentId，分叉共享祖先，压缩保留可追溯摘要。</text>
+  <g transform="translate(90 260)">
+    <path d="M640 20V95" stroke="#176f55" stroke-width="3" marker-end="url(#a)"/>
+    <rect x="540" y="100" width="240" height="100" rx="12" class="dark"/><text x="570" y="140" class="mono" fill="#9bd4bd" font-size="16">HEADER</text><text x="570" y="175" class="sans white" font-size="23" font-weight="700">session · version · id</text>
+    <path d="M660 200V280" stroke="#176f55" stroke-width="3" marker-end="url(#a)"/>
+    <rect x="540" y="285" width="240" height="100" rx="12" class="box"/><text x="570" y="325" class="mono green" font-size="16">ENTRY</text><text x="570" y="360" class="sans ink" font-size="22" font-weight="700">user · assistant · tool</text>
+    <path d="M660 385V460" stroke="#176f55" stroke-width="3" marker-end="url(#a)"/>
+    <rect x="430" y="465" width="300" height="110" rx="12" class="accent"/><text x="458" y="505" class="mono green" font-size="16">COMPACT</text><text x="458" y="540" class="sans ink" font-size="22" font-weight="700">早期历史压缩为摘要</text><text x="458" y="568" class="sans muted" font-size="16">原始条目仍保留在文件中</text>
+    <path d="M730 520H980" stroke="#176f55" stroke-width="3" marker-end="url(#a)"/>
+    <rect x="990" y="465" width="300" height="110" rx="12" class="box"/><text x="1018" y="505" class="mono green" font-size="16">ACTIVE LEAF</text><text x="1018" y="540" class="sans ink" font-size="22" font-weight="700">当前继续的末尾</text><text x="1018" y="568" class="sans muted" font-size="16">SessionManager 跟踪它</text>
+    <path d="M580 520H300" stroke="#176f55" stroke-width="3" marker-end="url(#a)"/>
+    <rect x="20" y="465" width="270" height="110" rx="12" class="box"/><text x="48" y="505" class="mono green" font-size="16">FORK A</text><text x="48" y="540" class="sans ink" font-size="22" font-weight="700">方案一：最小改动</text><text x="48" y="568" class="sans muted" font-size="16">共享相同祖先</text>
+    <path d="M300 575V655" stroke="#176f55" stroke-width="3" marker-end="url(#a)"/>
+    <rect x="20" y="660" width="270" height="110" rx="12" class="box"/><text x="48" y="700" class="mono green" font-size="16">FORK B</text><text x="48" y="735" class="sans ink" font-size="22" font-weight="700">方案二：重构实现</text><text x="48" y="763" class="sans muted" font-size="16">独立推进，互不覆盖</text>
+  </g>
+  <text x="90" y="850" class="sans muted" font-size="17">恢复会话不是恢复最后一段文本，而是回到树上某个可继续的节点。</text>
+</svg>
