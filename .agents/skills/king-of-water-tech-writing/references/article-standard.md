@@ -38,13 +38,13 @@ For every benchmark number, keep enough context to avoid turning it into adverti
 
 Do not apply one length to every article. Decide how much of the system the piece has to explain.
 
-| Class | Words | Use when | Typical examples |
-| --- | --- | --- | --- |
-| Flagship | 12,000–20,000+ | a whole architecture, ecosystem, technology map, or cross-cutting method | Agent harness, RAG map, coding-agent source walkthrough |
-| Focused | 6,000–12,000 | one mechanism, paper, subsystem, or workflow | FastCode, Repo Map, SDD, a Redis subsystem |
-| Field note | 2,000–6,000 | one specific question, one bug, one narrow behavior | a single Redis eviction issue, one config trap |
+| Class | Words | Floor / real target | Use when | Typical examples |
+| --- | --- | --- | --- | --- |
+| Flagship | 12,000–20,000+ | aim 15,000+ | a whole architecture, ecosystem, technology map, cross-cutting method, or an AI technique that needs full context | Agent harness, RAG map, FastCode, Repo Map, coding-agent source walkthrough |
+| Focused | 6,000–12,000 | aim 8,000+ | a deliberately narrow topic outside the AI core | one backend subsystem, one engineering workflow |
+| Field note | 2,000–6,000 | aim 3,500+ | one specific question, one bug, one narrow behavior | a single Redis eviction issue, one config trap |
 
-AI and Agent topics lean longer because they usually require a system view; narrow backend issues lean shorter. Padding a small topic to flagship length is an error, and leaving a broad AI topic at a few thousand words is also an error.
+AI and Agent topics are flagship by default. They usually need a system view, so the article should still cover context, mechanism, failure modes, and a worked example even when the title names one technique. The minimum is a floor, not a goal: a draft that only clears it is usually under-developed. Padding a small topic to flagship length is an error, and deliberately narrowing the class to avoid the AI depth requirement is also an error.
 
 ## Outline patterns
 

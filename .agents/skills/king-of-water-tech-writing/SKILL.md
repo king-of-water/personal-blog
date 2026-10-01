@@ -27,19 +27,19 @@ Read the relevant existing blog posts so the new article adds a new layer instea
 
 ## Choose the article class by scope
 
-Length follows how much of the system the article has to explain, not the category alone. Pick the class first, then write to it. Do not pad a narrow topic to flagship length, and do not let a broad AI topic stop at a few thousand words.
+Length follows how much of the system the article has to explain, not the category alone. The numbers describe how much the topic deserves, not quotas to reach. A draft that only clears the floor is usually under-developed: add mechanisms, worked examples, failure modes, comparisons, and sources until the topic is genuinely covered. Never add filler to hit a number, and never lower the class just to make an AI topic easier to finish.
 
-- **Flagship (12,000 to 20,000+):** the article explains a whole architecture, ecosystem, technology map, or cross-cutting method. AI and Agent core topics default here when they cover a system rather than a single point: an Agent harness, a RAG technology map, a coding-agent source walkthrough, a new control layer.
-- **Focused (6,000 to 12,000):** the article zooms into one mechanism, one paper, one subsystem, or one workflow. A broad topic narrowed to a single question also belongs here.
-- **Field note (2,000 to 6,000):** the article answers one specific question, reproduces one bug, or documents one narrow behavior, such as a single Redis eviction problem or one configuration trap.
+- **Flagship (12,000 to 20,000+):** the article explains a whole architecture, ecosystem, technology map, cross-cutting method, or a single technique that still needs its context, mechanism, failure modes, and an end-to-end example. Everything in the AI sections defaults here: an Agent harness, a RAG technology map, a coding-agent source walkthrough, RAG/FastCode/Repo Map/LLM Wiki, a new control layer.
+- **Focused (6,000 to 12,000):** a deliberately narrow topic outside the AI core, such as one backend subsystem or one engineering workflow. A broad topic narrowed to a single question can belong here.
+- **Field note (2,000 to 6,000):** one specific question, one bug, or one narrow behavior, such as a single Redis eviction problem or one configuration trap.
 
 Defaults by section:
 
-- Agent / AI Coding / RAG 与知识库 / Agent 前沿 / Agent 算法: flagship when the topic is a system or a map; focused when it is a single technique.
+- Agent 开发 / RAG 与知识库 / AI Coding / Agent 前沿 / Agent 算法: flagship. AI and knowledge-base topics are expected to be substantial, even when the title names one technique, because the technique still needs its context, mechanism, failure modes, and a worked example.
 - 后端 (Java, Redis, MySQL, 消息队列, 分布式): focused for a subsystem; field-note for a single issue or one reproduction.
 - 项目: focused for a build log; field-note for a short announcement or note.
 
-Declare the intended class in frontmatter with `articleClass: flagship | focused | field-note`. When an article does not declare one, the audit infers it from the section. The site counts each Han character and each Latin token as one word. Length is a diagnostic, not permission to repeat; if the source cannot support the target, narrow the title instead of padding.
+Declare the intended class in frontmatter with `articleClass: flagship | focused | field-note`. When an article does not declare one, the audit infers it from the section. The site counts each Han character and each Latin token as one word. Treat the class minimum as a floor and the middle-to-upper end of the range as the real target when the topic supports it; if the material genuinely cannot support the range, narrow the title instead of padding.
 
 ## Build the article around five jobs
 

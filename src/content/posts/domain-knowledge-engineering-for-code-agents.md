@@ -3,7 +3,7 @@ title: 让 Code Agent 读懂业务：把仓库知识做成可维护的 Skills
 description: 代码检索只能告诉 Agent“这里写了什么”。要让它处理复杂业务，还需要把术语、规则、代码入口、变更方法和验证手段组织成会随代码演进的知识系统。
 category: Agent
 subcategory: RAG 与知识库
-articleClass: focused
+articleClass: flagship
 featured: false
 publishedAt: 2026-09-30
 updatedAt: 2026-09-30

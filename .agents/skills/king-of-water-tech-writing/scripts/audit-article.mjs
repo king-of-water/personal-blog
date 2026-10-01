@@ -6,9 +6,9 @@ import path from 'node:path';
 // Length follows scope, not category. AI and system-level topics are expected to
 // be substantial; a narrow single-issue note is not padded to flagship length.
 const WIDTHS = {
-  flagship: { min: 12000, minH2: 6, minImages: 2, minCode: 2, minLinks: 3, label: '旗舰长文' },
-  focused: { min: 6000, minH2: 4, minImages: 1, minCode: 1, minLinks: 2, label: '专题深潜' },
-  'field-note': { min: 2000, minH2: 2, minImages: 0, minCode: 0, minLinks: 0, label: '问题笔记' },
+  flagship: { min: 12000, target: 15000, minH2: 6, minImages: 2, minCode: 2, minLinks: 3, label: '旗舰长文' },
+  focused: { min: 6000, target: 8000, minH2: 4, minImages: 1, minCode: 1, minLinks: 2, label: '专题深潜' },
+  'field-note': { min: 2000, target: 3500, minH2: 2, minImages: 0, minCode: 0, minLinks: 0, label: '问题笔记' },
 };
 
 const AI_SUBCATEGORIES = new Set([
@@ -90,6 +90,7 @@ const result = {
   classLabel: width.label,
   classSource,
   minimumWords,
+  targetWords: width.target,
   siteCountedWords: words,
   estimatedMinutes: Math.max(1, Math.ceil(words / 500)),
   h2,
@@ -115,5 +116,8 @@ for (const warning of warnings) console.warn(`WARN: ${warning}`);
 // external, while research notes should prefer primary sources.
 if (links < width.minLinks) {
   console.warn(`NOTE: ${links} external link(s); ${width.minLinks}+ expected when the article makes external implementation or research claims.`);
+}
+if (words >= minimumWords && words < width.target) {
+  console.warn(`NOTE: ${words.toLocaleString('en-US')} words clears the floor but is below the ${width.target.toLocaleString('en-US')} target for a ${width.label}. Deepen the topic instead of stopping at the minimum.`);
 }
 process.exitCode = warnings.length ? 1 : 0;

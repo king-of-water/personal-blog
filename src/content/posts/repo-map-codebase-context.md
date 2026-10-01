@@ -3,7 +3,7 @@ title: Repo Map：把整个代码仓库压缩成一张给 LLM 看的地图
 description: Repo Map 用符号定义、引用关系和图排序，在固定 Token 预算内生成仓库地图。本文结合 Aider 的实现，拆解 Tree-sitter、PageRank、上下文相关排序、增量缓存，以及它和 RAG、FastCode、LLM Wiki 的关系。
 category: Agent
 subcategory: RAG 与知识库
-articleClass: focused
+articleClass: flagship
 featured: false
 publishedAt: 2026-10-01
 updatedAt: 2026-10-01
