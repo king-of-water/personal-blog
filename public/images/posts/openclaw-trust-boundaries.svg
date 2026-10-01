@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="820" viewBox="0 0 1440 820" role="img" aria-labelledby="title desc">
+  <title id="title">OpenClaw 信任边界</title>
+  <desc id="desc">一个 Gateway 内多个 Agent 可以分工作区和工具策略，但仍共享一个管理信任域；互不信任的参与者需要拆到独立 Gateway、操作系统用户或主机。</desc>
+  <defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#5b5245"/></marker><style>.h{font:700 30px system-ui,"PingFang SC";fill:#2b2620}.s{font:16px system-ui,"PingFang SC";fill:#6f6659}.t{font:700 18px system-ui,"PingFang SC";fill:#2b2620}.b{font:15px system-ui,"PingFang SC";fill:#554d42}.x{font:13px system-ui,"PingFang SC";fill:#6f6659}.l{stroke:#5b5245;stroke-width:2;fill:none;marker-end:url(#a)}</style></defs>
+  <rect width="1440" height="820" rx="28" fill="#fdfaf3"/>
+  <text class="h" x="64" y="62">一个 Gateway，一条管理信任边界</text><text class="s" x="64" y="92">Agent 隔离能减少误用；它不能把同一控制面的参与者变成彼此敌对的云租户。</text>
+  <rect x="54" y="138" width="838" height="590" rx="28" fill="#f5f0e4" stroke="#a8433f" stroke-width="3" stroke-dasharray="10 8"/>
+  <text class="t" x="86" y="180">Gateway A：个人 / 互信团队</text><text class="x" x="86" y="206">共享配置、插件、管理 API 与控制面</text>
+  <rect x="86" y="242" width="354" height="194" rx="20" fill="#d8dee0" stroke="#2f5d8a"/>
+  <text class="t" x="263" y="280" text-anchor="middle">Agent: code</text><text class="b" x="263" y="315" text-anchor="middle">workspace-code · model auth</text><text class="b" x="263" y="343" text-anchor="middle">repo tools · sandbox rw</text><text class="x" x="263" y="390" text-anchor="middle">独立 session store / Skills</text>
+  <rect x="472" y="242" width="354" height="194" rx="20" fill="#dee3d6" stroke="#4f7a52"/>
+  <text class="t" x="649" y="280" text-anchor="middle">Agent: home</text><text class="b" x="649" y="315" text-anchor="middle">workspace-home · device auth</text><text class="b" x="649" y="343" text-anchor="middle">device tools · no repo access</text><text class="x" x="649" y="390" text-anchor="middle">独立 session store / Skills</text>
+  <rect x="86" y="476" width="740" height="188" rx="20" fill="#ebe4d4" stroke="#8a7f6d"/>
+  <text class="t" x="456" y="514" text-anchor="middle">共同控制面</text>
+  <rect x="112" y="540" width="204" height="78" rx="12" fill="#fbf8f1"/><text class="b" x="214" y="572" text-anchor="middle">Bindings / Sessions</text><text class="x" x="214" y="597" text-anchor="middle">可配置跨 Agent 访问</text>
+  <rect x="354" y="540" width="204" height="78" rx="12" fill="#fbf8f1"/><text class="b" x="456" y="572" text-anchor="middle">Plugins / Nodes</text><text class="x" x="456" y="597" text-anchor="middle">共享进程与管理权限</text>
+  <rect x="596" y="540" width="204" height="78" rx="12" fill="#eed9d3"/><text class="b" x="698" y="572" text-anchor="middle">Admin / Config</text><text class="x" x="698" y="597" text-anchor="middle">能改变其他 Agent 边界</text>
+
+  <rect x="996" y="180" width="368" height="478" rx="26" fill="#ebe4d4" stroke="#4f7a52" stroke-width="3"/>
+  <text class="t" x="1180" y="222" text-anchor="middle">Gateway B：不互信参与者</text>
+  <rect x="1032" y="260" width="296" height="104" rx="16" fill="#dee3d6"/><text class="b" x="1180" y="300" text-anchor="middle">独立 OS 用户或主机</text><text class="x" x="1180" y="329" text-anchor="middle">独立数据库、配置和日志</text>
+  <rect x="1032" y="390" width="296" height="104" rx="16" fill="#d8dee0"/><text class="b" x="1180" y="430" text-anchor="middle">独立凭证与网络策略</text><text class="x" x="1180" y="459" text-anchor="middle">没有共享 elevated 出口</text>
+  <rect x="1032" y="520" width="296" height="104" rx="16" fill="#fbf8f1"/><text class="b" x="1180" y="560" text-anchor="middle">最小化跨域接口</text><text class="x" x="1180" y="589" text-anchor="middle">认证 webhook / 消息摘要</text>
+  <path class="l" d="M892 418H988"/>
+  <rect x="54" y="756" width="1310" height="38" rx="12" fill="#eed9d3"/>
+  <text class="b" x="709" y="781" text-anchor="middle">Workspace、Tool Policy 和 Sandbox 控制爆炸半径；真正敌对的租户隔离要在 Gateway 外完成。</text>
+</svg>

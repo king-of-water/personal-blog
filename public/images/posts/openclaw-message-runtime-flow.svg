@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="800" viewBox="0 0 1440 800" role="img" aria-labelledby="title desc">
+  <title id="title">OpenClaw 消息运行链</title>
+  <desc id="desc">入站消息依次经过渠道准入、Agent binding、session 选择、队列策略、Prompt 和模型、工具执行、状态保存与原渠道交付。</desc>
+  <defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#5b5245"/></marker><style>.h{font:700 30px system-ui,"PingFang SC";fill:#2b2620}.s{font:16px system-ui,"PingFang SC";fill:#6f6659}.t{font:700 16px system-ui,"PingFang SC";fill:#2b2620}.b{font:14px system-ui,"PingFang SC";fill:#554d42}.n{font:700 17px system-ui,"PingFang SC";fill:#fdfaf3}.l{stroke:#5b5245;stroke-width:2.5;fill:none;marker-end:url(#a)}</style></defs>
+  <rect width="1440" height="800" rx="28" fill="#fdfaf3"/>
+  <text class="h" x="64" y="62">一条消息如何穿过 OpenClaw</text><text class="s" x="64" y="92">准入、路由、会话和执行各自做确定判断，模型只负责开放决策。</text>
+  <path class="l" d="M180 230H274"/><path class="l" d="M406 230H500"/><path class="l" d="M632 230H726"/><path class="l" d="M858 230H952"/><path class="l" d="M1084 230H1178"/>
+  <g><circle cx="114" cy="230" r="66" fill="#2f5d8a"/><text class="n" x="114" y="224" text-anchor="middle">1</text><text class="n" x="114" y="250" text-anchor="middle">入站消息</text><text class="b" x="114" y="323" text-anchor="middle">event ID · sender</text><text class="b" x="114" y="345" text-anchor="middle">channel · account</text></g>
+  <g><circle cx="340" cy="230" r="66" fill="#a8433f"/><text class="n" x="340" y="224" text-anchor="middle">2</text><text class="n" x="340" y="250" text-anchor="middle">渠道准入</text><text class="b" x="340" y="323" text-anchor="middle">pairing · allowFrom</text><text class="b" x="340" y="345" text-anchor="middle">DM / group policy</text></g>
+  <g><circle cx="566" cy="230" r="66" fill="#4f7a52"/><text class="n" x="566" y="224" text-anchor="middle">3</text><text class="n" x="566" y="250" text-anchor="middle">Agent Binding</text><text class="b" x="566" y="323" text-anchor="middle">peer → guild → account</text><text class="b" x="566" y="345" text-anchor="middle">命中 agentId</text></g>
+  <g><circle cx="792" cy="230" r="66" fill="#2f5d8a"/><text class="n" x="792" y="224" text-anchor="middle">4</text><text class="n" x="792" y="250" text-anchor="middle">Session Key</text><text class="b" x="792" y="323" text-anchor="middle">main / peer / group</text><text class="b" x="792" y="345" text-anchor="middle">加载 transcript</text></g>
+  <g><circle cx="1018" cy="230" r="66" fill="#a8433f"/><text class="n" x="1018" y="224" text-anchor="middle">5</text><text class="n" x="1018" y="250" text-anchor="middle">Queue Mode</text><text class="b" x="1018" y="323" text-anchor="middle">steer · followup</text><text class="b" x="1018" y="345" text-anchor="middle">collect · interrupt</text></g>
+  <g><circle cx="1244" cy="230" r="66" fill="#4f7a52"/><text class="n" x="1244" y="224" text-anchor="middle">6</text><text class="n" x="1244" y="250" text-anchor="middle">Agent Loop</text><text class="b" x="1244" y="323" text-anchor="middle">Prompt · model</text><text class="b" x="1244" y="345" text-anchor="middle">tool calls</text></g>
+  <path class="l" d="M1244 364V442H1098"/>
+  <rect x="816" y="438" width="282" height="112" rx="18" fill="#d8dee0" stroke="#2f5d8a"/><text class="t" x="957" y="476" text-anchor="middle">工具执行与审批</text><text class="b" x="957" y="506" text-anchor="middle">policy → sandbox / host / node</text><text class="b" x="957" y="530" text-anchor="middle">已开始动作不能靠 steer 倒转</text>
+  <path class="l" d="M816 494H680"/>
+  <rect x="398" y="438" width="282" height="112" rx="18" fill="#dee3d6" stroke="#4f7a52"/><text class="t" x="539" y="476" text-anchor="middle">保存状态与形成回复</text><text class="b" x="539" y="506" text-anchor="middle">transcript · usage · run result</text><text class="b" x="539" y="530" text-anchor="middle">compaction 与写入共用事务围栏</text>
+  <path class="l" d="M398 494H262"/>
+  <rect x="64" y="438" width="198" height="112" rx="18" fill="#ebe4d4" stroke="#8a7f6d"/><text class="t" x="163" y="476" text-anchor="middle">原渠道交付</text><text class="b" x="163" y="506" text-anchor="middle">lastRoute + account</text><text class="b" x="163" y="530" text-anchor="middle">平台 receipt</text>
+  <rect x="64" y="628" width="1312" height="94" rx="18" fill="#fbf8f1" stroke="#8a7f6d"/>
+  <text class="t" x="92" y="666">必须分开的三种状态</text><text class="b" x="92" y="698">Agent 完成 ≠ 工具副作用已确认 ≠ 回复已经送达。写操作超时先查询外部状态，投递失败可以重试消息，不能重放业务动作。</text>
+</svg>
