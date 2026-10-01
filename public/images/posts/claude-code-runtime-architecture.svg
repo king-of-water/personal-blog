@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900" role="img" aria-labelledby="title desc">
+  <title id="title">Claude Code 的运行时分层</title><desc id="desc">交互、Query、Context、Tool 和 Governance 五层围绕 Agent Loop 协同。</desc>
+  <defs><style>.bg{fill:#f5f4ef}.ink{fill:#1c201d}.muted{fill:#6f7670}.green{fill:#176f55}.soft{fill:#e4f1eb}.card{fill:#fff;stroke:#d8dcd6;stroke-width:2}.dark{fill:#222825}.sans{font-family:Inter,"PingFang SC","Microsoft YaHei",sans-serif}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}</style></defs>
+  <rect width="1440" height="900" class="bg"/>
+  <text x="90" y="86" class="sans green" font-size="20" font-weight="700" letter-spacing="3">CLAUDE CODE RUNTIME</text>
+  <text x="90" y="145" class="sans ink" font-size="46" font-weight="750">Query Loop 在中间，四类系统围着它转</text>
+  <text x="90" y="188" class="sans muted" font-size="21">这是工程职责图，不代表 Anthropic 官方模块命名。</text>
+  <g transform="translate(90 244)">
+    <rect x="420" y="160" width="420" height="230" rx="26" class="dark"/>
+    <text x="465" y="213" class="mono" fill="#79c4a4" font-size="18">QUERY LOOP</text>
+    <text x="465" y="267" class="sans" fill="#fff" font-size="38" font-weight="750">stream → tool_use</text>
+    <text x="465" y="315" class="sans" fill="#fff" font-size="38" font-weight="750">tool_result → end_turn</text>
+    <text x="465" y="356" class="sans" fill="#c9d2cd" font-size="18">推进会话，处理取消、重试与任务完成</text>
+
+    <rect x="420" width="420" height="112" rx="12" class="card"/>
+    <text x="453" y="42" class="mono green" font-size="16">INTERACTION</text><text x="453" y="75" class="sans ink" font-size="25" font-weight="700">Terminal · IDE · Desktop · Web</text><text x="453" y="99" class="sans muted" font-size="16">输入、事件呈现与用户批准</text>
+
+    <rect x="0" y="160" width="360" height="230" rx="12" class="card"/>
+    <text x="34" y="205" class="mono green" font-size="16">CONTEXT</text><text x="34" y="247" class="sans ink" font-size="28" font-weight="700">模型这一轮看见什么</text>
+    <text x="34" y="286" class="sans muted" font-size="18">CLAUDE.md · Rules · Skills</text><text x="34" y="318" class="sans muted" font-size="18">Memory · MCP · Tool Results</text><text x="34" y="350" class="sans muted" font-size="18">Compact · System Reminder</text>
+
+    <rect x="900" y="160" width="360" height="230" rx="12" class="card"/>
+    <text x="934" y="205" class="mono green" font-size="16">TOOLS</text><text x="934" y="247" class="sans ink" font-size="28" font-weight="700">意图怎样进入环境</text>
+    <text x="934" y="286" class="sans muted" font-size="18">Read · Edit · Bash · Grep</text><text x="934" y="318" class="sans muted" font-size="18">Task / Subagent · MCP</text><text x="934" y="350" class="sans muted" font-size="18">结构化结果与长任务</text>
+
+    <rect x="220" y="452" width="820" height="132" rx="12" class="soft"/>
+    <text x="255" y="497" class="mono green" font-size="16">GOVERNANCE &amp; RECOVERY</text><text x="255" y="536" class="sans ink" font-size="29" font-weight="700">Permissions · Sandbox · Hooks · Checkpoint · Session JSONL</text><text x="255" y="566" class="sans muted" font-size="17">约束副作用，保存历史，在任务失败或用户反悔时恢复</text>
+
+    <path d="M630 112V150" stroke="#176f55" stroke-width="3"/>
+    <path d="M360 275H410" stroke="#176f55" stroke-width="3"/>
+    <path d="M840 275H890" stroke="#176f55" stroke-width="3"/>
+    <path d="M630 390V442" stroke="#176f55" stroke-width="3"/>
+  </g>
+  <text x="90" y="850" class="sans muted" font-size="17">官方确认行为与第三方实现线索应分开阅读：能力可以稳定，函数名、阈值和 feature flag 未必稳定。</text>
+</svg>

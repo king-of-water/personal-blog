@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900" role="img" aria-labelledby="title desc">
+  <title id="title">一次 Codex Turn 在源码层怎样穿过各模块</title>
+  <desc id="desc">用户输入经 App Server、Core、Responses API、工具路由和执行环境循环，直到完成。</desc>
+  <defs>
+    <style>.bg{fill:#f5f4ef}.ink{fill:#1c201d}.muted{fill:#6f7670}.green{fill:#176f55}.card{fill:#fff;stroke:#d8dcd6;stroke-width:2}.soft{fill:#e4f1eb}.sans{font-family:Inter,"PingFang SC","Microsoft YaHei",sans-serif}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}</style>
+    <marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#176f55"/></marker>
+  </defs>
+  <rect width="1440" height="860" class="bg"/>
+  <text x="90" y="86" class="sans green" font-size="20" font-weight="700" letter-spacing="3">ONE TURN, MANY MODEL CALLS</text>
+  <text x="90" y="145" class="sans ink" font-size="46" font-weight="750">用户看到一轮，Core 看到一个循环</text>
+  <g transform="translate(110 230)">
+    <g>
+      <rect width="220" height="112" rx="10" class="card"/><text x="28" y="41" class="mono green" font-size="16">01 APP SERVER</text><text x="28" y="74" class="sans ink" font-size="24" font-weight="700">turn/start</text><text x="28" y="99" class="sans muted" font-size="16">输入与配置快照</text>
+      <path d="M220 56H292" stroke="#176f55" stroke-width="3" marker-end="url(#a)"/>
+      <rect x="300" width="220" height="112" rx="10" class="card"/><text x="328" y="41" class="mono green" font-size="16">02 CORE</text><text x="328" y="74" class="sans ink" font-size="24" font-weight="700">装配上下文</text><text x="328" y="99" class="sans muted" font-size="16">规则、历史、工具</text>
+      <path d="M520 56H592" stroke="#176f55" stroke-width="3" marker-end="url(#a)"/>
+      <rect x="600" width="220" height="112" rx="10" fill="#222825"/><text x="628" y="41" class="mono" fill="#79c4a4" font-size="16">03 MODEL</text><text x="628" y="74" class="sans" fill="#fff" font-size="24" font-weight="700">Responses stream</text><text x="628" y="99" class="sans" fill="#c9d2cd" font-size="16">文本或 tool call</text>
+      <path d="M820 56H892" stroke="#176f55" stroke-width="3" marker-end="url(#a)"/>
+      <rect x="900" width="220" height="112" rx="10" class="card"/><text x="928" y="41" class="mono green" font-size="16">04 ROUTER</text><text x="928" y="74" class="sans ink" font-size="24" font-weight="700">校验与策略</text><text x="928" y="99" class="sans muted" font-size="16">审批、并发、副作用</text>
+    </g>
+
+    <path d="M1010 112V190" stroke="#176f55" stroke-width="3" marker-end="url(#a)"/>
+    <rect x="770" y="198" width="460" height="132" rx="10" class="soft"/>
+    <text x="804" y="238" class="mono green" font-size="16">05 EXECUTION BOUNDARY</text><text x="804" y="276" class="sans ink" font-size="28" font-weight="700">Sandbox / Exec Server / Workspace</text><text x="804" y="307" class="sans muted" font-size="17">运行命令、应用补丁、返回结构化结果</text>
+
+    <path d="M770 264H625" stroke="#176f55" stroke-width="3" marker-end="url(#a)"/>
+    <rect x="330" y="198" width="285" height="132" rx="10" class="card"/>
+    <text x="360" y="238" class="mono green" font-size="16">06 TOOL RESULT</text><text x="360" y="276" class="sans ink" font-size="27" font-weight="700">写回 Thread 历史</text><text x="360" y="307" class="sans muted" font-size="17">退出码、输出、错误、截断</text>
+
+    <path d="M472 330V413H710V374" fill="none" stroke="#176f55" stroke-width="3" marker-end="url(#a)"/>
+    <text x="505" y="399" class="sans green" font-size="17" font-weight="650">下一次模型调用</text>
+
+    <rect x="520" y="440" width="380" height="126" rx="10" fill="#176f55"/>
+    <text x="558" y="481" class="mono" fill="#cce8dc" font-size="16">07 FINISH?</text><text x="558" y="520" class="sans" fill="#fff" font-size="30" font-weight="750">还有工具调用，继续循环</text><text x="558" y="549" class="sans" fill="#d6eee4" font-size="17">无待处理工具，Turn completed</text>
+  </g>
+  <text x="110" y="850" class="sans muted" font-size="18">事件流贯穿整个过程：Item started → delta → completed / error。中断只停止当前推进，不抹掉已经发生的事实。</text>
+</svg>

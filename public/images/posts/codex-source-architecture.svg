@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1020" viewBox="0 0 1440 1020" role="img" aria-labelledby="title desc">
+  <title id="title">Codex 官方源码中的运行时分层</title>
+  <desc id="desc">从客户端、App Server、Codex Core、工具路由到沙箱和执行环境的五层架构。</desc>
+  <defs>
+    <style>
+      .bg{fill:#f5f4ef}.ink{fill:#1c201d}.muted{fill:#6f7670}.green{fill:#176f55}.line{stroke:#d8dcd6;stroke-width:2}.accent{fill:#e4f1eb}.dark{fill:#222825}.white{fill:#fff}.box{fill:#fff;stroke:#d8dcd6;stroke-width:2}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.sans{font-family:Inter,"PingFang SC","Microsoft YaHei",sans-serif}
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#176f55"/></marker>
+  </defs>
+  <rect width="1440" height="900" class="bg"/>
+  <text x="90" y="86" class="sans green" font-size="20" font-weight="700" letter-spacing="3">CODEX SOURCE MAP</text>
+  <text x="90" y="145" class="sans ink" font-size="46" font-weight="750">一次任务，穿过五层运行时</text>
+  <text x="90" y="188" class="sans muted" font-size="22">界面负责呈现，Core 负责推进，执行边界负责兜底。</text>
+
+  <g transform="translate(90 245)">
+    <rect width="1260" height="96" rx="8" class="box"/>
+    <rect width="210" height="96" rx="8" class="accent"/>
+    <text x="28" y="42" class="mono green" font-size="17">01 CLIENTS</text><text x="28" y="70" class="sans ink" font-size="22" font-weight="700">交互客户端</text>
+    <text x="250" y="44" class="sans ink" font-size="24" font-weight="650">TUI · IDE · Desktop · 自定义客户端</text>
+    <text x="250" y="73" class="sans muted" font-size="18">显示 Item，提交任务，处理批准、中断与补充输入</text>
+
+    <path d="M630 96V127" stroke="#176f55" stroke-width="3" marker-end="url(#arrow)"/>
+    <rect y="132" width="1260" height="96" rx="8" class="box"/>
+    <rect y="132" width="210" height="96" rx="8" class="accent"/>
+    <text x="28" y="174" class="mono green" font-size="17">02 PROTOCOL</text><text x="28" y="202" class="sans ink" font-size="22" font-weight="700">App Server</text>
+    <text x="250" y="176" class="sans ink" font-size="24" font-weight="650">JSON-RPC · Thread · Turn · Item</text>
+    <text x="250" y="205" class="sans muted" font-size="18">把多个界面接到同一个运行时，持续发送结构化事件</text>
+
+    <path d="M630 228V259" stroke="#176f55" stroke-width="3" marker-end="url(#arrow)"/>
+    <rect y="264" width="1260" height="112" rx="8" class="dark"/>
+    <rect y="264" width="210" height="112" rx="8" fill="#176f55"/>
+    <text x="28" y="309" class="mono white" font-size="17">03 RUNTIME</text><text x="28" y="340" class="sans white" font-size="22" font-weight="700">Codex Core</text>
+    <text x="250" y="310" class="sans white" font-size="25" font-weight="650">Agent Loop · Context · Session State · Responses API</text>
+    <text x="250" y="344" class="sans" fill="#c9d2cd" font-size="18">接收输入，调用模型，解释事件，决定继续调用工具还是结束 Turn</text>
+
+    <path d="M630 376V407" stroke="#176f55" stroke-width="3" marker-end="url(#arrow)"/>
+    <rect y="412" width="1260" height="96" rx="8" class="box"/>
+    <rect y="412" width="210" height="96" rx="8" class="accent"/>
+    <text x="28" y="454" class="mono green" font-size="17">04 CAPABILITY</text><text x="28" y="482" class="sans ink" font-size="22" font-weight="700">Tool Router</text>
+    <text x="250" y="456" class="sans ink" font-size="24" font-weight="650">Exec · Patch · MCP · Skills · Apps</text>
+    <text x="250" y="485" class="sans muted" font-size="18">校验参数，判断副作用，规范化结果，管理长任务句柄</text>
+
+    <path d="M630 508V539" stroke="#176f55" stroke-width="3" marker-end="url(#arrow)"/>
+    <rect y="544" width="1260" height="96" rx="8" class="box"/>
+    <rect y="544" width="210" height="96" rx="8" class="accent"/>
+    <text x="28" y="586" class="mono green" font-size="17">05 EXECUTION</text><text x="28" y="614" class="sans ink" font-size="22" font-weight="700">执行边界</text>
+    <text x="250" y="588" class="sans ink" font-size="24" font-weight="650">Approval · Sandbox · Exec Server · Workspace</text>
+    <text x="250" y="617" class="sans muted" font-size="18">人的授权与操作系统权限分离，本地和远程环境共享执行协议</text>
+  </g>
+  <text x="90" y="970" class="sans muted" font-size="17">读取顺序：先找协议边界，再沿一次 Turn 向下追工具调用，最后回看事件如何持久化。</text>
+</svg>

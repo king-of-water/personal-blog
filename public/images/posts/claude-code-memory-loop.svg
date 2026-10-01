@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="860" viewBox="0 0 1440 860" role="img" aria-labelledby="title desc">
+  <title id="title">Claude Code 自动记忆的写入与召回闭环</title><desc id="desc">对话结束后抽取结构化记忆，下一次请求从索引选择相关文件并带老化提示注入。</desc>
+  <defs><style>.bg{fill:#f5f4ef}.ink{fill:#1c201d}.muted{fill:#6f7670}.green{fill:#176f55}.soft{fill:#e4f1eb}.card{fill:#fff;stroke:#d8dcd6;stroke-width:2}.dark{fill:#222825}.sans{font-family:Inter,"PingFang SC","Microsoft YaHei",sans-serif}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}</style><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#176f55"/></marker></defs>
+  <rect width="1440" height="860" class="bg"/>
+  <text x="90" y="86" class="sans green" font-size="20" font-weight="700" letter-spacing="3">MEMORY READ / WRITE LOOP</text>
+  <text x="90" y="145" class="sans ink" font-size="46" font-weight="750">记忆不是仓库，是一条受控流水线</text>
+  <text x="90" y="188" class="sans muted" font-size="20">具体函数与模型选择来自第三方还原，图中强调的是可迁移的设计。</text>
+
+  <g transform="translate(100 250)">
+    <rect x="0" y="0" width="300" height="130" rx="12" class="card"/><text x="30" y="42" class="mono green" font-size="16">WRITE 01</text><text x="30" y="78" class="sans ink" font-size="25" font-weight="700">本轮对话结束</text><text x="30" y="108" class="sans muted" font-size="17">反馈、纠正、项目事实</text>
+    <path d="M300 65H382" stroke="#176f55" stroke-width="3" marker-end="url(#a)"/>
+    <rect x="390" y="0" width="300" height="130" rx="12" class="card"/><text x="420" y="42" class="mono green" font-size="16">WRITE 02</text><text x="420" y="78" class="sans ink" font-size="25" font-weight="700">独立抽取与去重</text><text x="420" y="108" class="sans muted" font-size="17">只允许四种类型</text>
+    <path d="M690 65H772" stroke="#176f55" stroke-width="3" marker-end="url(#a)"/>
+    <rect x="780" y="0" width="360" height="130" rx="12" class="soft"/><text x="810" y="42" class="mono green" font-size="16">STORE</text><text x="810" y="78" class="sans ink" font-size="25" font-weight="700">MEMORY.md + 独立文件</text><text x="810" y="108" class="sans muted" font-size="17">索引常驻，正文按需</text>
+
+    <path d="M960 130V218" stroke="#176f55" stroke-width="3" marker-end="url(#a)"/>
+
+    <rect x="780" y="226" width="360" height="130" rx="12" class="card"/><text x="810" y="268" class="mono green" font-size="16">READ 01</text><text x="810" y="304" class="sans ink" font-size="25" font-weight="700">读取候选索引</text><text x="810" y="334" class="sans muted" font-size="17">名称、描述、类型、时间</text>
+    <path d="M780 291H698" stroke="#176f55" stroke-width="3" marker-end="url(#a)"/>
+    <rect x="390" y="226" width="300" height="130" rx="12" class="card"/><text x="420" y="268" class="mono green" font-size="16">READ 02</text><text x="420" y="304" class="sans ink" font-size="25" font-weight="700">选择少量相关项</text><text x="420" y="334" class="sans muted" font-size="17">不确定的候选不注入</text>
+    <path d="M390 291H308" stroke="#176f55" stroke-width="3" marker-end="url(#a)"/>
+    <rect x="0" y="226" width="300" height="130" rx="12" class="dark"/><text x="30" y="268" class="mono" fill="#79c4a4" font-size="16">READ 03</text><text x="30" y="304" class="sans" fill="#fff" font-size="25" font-weight="700">注入并提示验证</text><text x="30" y="334" class="sans" fill="#c9d2cd" font-size="17">老记忆不是当前真相</text>
+
+    <rect x="0" y="438" width="1140" height="112" rx="12" class="soft"/>
+    <text x="30" y="479" class="mono green" font-size="16">MEMORY SCHEMA</text>
+    <text x="30" y="522" class="sans ink" font-size="25" font-weight="700">user 用户背景　·　feedback 行为偏好　·　project 项目动态　·　reference 外部指针</text>
+  </g>
+  <text x="100" y="826" class="sans muted" font-size="17">不存：代码结构、Git 历史、临时任务状态和能够从当前仓库直接推导的事实。</text>
+</svg>

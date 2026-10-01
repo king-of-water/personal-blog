@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1040" viewBox="0 0 1440 1040" role="img" aria-labelledby="title desc">
+  <title id="title">Claude Code 特定版本中的五层上下文压缩</title><desc id="desc">从工具结果落盘到自动压缩摘要的五层减压管线。</desc>
+  <defs><style>.bg{fill:#f5f4ef}.ink{fill:#1c201d}.muted{fill:#6f7670}.green{fill:#176f55}.soft{fill:#e4f1eb}.card{fill:#fff;stroke:#d8dcd6;stroke-width:2}.dark{fill:#222825}.sans{font-family:Inter,"PingFang SC","Microsoft YaHei",sans-serif}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}</style><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#176f55"/></marker></defs>
+  <rect width="1440" height="930" class="bg"/>
+  <text x="90" y="86" class="sans green" font-size="20" font-weight="700" letter-spacing="3">COMPACTION PIPELINE</text>
+  <text x="90" y="145" class="sans ink" font-size="46" font-weight="750">先减负，最后才重写历史</text>
+  <text x="90" y="188" class="sans muted" font-size="20">以下层次来自特定版本的第三方还原，表示设计思路，不是稳定接口。</text>
+  <g transform="translate(90 245)">
+    <rect width="1260" height="100" rx="10" class="card"/><rect width="180" height="100" rx="10" class="soft"/><text x="26" y="41" class="mono green" font-size="17">LAYER 1</text><text x="26" y="72" class="sans ink" font-size="21" font-weight="700">结果落盘</text><text x="220" y="45" class="sans ink" font-size="25" font-weight="700">巨型工具输出留引用与预览</text><text x="220" y="75" class="sans muted" font-size="17">不丢事实，但不让一次文件读取吞掉整个窗口</text>
+    <path d="M630 100V126" stroke="#176f55" stroke-width="3" marker-end="url(#a)"/>
+    <rect y="132" width="1260" height="100" rx="10" class="card"/><rect y="132" width="180" height="100" rx="10" class="soft"/><text x="26" y="173" class="mono green" font-size="17">LAYER 2</text><text x="26" y="204" class="sans ink" font-size="21" font-weight="700">语义清理</text><text x="220" y="177" class="sans ink" font-size="25" font-weight="700">标记已经完成使命的旧内容</text><text x="220" y="207" class="sans muted" font-size="17">优先处理可重建信息，避免盲目按字符截断</text>
+    <path d="M630 232V258" stroke="#176f55" stroke-width="3" marker-end="url(#a)"/>
+    <rect y="264" width="1260" height="100" rx="10" class="card"/><rect y="264" width="180" height="100" rx="10" class="soft"/><text x="26" y="305" class="mono green" font-size="17">LAYER 3</text><text x="26" y="336" class="sans ink" font-size="21" font-weight="700">Micro-Compact</text><text x="220" y="309" class="sans ink" font-size="25" font-weight="700">清掉旧工具输出，保护昂贵结论</text><text x="220" y="339" class="sans muted" font-size="17">旧日志可以重跑，子 Agent 的研究结果不应随手丢弃</text>
+    <path d="M630 364V390" stroke="#176f55" stroke-width="3" marker-end="url(#a)"/>
+    <rect y="396" width="1260" height="100" rx="10" class="card"/><rect y="396" width="180" height="100" rx="10" class="soft"/><text x="26" y="437" class="mono green" font-size="17">LAYER 4</text><text x="26" y="468" class="sans ink" font-size="21" font-weight="700">读取投影</text><text x="220" y="441" class="sans ink" font-size="25" font-weight="700">实验性排除低价值上下文</text><text x="220" y="471" class="sans muted" font-size="17">靠近窗口上限时减负，可能受 feature flag 控制</text>
+    <path d="M630 496V522" stroke="#176f55" stroke-width="3" marker-end="url(#a)"/>
+    <rect y="528" width="1260" height="118" rx="10" class="dark"/><rect y="528" width="180" height="118" rx="10" fill="#176f55"/><text x="26" y="573" class="mono" fill="#d6eee4" font-size="17">LAYER 5</text><text x="26" y="606" class="sans" fill="#fff" font-size="21" font-weight="700">Auto-Compact</text><text x="220" y="578" class="sans" fill="#fff" font-size="26" font-weight="700">结构化摘要接管旧历史</text><text x="220" y="612" class="sans" fill="#c9d2cd" font-size="17">目标、文件、错误、决定、待办与下一步必须留下</text>
+  </g>
+  <rect x="90" y="930" width="1260" height="50" rx="6" class="soft"/><text x="115" y="963" class="sans green" font-size="18" font-weight="650">原则：能重建的先清理，不能重建的进摘要，程序状态继续由 Harness 维护。</text>
+</svg>
