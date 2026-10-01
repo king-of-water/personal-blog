@@ -25,21 +25,29 @@ Do not inflate a vendor statement into an independent fact. Label paper results 
 
 Read the relevant existing blog posts so the new article adds a new layer instead of re-explaining material already covered.
 
-## Choose the article class by scope
+## Choose the article class by scope, not by category
 
-Length follows how much of the system the article has to explain, not the category alone. The numbers describe how much the topic deserves, not quotas to reach. A draft that only clears the floor is usually under-developed: add mechanisms, worked examples, failure modes, comparisons, and sources until the topic is genuinely covered. Never add filler to hit a number, and never lower the class just to make an AI topic easier to finish.
+Pick the class by asking how much the topic must cover to be explained well. The category does not decide it: a narrow AI behavior can be a field note, and a whole backend protocol design can be flagship. The question is whether the length is proportionate to what the topic actually needs.
 
-- **Flagship (12,000 to 20,000+):** the article explains a whole architecture, ecosystem, technology map, cross-cutting method, or a single technique that still needs its context, mechanism, failure modes, and an end-to-end example. Everything in the AI sections defaults here: an Agent harness, a RAG technology map, a coding-agent source walkthrough, RAG/FastCode/Repo Map/LLM Wiki, a new control layer.
-- **Focused (6,000 to 12,000):** a deliberately narrow topic outside the AI core, such as one backend subsystem or one engineering workflow. A broad topic narrowed to a single question can belong here.
-- **Field note (2,000 to 6,000):** one specific question, one bug, or one narrow behavior, such as a single Redis eviction problem or one configuration trap.
+- **Flagship (12,000 to 20,000+, aim 15,000+):** a system, architecture, technology map, methodology, or a technique that must be explained together with its ecosystem. Doing it justice needs several components or concepts, their relationships, failure modes, and an end-to-end example.
+- **Focused (6,000 to 12,000, aim 8,000+):** one component, module, subsystem, or single mechanism, explained on its own with its own context and one worked example.
+- **Field note (2,000 to 6,000, aim 3,500+):** one specific question, one bug, or one narrow behavior with a single cause, fix, or observation.
 
-Defaults by section:
+A practical test is to count what the article must contain:
 
-- Agent 开发 / RAG 与知识库 / AI Coding / Agent 前沿 / Agent 算法: flagship. AI and knowledge-base topics are expected to be substantial, even when the title names one technique, because the technique still needs its context, mechanism, failure modes, and a worked example.
-- 后端 (Java, Redis, MySQL, 消息队列, 分布式): focused for a subsystem; field-note for a single issue or one reproduction.
-- 项目: focused for a build log; field-note for a short announcement or note.
+- whole system + neighboring ideas + failure modes + end-to-end example → flagship
+- one mechanism + one example → focused
+- one question + one answer → field note
 
-Declare the intended class in frontmatter with `articleClass: flagship | focused | field-note`. When an article does not declare one, the audit infers it from the section. The site counts each Han character and each Latin token as one word. Treat the class minimum as a floor and the middle-to-upper end of the range as the real target when the topic supports it; if the material genuinely cannot support the range, narrow the title instead of padding.
+The floor is a floor; treat the middle-to-upper part of the range as the target. A draft that only clears the floor is usually under-developed: add mechanisms, examples, failure modes, comparisons, and sources until the topic is genuinely covered. Never add filler to hit a number, and never lower the class to finish sooner.
+
+Examples by scope, across categories:
+
+- System / map / methodology → flagship: Agent Harness, RAG 技术地图, Codex 源码拆解, FastCode, Repo Map, LLM Wiki, SDD; a backend 「分布式一致性全景」 would also be flagship.
+- One subsystem / module → focused: a RAG reranking module, a Redis cluster design, MySQL index internals.
+- One question / bug → field note: why a specific Redis key is evicted on read, why one configuration does not take effect.
+
+Declare the class in frontmatter with `articleClass: flagship | focused | field-note`. When it is missing, the audit defaults to `focused` and notes that the class was not declared. The site counts each Han character and each Latin token as one word.
 
 ## Build the article around five jobs
 

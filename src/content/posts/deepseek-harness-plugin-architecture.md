@@ -3,6 +3,7 @@ title: DSH：Everything is a Plugin，Agent Harness 如何被拆成可组合能�
 description: 沿 DeepSeek Harness 与 Cordis 论文拆解插件化 Agent 运行时：Service Definition、Provider、Consumer、Scope、可逆 effect 与响应式 coeffect，以及可替换 Agent Loop 和运行时自修改的治理边界。
 category: Agent
 subcategory: Agent 前沿
+articleClass: flagship
 featured: false
 publishedAt: 2026-10-01T20:04:00+08:00
 updatedAt: 2026-10-01

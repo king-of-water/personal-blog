@@ -38,13 +38,15 @@ For every benchmark number, keep enough context to avoid turning it into adverti
 
 Do not apply one length to every article. Decide how much of the system the piece has to explain.
 
+The class follows the topic's scope, not its category. Ask how much the article must cover, then choose the length that is proportionate.
+
 | Class | Words | Floor / real target | Use when | Typical examples |
 | --- | --- | --- | --- | --- |
-| Flagship | 12,000–20,000+ | aim 15,000+ | a whole architecture, ecosystem, technology map, cross-cutting method, or an AI technique that needs full context | Agent harness, RAG map, FastCode, Repo Map, coding-agent source walkthrough |
-| Focused | 6,000–12,000 | aim 8,000+ | a deliberately narrow topic outside the AI core | one backend subsystem, one engineering workflow |
-| Field note | 2,000–6,000 | aim 3,500+ | one specific question, one bug, one narrow behavior | a single Redis eviction issue, one config trap |
+| Flagship | 12,000–20,000+ | aim 15,000+ | a whole system, architecture, technology map, methodology, or a technique that must be explained with its ecosystem | Agent harness, RAG map, Codex source, FastCode, Repo Map, LLM Wiki, a 分布式一致性全景 |
+| Focused | 6,000–12,000 | aim 8,000+ | one subsystem, module, or single mechanism explained on its own | a RAG reranking module, a Redis cluster design, MySQL index internals |
+| Field note | 2,000–6,000 | aim 3,500+ | one specific question, bug, or narrow behavior | why a Redis key is evicted on read, one config trap |
 
-AI and Agent topics are flagship by default. They usually need a system view, so the article should still cover context, mechanism, failure modes, and a worked example even when the title names one technique. The minimum is a floor, not a goal: a draft that only clears it is usually under-developed. Padding a small topic to flagship length is an error, and deliberately narrowing the class to avoid the AI depth requirement is also an error.
+The category is a hint, not the rule. A narrow AI behavior can be a field note, and a whole backend subsystem can be flagship. The minimum is a floor, not a goal: a draft that only clears it is usually under-developed. Padding a small topic to flagship length is an error, and quietly lowering the class to avoid depth is also an error.
 
 ## Outline patterns
 

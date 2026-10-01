@@ -3,6 +3,7 @@ title: Agent 自进化：它究竟在修改什么
 description: 从 Context、Memory、Skill、Workflow、代码到模型权重，梳理 Agent 自进化的对象、反馈信号、更新周期与安全边界，并结合 ACE、EvoSkill、DGM、AlphaEvolve 与自进化综述，分析哪些修改值得保留、哪些会越改越差。
 category: Agent
 subcategory: Agent 前沿
+articleClass: flagship
 featured: false
 publishedAt: 2026-10-01T20:02:00+08:00
 updatedAt: 2026-10-01

@@ -11,14 +11,6 @@ const WIDTHS = {
   'field-note': { min: 2000, target: 3500, minH2: 2, minImages: 0, minCode: 0, minLinks: 0, label: '问题笔记' },
 };
 
-const AI_SUBCATEGORIES = new Set([
-  'Agent 开发',
-  'RAG 与知识库',
-  'AI Coding',
-  'Agent 前沿',
-  'Agent 算法',
-]);
-
 const file = process.argv[2];
 if (!file) {
   console.error('Usage: node audit-article.mjs <article.md> [--class=flagship|focused|field-note|auto] [--min=N]');
@@ -37,16 +29,11 @@ if (explicitMin !== undefined && !Number.isFinite(explicitMin)) {
 const source = fs.readFileSync(file, 'utf8');
 const frontmatter = source.match(/^---\s*\n([\s\S]*?)\n---/)?.[1] ?? '';
 const declaredClass = frontmatter.match(/^articleClass:\s*(\S+)/m)?.[1];
-const category = frontmatter.match(/^category:\s*(.+)$/m)?.[1]?.trim();
-const subcategory = frontmatter.match(/^subcategory:\s*(.+)$/m)?.[1]?.trim();
-
 // Precedence: explicit --class, then the article's own declaration, then a
-// scope default inferred from the section it lives in.
+// neutral focused default. The class is a scope judgement, so articles should
+// declare it rather than inherit one from their category.
 function inferClass() {
   if (declaredClass && WIDTHS[declaredClass]) return declaredClass;
-  if (subcategory && AI_SUBCATEGORIES.has(subcategory)) return 'flagship';
-  if (subcategory) return 'focused';
-  if (category === 'Agent') return 'flagship';
   return 'focused';
 }
 
