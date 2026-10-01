@@ -29,9 +29,9 @@ Read the relevant existing blog posts so the new article adds a new layer instea
 
 Pick the class by asking how much the topic must cover to be explained well. The category does not decide it: a narrow AI behavior can be a field note, and a whole backend protocol design can be flagship. The question is whether the length is proportionate to what the topic actually needs.
 
-- **Flagship (12,000 to 20,000+, aim 15,000+):** a system, architecture, technology map, methodology, or a technique that must be explained together with its ecosystem. Doing it justice needs several components or concepts, their relationships, failure modes, and an end-to-end example.
-- **Focused (6,000 to 12,000, aim 8,000+):** one component, module, subsystem, or single mechanism, explained on its own with its own context and one worked example.
-- **Field note (2,000 to 6,000, aim 3,500+):** one specific question, one bug, or one narrow behavior with a single cause, fix, or observation.
+- **Flagship (reference ~8,000, up to 20,000+):** a system, architecture, technology map, methodology, or a technique that must be explained together with its ecosystem. A coherent, fully covered article of about 8,000 words is normal; write longer only when the topic genuinely has more content.
+- **Focused (reference ~6,000):** one component, module, subsystem, or single mechanism, explained on its own with its own context and one worked example.
+- **Field note (reference ~2,500):** one specific question, one bug, or one narrow behavior with a single cause, fix, or observation.
 
 A practical test is to count what the article must contain:
 
@@ -49,7 +49,7 @@ Decide the outline and roughly how much each section needs before drafting, then
 
 Length is the natural result of covering the topic, not a target to chase. If a section only needs three paragraphs, leave it at three. The audit is a check applied once at the end, not a driver that keeps adding until a number is reached. If the finished draft is short, that is a signal to deepen the reasoning in the outline, not to bolt on more paragraphs.
 
-The floor is a floor; treat the middle-to-upper part of the range as the target. A draft that only clears the floor is usually under-developed: add mechanisms, examples, failure modes, comparisons, and sources until the topic is genuinely covered. Never add filler to hit a number, and never lower the class to finish sooner.
+Length is a byproduct of covering the topic, not a target. Write until the topic is fully covered, then stop. The reference length is where a complete article usually lands; it is not a quota, and going below it is fine when the topic is genuinely narrow. Never add filler to reach a number, and never lower the class to finish sooner.
 
 Examples by scope, across categories:
 
