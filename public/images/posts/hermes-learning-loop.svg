@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="820" viewBox="0 0 1440 820" role="img" aria-labelledby="title desc">
+  <title id="title">Hermes Agent 学习闭环</title>
+  <desc id="desc">任务执行形成轨迹，提取记忆和技能候选，经审查批准后在新会话加载，并通过回放决定保留、修改或回滚。</desc>
+  <defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#5b5245"/></marker><style>.h{font:700 30px system-ui,"PingFang SC";fill:#2b2620}.s{font:16px system-ui,"PingFang SC";fill:#6f6659}.t{font:700 18px system-ui,"PingFang SC";fill:#2b2620}.b{font:15px system-ui,"PingFang SC";fill:#554d42}.n{font:700 22px system-ui,"PingFang SC";fill:#fdfaf3}.l{stroke:#5b5245;stroke-width:3;fill:none;marker-end:url(#a)}</style></defs>
+  <rect width="1440" height="820" rx="28" fill="#fdfaf3"/>
+  <text class="h" x="64" y="62">Hermes 的学习发生在会话之间</text><text class="s" x="64" y="92">一次成功只是轨迹；提取、审查、发布和新会话回放之后，经验才成为稳定能力。</text>
+  <path d="M270 258C370 118 560 112 656 220" class="l"/><path d="M782 220C890 112 1080 132 1150 270" class="l"/><path d="M1176 390C1224 516 1124 646 968 654" class="l"/><path d="M850 670C730 752 532 722 470 608" class="l"/><path d="M354 564C206 536 164 386 230 300" class="l"/>
+  <circle cx="238" cy="290" r="88" fill="#2f5d8a"/><text class="n" x="238" y="278" text-anchor="middle">1</text><text class="t" x="238" y="312" text-anchor="middle" fill="#fdfaf3">执行任务</text><text class="b" x="238" y="410" text-anchor="middle">工具结果、错误、决策</text><text class="b" x="238" y="435" text-anchor="middle">与验证证据形成轨迹</text>
+  <circle cx="720" cy="210" r="88" fill="#4f7a52"/><text class="n" x="720" y="198" text-anchor="middle">2</text><text class="t" x="720" y="232" text-anchor="middle" fill="#fdfaf3">提取候选</text><text class="b" x="720" y="330" text-anchor="middle">事实 → Memory</text><text class="b" x="720" y="355" text-anchor="middle">程序 → Skill</text>
+  <circle cx="1190" cy="330" r="88" fill="#a8433f"/><text class="n" x="1190" y="318" text-anchor="middle">3</text><text class="t" x="1190" y="352" text-anchor="middle" fill="#fdfaf3">审查批准</text><text class="b" x="1190" y="452" text-anchor="middle">范围、权限、来源</text><text class="b" x="1190" y="477" text-anchor="middle">复现与回滚条件</text>
+  <circle cx="914" cy="666" r="88" fill="#2f5d8a"/><text class="n" x="914" y="654" text-anchor="middle">4</text><text class="t" x="914" y="688" text-anchor="middle" fill="#fdfaf3">新会话加载</text><text class="b" x="914" y="782" text-anchor="middle">冻结记忆快照，按需命中 Skill</text>
+  <circle cx="414" cy="574" r="88" fill="#4f7a52"/><text class="n" x="414" y="562" text-anchor="middle">5</text><text class="t" x="414" y="596" text-anchor="middle" fill="#fdfaf3">固定任务回放</text><text class="b" x="414" y="696" text-anchor="middle">成功率、成本、越权</text><text class="b" x="414" y="721" text-anchor="middle">误触发与恢复能力</text>
+  <rect x="566" y="408" width="320" height="130" rx="22" fill="#f5f0e4" stroke="#8a7f6d"/>
+  <text class="t" x="726" y="447" text-anchor="middle">选择，而不是无条件累积</text><text class="b" x="726" y="481" text-anchor="middle">通过 → 保留并记录版本</text><text class="b" x="726" y="509" text-anchor="middle">失败 → 修改、降级或回滚</text>
+</svg>

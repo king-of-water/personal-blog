@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="760" viewBox="0 0 1440 760" role="img" aria-labelledby="title desc">
+  <title id="title">Hermes execute_code 执行流</title>
+  <desc id="desc">模型生成 Python，子进程通过 hermes_tools 和 RPC 调用主进程工具，内部结果经过过滤后只有 print 输出返回模型。</desc>
+  <defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#5b5245"/></marker><style>.h{font:700 30px system-ui,"PingFang SC";fill:#2b2620}.s{font:16px system-ui,"PingFang SC";fill:#6f6659}.t{font:700 19px system-ui,"PingFang SC";fill:#2b2620}.b{font:15px system-ui,"PingFang SC";fill:#554d42}.x{font:13px ui-monospace,SFMono-Regular,monospace;fill:#554d42}.l{stroke:#5b5245;stroke-width:2;fill:none;marker-end:url(#a)}</style></defs>
+  <rect width="1440" height="760" rx="28" fill="#fdfaf3"/>
+  <text class="h" x="64" y="62">execute_code：把多工具编排留在程序层</text><text class="s" x="64" y="92">中间结果不必全部进入 Context；权限仍受工具白名单和运行资源限制。</text>
+  <rect x="70" y="160" width="250" height="156" rx="20" fill="#d8dee0" stroke="#2f5d8a"/>
+  <text class="t" x="195" y="201" text-anchor="middle">Model / Agent Loop</text><text class="b" x="195" y="235" text-anchor="middle">生成一段 Python 程序</text><text class="x" x="195" y="270" text-anchor="middle">from hermes_tools import ...</text>
+  <rect x="394" y="132" width="350" height="380" rx="22" fill="#f5f0e4" stroke="#8a7f6d"/>
+  <text class="t" x="569" y="171" text-anchor="middle">受限子进程</text>
+  <rect x="426" y="198" width="286" height="74" rx="14" fill="#fbf8f1"/><text class="b" x="569" y="228" text-anchor="middle">运行生成的 Python</text><text class="x" x="569" y="252" text-anchor="middle">循环 · 过滤 · 聚合 · 排序</text>
+  <rect x="426" y="298" width="286" height="74" rx="14" fill="#dee3d6"/><text class="b" x="569" y="328" text-anchor="middle">hermes_tools.py</text><text class="x" x="569" y="352" text-anchor="middle">受控 RPC 客户端</text>
+  <rect x="426" y="398" width="286" height="82" rx="14" fill="#eed9d3"/><text class="b" x="569" y="428" text-anchor="middle">资源门限</text><text class="x" x="569" y="452" text-anchor="middle">timeout · stdout · stderr</text><text class="x" x="569" y="472" text-anchor="middle">tool-call budget · env allowlist</text>
+  <rect x="820" y="160" width="300" height="326" rx="22" fill="#ebe4d4" stroke="#8a7f6d"/>
+  <text class="t" x="970" y="200" text-anchor="middle">主进程 Tool Registry</text>
+  <rect x="854" y="226" width="232" height="54" rx="12" fill="#fbf8f1"/><text class="b" x="970" y="259" text-anchor="middle">搜索 / 文件 / 浏览器</text>
+  <rect x="854" y="296" width="232" height="54" rx="12" fill="#fbf8f1"/><text class="b" x="970" y="329" text-anchor="middle">终端 / 视觉 / Memory</text>
+  <rect x="854" y="366" width="232" height="86" rx="12" fill="#eed9d3"/><text class="b" x="970" y="397" text-anchor="middle">显式白名单</text><text class="x" x="970" y="422" text-anchor="middle">排除递归 execute_code</text><text class="x" x="970" y="443" text-anchor="middle">delegate_task / MCP</text>
+  <rect x="1194" y="205" width="176" height="180" rx="20" fill="#dee3d6" stroke="#4f7a52"/>
+  <text class="t" x="1282" y="244" text-anchor="middle">外部世界</text><text class="b" x="1282" y="281" text-anchor="middle">文件与进程</text><text class="b" x="1282" y="311" text-anchor="middle">网页与 API</text><text class="b" x="1282" y="341" text-anchor="middle">远程执行后端</text>
+  <path class="l" d="M320 238H386"/><path class="l" d="M712 335H812"/><path class="l" d="M1120 295H1186"/>
+  <path d="M820 455H760V565H320" stroke="#2f5d8a" stroke-width="3" fill="none" marker-end="url(#a)"/>
+  <rect x="70" y="540" width="250" height="112" rx="18" fill="#d8dee0" stroke="#2f5d8a"/>
+  <text class="t" x="195" y="578" text-anchor="middle">只返回显式输出</text><text class="b" x="195" y="608" text-anchor="middle">print() 进入模型 Context</text><text class="x" x="195" y="633" text-anchor="middle">原始中间结果留在程序层</text>
+  <rect x="394" y="560" width="976" height="92" rx="18" fill="#fbf8f1" stroke="#8a7f6d"/>
+  <text class="t" x="426" y="597">何时使用</text><text class="b" x="426" y="627">三个以上工具调用、批量过滤或需要循环聚合。构建、进程管理与原生 shell 仍交给 terminal。</text>
+</svg>
