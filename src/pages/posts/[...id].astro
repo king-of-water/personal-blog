@@ -48,6 +48,7 @@ const categorySections = category === 'Agent'
 		: [];
 const librarySections = categorySections.map((section) => ({
 	...section,
+	path: subcategoryPath(category, section.name),
 	posts: categoryPosts.filter((item) => item.data.subcategory === section.name),
 }));
 ---
@@ -63,7 +64,7 @@ const librarySections = categorySections.map((section) => ({
 							<li>
 								{section.posts.length > 0 ? (
 									<details open={post.data.subcategory === section.name} class:list={{ 'is-current-section': post.data.subcategory === section.name }}>
-										<summary>{section.name}</summary>
+										<summary><a href={section.path}>{section.name}</a></summary>
 									<ul>
 										{section.posts.map((item) => (
 											<li>
@@ -76,7 +77,7 @@ const librarySections = categorySections.map((section) => ({
 										))}
 									</ul>
 									</details>
-								) : <span class="library-section-empty">{section.name}</span>}
+								) : <a class="library-section-empty" href={section.path}>{section.name}</a>}
 							</li>
 						))}
 					</ul>

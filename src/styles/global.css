@@ -154,6 +154,7 @@ main { min-height: calc(100vh - 150px); }
 .library-sections > li { margin: 3px 0; }
 .library-sections summary, .library-section-empty { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; padding: 7px 9px; color: var(--muted); font-size: 13px; font-weight: 600; }
 .library-sections summary { cursor: pointer; list-style: none; }
+.library-sections summary > a { flex: 1 1 auto; min-width: 0; }
 .library-sections summary::-webkit-details-marker { display: none; }
 .library-sections summary::after { content: "+"; flex: 0 0 auto; color: #9da29d; font-weight: 400; }
 .library-sections details[open] > summary::after { content: "−"; }
