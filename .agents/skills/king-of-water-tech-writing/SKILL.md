@@ -41,7 +41,7 @@ A practical test is to count what the article must contain:
 
 ### Section density
 
-Write fewer, longer sections. A section (H2 or H3) should carry roughly 350 to 600 words, not two sentences. Do not reach a word target by adding many small headings; that turns the article into a glossary and the sidebar into a long list of one-line topics. When a draft ends up with dozens of two-sentence subsections, merge them into a handful of substantial ones. The audit warns when a flagship article averages fewer than 350 words per heading.
+Write fewer, longer sections. Do not reach a word target by adding many small headings; that turns the article into a glossary and the sidebar into a long list of one-line topics. The local benchmark (`agent-harness-engineering.md`) uses about 44 headings, so a flagship article should stay near that count and merge any two-sentence subsections into substantial ones. The audit warns when a flagship article exceeds 50 headings, or when sections are so thin that they average under 250 words.
 
 ### Write each section once
 

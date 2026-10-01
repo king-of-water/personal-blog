@@ -6,9 +6,9 @@ import path from 'node:path';
 // Length follows scope, not category. AI and system-level topics are expected to
 // be substantial; a narrow single-issue note is not padded to flagship length.
 const WIDTHS = {
-  flagship: { min: 12000, target: 15000, minH2: 6, minImages: 2, minCode: 2, minLinks: 3, label: '旗舰长文' },
-  focused: { min: 6000, target: 8000, minH2: 4, minImages: 1, minCode: 1, minLinks: 2, label: '专题深潜' },
-  'field-note': { min: 2000, target: 3500, minH2: 2, minImages: 0, minCode: 0, minLinks: 0, label: '问题笔记' },
+  flagship: { min: 12000, target: 15000, minH2: 6, maxHeadings: 50, minWordsPerHeading: 250, minImages: 2, minCode: 2, minLinks: 3, label: '旗舰长文' },
+  focused: { min: 6000, target: 8000, minH2: 4, maxHeadings: 34, minWordsPerHeading: 200, minImages: 1, minCode: 1, minLinks: 2, label: '专题深潜' },
+  'field-note': { min: 2000, target: 3500, minH2: 2, maxHeadings: 16, minWordsPerHeading: 120, minImages: 0, minCode: 0, minLinks: 0, label: '问题笔记' },
 };
 
 const file = process.argv[2];
@@ -100,9 +100,13 @@ if (words < minimumWords) {
 }
 if (h2 < width.minH2) warnings.push(`Fewer than ${width.minH2} H2 sections for a ${width.label}.`);
 // A long article built from many two-sentence subsections reads like a glossary
-// and turns the sidebar into a huge list. Keep sections substantial.
-if (requestedClass === 'flagship' && headings > 0 && wordsPerHeading < 350) {
-  warnings.push(`Heading density too high: ${headings} sections for ${words} words (~${wordsPerHeading} words/section). Merge micro-sections so each H3 carries roughly 350-600 words.`);
+// and turns the sidebar into a huge list. The benchmark article (Agent Harness)
+// uses ~44 headings, so cap the count and only flag genuinely tiny sections.
+if (headings > width.maxHeadings) {
+  warnings.push(`Too many sections: ${headings} headings (max ${width.maxHeadings} for a ${width.label}). Merge micro-sections instead of adding more.`);
+}
+if (headings > 0 && wordsPerHeading < width.minWordsPerHeading) {
+  warnings.push(`Sections too thin: ~${wordsPerHeading} words per heading (min ${width.minWordsPerHeading}). Merge micro-sections into substantial ones.`);
 }
 if (images < width.minImages) warnings.push(`Expect at least ${width.minImages} figure(s) for a ${width.label}.`);
 if (fences < width.minCode) warnings.push(`Expect at least ${width.minCode} code/example block(s) for a ${width.label}.`);
