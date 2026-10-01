@@ -2,11 +2,11 @@
 title: 让 Code Agent 读懂业务：把仓库知识做成可维护的 Skills
 description: 代码检索只能告诉 Agent“这里写了什么”。要让它处理复杂业务，还需要把术语、规则、代码入口、变更方法和验证手段组织成会随代码演进的知识系统。
 category: Agent
-subcategory: AI Coding
+subcategory: RAG 与知识库
 featured: false
 publishedAt: 2026-09-30
 updatedAt: 2026-09-30
-tags: [Agent, AI Coding, Skills, 知识工程, 软件工程]
+tags: [Agent, Skills, 代码知识库, 知识工程, 软件工程]
 ---
 
 Code Agent 改一个局部函数时通常表现不错。任务扩大到跨模块需求、遗留系统重构或业务规则调整，效果往往会突然下降：它能找到许多相关代码，也能解释每个函数，却不知道哪些分支仍在生效、某个字段为什么不能改、一次修改还要同步检查哪些地方。

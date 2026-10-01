@@ -2,11 +2,11 @@
 title: FastCode：先侦察代码结构，再把上下文交给模型
 description: FastCode 把代码仓库探索与正文读取拆开，先在语义结构地图上定位目标，再按预算组装最小充分上下文。本文拆解它与普通 Code RAG、Repo Map 和 Coding Agent 在线搜索的区别。
 category: Agent
-subcategory: AI Coding
+subcategory: RAG 与知识库
 featured: false
 publishedAt: 2026-10-01
 updatedAt: 2026-10-01
-tags: [FastCode, AI Coding, Code RAG, Context Engineering, 代码检索]
+tags: [FastCode, Code RAG, 代码知识库, Context Engineering, 代码检索]
 tools:
   - name: humanizer
     href: /toolbox/#humanizer
