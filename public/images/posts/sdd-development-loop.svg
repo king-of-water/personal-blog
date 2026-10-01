@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="820" viewBox="0 0 1440 820" role="img" aria-labelledby="title desc">
+  <title id="title">SDD 从开发意图到实现收敛的完整循环</title>
+  <desc id="desc">项目原则约束整个流程，需求依次经过规格、澄清、计划、任务、实现与收敛；实现发现可以回写前面的工件。</desc>
+  <rect width="1440" height="820" fill="#fdfaf3"/>
+  <style>
+    .title{font:700 32px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2b2620}
+    .sub{font:400 16px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#6f6659}
+    .k{font:700 13px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2f5d8a;letter-spacing:1px}
+    .h{font:700 19px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2b2620}
+    .p{font:400 14px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#554d42}
+    .loop{font:600 14px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#943b37}
+  </style>
+  <text x="80" y="68" class="title">SDD：意图、实现与证据持续对齐</text>
+  <text x="80" y="101" class="sub">每个阶段产生可审查工件，工程发现可以回到对应层修正</text>
+
+  <rect x="80" y="145" width="1280" height="94" rx="10" fill="#ebe4d4" stroke="#8a7f6d"/>
+  <text x="110" y="180" class="k">PROJECT CONSTITUTION</text>
+  <text x="110" y="213" class="h">技术栈 · 安全边界 · 质量底线 · 验证要求</text>
+  <text x="1040" y="202" class="p">约束下面所有功能开发</text>
+
+  <rect x="80" y="315" width="180" height="168" rx="10" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+  <text x="106" y="350" class="k">01 · SPECIFY</text>
+  <text x="106" y="390" class="h">定义行为</text>
+  <text x="106" y="423" class="p">目标、用户故事</text>
+  <text x="106" y="449" class="p">范围与验收条件</text>
+
+  <line x1="260" y1="399" x2="300" y2="399" stroke="#5b5245" stroke-width="2"/><path d="M290 391l10 8-10 8" fill="none" stroke="#5b5245" stroke-width="2"/>
+  <rect x="300" y="315" width="180" height="168" rx="10" fill="#f5f0e4" stroke="#8a7f6d"/>
+  <text x="326" y="350" class="k">02 · CLARIFY</text>
+  <text x="326" y="390" class="h">消除空白</text>
+  <text x="326" y="423" class="p">列出未决问题</text>
+  <text x="326" y="449" class="p">将答案回写 Spec</text>
+
+  <line x1="480" y1="399" x2="520" y2="399" stroke="#5b5245" stroke-width="2"/><path d="M510 391l10 8-10 8" fill="none" stroke="#5b5245" stroke-width="2"/>
+  <rect x="520" y="315" width="180" height="168" rx="10" fill="#f5f0e4" stroke="#8a7f6d"/>
+  <text x="546" y="350" class="k">03 · PLAN</text>
+  <text x="546" y="390" class="h">设计方案</text>
+  <text x="546" y="423" class="p">映射现有系统</text>
+  <text x="546" y="449" class="p">接口、风险与验证</text>
+
+  <line x1="700" y1="399" x2="740" y2="399" stroke="#5b5245" stroke-width="2"/><path d="M730 391l10 8-10 8" fill="none" stroke="#5b5245" stroke-width="2"/>
+  <rect x="740" y="315" width="180" height="168" rx="10" fill="#f5f0e4" stroke="#8a7f6d"/>
+  <text x="766" y="350" class="k">04 · TASKS</text>
+  <text x="766" y="390" class="h">切分增量</text>
+  <text x="766" y="423" class="p">依赖、修改范围</text>
+  <text x="766" y="449" class="p">每步完成证据</text>
+
+  <line x1="920" y1="399" x2="960" y2="399" stroke="#5b5245" stroke-width="2"/><path d="M950 391l10 8-10 8" fill="none" stroke="#5b5245" stroke-width="2"/>
+  <rect x="960" y="315" width="180" height="168" rx="10" fill="#f5f0e4" stroke="#8a7f6d"/>
+  <text x="986" y="350" class="k">05 · IMPLEMENT</text>
+  <text x="986" y="390" class="h">实现与验证</text>
+  <text x="986" y="423" class="p">小步修改代码</text>
+  <text x="986" y="449" class="p">持续运行局部检查</text>
+
+  <line x1="1140" y1="399" x2="1180" y2="399" stroke="#5b5245" stroke-width="2"/><path d="M1170 391l10 8-10 8" fill="none" stroke="#5b5245" stroke-width="2"/>
+  <rect x="1180" y="315" width="180" height="168" rx="10" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+  <text x="1206" y="350" class="k">06 · CONVERGE</text>
+  <text x="1206" y="390" class="h">对照并收尾</text>
+  <text x="1206" y="423" class="p">检查意图与证据</text>
+  <text x="1206" y="449" class="p">缺口追加回 Tasks</text>
+
+  <path d="M1270 483 V590 H610 V518" fill="none" stroke="#a8433f" stroke-width="2" stroke-dasharray="8 7"/>
+  <path d="M602 528l8-10 8 10" fill="none" stroke="#a8433f" stroke-width="2"/>
+  <text x="790" y="620" class="loop">实现或验收发现改变方案时，回到对应工件修正，再继续执行</text>
+
+  <rect x="80" y="680" width="1280" height="76" rx="10" fill="#fbf8f1" stroke="#8a7f6d"/>
+  <text x="110" y="711" class="k">DELIVERY EVIDENCE</text>
+  <text x="110" y="741" class="p">代码差异 · 自动化测试 · 构建结果 · 页面检查 · 性能与兼容性记录</text>
+</svg>

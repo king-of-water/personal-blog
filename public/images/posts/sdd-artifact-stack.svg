@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="820" viewBox="0 0 1440 820" role="img" aria-labelledby="title desc">
+  <title id="title">SDD 各类工件分别约束什么</title>
+  <desc id="desc">从项目原则、功能规格、技术计划、任务列表到实现证据，每一层回答不同问题，并为下一层提供输入。</desc>
+  <rect width="1440" height="820" fill="#fdfaf3"/>
+  <style>
+    .title{font:700 32px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2b2620}
+    .sub{font:400 16px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#6f6659}
+    .k{font:700 13px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2f5d8a;letter-spacing:1px}
+    .h{font:700 23px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2b2620}
+    .q{font:700 17px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2b2620}
+    .p{font:400 15px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#554d42}
+  </style>
+  <text x="80" y="68" class="title">五类工件，分别固定五层决定</text>
+  <text x="80" y="101" class="sub">上一层给下一层提供边界，下面的工程证据也可以推动上层修正</text>
+
+  <rect x="80" y="145" width="1280" height="104" rx="10" fill="#ebe4d4" stroke="#8a7f6d"/>
+  <text x="110" y="180" class="k">CONSTITUTION · 项目原则</text>
+  <text x="110" y="219" class="h">整个项目长期遵守什么？</text>
+  <text x="760" y="211" class="p">技术栈、安全边界、质量底线、兼容范围、统一验证命令</text>
+
+  <rect x="140" y="276" width="1160" height="104" rx="10" fill="#d8dee0" stroke="#295279"/>
+  <text x="170" y="311" class="k">SPEC · 功能规格</text>
+  <text x="170" y="350" class="h">用户最终能够做什么？</text>
+  <text x="760" y="342" class="p">目标、用户故事、可观察行为、范围、验收场景</text>
+
+  <rect x="200" y="407" width="1040" height="104" rx="10" fill="#f5f0e4" stroke="#8a7f6d"/>
+  <text x="230" y="442" class="k">PLAN · 技术方案</text>
+  <text x="230" y="481" class="h">当前系统准备怎样改变？</text>
+  <text x="760" y="473" class="p">影响范围、数据与接口、技术取舍、风险、验证策略</text>
+
+  <rect x="260" y="538" width="920" height="104" rx="10" fill="#f5f0e4" stroke="#8a7f6d"/>
+  <text x="290" y="573" class="k">TASKS · 任务列表</text>
+  <text x="290" y="612" class="h">按照什么顺序交付？</text>
+  <text x="760" y="604" class="p">依赖关系、文件范围、可并行项、单步完成条件</text>
+
+  <rect x="320" y="669" width="800" height="104" rx="10" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+  <text x="350" y="704" class="k">EVIDENCE · 实现证据</text>
+  <text x="350" y="743" class="h">如何证明意图已经兑现？</text>
+  <text x="760" y="735" class="p">代码、测试、构建、运行结果、人工验收记录</text>
+
+  <path d="M1330 250 V668" fill="none" stroke="#5b5245" stroke-width="2"/>
+  <path d="M1322 658l8 10 8-10" fill="none" stroke="#5b5245" stroke-width="2"/>
+  <text x="1355" y="432" class="q" transform="rotate(90 1355 432)">从意图逐层收敛到证据</text>
+</svg>

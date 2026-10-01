@@ -9,7 +9,7 @@ export interface Subcategory {
 export const agentSubcategories: Subcategory[] = [
 	{ name: 'Agent 开发', slug: 'agent-development', description: 'Context、工具、状态、权限与可靠执行。' },
 	{ name: 'RAG 与知识库', slug: 'rag-knowledge', description: '让知识可检索、可理解、可维护，并成为 Agent 能够使用的上下文。' },
-	{ name: 'AI Coding', slug: 'ai-coding', description: 'Code Agent、Skills、仓库知识与研发工作流。' },
+	{ name: 'AI Coding', slug: 'ai-coding', description: 'Codex、SDD、上下文管理与 AI 研发工作流。' },
 	{ name: 'Agent 前沿', slug: 'agent-frontier', description: '新模型、新框架与新型 Agent 产品观察。' },
 	{ name: 'Agent 算法', slug: 'agent-algorithms', description: '规划、记忆、反思、搜索与多 Agent 协作。' },
 ];
