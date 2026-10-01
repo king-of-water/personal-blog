@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900" role="img" aria-labelledby="title desc">
+  <title id="title">DSH Scope 生命周期与可逆副作用</title><desc id="desc">Scope 从装配 Provider，到运行任务，再到执行逆操作卸载，展示时间维度的可组合性。</desc>
+  <defs><style>.bg{fill:#f5f4ef}.ink{fill:#1c201d}.muted{fill:#6f7670}.green{fill:#176f55}.accent{fill:#e4f1eb}.box{fill:#fff;stroke:#d8dcd6;stroke-width:2}.dark{fill:#222825}.white{fill:#fff}.sans{font-family:Inter,"PingFang SC","Microsoft YaHei",sans-serif}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}</style><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#176f55"/></marker></defs>
+  <rect width="1440" height="900" class="bg"/><text x="88" y="78" class="mono green" font-size="19" font-weight="700" letter-spacing="3">TEMPORAL COMPOSABILITY</text><text x="88" y="137" class="sans ink" font-size="46" font-weight="760">卸载时，副作用能被撤回</text><text x="88" y="180" class="sans muted" font-size="21">每次 context 变换都带一个逆操作，运行时持有它并在卸载时执行。</text>
+  <g transform="translate(90 250)">
+    <rect x="0" y="0" width="330" height="150" rx="12" class="box"/><text x="28" y="46" class="mono green" font-size="16">01 MOUNT</text><text x="28" y="84" class="sans ink" font-size="25" font-weight="700">装配 Provider</text><text x="28" y="118" class="sans muted" font-size="17">副作用进入 context，记录 inverse</text>
+    <path d="M330 75H430" stroke="#176f55" stroke-width="3" marker-end="url(#a)"/>
+    <rect x="440" y="0" width="330" height="150" rx="12" class="dark"/><text x="468" y="46" class="mono" fill="#9bd4bd" font-size="16">02 RUN</text><text x="468" y="84" class="sans white" font-size="25" font-weight="700">在 Scope 中运行</text><text x="468" y="118" class="sans" fill="#c9d2cd" font-size="17">任务使用能力，产生轨迹</text>
+    <path d="M770 75H870" stroke="#176f55" stroke-width="3" marker-end="url(#a)"/>
+    <rect x="880" y="0" width="330" height="150" rx="12" class="accent"/><text x="908" y="46" class="mono green" font-size="16">03 REVERT</text><text x="908" y="84" class="sans ink" font-size="25" font-weight="700">执行 inverse</text><text x="908" y="118" class="sans muted" font-size="17">按依赖逆序释放资源</text>
+    <path d="M1210 75H1320V320H680" stroke="#176f55" stroke-width="3" fill="none" marker-end="url(#a)"/>
+    <rect x="440" y="220" width="540" height="160" rx="12" class="box"/><text x="468" y="264" class="mono green" font-size="16">CLEANUP ORDER</text><text x="468" y="302" class="sans ink" font-size="24" font-weight="700">依赖的逆序</text><text x="468" y="336" class="sans muted" font-size="17">先卸载依赖 Provider，再卸载被依赖的连接池</text><rect x="468" y="352" width="180" height="0" rx="0"/>
+    <path d="M710 380V520H500" stroke="#176f55" stroke-width="3" fill="none" marker-end="url(#a)"/>
+    <rect x="170" y="470" width="540" height="160" rx="12" class="box"/><text x="198" y="514" class="mono green" font-size="16">04 UNMOUNT</text><text x="198" y="552" class="sans ink" font-size="24" font-weight="700">Scope 销毁</text><text x="198" y="586" class="sans muted" font-size="17">无句柄、连接或监听器泄漏</text>
+  </g>
+  <text x="90" y="850" class="sans muted" font-size="17">读取顺序：先看副作用怎样被记录，再看卸载怎样沿依赖逆序撤回。</text>
+</svg>
