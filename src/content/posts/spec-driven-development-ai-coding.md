@@ -6,7 +6,7 @@ subcategory: AI Coding
 articleClass: flagship
 featured: false
 publishedAt: 2026-10-01
-updatedAt: 2026-10-01
+updatedAt: 2026-10-02
 tags: [SDD, Spec-Driven Development, AI Coding, Spec Kit, Codex, 开发流程]
 tools:
   - name: humanizer
@@ -90,18 +90,18 @@ Agent 无法从中确定搜索范围、交互方式和完成条件。Specify 阶
 ```markdown
 # 博客文章搜索
 
-## 目标
+目标：
 
 读者可以在博客中搜索已经发布的文章，
 并从结果直接进入文章页面。
 
-## 用户故事
+用户故事：
 
 作为博客读者，
 我希望用标题、摘要或标签查找文章，
 以便快速找到某个技术主题。
 
-## 功能要求
+功能要求：
 
 1. 顶部导航提供搜索入口。
 2. 搜索范围包含标题、摘要和标签。
@@ -110,14 +110,14 @@ Agent 无法从中确定搜索范围、交互方式和完成条件。Specify 阶
 5. 没有匹配内容时显示空状态。
 6. 草稿文章不能进入搜索结果。
 
-## 范围之外
+范围之外：
 
 - 暂不搜索文章正文；
 - 不保存用户搜索历史；
 - 不接入外部搜索服务；
 - 不提供拼写纠正和搜索推荐。
 
-## 验收场景
+验收场景：
 
 - 搜索“RAG”可以找到 RAG 相关文章；
 - 搜索不存在的词时显示空状态；
@@ -168,19 +168,19 @@ Plan 回答技术问题。Agent 要先检查仓库结构、现有约定、依赖
 ```markdown
 # 技术方案
 
-## 当前系统
+当前系统：
 
 - Astro 静态站点；
 - 文章来自 content collection；
 - 没有运行时后端和数据库；
 - 顶部导航由 BaseLayout 渲染。
 
-## 方案
+方案：
 
 构建时读取已发布文章，生成静态 JSON 索引。
 浏览器按需加载索引并在本地完成匹配。
 
-## 数据结构
+数据结构：
 
 SearchDocument {
   title: string
@@ -192,7 +192,7 @@ SearchDocument {
   url: string
 }
 
-## 修改范围
+修改范围：
 
 - 新增搜索索引端点；
 - 新增搜索匹配函数；
@@ -201,14 +201,14 @@ SearchDocument {
 - 增加移动端和键盘交互样式；
 - 增加搜索逻辑测试。
 
-## 约束
+约束：
 
 - 索引排除 draft；
 - 不增加服务端运行时；
 - 搜索组件初始不下载索引；
 - 复用现有颜色和排版变量。
 
-## 验证
+验证：
 
 - 单元测试覆盖匹配、排序和草稿过滤；
 - npm run build；
@@ -220,7 +220,19 @@ Plan 应该显示它如何利用现有系统。脱离仓库生成的通用方案
 
 接口、事件和数据结构可以作为 `contracts/` 下的独立工件。多服务协作时，先确定提供方和消费方共同遵守的契约，再分别实现。Spec Kit 的[契约驱动开发指南](https://github.com/github/spec-kit/blob/main/docs/guides/contract-driven-development.md)也强调，提供方与消费方应引用同一份权威契约，并为双方安排验证。
 
-## 六、Tasks：把方案切成可交付的增量
+## 六、旧项目不需要先补一部百科全书
+
+很多团队一听 SDD，就担心必须先把整个遗留系统反向写成规格。GitHub 的既有项目指南给出的边界更务实：新 `spec.md` 描述准备发生的变化，不负责为全部历史行为补传记。Plan 阶段再读取与本次变更有关的真实代码、测试和约定，确认方案怎样复用现有系统。
+
+博客搜索就是一次 Brownfield 变更。我们无需先为整个 Astro 站点补齐页面规格，只要确认当前内容集合、导航结构、草稿过滤和构建方式。已有行为中与搜索无关的部分继续由代码和测试表达；本次会受影响的约束进入 Spec 与 Plan。
+
+旧项目落地时，我会先做一个中等规模功能，而不是全仓改造。选择标准是：用户结果清楚、会触及两三个模块、现有测试能够提供部分基线。第一轮重点观察工件是否真的减少返工：Clarify 有没有提前发现歧义，Plan 有没有引用正确入口，Tasks 能否形成独立增量，Converge 找出的缺口是否有价值。
+
+如果 Agent 在 Plan 阶段发现已有实现与需求文档冲突，不要立刻把整个系统纳入当前 Spec。先记录本次变更依赖的事实和待确认问题；只有当历史行为本身需要改变，才把它纳入范围。SDD 的目的在于控制当前变化，范围失控会把规格工作变成另一个长期停滞的文档项目。
+
+Brownfield 还要保存基线证据。修改前运行相关测试、记录关键接口输出或截图，后续才能判断变化来自本次实现。没有基线时，Converge 只能比较文档与当前代码，无法区分新增缺陷和原有问题。
+
+## 七、Tasks：把方案切成可交付的增量
 
 一份写得很详细的 Plan 仍然可能让 Agent 一口气修改十几个文件。Tasks 将方案拆成可执行单元，并明确依赖关系与验收方法。
 
@@ -258,7 +270,7 @@ Plan 应该显示它如何利用现有系统。脱离仓库生成的通用方案
 
 任务也不必机械地按文件拆分。一个垂直切片可以同时修改数据、逻辑和界面，只要它能形成可验证的增量。按照技术层批量完成“所有后端任务”再做“所有前端任务”，很容易把集成问题拖到最后。
 
-## 七、Checklist 与 Analyze：实现前再做一次静态检查
+## 八、Checklist 与 Analyze：实现前再做一次静态检查
 
 进入代码阶段前，可以对文档本身做检查。
 
@@ -283,7 +295,7 @@ Constitution 与 Plan 是否冲突？
 
 这一步很像对自然语言做静态分析。它无法证明方案正确，却能提前发现遗漏、重复和矛盾。Spec Kit 将 Checklist 和 Analyze 都设计为可选步骤，大功能和跨团队变更更值得使用。
 
-## 八、Implement：按任务推进，也允许证据改变计划
+## 九、Implement：按任务推进，也允许证据改变计划
 
 Implement 阶段才开始修改代码。Agent 每次领取一个或一组相邻任务，读取相关 Spec 与 Plan，检查真实代码后完成实现和验证。
 
@@ -309,7 +321,7 @@ Implement 阶段才开始修改代码。Agent 每次领取一个或一组相邻�
 
 SDD 给 Agent 提供了稳定计划，也必须允许工程证据修正计划。把初稿视为不可修改的合同，只会让错误更有秩序地执行下去。
 
-## 九、Converge：代码完成后检查意图是否兑现
+## 十、Converge：代码完成后检查意图是否兑现
 
 所有任务打勾，只能说明任务列表执行完了。Converge 会回到最初意图，对比五类材料：
 
@@ -331,23 +343,43 @@ Evidence   测试和运行结果证明了什么
 
 发现缺口后不要只写一段总结。把剩余工作追加回 Tasks，继续实现并验证，直到没有影响验收的差异。Spec Kit 当前将 `converge` 放在核心流程末端，用它评估代码库与 Spec、Plan、Tasks 的差异并补充任务。
 
+当前 Spec Kit 的 Converge 还有一个值得学习的约束：它只评估现状并向 `tasks.md` 追加收敛任务，不直接改代码，也不重写已有 Spec、Plan 或任务。这样“发现缺口”和“执行修复”仍是两个可审查阶段。若已经满足全部工件，它应保持 `tasks.md` 不变；若发现未请求的实现，也只追加一条审查、解释或删除任务，不擅自替团队裁决。
+
 这一步为 SDD 闭环。没有 Converge，流程容易退化成“开发前多写几份文档”。
 
 ![SDD 各类工件分别约束什么](/images/posts/sdd-artifact-stack.svg)
 
-## 十、规格应该保留多久
+## 十一、冲突时谁说了算
+
+工件越多，漂移可能性越高。Spec 说结果按相关度排序，Plan 写发布日期倒序，测试又只断言结果数量时，Agent 不能选择最容易实现的一版继续。团队需要提前定义权威关系。
+
+| 冲突 | 默认处理 |
+| --- | --- |
+| Constitution 与 Feature Spec | 长期强制原则优先，必要时修改或拒绝 Feature |
+| Spec 与 Plan | 外部行为以 Spec 为准，Plan 必须调整 |
+| Plan 与真实代码 | 先判断代码是既有约束还是可修改实现，再更新 Plan |
+| Tasks 与 Plan | Tasks 是派生执行单，缺失或冲突时重建或追加 |
+| 测试与 Spec | 检查测试表达的是旧行为还是验收契约，不能盲目保绿 |
+
+这张表不是绝对法律。紧急修复可能先改变代码，再补齐工件；经过批准的新需求也会推翻旧 Spec。重要的是每次例外都留下可追溯决定，而不是让最后修改时间自动成为权威。
+
+变更进入实现后，可以给每条需求一个稳定标识，例如 `FR-03`。Plan 标出它选择的方案，Tasks 引用它，测试名称或验收记录继续引用。Converge 发现缺口时就能指出“FR-03 没有实现”或“只有代码，没有对应需求”，比对整篇 Markdown 做模糊判断更可靠。
+
+高风险项目还可以要求双向追踪：从每条需求能找到实现与证据，从每处重要实现能找到授权它的需求或技术约束。低风险个人项目不必维护完整矩阵，但至少要保证完成条件能落到测试、页面或运行结果上。
+
+## 十二、规格应该保留多久
 
 功能上线后，团队还要决定这些文件的生命周期。[Spec Kit 的 Spec Persistence 文档](https://github.com/github/spec-kit/blob/main/docs/concepts/spec-persistence.md)列出了几种常见选择。
 
-### Spec-first
+**Spec-first。**
 
 Spec 用于本次开发，完成后可以归档。它适合一次性功能或低维护成本项目。优点是负担小，缺点是下一次修改可能重新从代码推断意图。
 
-### Spec-anchored
+**Spec-anchored。**
 
 Spec 在实现后继续保留，后续修改需要参考它。旧 Spec 记录功能为何这样设计，新需求可以创建新的变更规格。这种方式适合希望保留决策历史的团队。
 
-### Spec-as-source
+**Spec-as-source。**
 
 Spec 成为长期权威来源，Plan、Tasks 甚至部分实现都由它派生。需求变化先修改 Spec，再同步下游工件。它提供更强一致性，也要求团队投入持续维护。
 
@@ -355,7 +387,7 @@ Spec 成为长期权威来源，Plan、Tasks 甚至部分实现都由它派生�
 
 没有一种模式适合所有项目。重要的是明确哪份材料在冲突时拥有更高权威，以及谁负责消除漂移。
 
-## 十一、大功能需要拆成多个 Spec
+## 十三、大功能需要拆成多个 Spec
 
 如果一个 Spec 需要 Agent 连续执行几十个任务，模型仍然会在中途失去重点。大功能可以先建立 Roadmap，再把每个切片运行一遍完整 SDD 流程。
 
@@ -370,7 +402,7 @@ R4 增加搜索分析
 
 切分时要保证每一部分能够独立验收。只把一个大任务按代码层拆成数据库、后端、前端三个 Spec，会让每个 Spec 都缺少可见结果。按照用户能力或完整业务路径切分通常更容易收敛。
 
-## 十二、SDD 与 TDD、BDD、Skills 的关系
+## 十四、SDD 与 TDD、BDD、Skills 的关系
 
 它们处理不同层次的问题，可以组合使用。
 
@@ -385,7 +417,7 @@ R4 增加搜索分析
 
 Skills 还可以把 SDD 流程本身封装起来。例如一个 `feature-development` Skill 规定：先检查 Constitution，再生成 Spec，列出未决问题，得到确认后生成 Plan 与 Tasks，完成实现后运行 Converge。这样流程从团队约定变成 Agent 可以重复执行的操作。
 
-## 十三、SDD 与知识库的关系
+## 十五、SDD 与知识库的关系
 
 知识库告诉 Agent 项目里有什么，SDD 告诉它这次准备改变什么。
 
@@ -407,7 +439,7 @@ Coding Agent 按计划修改并验证
 
 这也是我们从“RAG 与知识库”转向“AI Coding”后很自然的一步。前者管理模型能够获得的知识，后者管理人怎样利用这些知识驱动 Agent 开发。
 
-## 十四、哪些任务值得使用完整 SDD
+## 十六、哪些任务值得使用完整 SDD
 
 完整流程适合：
 
@@ -429,33 +461,33 @@ Coding Agent 按计划修改并验证
 
 流程长度应当与不确定性匹配。任务越小、相关代码越明确，前置工件越轻；需求越模糊、影响面越大，越需要先固定意图。
 
-## 十五、几个常见失败方式
+## 十七、几个常见失败方式
 
-### 1. 把 Spec 写成愿望清单
+**把 Spec 写成愿望清单。**
 
 “体验流畅”“架构合理”“保证高性能”很难验证。每条要求都应该能够被测试、观察或评审。
 
-### 2. 在 Spec 中提前写死实现
+**在 Spec 中提前写死实现。**
 
 Spec 规定用户行为，Plan 选择实现方式。过早指定框架、类名和目录，会让后续调研失去意义，也会把技术细节误当成产品要求。
 
-### 3. 一次生成全部文档，不做人工确认
+**一次生成全部文档，不做人工确认。**
 
 Agent 可以连续生成 Spec、Plan 和 Tasks，也能把同一个错误复制三遍。关键边界和技术取舍需要在阶段之间确认。
 
-### 4. Tasks 只有动作，没有验证
+**Tasks 只有动作，没有验证。**
 
 “实现搜索组件”没有明确终点。任务需要写清对应需求、修改范围和完成证据。
 
-### 5. 实现变化没有回写
+**实现变化没有回写。**
 
 代码因为工程现实改变，Plan 仍保留旧方案。后续 Agent 会把旧文档当成事实。Converge 必须处理这类漂移。
 
-### 6. 把流程当成固定仪式
+**把流程当成固定仪式。**
 
 所有任务都走同样长度的流程，会产生大量无人维护的 Markdown。SDD 的价值来自减少不确定性，不来自文件数量。
 
-## 十六、一套适合个人项目的最小流程
+## 十八、一套适合个人项目的最小流程
 
 个人项目不需要一开始就安装完整工具。可以在仓库里创建：
 
@@ -483,7 +515,7 @@ docs/features/<feature-name>/
 
 这套最小流程已经具备 SDD 的主要价值。等项目和协作规模扩大，再引入 Spec Kit 的 Constitution、Checklist、Analyze、Converge、扩展和预设机制。
 
-## 十七、我对 SDD 的理解
+## 十九、我对 SDD 的理解
 
 SDD 可以看成开发意图的编译过程。
 
@@ -501,3 +533,5 @@ SDD 可以看成开发意图的编译过程。
 - GitHub Spec Kit，[Spec Persistence Models](https://github.com/github/spec-kit/blob/main/docs/concepts/spec-persistence.md)
 - GitHub Spec Kit，[Contract-Driven Development](https://github.com/github/spec-kit/blob/main/docs/guides/contract-driven-development.md)
 - GitHub Spec Kit，[Spec of Specs](https://github.com/github/spec-kit/blob/main/docs/concepts/spec-of-specs.md)
+- GitHub Spec Kit，[Adopting Spec Kit in existing projects](https://github.com/github/spec-kit/blob/main/docs/guides/existing-projects.md)
+- GitHub Spec Kit，[Converge command contract](https://github.com/github/spec-kit/blob/main/templates/commands/converge.md)
