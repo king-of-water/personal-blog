@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">Skill 包的三层内容与职责</title>
+  <desc id="desc">元数据用于发现，SKILL.md 正文用于执行，脚本、引用和资产在任务需要时加载。</desc>
+  <rect width="1200" height="700" fill="#fdfaf3"/>
+  <text x="70" y="72" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#2b2620">Skill 包按 Context 成本分成三层</text>
+  <text x="70" y="108" font-family="Arial, sans-serif" font-size="18" fill="#6f6659">越靠下内容越具体，也越不应该在所有任务中常驻</text>
+  <g font-family="Arial, sans-serif">
+    <rect x="90" y="155" width="1020" height="120" rx="20" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="125" y="198" font-size="15" font-weight="700" fill="#2f5d8a">LAYER 1 · DISCOVERY</text>
+    <text x="125" y="239" font-size="27" font-weight="700" fill="#2b2620">name + description + path</text>
+    <text x="735" y="218" font-size="17" fill="#554d42">启动时可见 · 负责路由 · 内容最短</text>
+    <rect x="150" y="305" width="900" height="135" rx="20" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="185" y="350" font-size="15" font-weight="700" fill="#2f5d8a">LAYER 2 · INSTRUCTIONS</text>
+    <text x="185" y="394" font-size="27" font-weight="700" fill="#2b2620">SKILL.md 核心工作流</text>
+    <text x="665" y="376" font-size="17" fill="#554d42">激活后整体读取</text><text x="665" y="407" font-size="17" fill="#554d42">边界 · 步骤 · 门控 · 验收</text>
+    <rect x="210" y="475" width="780" height="155" rx="20" fill="#ebe4d4" stroke="#5b5245" stroke-width="2"/>
+    <text x="245" y="520" font-size="15" font-weight="700" fill="#2f5d8a">LAYER 3 · RESOURCES</text>
+    <text x="245" y="566" font-size="25" font-weight="700" fill="#2b2620">scripts/　references/　assets/</text>
+    <text x="245" y="603" font-size="17" fill="#554d42">分支命中后再读取或执行 · 不重复主文件中的事实</text>
+    <text x="90" y="668" font-size="16" fill="#6f6659">同一个原则只保留一份权威来源，避免多个副本在维护中漂移。</text>
+  </g>
+</svg>

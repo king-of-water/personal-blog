@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="690" viewBox="0 0 1200 690" role="img" aria-labelledby="title desc">
+  <title id="title">Agent Skill 从发现到验收的运行路径</title>
+  <desc id="desc">用户任务先和技能元数据匹配，命中后加载完整指令与所需资源，再由工具执行并用证据验收。</desc>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#8a7f6d"/></marker></defs>
+  <rect width="1200" height="690" fill="#fdfaf3"/>
+  <text x="70" y="72" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#2b2620">Skill 运行时：先路由，再展开，最后验收</text>
+  <text x="70" y="108" font-family="Arial, sans-serif" font-size="18" fill="#6f6659">Context 中只放当前阶段需要的信息；真实动作仍由工具与 Harness 执行</text>
+  <g font-family="Arial, sans-serif">
+    <rect x="70" y="165" width="190" height="145" rx="18" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="94" y="202" font-size="15" font-weight="700" fill="#2f5d8a">01 · TASK</text><text x="94" y="240" font-size="24" font-weight="700" fill="#2b2620">用户任务</text>
+    <text x="94" y="274" font-size="16" fill="#554d42">目标 · 输入 · 约束</text>
+    <rect x="315" y="165" width="190" height="145" rx="18" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="339" y="202" font-size="15" font-weight="700" fill="#2f5d8a">02 · DISCOVER</text><text x="339" y="240" font-size="24" font-weight="700" fill="#2b2620">元数据匹配</text>
+    <text x="339" y="274" font-size="16" fill="#554d42">name · description</text>
+    <rect x="560" y="165" width="190" height="145" rx="18" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="584" y="202" font-size="15" font-weight="700" fill="#2f5d8a">03 · LOAD</text><text x="584" y="240" font-size="24" font-weight="700" fill="#2b2620">完整指令</text>
+    <text x="584" y="274" font-size="16" fill="#554d42">SKILL.md 主流程</text>
+    <rect x="805" y="165" width="190" height="145" rx="18" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="829" y="202" font-size="15" font-weight="700" fill="#2f5d8a">04 · RESOLVE</text><text x="829" y="240" font-size="24" font-weight="700" fill="#2b2620">按需资源</text>
+    <text x="829" y="274" font-size="16" fill="#554d42">脚本 · 引用 · 资产</text>
+    <path d="M260 238 H305" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/><path d="M505 238 H550" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/><path d="M750 238 H795" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+    <rect x="180" y="405" width="350" height="155" rx="20" fill="#ebe4d4" stroke="#5b5245" stroke-width="2"/>
+    <text x="210" y="446" font-size="15" font-weight="700" fill="#2f5d8a">05 · EXECUTE</text><text x="210" y="486" font-size="26" font-weight="700" fill="#2b2620">Harness 与工具执行</text>
+    <text x="210" y="522" font-size="17" fill="#554d42">权限 · 沙箱 · 工具结果 · 副作用</text>
+    <rect x="670" y="405" width="350" height="155" rx="20" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="700" y="446" font-size="15" font-weight="700" fill="#3d6340">06 · VERIFY</text><text x="700" y="486" font-size="26" font-weight="700" fill="#2b2620">外部证据验收</text>
+    <text x="700" y="522" font-size="17" fill="#554d42">测试 · 构建 · diff · 人工判断</text>
+    <path d="M900 310 V352 H355 V395" stroke="#8a7f6d" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+    <path d="M530 482 H660" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+    <path d="M845 560 V620 H410 V570" stroke="#8a7f6d" stroke-width="2" stroke-dasharray="8 7" fill="none" marker-end="url(#arrow)"/>
+    <text x="520" y="645" font-size="16" fill="#6f6659">验收失败回到执行路径；禁止用“看起来完成”替代证据</text>
+  </g>
+</svg>

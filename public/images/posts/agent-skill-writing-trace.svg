@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">这篇文章如何组合多个 Skill 与工具</title>
+  <desc id="desc">技术写作 Skill 作为主流程，条件加载 OpenAI 文档、视觉和语言清理 Skill，再调用资料读取、文件编辑、命令行与浏览器工具完成验收。</desc>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#8a7f6d"/></marker></defs>
+  <rect width="1200" height="760" fill="#fdfaf3"/>
+  <text x="70" y="70" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#2b2620">真实轨迹：一篇 Agent Skills 文章怎样完成</text>
+  <text x="70" y="106" font-family="Arial, sans-serif" font-size="18" fill="#6f6659">主 Skill 保持工作流，其他 Skill 只在对应分支出现</text>
+  <g font-family="Arial, sans-serif">
+    <rect x="80" y="155" width="300" height="480" rx="22" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="112" y="198" font-size="15" font-weight="700" fill="#2f5d8a">PRIMARY SKILL</text>
+    <text x="112" y="240" font-size="25" font-weight="700" fill="#2b2620">技术写作</text>
+    <text x="112" y="278" font-size="17" fill="#554d42">提出研究问题</text><text x="112" y="314" font-size="17" fill="#554d42">选择一手资料</text><text x="112" y="350" font-size="17" fill="#554d42">规划结构与案例</text><text x="112" y="386" font-size="17" fill="#554d42">创建文章与配图</text><text x="112" y="422" font-size="17" fill="#554d42">文章审计</text><text x="112" y="458" font-size="17" fill="#554d42">构建与视觉验收</text><text x="112" y="494" font-size="17" fill="#554d42">提交并推送</text>
+    <rect x="455" y="155" width="300" height="135" rx="18" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="483" y="194" font-size="15" font-weight="700" fill="#2f5d8a">CONDITIONAL SKILL</text><text x="483" y="232" font-size="23" font-weight="700" fill="#2b2620">OpenAI Docs</text><text x="483" y="262" font-size="16" fill="#554d42">当前产品事实与官方引用</text>
+    <rect x="455" y="325" width="300" height="135" rx="18" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="483" y="364" font-size="15" font-weight="700" fill="#2f5d8a">CONDITIONAL SKILL</text><text x="483" y="402" font-size="23" font-weight="700" fill="#2b2620">Visuals</text><text x="483" y="432" font-size="16" fill="#554d42">架构、流程与 Editorial 配色</text>
+    <rect x="455" y="495" width="300" height="135" rx="18" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="483" y="534" font-size="15" font-weight="700" fill="#2f5d8a">FINAL PASS</text><text x="483" y="572" font-size="23" font-weight="700" fill="#2b2620">Humanizer</text><text x="483" y="602" font-size="16" fill="#554d42">保留事实，清理机械表达</text>
+    <rect x="830" y="155" width="290" height="475" rx="22" fill="#ebe4d4" stroke="#5b5245" stroke-width="2"/>
+    <text x="860" y="198" font-size="15" font-weight="700" fill="#2f5d8a">TOOLS &amp; EVIDENCE</text>
+    <text x="860" y="245" font-size="21" font-weight="700" fill="#2b2620">文档读取</text><text x="860" y="276" font-size="16" fill="#554d42">官方页面 · 用户材料</text>
+    <text x="860" y="335" font-size="21" font-weight="700" fill="#2b2620">文件编辑</text><text x="860" y="366" font-size="16" fill="#554d42">Markdown · SVG · config</text>
+    <text x="860" y="425" font-size="21" font-weight="700" fill="#2b2620">CLI</text><text x="860" y="456" font-size="16" fill="#554d42">audit · xmllint · build</text>
+    <text x="860" y="515" font-size="21" font-weight="700" fill="#2b2620">浏览器</text><text x="860" y="546" font-size="16" fill="#554d42">目录 · 图片 · 代码溢出</text>
+    <path d="M380 220 H445" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/><path d="M380 390 H445" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/><path d="M380 560 H445" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+    <path d="M755 222 H820" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/><path d="M755 392 H820" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/><path d="M755 562 H820" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+    <text x="80" y="700" font-size="18" fill="#6f6659">完成条件：内容证据、结构审计、构建结果和页面视觉检查同时成立。</text>
+  </g>
+</svg>
