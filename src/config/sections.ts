@@ -34,7 +34,7 @@ export const agentSubcategories: Subcategory[] = [
 			'Skills 与 Memory：能力如何按需加载并跨会话保留',
 			'Subagent 与多 Agent：任务拆分、通信与结果汇总',
 			'长任务运行：状态、调度、恢复与收口',
-			'MCP：工具发现、命名空间与协议边界',
+			'Agent 工具系统：Function Calling、CLI、浏览器、代码执行与 MCP',
 			'Agent Benchmark：任务集、轨迹评测与错误归因',
 			'Agent 生产化：可观测性、成本、并发与故障恢复',
 		],
