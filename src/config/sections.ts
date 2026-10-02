@@ -30,13 +30,11 @@ export const agentSubcategories: Subcategory[] = [
 		plannedTopics: [
 			'Prompt 工程与注入防御：从指令设计到不可信内容隔离',
 			'Context Engineering：Agent 每一步究竟看到了什么',
-			'Agent Loop：ReAct 主循环中的规划、行动与反思',
-			'Skills 与 Memory：能力如何按需加载并跨会话保留',
-			'Subagent 与多 Agent：任务拆分、通信与结果汇总',
-			'长任务运行：状态、调度、恢复与收口',
 			'Agent 工具系统：Function Calling、CLI、浏览器、代码执行与 MCP',
-			'Agent Benchmark：任务集、轨迹评测与错误归因',
-			'Agent 生产化：可观测性、成本、并发与故障恢复',
+			'Skills 与 Memory：能力如何按需加载并跨会话保留',
+			'长任务运行：状态、调度、恢复与收口',
+			'Subagent 与多 Agent：任务拆分、通信与结果汇总',
+			'Agent 生产化：安全、可观测性、成本、并发与故障恢复',
 		],
 	},
 	{
