@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="820" viewBox="0 0 1440 820" role="img" aria-labelledby="title desc">
+  <title id="title">Learn Claude Code 最小 Agent Loop</title>
+  <desc id="desc">用户任务进入消息历史，模型产生工具请求，Harness 校验并执行工具，环境结果作为工具结果回到消息历史，直到模型不再请求工具。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5b5245"/>
+    </marker>
+    <style>
+      .title{font:700 38px -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif;fill:#2b2620}.sub{font:18px -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif;fill:#6f6659}.h{font:700 22px -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif;fill:#2b2620}.body{font:17px -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif;fill:#554d42}.small{font:15px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#554d42}.label{font:700 15px -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif;fill:#2f5d8a}.line{stroke:#5b5245;stroke-width:3;fill:none;marker-end:url(#arrow)}
+    </style>
+  </defs>
+  <rect width="1440" height="820" fill="#fdfaf3"/>
+  <text x="72" y="78" class="title">最小 Agent Loop：模型选择动作，Harness 负责让动作发生</text>
+  <text x="72" y="112" class="sub">每一轮新增的事实都要经过 tool_result 回到 messages，模型才能据此决定下一步。</text>
+
+  <rect x="72" y="190" width="250" height="142" rx="18" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+  <text x="102" y="235" class="h">用户任务</text>
+  <text x="102" y="274" class="body">目标与约束</text>
+  <text x="102" y="305" class="small">role: user</text>
+
+  <rect x="412" y="170" width="282" height="182" rx="18" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+  <text x="442" y="215" class="h">messages[]</text>
+  <text x="442" y="254" class="body">用户消息</text>
+  <text x="442" y="284" class="body">模型响应</text>
+  <text x="442" y="314" class="body">工具结果</text>
+
+  <rect x="786" y="190" width="250" height="142" rx="18" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+  <text x="816" y="235" class="h">LLM</text>
+  <text x="816" y="274" class="body">生成文本或 tool_use</text>
+  <text x="816" y="305" class="small">name · input · id</text>
+
+  <path d="M322 261 H412" class="line"/>
+  <path d="M694 261 H786" class="line"/>
+  <text x="713" y="243" class="label">调用</text>
+
+  <path d="M911 332 V410" class="line"/>
+  <text x="929" y="385" class="label">tool_use</text>
+
+  <rect x="702" y="432" width="418" height="142" rx="18" fill="#ebe4d4" stroke="#8a7f6d" stroke-width="2"/>
+  <text x="732" y="477" class="h">Harness：校验、权限、分发</text>
+  <text x="732" y="516" class="body">根据工具名找到 Handler</text>
+  <text x="732" y="547" class="body">决定允许、询问或拒绝</text>
+
+  <rect x="702" y="634" width="418" height="112" rx="18" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+  <text x="732" y="681" class="h">外部环境</text>
+  <text x="732" y="718" class="body">文件系统 · Shell · API · 数据库</text>
+  <path d="M911 574 V634" class="line"/>
+  <text x="930" y="612" class="label">执行</text>
+
+  <path d="M702 690 H540 V430" class="line"/>
+  <text x="556" y="665" class="label">tool_result</text>
+  <rect x="378" y="430" width="324" height="144" rx="18" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+  <text x="408" y="475" class="h">把结果追加回消息</text>
+  <text x="408" y="514" class="small">tool_use_id: toolu_01</text>
+  <text x="408" y="545" class="body">下一轮基于新观察继续</text>
+  <path d="M540 430 V352" class="line"/>
+
+  <path d="M1036 261 H1278" class="line"/>
+  <rect x="1200" y="190" width="168" height="142" rx="18" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+  <text x="1230" y="235" class="h">退出本轮</text>
+  <text x="1230" y="274" class="body">无 tool_use</text>
+  <text x="1230" y="305" class="small">≠ 已验收完成</text>
+  <text x="1082" y="243" class="label">没有工具请求</text>
+</svg>

@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="850" viewBox="0 0 1440 850" role="img" aria-labelledby="title desc">
+  <title id="title">Learn Claude Code 十七章学习路线</title>
+  <desc id="desc">十七章围绕同一个 Agent Loop，依次增加安全行动、长任务上下文、跨时间运行、协作扩展和目标闭环五类能力。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#5b5245"/></marker>
+    <style>
+      .title{font:700 38px -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif;fill:#2b2620}.sub{font:18px -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif;fill:#6f6659}.num{font:700 17px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2f5d8a}.h{font:700 22px -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif;fill:#2b2620}.body{font:16px -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif;fill:#554d42}.small{font:15px -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif;fill:#6f6659}.line{stroke:#5b5245;stroke-width:3;fill:none;marker-end:url(#arrow)}
+    </style>
+  </defs>
+  <rect width="1440" height="850" fill="#fdfaf3"/>
+  <text x="72" y="78" class="title">十七章没有十七套架构，只有一条循环不断长出责任</text>
+  <text x="72" y="112" class="sub">先看懂动作怎样往返，再学习 Context、持久化、协作与完成判断。</text>
+
+  <rect x="72" y="176" width="1296" height="112" rx="20" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+  <text x="112" y="220" class="num">CORE</text>
+  <text x="224" y="220" class="h">稳定内核：messages → LLM → tool_use → Handler → tool_result → messages</text>
+  <text x="224" y="257" class="body">每个阶段都围绕这条 Agent Loop 增加机制，不把业务扩展堆进模型调用本身。</text>
+
+  <path d="M720 288 V340" class="line"/>
+
+  <rect x="72" y="352" width="232" height="338" rx="18" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+  <text x="100" y="395" class="num">s01-s04</text>
+  <text x="100" y="432" class="h">能安全行动</text>
+  <text x="100" y="477" class="body">Agent Loop</text>
+  <text x="100" y="510" class="body">Tool Dispatch</text>
+  <text x="100" y="543" class="body">Permission</text>
+  <text x="100" y="576" class="body">Hooks</text>
+  <text x="100" y="637" class="small">先掌握请求、执行</text>
+  <text x="100" y="664" class="small">与结果回传</text>
+
+  <rect x="338" y="352" width="232" height="338" rx="18" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+  <text x="366" y="395" class="num">s05-s09</text>
+  <text x="366" y="432" class="h">能处理长任务</text>
+  <text x="366" y="477" class="body">Todo 与 Subagent</text>
+  <text x="366" y="510" class="body">Skill Loading</text>
+  <text x="366" y="543" class="body">Context Compact</text>
+  <text x="366" y="576" class="body">Memory</text>
+  <text x="366" y="637" class="small">区分当前上下文</text>
+  <text x="366" y="664" class="small">和跨会话知识</text>
+
+  <rect x="604" y="352" width="232" height="338" rx="18" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+  <text x="632" y="395" class="num">s10-s12</text>
+  <text x="632" y="432" class="h">能跨时间运行</text>
+  <text x="632" y="477" class="body">Task Graph</text>
+  <text x="632" y="510" class="body">Background Task</text>
+  <text x="632" y="543" class="body">Cron Scheduler</text>
+  <text x="632" y="637" class="small">让状态离开单次</text>
+  <text x="632" y="664" class="small">模型调用后仍然存在</text>
+
+  <rect x="870" y="352" width="232" height="338" rx="18" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+  <text x="898" y="395" class="num">s13-s15</text>
+  <text x="898" y="432" class="h">能协作与扩展</text>
+  <text x="898" y="477" class="body">Agent Teams</text>
+  <text x="898" y="510" class="body">Worktree 与协议</text>
+  <text x="898" y="543" class="body">MCP Tool Pool</text>
+  <text x="898" y="576" class="body">Integrated Harness</text>
+  <text x="898" y="637" class="small">隔离上下文、资源</text>
+  <text x="898" y="664" class="small">和工具命名空间</text>
+
+  <rect x="1136" y="352" width="232" height="338" rx="18" fill="#ebe4d4" stroke="#5b5245" stroke-width="2"/>
+  <text x="1164" y="395" class="num">s16-s17</text>
+  <text x="1164" y="432" class="h">能编排并收口</text>
+  <text x="1164" y="477" class="body">Workflow Journal</text>
+  <text x="1164" y="510" class="body">Resume</text>
+  <text x="1164" y="543" class="body">Goal Loop</text>
+  <text x="1164" y="637" class="small">固定路径交给代码</text>
+  <text x="1164" y="664" class="small">完成判断交给闸门</text>
+
+  <path d="M304 521 H338" class="line"/>
+  <path d="M570 521 H604" class="line"/>
+  <path d="M836 521 H870" class="line"/>
+  <path d="M1102 521 H1136" class="line"/>
+
+  <rect x="72" y="742" width="1296" height="54" rx="14" fill="#f5f0e4" stroke="#8a7f6d"/>
+  <text x="102" y="776" class="body">推荐节奏：先亲手跑完 s01-s04，再按遇到的故障选择后续机制，不要从完整集成版反推基础概念。</text>
+</svg>
