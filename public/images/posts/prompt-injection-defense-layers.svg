@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Prompt Injection 的分层防御</title>
+  <desc id="desc">从不可信数据进入 Agent 到真实动作发生前，依次使用来源与结构标记、最小工具和数据权限、确定性动作检查、信息流和损失限制、检测与人工接管五层防御。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><path d="M0 0 L9 3.5 L0 7" fill="none" stroke="#5b5245" stroke-width="1.4"/></marker>
+    <style>
+      .title{font:700 34px system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2b2620}.sub{font:17px system-ui,-apple-system,"PingFang SC",sans-serif;fill:#6f6659}.num{font:700 24px system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2f5d8a}.h{font:700 21px system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2b2620}.b{font:15px system-ui,-apple-system,"PingFang SC",sans-serif;fill:#554d42}.box{fill:#f5f0e4;stroke:#8a7f6d;stroke-width:1.5}.accent{fill:#d8dee0;stroke:#295279;stroke-width:2}.flow{fill:none;stroke:#5b5245;stroke-width:2;marker-end:url(#arrow)}
+    </style>
+  </defs>
+  <rect width="1200" height="760" fill="#fdfaf3"/>
+  <text class="title" x="64" y="66">把防御分布在整条执行路径上</text>
+  <text class="sub" x="64" y="98">任何一层都可能失败，下一层继续限制影响</text>
+
+  <rect class="box" x="64" y="148" width="890" height="88" rx="14"/>
+  <text class="num" x="90" y="201">01</text><text class="h" x="150" y="187">来源与结构标记</text><text class="b" x="150" y="215">分开指令和数据，保留文档 ID、来源、时间与信任级别</text>
+  <rect class="accent" x="982" y="148" width="154" height="88" rx="14"/><text class="h" x="1028" y="201">INPUT</text>
+  <path class="flow" d="M1059 236 V266 H954"/>
+
+  <rect class="box" x="246" y="268" width="890" height="88" rx="14"/>
+  <text class="num" x="272" y="321">02</text><text class="h" x="332" y="307">最小工具与数据权限</text><text class="b" x="332" y="335">只暴露当前任务需要的资源，在服务端重新校验归属</text>
+  <path class="flow" d="M246 312 H154 V386 H246"/>
+
+  <rect class="accent" x="64" y="388" width="890" height="88" rx="14"/>
+  <text class="num" x="90" y="441">03</text><text class="h" x="150" y="427">确定性动作检查</text><text class="b" x="150" y="455">在执行前检查身份、资源、金额、状态、目标和审批</text>
+  <path class="flow" d="M954 432 H1044 V506 H954"/>
+
+  <rect class="box" x="246" y="508" width="890" height="88" rx="14"/>
+  <text class="num" x="272" y="561">04</text><text class="h" x="332" y="547">信息流与损失限制</text><text class="b" x="332" y="575">控制网络出站、新目标传输、敏感数据离开原边界和单次动作上限</text>
+  <path class="flow" d="M246 552 H154 V626 H246"/>
+
+  <rect class="box" x="64" y="628" width="890" height="88" rx="14"/>
+  <text class="num" x="90" y="681">05</text><text class="h" x="150" y="667">检测、日志与人工接管</text><text class="b" x="150" y="695">检测异常路径，保留可回放证据，在高风险或不确定时停止自动执行</text>
+  <rect class="accent" x="982" y="628" width="154" height="88" rx="14"/><text class="h" x="1016" y="681">ACTION</text>
+</svg>

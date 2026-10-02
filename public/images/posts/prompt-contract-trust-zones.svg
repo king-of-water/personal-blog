@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Prompt 在 Agent 系统中的四个责任区</title>
+  <desc id="desc">展示 Prompt、Context、模型和 Harness 的责任边界：Prompt 描述目标与语义规则，Context 提供事实与外部数据，模型生成候选决策，Harness 执行权限、校验与副作用控制。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+      <path d="M0 0 L9 3.5 L0 7" fill="none" stroke="#5b5245" stroke-width="1.4"/>
+    </marker>
+    <style>
+      .title{font:700 34px system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2b2620}.sub{font:17px system-ui,-apple-system,"PingFang SC",sans-serif;fill:#6f6659}.k{font:700 15px system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2f5d8a;letter-spacing:.08em}.h{font:700 24px system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2b2620}.b{font:16px system-ui,-apple-system,"PingFang SC",sans-serif;fill:#554d42}.small{font:14px system-ui,-apple-system,"PingFang SC",sans-serif;fill:#6f6659}.box{fill:#f5f0e4;stroke:#8a7f6d;stroke-width:1.5}.accent{fill:#d8dee0;stroke:#295279;stroke-width:2}.line{fill:none;stroke:#5b5245;stroke-width:2;marker-end:url(#arrow)}
+    </style>
+  </defs>
+  <rect width="1200" height="760" fill="#fdfaf3"/>
+  <text class="title" x="64" y="66">Prompt 只是系统契约的一部分</text>
+  <text class="sub" x="64" y="98">从语义约束到真实动作，责任逐层发生变化</text>
+
+  <rect class="accent" x="64" y="145" width="1072" height="112" rx="18"/>
+  <text class="k" x="92" y="178">01  PROMPT</text>
+  <text class="h" x="92" y="213">任务契约</text>
+  <text class="b" x="330" y="190">目标、输入边界、语义规则、输出契约、完成条件</text>
+  <text class="small" x="330" y="222">引导模型行为，不提供确定的权限与副作用保证</text>
+
+  <path class="line" d="M600 257 V292"/>
+  <rect class="box" x="64" y="294" width="1072" height="112" rx="18"/>
+  <text class="k" x="92" y="327">02  CONTEXT</text>
+  <text class="h" x="92" y="362">当前事实的视图</text>
+  <text class="b" x="330" y="339">用户请求、业务数据、历史消息、检索文档与工具结果</text>
+  <text class="small" x="330" y="371">每段内容保留来源、时间、信任级别和用途</text>
+
+  <path class="line" d="M600 406 V441"/>
+  <rect class="box" x="64" y="443" width="1072" height="112" rx="18"/>
+  <text class="k" x="92" y="476">03  MODEL</text>
+  <text class="h" x="92" y="511">概率决策者</text>
+  <text class="b" x="330" y="488">根据当前输入生成回答、结构化结果或候选工具调用</text>
+  <text class="small" x="330" y="520">可以理解开放语义，也可能误解、遗漏或被外部内容误导</text>
+
+  <path class="line" d="M600 555 V590"/>
+  <rect class="accent" x="64" y="592" width="1072" height="112" rx="18"/>
+  <text class="k" x="92" y="625">04  HARNESS</text>
+  <text class="h" x="92" y="660">执行与安全边界</text>
+  <text class="b" x="330" y="637">参数校验、最小权限、确认、沙箱、日志、重试与验收</text>
+  <text class="small" x="330" y="669">只有这一层能在动作发生前给出确定拒绝</text>
+  <text class="small" x="64" y="738">阅读方式：上层提供意图和信息，下层逐步承担更多真实世界责任。</text>
+</svg>

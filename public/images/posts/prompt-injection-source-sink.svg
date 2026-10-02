@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">间接 Prompt Injection 从输入源到高风险动作的路径</title>
+  <desc id="desc">展示攻击者把指令藏入外部文档，文档经检索进入模型上下文，模型产生工具调用，最终可能造成越权读取、数据外发或真实副作用；中间的策略闸可拦截高风险动作。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><path d="M0 0 L9 3.5 L0 7" fill="none" stroke="#5b5245" stroke-width="1.4"/></marker>
+    <style>
+      .title{font:700 34px system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2b2620}.sub{font:17px system-ui,-apple-system,"PingFang SC",sans-serif;fill:#6f6659}.k{font:700 14px system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2f5d8a;letter-spacing:.08em}.h{font:700 21px system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2b2620}.b{font:15px system-ui,-apple-system,"PingFang SC",sans-serif;fill:#554d42}.box{fill:#f5f0e4;stroke:#8a7f6d;stroke-width:1.5}.bad{fill:#eed9d3;stroke:#943b37;stroke-width:2}.gate{fill:#d8dee0;stroke:#295279;stroke-width:2}.good{fill:#dee3d6;stroke:#466b48;stroke-width:2}.flow{fill:none;stroke:#5b5245;stroke-width:2;marker-end:url(#arrow)}.attack{fill:none;stroke:#943b37;stroke-width:2;stroke-dasharray:8 6;marker-end:url(#arrow)}
+    </style>
+  </defs>
+  <rect width="1200" height="720" fill="#fdfaf3"/>
+  <text class="title" x="62" y="66">攻击需要同时接通 source 和 sink</text>
+  <text class="sub" x="62" y="98">外部内容提供操纵入口，高风险工具决定最大影响</text>
+
+  <rect class="bad" x="62" y="166" width="206" height="130" rx="16"/>
+  <text class="k" x="84" y="199">ATTACKER</text><text class="h" x="84" y="234">攻击者</text>
+  <text class="b" x="84" y="265">控制网页、邮件、PDF</text><text class="b" x="84" y="287">工单或代码注释</text>
+
+  <rect class="box" x="334" y="166" width="206" height="130" rx="16"/>
+  <text class="k" x="356" y="199">SOURCE</text><text class="h" x="356" y="234">不可信数据</text>
+  <text class="b" x="356" y="265">合法事实与恶意指令</text><text class="b" x="356" y="287">混在同一内容中</text>
+
+  <rect class="box" x="606" y="166" width="206" height="130" rx="16"/>
+  <text class="k" x="628" y="199">MODEL</text><text class="h" x="628" y="234">指令与数据冲突</text>
+  <text class="b" x="628" y="265">生成候选动作</text><text class="b" x="628" y="287">或错误扩大任务边界</text>
+
+  <rect class="gate" x="878" y="166" width="260" height="130" rx="16"/>
+  <text class="k" x="900" y="199">POLICY GATE</text><text class="h" x="900" y="234">确定性动作检查</text>
+  <text class="b" x="900" y="265">身份、资源、金额、目标</text><text class="b" x="900" y="287">数据流向与人工确认</text>
+
+  <path class="attack" d="M268 231 H334"/><path class="attack" d="M540 231 H606"/><path class="flow" d="M812 231 H878"/>
+  <text class="b" x="278" y="216">藏入</text><text class="b" x="548" y="216">检索进入 Context</text><text class="b" x="820" y="216">工具请求</text>
+
+  <path class="flow" d="M1008 296 V366"/>
+  <rect class="good" x="710" y="368" width="428" height="112" rx="16"/>
+  <text class="k" x="734" y="402">BLOCK OR CONFIRM</text><text class="h" x="734" y="437">拒绝、降级或等待明确授权</text>
+  <text class="b" x="734" y="464">模型被误导时，仍把损失限制在系统边界内</text>
+
+  <path class="attack" d="M709 296 V432 H648"/>
+  <rect class="bad" x="62" y="368" width="586" height="208" rx="16"/>
+  <text class="k" x="88" y="404">UNGUARDED SINKS</text><text class="h" x="88" y="441">没有动作层边界时的可利用能力</text>
+  <rect class="box" x="88" y="472" width="158" height="72" rx="12"/><text class="b" x="117" y="503">跨用户读取</text><text class="b" x="124" y="528">数据库 / 邮箱</text>
+  <rect class="box" x="274" y="472" width="158" height="72" rx="12"/><text class="b" x="307" y="503">向外部传输</text><text class="b" x="309" y="528">邮件 / URL</text>
+  <rect class="box" x="460" y="472" width="158" height="72" rx="12"/><text class="b" x="493" y="503">真实副作用</text><text class="b" x="499" y="528">付款 / Shell</text>
+
+  <text class="sub" x="62" y="642">设计目标：减少不可信 source，缩小每个 sink 的权限，并在 source 与 sink 相遇时提升校验级别。</text>
+</svg>
