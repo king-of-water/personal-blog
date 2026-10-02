@@ -212,11 +212,24 @@ const librarySections = categorySections.map((section) => ({
 				}
 			};
 
+			const alignInitialHash = () => {
+				const targetId = decodeURIComponent(window.location.hash.slice(1));
+				const target = targetId ? document.getElementById(targetId) : null;
+				if (target && sections.includes(target)) {
+					target.scrollIntoView({ block: 'start' });
+				}
+				requestUpdate();
+			};
+
 			window.addEventListener('scroll', requestUpdate, { passive: true });
 			window.addEventListener('resize', requestUpdate);
 			window.addEventListener('hashchange', requestUpdate);
-			window.addEventListener('load', requestUpdate, { once: true });
-			updateActiveSection();
+			if (document.readyState === 'complete') {
+				alignInitialHash();
+			} else {
+				window.addEventListener('load', alignInitialHash, { once: true });
+				if (!window.location.hash) updateActiveSection();
+			}
 		</script>
 	)}
 	<script>

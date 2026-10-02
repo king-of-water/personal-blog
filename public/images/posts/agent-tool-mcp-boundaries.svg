@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">MCP 接入 Agent 工具系统时的组件和信任边界</title>
+  <desc id="desc">Host 内包含模型、全局策略和多个 MCP Client，本地 Server 通过 stdio 连接，远端 Server 通过 Streamable HTTP 连接；Server 继续调用下游资源，权限和凭据不能跨边界透传。</desc>
+  <rect width="1200" height="720" fill="#fdfaf3"/>
+  <g font-family="system-ui, sans-serif">
+    <text x="60" y="62" fill="#2b2620" font-size="34" font-weight="700">MCP 统一连接方式，Host 仍然掌握执行策略</text>
+    <text x="60" y="96" fill="#6f6659" font-size="17">协议边界、进程边界与资源授权是三件不同的事</text>
+
+    <rect x="60" y="138" width="600" height="474" rx="18" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="88" y="176" fill="#2f5d8a" font-size="14" font-weight="700" letter-spacing="2">MCP HOST · USER TRUST DOMAIN</text>
+
+    <rect x="94" y="208" width="240" height="112" rx="14" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="120" y="246" fill="#2b2620" font-size="21" font-weight="700">Model + Agent Loop</text>
+    <text x="120" y="278" fill="#554d42" font-size="15">选择工具，消费 Tool Result</text>
+
+    <rect x="386" y="208" width="240" height="112" rx="14" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="412" y="246" fill="#2b2620" font-size="21" font-weight="700">Registry + Policy</text>
+    <text x="412" y="278" fill="#554d42" font-size="15">可见性、审批、资源范围</text>
+
+    <rect x="94" y="388" width="240" height="142" rx="14" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="120" y="426" fill="#2f5d8a" font-size="13" font-weight="700" letter-spacing="1.5">MCP CLIENT A</text>
+    <text x="120" y="462" fill="#2b2620" font-size="21" font-weight="700">本地连接</text>
+    <text x="120" y="494" fill="#554d42" font-size="15">协商能力 · JSON-RPC</text>
+
+    <rect x="386" y="388" width="240" height="142" rx="14" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="412" y="426" fill="#2f5d8a" font-size="13" font-weight="700" letter-spacing="1.5">MCP CLIENT B</text>
+    <text x="412" y="462" fill="#2b2620" font-size="21" font-weight="700">远端连接</text>
+    <text x="412" y="494" fill="#554d42" font-size="15">认证 · Session · JSON-RPC</text>
+
+    <path d="M334 264 H376" stroke="#5b5245" stroke-width="3"/><path d="M376 264 l-12 -8 v16 z" fill="#5b5245"/>
+    <path d="M214 320 V378" stroke="#5b5245" stroke-width="3"/><path d="M214 378 l-8 -12 h16 z" fill="#5b5245"/>
+    <path d="M506 320 V378" stroke="#5b5245" stroke-width="3"/><path d="M506 378 l-8 -12 h16 z" fill="#5b5245"/>
+
+    <line x1="700" y1="126" x2="700" y2="638" stroke="#943b37" stroke-width="2" stroke-dasharray="8 7"/>
+    <text x="714" y="152" fill="#943b37" font-size="14" font-weight="700">TRUST BOUNDARY</text>
+
+    <rect x="748" y="162" width="392" height="158" rx="16" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="778" y="200" fill="#2f5d8a" font-size="13" font-weight="700" letter-spacing="1.5">LOCAL MCP SERVER</text>
+    <text x="778" y="238" fill="#2b2620" font-size="22" font-weight="700">子进程 · stdio</text>
+    <text x="778" y="272" fill="#554d42" font-size="15">运行在本机权限下，需要命令确认与沙箱</text>
+
+    <rect x="748" y="380" width="392" height="158" rx="16" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="778" y="418" fill="#2f5d8a" font-size="13" font-weight="700" letter-spacing="1.5">REMOTE MCP SERVER</text>
+    <text x="778" y="456" fill="#2b2620" font-size="22" font-weight="700">Streamable HTTP</text>
+    <text x="778" y="490" fill="#554d42" font-size="15">OAuth · Origin 校验 · 用户范围授权</text>
+
+    <path d="M334 430 H360 V350 H688 V241 H738" stroke="#5b5245" stroke-width="3" fill="none"/><path d="M738 241 l-12 -8 v16 z" fill="#5b5245"/>
+    <text x="526" y="340" fill="#6f6659" font-size="14">stdio</text>
+    <path d="M626 459 H738" stroke="#5b5245" stroke-width="3"/><path d="M738 459 l-12 -8 v16 z" fill="#5b5245"/>
+    <text x="654" y="446" fill="#6f6659" font-size="14">HTTP</text>
+
+    <rect x="748" y="586" width="392" height="70" rx="14" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+    <text x="944" y="615" text-anchor="middle" fill="#2b2620" font-size="17" font-weight="700">下游 API / 数据库 / SaaS</text>
+    <text x="944" y="640" text-anchor="middle" fill="#554d42" font-size="14">Token 受众与操作归属在这里继续校验</text>
+    <path d="M944 538 V576" stroke="#943b37" stroke-width="2"/><path d="M944 576 l-8 -12 h16 z" fill="#943b37"/>
+
+    <text x="60" y="681" fill="#6f6659" font-size="15">Server 提供能力；Host 决定当前 Agent 能否看见、调用以及何时需要用户确认。</text>
+  </g>
+</svg>

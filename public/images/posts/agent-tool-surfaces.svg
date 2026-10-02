@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">CLI、浏览器、代码执行和 MCP 的状态与风险比较</title>
+  <desc id="desc">四种工具面分别连接已有程序、有会话状态的网页、模型生成的临时代码和外部能力协议，它们的输入、状态、副作用和隔离要求不同。</desc>
+  <rect width="1200" height="760" fill="#fdfaf3"/>
+  <g font-family="system-ui, sans-serif">
+    <text x="60" y="62" fill="#2b2620" font-size="34" font-weight="700">四种执行面，不能共用一条粗糙的 execute</text>
+    <text x="60" y="96" fill="#6f6659" font-size="17">选择工具时看任务语义，设计边界时看它接触的状态和副作用</text>
+
+    <rect x="60" y="142" width="1080" height="58" rx="12" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="88" y="179" fill="#2b2620" font-size="18" font-weight="650">Function Calling：统一表达 name + arguments；下面四种能力仍由不同 Adapter 执行</text>
+
+    <rect x="60" y="238" width="255" height="390" rx="16" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="86" y="278" fill="#2f5d8a" font-size="14" font-weight="700" letter-spacing="2">CLI</text>
+    <text x="86" y="316" fill="#2b2620" font-size="23" font-weight="700">调用已有程序</text>
+    <text x="86" y="360" fill="#6f6659" font-size="14">输入</text>
+    <text x="86" y="386" fill="#2b2620" font-size="16">argv · cwd · env</text>
+    <text x="86" y="430" fill="#6f6659" font-size="14">主要状态</text>
+    <text x="86" y="456" fill="#2b2620" font-size="16">进程 · 文件 · 退出码</text>
+    <text x="86" y="500" fill="#6f6659" font-size="14">典型风险</text>
+    <text x="86" y="526" fill="#2b2620" font-size="16">Shell 注入 · 输出爆炸</text>
+    <text x="86" y="570" fill="#6f6659" font-size="14">边界</text>
+    <text x="86" y="596" fill="#2b2620" font-size="16">参数化 · 目录/网络限制</text>
+
+    <rect x="335" y="238" width="255" height="390" rx="16" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="361" y="278" fill="#2f5d8a" font-size="14" font-weight="700" letter-spacing="2">BROWSER</text>
+    <text x="361" y="316" fill="#2b2620" font-size="23" font-weight="700">操作有状态网页</text>
+    <text x="361" y="360" fill="#6f6659" font-size="14">输入</text>
+    <text x="361" y="386" fill="#2b2620" font-size="16">URL · Locator · Action</text>
+    <text x="361" y="430" fill="#6f6659" font-size="14">主要状态</text>
+    <text x="361" y="456" fill="#2b2620" font-size="16">Cookie · DOM · 页面会话</text>
+    <text x="361" y="500" fill="#6f6659" font-size="14">典型风险</text>
+    <text x="361" y="526" fill="#2b2620" font-size="16">注入 · 误点击 · 凭据暴露</text>
+    <text x="361" y="570" fill="#6f6659" font-size="14">边界</text>
+    <text x="361" y="596" fill="#2b2620" font-size="16">Context 隔离 · 动作确认</text>
+
+    <rect x="610" y="238" width="255" height="390" rx="16" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="636" y="278" fill="#2f5d8a" font-size="14" font-weight="700" letter-spacing="2">CODE EXECUTION</text>
+    <text x="636" y="316" fill="#2b2620" font-size="23" font-weight="700">运行临时代码</text>
+    <text x="636" y="360" fill="#6f6659" font-size="14">输入</text>
+    <text x="636" y="386" fill="#2b2620" font-size="16">源码 · Runtime · Artifact</text>
+    <text x="636" y="430" fill="#6f6659" font-size="14">主要状态</text>
+    <text x="636" y="456" fill="#2b2620" font-size="16">进程 · 依赖 · 中间数据</text>
+    <text x="636" y="500" fill="#6f6659" font-size="14">典型风险</text>
+    <text x="636" y="526" fill="#2b2620" font-size="16">逃逸 · 外传 · 资源耗尽</text>
+    <text x="636" y="570" fill="#6f6659" font-size="14">边界</text>
+    <text x="636" y="596" fill="#2b2620" font-size="16">沙箱 · 配额 · 临时凭据</text>
+
+    <rect x="885" y="238" width="255" height="390" rx="16" fill="#ebe4d4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="911" y="278" fill="#2f5d8a" font-size="14" font-weight="700" letter-spacing="2">MCP</text>
+    <text x="911" y="316" fill="#2b2620" font-size="23" font-weight="700">接入外部能力</text>
+    <text x="911" y="360" fill="#6f6659" font-size="14">输入</text>
+    <text x="911" y="386" fill="#2b2620" font-size="16">JSON-RPC · Capability</text>
+    <text x="911" y="430" fill="#6f6659" font-size="14">主要状态</text>
+    <text x="911" y="456" fill="#2b2620" font-size="16">连接 · Session · 远端资源</text>
+    <text x="911" y="500" fill="#6f6659" font-size="14">典型风险</text>
+    <text x="911" y="526" fill="#2b2620" font-size="16">恶意 Server · Token 越界</text>
+    <text x="911" y="570" fill="#6f6659" font-size="14">边界</text>
+    <text x="911" y="596" fill="#2b2620" font-size="16">来源治理 · OAuth · Policy</text>
+
+    <rect x="158" y="670" width="884" height="50" rx="12" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="600" y="702" text-anchor="middle" fill="#2b2620" font-size="17" font-weight="650">统一的是请求、策略、结果和 Trace；隔离强度随执行面的自由度调整</text>
+  </g>
+</svg>
