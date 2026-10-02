@@ -28,7 +28,6 @@ export const agentSubcategories: Subcategory[] = [
 		slug: 'agent-development',
 		description: '从 Prompt、Context 和工具调用出发，构建可运行、可恢复、可评估的 Agent 系统。',
 		plannedTopics: [
-			'Agent Loop：ReAct 主循环中的规划、行动与反思',
 			'Agent 工具系统：Function Calling、CLI、浏览器、代码执行与 MCP',
 			'Skills 与 Memory：能力如何按需加载并跨会话保留',
 			'长任务运行：状态、调度、恢复与收口',

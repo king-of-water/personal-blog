@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">ReAct 主循环中 Planning、Verification 与 Reflection 的位置</title>
+  <desc id="desc">计划提供目标和当前节点，模型决定动作，Harness 执行后得到环境观察，验证器检查完成条件，失败时反思选择局部修正、重规划或停止。</desc>
+  <rect width="1200" height="720" fill="#fdfaf3"/>
+  <text x="60" y="62" fill="#2b2620" font-family="system-ui, sans-serif" font-size="34" font-weight="700">一条 Agent Loop 有四个控制点</text>
+  <text x="60" y="94" fill="#6f6659" font-family="system-ui, sans-serif" font-size="17">计划固定方向，ReAct 推进一步，验证给出证据，反思只处理有信息的失败</text>
+  <g font-family="system-ui, sans-serif">
+    <rect x="60" y="132" width="1080" height="86" rx="14" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="88" y="165" fill="#2f5d8a" font-size="14" font-weight="700" letter-spacing="2">PLANNING</text>
+    <text x="88" y="195" fill="#2b2620" font-size="20" font-weight="650">目标 · 当前节点 · 依赖 · 验收条件 · 预算</text>
+
+    <rect x="90" y="276" width="230" height="148" rx="16" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="118" y="315" fill="#2f5d8a" font-size="14" font-weight="700" letter-spacing="2">DECIDE</text>
+    <text x="118" y="352" fill="#2b2620" font-size="23" font-weight="700">模型</text>
+    <text x="118" y="385" fill="#554d42" font-size="16">回答、工具调用</text>
+
+    <rect x="390" y="276" width="230" height="148" rx="16" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="418" y="315" fill="#2f5d8a" font-size="14" font-weight="700" letter-spacing="2">ACT</text>
+    <text x="418" y="352" fill="#2b2620" font-size="23" font-weight="700">Harness</text>
+    <text x="418" y="385" fill="#554d42" font-size="16">校验、权限、执行</text>
+
+    <rect x="690" y="276" width="230" height="148" rx="16" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="718" y="315" fill="#2f5d8a" font-size="14" font-weight="700" letter-spacing="2">OBSERVE</text>
+    <text x="718" y="352" fill="#2b2620" font-size="23" font-weight="700">环境</text>
+    <text x="718" y="385" fill="#554d42" font-size="16">结果、错误、状态变化</text>
+
+    <rect x="990" y="276" width="150" height="148" rx="16" fill="#ebe4d4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="1014" y="315" fill="#2f5d8a" font-size="14" font-weight="700" letter-spacing="2">VERIFY</text>
+    <text x="1014" y="352" fill="#2b2620" font-size="22" font-weight="700">验收</text>
+    <text x="1014" y="385" fill="#554d42" font-size="15">证据是否通过</text>
+
+    <path d="M320 350 H380" stroke="#5b5245" stroke-width="3"/><path d="M380 350 l-13 -8 v16 z" fill="#5b5245"/>
+    <path d="M620 350 H680" stroke="#5b5245" stroke-width="3"/><path d="M680 350 l-13 -8 v16 z" fill="#5b5245"/>
+    <path d="M920 350 H980" stroke="#5b5245" stroke-width="3"/><path d="M980 350 l-13 -8 v16 z" fill="#5b5245"/>
+    <path d="M805 424 V474 H205 V434" stroke="#8a7f6d" stroke-width="2" fill="none"/><path d="M205 434 l-8 13 h16 z" fill="#8a7f6d"/>
+    <text x="505" y="496" text-anchor="middle" fill="#6f6659" font-size="15">普通 Observation 回到下一轮 Context</text>
+
+    <rect x="252" y="548" width="696" height="104" rx="16" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+    <text x="282" y="581" fill="#943b37" font-size="14" font-weight="700" letter-spacing="2">REFLECTION ON FAILURE</text>
+    <text x="282" y="617" fill="#2b2620" font-size="19" font-weight="650">证据归因 → 修当前动作 / 修计划节点 / 重规划 / 请求用户 / 停止</text>
+    <path d="M1065 424 V520 H900 V538" stroke="#943b37" stroke-width="2" stroke-dasharray="7 6" fill="none"/><path d="M900 538 l-8 -13 h16 z" fill="#943b37"/>
+    <path d="M252 600 H128 V228 H178" stroke="#943b37" stroke-width="2" stroke-dasharray="7 6" fill="none"/><path d="M178 228 l-13 -8 v16 z" fill="#943b37"/>
+    <text x="1067" y="501" fill="#943b37" font-size="14">验收失败</text>
+  </g>
+</svg>

@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">五种 Agent 循环模式的控制范围</title>
+  <desc id="desc">ReAct 围绕单步动作，Plan-and-Execute 围绕任务阶段，Self-Refine 围绕一个产物，Reflexion 跨完整 trial 保存经验，Tree Search 同时维护多条候选路径。</desc>
+  <rect width="1200" height="760" fill="#fdfaf3"/>
+  <text x="60" y="62" fill="#2b2620" font-family="system-ui, sans-serif" font-size="34" font-weight="700">名字相近，控制的状态范围不同</text>
+  <text x="60" y="94" fill="#6f6659" font-family="system-ui, sans-serif" font-size="17">从一次动作、一个产物，到完整 trial 与多条搜索分支</text>
+  <g font-family="system-ui, sans-serif">
+    <rect x="60" y="135" width="1080" height="100" rx="14" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="88" y="170" fill="#2f5d8a" font-size="14" font-weight="700" letter-spacing="2">REACT · ONE STEP</text>
+    <text x="88" y="205" fill="#2b2620" font-size="20" font-weight="650">决定动作 → 环境 Observation → 下一动作</text>
+    <text x="810" y="190" fill="#554d42" font-size="16">状态：消息与工具轨迹</text>
+
+    <rect x="60" y="255" width="1080" height="100" rx="14" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="88" y="290" fill="#2f5d8a" font-size="14" font-weight="700" letter-spacing="2">PLAN-AND-EXECUTE · TASK</text>
+    <text x="88" y="325" fill="#2b2620" font-size="20" font-weight="650">计划节点 → 节点内执行 → 完成证据 → 下一节点或重规划</text>
+    <text x="810" y="310" fill="#554d42" font-size="16">状态：Plan / Todo / Task Graph</text>
+
+    <rect x="60" y="375" width="1080" height="100" rx="14" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="88" y="410" fill="#2f5d8a" font-size="14" font-weight="700" letter-spacing="2">SELF-REFINE · ARTIFACT</text>
+    <text x="88" y="445" fill="#2b2620" font-size="20" font-weight="650">生成产物 → 反馈 → 改写 → 再评分</text>
+    <text x="810" y="430" fill="#554d42" font-size="16">状态：产物版本与反馈</text>
+
+    <rect x="60" y="495" width="1080" height="100" rx="14" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="88" y="530" fill="#2f5d8a" font-size="14" font-weight="700" letter-spacing="2">REFLEXION · ACROSS TRIALS</text>
+    <text x="88" y="565" fill="#2b2620" font-size="20" font-weight="650">完整尝试 → 奖励与轨迹反馈 → 语言反思 → 下一次尝试</text>
+    <text x="810" y="550" fill="#554d42" font-size="16">状态：episodic memory</text>
+
+    <rect x="60" y="615" width="1080" height="100" rx="14" fill="#ebe4d4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="88" y="650" fill="#2f5d8a" font-size="14" font-weight="700" letter-spacing="2">TREE / SEARCH · BRANCHES</text>
+    <text x="88" y="685" fill="#2b2620" font-size="20" font-weight="650">生成候选 → 评分 → 展开 / 剪枝 / 回溯</text>
+    <text x="810" y="670" fill="#554d42" font-size="16">状态：搜索树与隔离环境</text>
+  </g>
+</svg>
