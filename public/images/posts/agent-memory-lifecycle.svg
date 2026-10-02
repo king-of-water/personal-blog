@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">Agent 长期记忆的完整生命周期</title>
+  <desc id="desc">从事件观察、候选筛选、规范化写入、检索重排、上下文使用，到反馈更新或删除的循环。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#8a7f6d"/></marker>
+  </defs>
+  <rect width="1200" height="700" fill="#fdfaf3"/>
+  <g font-family="Arial, sans-serif">
+    <text x="70" y="72" font-size="34" font-weight="700" fill="#2b2620">一条记忆怎样进入未来决策</text>
+    <text x="70" y="108" font-size="18" fill="#6f6659">任何一步都可能拒绝候选；保存成功也不保证一定被召回</text>
+
+    <rect x="70" y="170" width="210" height="130" rx="18" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="94" y="207" font-size="15" font-weight="700" fill="#2f5d8a">01 · OBSERVE</text>
+    <text x="94" y="244" font-size="24" font-weight="700" fill="#2b2620">观察事件</text>
+    <text x="94" y="276" font-size="16" fill="#554d42">消息 · 工具 · 任务轨迹</text>
+
+    <rect x="360" y="170" width="210" height="130" rx="18" fill="#f4eace" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="384" y="207" font-size="15" font-weight="700" fill="#8a6b12">02 · DECIDE</text>
+    <text x="384" y="244" font-size="24" font-weight="700" fill="#2b2620">筛选候选</text>
+    <text x="384" y="276" font-size="16" fill="#554d42">价值 · 权限 · 可信度</text>
+
+    <rect x="650" y="170" width="210" height="130" rx="18" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="674" y="207" font-size="15" font-weight="700" fill="#2f5d8a">03 · COMMIT</text>
+    <text x="674" y="244" font-size="24" font-weight="700" fill="#2b2620">规范化写入</text>
+    <text x="674" y="276" font-size="16" fill="#554d42">Scope · 来源 · 版本</text>
+
+    <rect x="940" y="170" width="190" height="130" rx="18" fill="#ebe4d4" stroke="#5b5245" stroke-width="2"/>
+    <text x="964" y="207" font-size="15" font-weight="700" fill="#2f5d8a">04 · STORE</text>
+    <text x="964" y="244" font-size="24" font-weight="700" fill="#2b2620">记忆集合</text>
+    <text x="964" y="276" font-size="16" fill="#554d42">Profile · Item · Episode</text>
+
+    <path d="M280 235 H350" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+    <path d="M570 235 H640" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+    <path d="M860 235 H930" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+
+    <rect x="215" y="420" width="230" height="135" rx="18" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="241" y="458" font-size="15" font-weight="700" fill="#2f5d8a">06 · USE</text>
+    <text x="241" y="496" font-size="24" font-weight="700" fill="#2b2620">装配进 Context</text>
+    <text x="241" y="530" font-size="16" fill="#554d42">引用证据并影响动作</text>
+
+    <rect x="560" y="420" width="230" height="135" rx="18" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="586" y="458" font-size="15" font-weight="700" fill="#2f5d8a">05 · RECALL</text>
+    <text x="586" y="496" font-size="24" font-weight="700" fill="#2b2620">检索与重排</text>
+    <text x="586" y="530" font-size="16" fill="#554d42">过滤 · 混合召回 · 去重</text>
+
+    <rect x="905" y="420" width="225" height="135" rx="18" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="931" y="458" font-size="15" font-weight="700" fill="#3d6340">07 · FEEDBACK</text>
+    <text x="931" y="496" font-size="24" font-weight="700" fill="#2b2620">更新或遗忘</text>
+    <text x="931" y="530" font-size="16" fill="#554d42">纠正 · 过期 · 删除</text>
+
+    <path d="M1035 300 V410" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+    <path d="M895 488 H800" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+    <path d="M550 488 H455" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+    <path d="M330 565 V620 H755 V310" fill="none" stroke="#8a7f6d" stroke-width="2" stroke-dasharray="8 7" marker-end="url(#arrow)"/>
+    <text x="540" y="650" font-size="16" fill="#6f6659">行为结果回到写入侧，形成可审计的闭环</text>
+    <path d="M465 310 V345" stroke="#a8433f" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="484" y="340" font-size="15" fill="#943b37">拒绝无价值或越权候选</text>
+  </g>
+</svg>

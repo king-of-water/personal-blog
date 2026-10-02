@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Agent Memory 的四层状态结构</title>
+  <desc id="desc">从当前模型上下文、线程状态、长期记忆到原始归档，展示容量、速度、作用域与职责的变化。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#8a7f6d"/></marker>
+  </defs>
+  <rect width="1200" height="760" fill="#fdfaf3"/>
+  <g font-family="Arial, sans-serif">
+    <text x="70" y="72" font-size="34" font-weight="700" fill="#2b2620">Memory 分层：离模型越近，容量越小、选择越严格</text>
+    <text x="70" y="108" font-size="18" fill="#6f6659">每层保存不同生命周期的信息，并用地址连接到下一层证据</text>
+
+    <rect x="230" y="155" width="740" height="110" rx="18" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="270" y="192" font-size="15" font-weight="700" fill="#2f5d8a">L1 · ACTIVE CONTEXT</text>
+    <text x="270" y="228" font-size="25" font-weight="700" fill="#2b2620">本次推理真正看见的内容</text>
+    <text x="705" y="210" font-size="17" fill="#554d42">最近消息 · 当前目标 · 少量召回证据</text>
+
+    <rect x="180" y="295" width="840" height="110" rx="18" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="220" y="332" font-size="15" font-weight="700" fill="#2f5d8a">L2 · THREAD STATE</text>
+    <text x="220" y="368" font-size="25" font-weight="700" fill="#2b2620">一个任务的结构化状态</text>
+    <text x="705" y="350" font-size="17" fill="#554d42">计划 · 工具结果 · 审批 · 检查点</text>
+
+    <rect x="130" y="435" width="940" height="110" rx="18" fill="#ebe4d4" stroke="#5b5245" stroke-width="2"/>
+    <text x="170" y="472" font-size="15" font-weight="700" fill="#2f5d8a">L3 · LONG-TERM MEMORY</text>
+    <text x="170" y="508" font-size="25" font-weight="700" fill="#2b2620">跨会话筛选后的事实与经验</text>
+    <text x="705" y="490" font-size="17" fill="#554d42">偏好 · 项目事实 · Episode · 来源</text>
+
+    <rect x="80" y="575" width="1040" height="110" rx="18" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="120" y="612" font-size="15" font-weight="700" fill="#2f5d8a">L4 · EVENT ARCHIVE</text>
+    <text x="120" y="648" font-size="25" font-weight="700" fill="#2b2620">可追溯的原始事件与外部事实地址</text>
+    <text x="705" y="630" font-size="17" fill="#554d42">消息 · Tool Call · 日志 · 文件版本</text>
+
+    <path d="M1080 630 H1150 V210 H985" fill="none" stroke="#8a7f6d" stroke-width="3" stroke-dasharray="8 7" marker-end="url(#arrow)"/>
+    <text x="1030" y="400" transform="rotate(-90 1030 400)" text-anchor="middle" font-size="16" fill="#6f6659">按需检索与换入</text>
+    <path d="M110 210 H50 V630 H65" fill="none" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+    <text x="83" y="420" transform="rotate(-90 83 420)" text-anchor="middle" font-size="16" fill="#6f6659">写入、压缩与归档</text>
+    <text x="600" y="724" text-anchor="middle" font-size="16" fill="#6f6659">Context 是视图，State 负责恢复，Memory 负责跨会话复用，Archive 保留证据</text>
+  </g>
+</svg>

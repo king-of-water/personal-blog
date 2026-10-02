@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="690" viewBox="0 0 1200 690" role="img" aria-labelledby="title desc">
+  <title id="title">Agent Memory 的作用域冲突与版本选择</title>
+  <desc id="desc">通用自动推送规则继续有效，更具体的部署配置确认规则成为例外，检索时按作用域和时间选择。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#8a7f6d"/></marker>
+  </defs>
+  <rect width="1200" height="690" fill="#fdfaf3"/>
+  <g font-family="Arial, sans-serif">
+    <text x="70" y="72" font-size="34" font-weight="700" fill="#2b2620">冲突处理：更新版本，也允许更具体的例外</text>
+    <text x="70" y="108" font-size="18" fill="#6f6659">判断依据是来源、时间和 Scope，不是简单选择最新一句</text>
+
+    <rect x="70" y="170" width="400" height="150" rx="20" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="100" y="208" font-size="15" font-weight="700" fill="#2f5d8a">MEMORY A · ACTIVE</text>
+    <text x="100" y="248" font-size="23" font-weight="700" fill="#2b2620">文章完成检查后直接提交推送</text>
+    <text x="100" y="283" font-size="16" fill="#554d42">Scope: personal-blog / article</text>
+
+    <rect x="70" y="385" width="400" height="150" rx="20" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="100" y="423" font-size="15" font-weight="700" fill="#2f5d8a">MEMORY B · ACTIVE EXCEPTION</text>
+    <text x="100" y="463" font-size="23" font-weight="700" fill="#2b2620">涉及部署配置时先确认</text>
+    <text x="100" y="498" font-size="16" fill="#554d42">Scope: personal-blog / deploy-config</text>
+
+    <rect x="630" y="205" width="500" height="290" rx="22" fill="#ebe4d4" stroke="#5b5245" stroke-width="2"/>
+    <text x="665" y="247" font-size="15" font-weight="700" fill="#2f5d8a">RETRIEVAL DECISION</text>
+    <text x="665" y="290" font-size="25" font-weight="700" fill="#2b2620">当前任务修改文章与部署配置</text>
+    <line x1="665" y1="320" x2="1095" y2="320" stroke="#8a7f6d"/>
+    <text x="665" y="358" font-size="17" fill="#554d42">1. 用户与项目作用域一致</text>
+    <text x="665" y="394" font-size="17" fill="#554d42">2. 两条记录都在有效期内</text>
+    <text x="665" y="430" font-size="17" fill="#554d42">3. deploy-config 比 article 更具体</text>
+    <rect x="665" y="451" width="410" height="54" rx="12" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="870" y="486" text-anchor="middle" font-size="19" font-weight="700" fill="#2b2620">执行前请求确认，再继续提交</text>
+
+    <path d="M470 245 H560 V305 H620" fill="none" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+    <path d="M470 460 H560 V395 H620" fill="none" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+
+    <rect x="70" y="590" width="1060" height="55" rx="14" fill="#f4eace" stroke="#8a7f6d"/>
+    <text x="600" y="625" text-anchor="middle" font-size="17" fill="#2b2620">若新指令明确撤销旧规则，则创建新版本并把旧记录标为 superseded；不要静默覆盖来源</text>
+  </g>
+</svg>
