@@ -4,6 +4,7 @@ description: 面向没有大模型算法基础的工程师，用一条完整运�
 category: Agent
 subcategory: LLM 原理与训练
 articleClass: flagship
+seriesOrder: 10
 featured: false
 publishedAt: 2026-10-02
 updatedAt: 2026-10-02

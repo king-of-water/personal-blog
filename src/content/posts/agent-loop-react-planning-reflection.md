@@ -4,6 +4,7 @@ description: 从最小工具循环出发，对比 ReAct、Plan-and-Execute、Ref
 category: Agent
 subcategory: Agent 开发
 articleClass: flagship
+seriesOrder: 50
 featured: false
 publishedAt: 2026-10-02
 updatedAt: 2026-10-02

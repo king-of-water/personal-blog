@@ -4,6 +4,7 @@ description: 从知识模型、页面规划、证据组装、分层生成到更�
 category: Agent
 subcategory: RAG 与知识工程
 articleClass: flagship
+seriesOrder: 50
 featured: false
 publishedAt: 2026-10-01T20:00:00+08:00
 updatedAt: 2026-10-01

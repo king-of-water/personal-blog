@@ -4,6 +4,7 @@ description: 从任务契约、结果与轨迹评测、LLM Judge、数据分层�
 category: Agent
 subcategory: Agent 开发
 articleClass: flagship
+seriesOrder: 110
 featured: false
 publishedAt: 2026-10-01T20:01:00+08:00
 updatedAt: 2026-10-01

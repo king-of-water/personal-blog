@@ -4,6 +4,7 @@ description: 从一次本地缓存重建异常出发，拆解 Pipeline、客户�
 category: 后端
 subcategory: Redis
 articleClass: field-note
+seriesOrder: 10
 featured: true
 publishedAt: 2026-09-30
 tags: [Redis, 缓存, 稳定性, Java, 故障排查]

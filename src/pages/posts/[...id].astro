@@ -8,6 +8,7 @@ import {
 	subcategoryPath,
 	type MainCategory,
 } from '../../config/sections';
+import { comparePostsBySeriesOrder, formatSeriesNumber } from '../../utils/post-order';
 
 export async function getStaticPaths() {
 	const posts = await getCollection('posts', ({ data }) => !data.draft);
@@ -22,8 +23,15 @@ const date = new Intl.DateTimeFormat('zh-CN', { year: 'numeric', month: 'long', 
 const allPosts = (await getCollection('posts', ({ data }) => !data.draft))
 	.sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
 const currentIndex = allPosts.findIndex((item) => item.id === post.id);
-const newerPost = allPosts[currentIndex - 1];
-const olderPost = allPosts[currentIndex + 1];
+const sectionPosts = post.data.subcategory
+	? allPosts
+		.filter((item) => item.data.category === post.data.category && item.data.subcategory === post.data.subcategory)
+		.sort(comparePostsBySeriesOrder)
+	: [];
+const usesSeriesNavigation = post.data.seriesOrder !== undefined && sectionPosts.length > 0;
+const currentSeriesIndex = usesSeriesNavigation ? sectionPosts.findIndex((item) => item.id === post.id) : -1;
+const previousPost = usesSeriesNavigation ? sectionPosts[currentSeriesIndex - 1] : allPosts[currentIndex - 1];
+const nextPost = usesSeriesNavigation ? sectionPosts[currentSeriesIndex + 1] : allPosts[currentIndex + 1];
 const articleText = post.body
 	.replace(/```[\s\S]*?```/g, ' ')
 	.replace(/<[^>]+>/g, ' ')
@@ -49,7 +57,7 @@ const categorySections = category === 'Agent'
 const librarySections = categorySections.map((section) => ({
 	...section,
 	path: subcategoryPath(category, section.name),
-	posts: categoryPosts.filter((item) => item.data.subcategory === section.name),
+	posts: categoryPosts.filter((item) => item.data.subcategory === section.name).sort(comparePostsBySeriesOrder),
 }));
 ---
 
@@ -66,13 +74,13 @@ const librarySections = categorySections.map((section) => ({
 									<details open={post.data.subcategory === section.name} class:list={{ 'is-current-section': post.data.subcategory === section.name }}>
 										<summary><a href={section.path}>{section.name}</a></summary>
 									<ul>
-										{section.posts.map((item) => (
+										{section.posts.map((item, index) => (
 											<li>
 												<a
 													href={`/posts/${item.id}/`}
 													class:list={{ 'is-active': item.id === post.id }}
 													aria-current={item.id === post.id ? 'page' : undefined}
-												>{item.data.title}</a>
+												><span class="library-order" aria-hidden="true">{formatSeriesNumber(index)}</span><span>{item.data.title}</span></a>
 											</li>
 										))}
 									</ul>
@@ -137,8 +145,8 @@ const librarySections = categorySections.map((section) => ({
 				</button>
 			</div>
 			<nav class="article-nav" aria-label="文章导航">
-				{newerPost ? <a href={`/posts/${newerPost.id}/`}><small>较新文章</small><strong>← {newerPost.data.title}</strong></a> : <span />}
-				{olderPost ? <a href={`/posts/${olderPost.id}/`}><small>较早文章</small><strong>{olderPost.data.title} →</strong></a> : <span />}
+				{previousPost ? <a href={`/posts/${previousPost.id}/`}><small>{usesSeriesNavigation ? '上一章' : '较新文章'}</small><strong>← {previousPost.data.title}</strong></a> : <span />}
+				{nextPost ? <a href={`/posts/${nextPost.id}/`}><small>{usesSeriesNavigation ? '下一章' : '较早文章'}</small><strong>{nextPost.data.title} →</strong></a> : <span />}
 			</nav>
 		</article>
 	</div>

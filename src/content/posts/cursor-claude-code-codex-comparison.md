@@ -4,6 +4,7 @@ description: 不比一次生成了多少代码，改从工作中心、上下文�
 category: Agent
 subcategory: AI Coding 实践
 articleClass: flagship
+seriesOrder: 10
 featured: false
 publishedAt: 2026-10-01
 updatedAt: 2026-10-02

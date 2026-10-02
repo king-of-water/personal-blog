@@ -4,6 +4,7 @@ description: 从责任所有权、业务适配、状态与恢复、安全边界�
 category: Agent
 subcategory: Agent 开发
 articleClass: flagship
+seriesOrder: 10
 featured: false
 publishedAt: 2026-10-02
 updatedAt: 2026-10-02

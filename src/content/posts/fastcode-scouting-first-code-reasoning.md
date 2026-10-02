@@ -4,6 +4,7 @@ description: 从语义结构地图、查询增强、图导航和成本策略出�
 category: Agent
 subcategory: RAG 与知识工程
 articleClass: flagship
+seriesOrder: 40
 featured: false
 publishedAt: 2026-10-01
 updatedAt: 2026-10-02

@@ -4,6 +4,7 @@ description: 沿 DeepSeek Harness 与 Cordis 论文拆解插件化 Agent 运行�
 category: Agent
 subcategory: Agent 产品拆解
 articleClass: flagship
+seriesOrder: 40
 featured: false
 publishedAt: 2026-10-01T20:04:00+08:00
 updatedAt: 2026-10-01

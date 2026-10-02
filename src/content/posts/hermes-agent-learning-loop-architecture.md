@@ -4,6 +4,7 @@ description: 从 Agent Loop、会话压缩、持久记忆、Skill 生成、execu
 category: Agent
 subcategory: Agent 产品拆解
 articleClass: flagship
+seriesOrder: 50
 featured: false
 publishedAt: 2026-10-02
 updatedAt: 2026-10-02

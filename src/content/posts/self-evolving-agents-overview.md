@@ -4,6 +4,7 @@ description: 从 Context、Memory、Skill、Workflow、代码到模型权重，�
 category: Agent
 subcategory: Agent 开发
 articleClass: flagship
+seriesOrder: 100
 featured: false
 publishedAt: 2026-10-01T20:02:00+08:00
 updatedAt: 2026-10-01

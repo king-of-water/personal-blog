@@ -4,6 +4,7 @@ description: 沿 OpenAI 官方 Rust 仓库追踪一次 Codex 任务，拆开 App
 category: Agent
 subcategory: Agent 产品拆解
 articleClass: flagship
+seriesOrder: 30
 featured: false
 publishedAt: 2026-10-01
 updatedAt: 2026-10-02

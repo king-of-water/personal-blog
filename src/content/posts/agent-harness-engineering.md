@@ -4,6 +4,7 @@ description: 从概念演进和模型边界出发，拆解循环、工具、规�
 category: Agent
 subcategory: Agent 开发
 articleClass: flagship
+seriesOrder: 70
 featured: true
 publishedAt: 2026-09-30
 updatedAt: 2026-09-30

@@ -4,6 +4,7 @@ description: 代码检索只能告诉 Agent“这里写了什么”。要让它�
 category: Agent
 subcategory: RAG 与知识工程
 articleClass: flagship
+seriesOrder: 20
 featured: false
 publishedAt: 2026-09-30
 updatedAt: 2026-10-02

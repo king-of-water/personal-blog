@@ -4,6 +4,7 @@ description: 从一次真实的技术文章任务出发，解释 Agent Skill 怎
 category: Agent
 subcategory: Agent 开发
 articleClass: flagship
+seriesOrder: 80
 featured: false
 publishedAt: 2026-10-02
 updatedAt: 2026-10-02

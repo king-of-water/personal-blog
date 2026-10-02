@@ -4,6 +4,7 @@ description: 以 Anthropic 官方文档为事实边界，结合特定版本的�
 category: Agent
 subcategory: Agent 产品拆解
 articleClass: flagship
+seriesOrder: 20
 featured: false
 publishedAt: 2026-10-01
 updatedAt: 2026-10-02

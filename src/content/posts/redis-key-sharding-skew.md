@@ -4,6 +4,7 @@ description: 用一个可复现的实验拆解 Redis 代理分片中的数据倾
 category: 后端
 subcategory: Redis
 articleClass: field-note
+seriesOrder: 20
 featured: true
 publishedAt: 2026-09-30
 tags: [Redis, 分布式系统, 哈希, 稳定性, Java]

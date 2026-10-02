@@ -4,6 +4,7 @@ description: 从一次跨会话写作任务出发，拆解 Agent 怎样保存运
 category: Agent
 subcategory: Agent 开发
 articleClass: flagship
+seriesOrder: 90
 featured: false
 publishedAt: 2026-10-02
 updatedAt: 2026-10-02

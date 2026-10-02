@@ -4,6 +4,7 @@ description: 拆解 Repo Map 的符号抽取、图排序、预算渲染与增量
 category: Agent
 subcategory: RAG 与知识工程
 articleClass: flagship
+seriesOrder: 30
 featured: false
 publishedAt: 2026-09-30
 updatedAt: 2026-10-01

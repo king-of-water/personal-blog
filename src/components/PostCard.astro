@@ -1,13 +1,19 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 
-interface Props { post: CollectionEntry<'posts'> }
-const { post } = Astro.props;
+interface Props {
+	post: CollectionEntry<'posts'>;
+	sequence?: number;
+}
+const { post, sequence } = Astro.props;
 const date = new Intl.DateTimeFormat('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(post.data.publishedAt);
 ---
 
 <a class="post-card" href={`/posts/${post.id}/`}>
-	<time class="post-date" datetime={post.data.publishedAt.toISOString()}>{date}</time>
+	{sequence !== undefined
+		? <span class="post-sequence" aria-label={`第 ${sequence} 章`}>{String(sequence).padStart(2, '0')}</span>
+		: <time class="post-date" datetime={post.data.publishedAt.toISOString()}>{date}</time>
+	}
 	<div class="post-main">
 		<span class="post-category">{post.data.category}{post.data.subcategory && ` · ${post.data.subcategory}`}</span>
 		<h3>{post.data.title}<span class="post-arrow" aria-hidden="true">↗</span></h3>

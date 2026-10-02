@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from './PostCard.astro';
 import { categoryPath, type MainCategory } from '../config/sections';
+import { comparePostsBySeriesOrder, formatSeriesNumber } from '../utils/post-order';
 
 interface Props {
 	category: MainCategory;
@@ -14,7 +15,7 @@ interface Props {
 const { category, name, description, plannedTopics = [] } = Astro.props;
 const posts = (await getCollection('posts', ({ data }) => (
 	!data.draft && data.category === category && data.subcategory === name
-))).sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
+))).sort(comparePostsBySeriesOrder);
 ---
 
 <BaseLayout title={`${name} · ${category}`} description={description} activeNav={categoryPath(category)}>
@@ -33,7 +34,7 @@ const posts = (await getCollection('posts', ({ data }) => (
 			<span>{posts.length > 0 ? `${posts.length} 篇` : '内容正在整理'}</span>
 		</div>
 		{posts.length > 0 ? (
-			<div class="post-list">{posts.map((post) => <PostCard post={post} />)}</div>
+			<div class="post-list">{posts.map((post, index) => <PostCard post={post} sequence={index + 1} />)}</div>
 		) : (
 			<div class="empty-state compact-empty-state">
 				<h2>这里还没有文章</h2>
@@ -48,7 +49,7 @@ const posts = (await getCollection('posts', ({ data }) => (
 				<span>{plannedTopics.length} 个选题</span>
 			</div>
 			<ol>
-				{plannedTopics.map((topic) => <li><span>{topic}</span><small>待深入</small></li>)}
+				{plannedTopics.map((topic, index) => <li><b>{formatSeriesNumber(posts.length + index)}</b><span>{topic}</span><small>待深入</small></li>)}
 			</ol>
 		</section>
 	)}

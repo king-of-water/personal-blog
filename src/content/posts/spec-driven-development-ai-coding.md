@@ -4,6 +4,7 @@ description: Spec-Driven Development 用 Spec、Plan、Tasks 和 Converge 管理
 category: Agent
 subcategory: AI Coding 实践
 articleClass: flagship
+seriesOrder: 30
 featured: false
 publishedAt: 2026-10-01
 updatedAt: 2026-10-02

@@ -4,6 +4,7 @@ description: 沿 Pi 的公开源码拆解一个可用 Agent Harness 的必要组
 category: Agent
 subcategory: Agent 产品拆解
 articleClass: flagship
+seriesOrder: 10
 featured: false
 publishedAt: 2026-10-01T20:05:00+08:00
 updatedAt: 2026-10-01

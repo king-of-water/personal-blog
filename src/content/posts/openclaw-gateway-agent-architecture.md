@@ -4,6 +4,7 @@ description: 从 Gateway 控制面、确定性路由、Agent Runtime、共享会
 category: Agent
 subcategory: Agent 产品拆解
 articleClass: flagship
+seriesOrder: 60
 featured: false
 publishedAt: 2026-10-02
 updatedAt: 2026-10-02

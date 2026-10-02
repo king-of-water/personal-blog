@@ -21,6 +21,7 @@ const posts = defineCollection({
 			'分布式',
 		]).optional(),
 		articleClass: z.enum(['flagship', 'focused', 'field-note']).optional(),
+		seriesOrder: z.number().int().positive().optional(),
 		featured: z.boolean().default(false),
 		publishedAt: z.coerce.date(),
 		updatedAt: z.coerce.date().optional(),

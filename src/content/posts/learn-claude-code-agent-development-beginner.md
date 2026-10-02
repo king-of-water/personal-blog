@@ -4,6 +4,7 @@ description: 面向第一次开发 Agent 的工程师，从 Learn Claude Code �
 category: Agent
 subcategory: Agent 开发
 articleClass: focused
+seriesOrder: 20
 featured: false
 publishedAt: 2026-10-02
 updatedAt: 2026-10-02

@@ -4,6 +4,7 @@ description: 用一个售后工单 Agent 串起 System Prompt、Few-shot、结�
 category: Agent
 subcategory: Agent 开发
 articleClass: flagship
+seriesOrder: 30
 featured: false
 publishedAt: 2026-10-02
 updatedAt: 2026-10-02

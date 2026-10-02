@@ -4,6 +4,7 @@ description: Jev 不生成长文本，而是对有限答案返回类型化决策
 category: Agent
 subcategory: Agent 产品拆解
 articleClass: flagship
+seriesOrder: 70
 featured: false
 publishedAt: 2026-10-01T20:03:00+08:00
 updatedAt: 2026-10-01

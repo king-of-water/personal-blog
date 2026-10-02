@@ -4,6 +4,7 @@ description: 把 RAG 看成一条可评测、可降级、可审计的知识流�
 category: Agent
 subcategory: RAG 与知识工程
 articleClass: flagship
+seriesOrder: 10
 featured: false
 publishedAt: 2026-10-01T20:00:00+08:00
 updatedAt: 2026-10-01

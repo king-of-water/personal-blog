@@ -4,6 +4,7 @@ description: 从任务契约、Plan、AGENTS.md、Skills、线程与 Worktree，
 category: Agent
 subcategory: AI Coding 实践
 articleClass: flagship
+seriesOrder: 20
 featured: false
 publishedAt: 2026-10-01
 updatedAt: 2026-10-02
