@@ -4,9 +4,10 @@ import { defineConfig } from 'astro/config';
 // https://astro.build/config
 export default defineConfig({
 	redirects: {
-		'/agent/agent-development/': '/agent/agent-engineering/',
-		'/agent/agent-methods/': '/agent/agent-mechanisms/',
-		'/agent/agent-frontier/': '/agent/agent-mechanisms/',
+		'/agent/agent-engineering/': '/agent/agent-development/',
+		'/agent/agent-mechanisms/': '/agent/agent-development/',
+		'/agent/agent-methods/': '/agent/agent-development/',
+		'/agent/agent-frontier/': '/agent/agent-development/',
 		'/agent/agent-algorithms/': '/agent/llm-fundamentals/',
 	},
 });

@@ -24,9 +24,9 @@ export const agentSubcategories: Subcategory[] = [
 		],
 	},
 	{
-		name: 'Agent 核心机制',
-		slug: 'agent-mechanisms',
-		description: '理解 Agent 如何接受指令、组织上下文、调用工具、规划、记忆与协作。',
+		name: 'Agent 开发',
+		slug: 'agent-development',
+		description: '从 Prompt、Context 和工具调用出发，构建可运行、可恢复、可评估的 Agent 系统。',
 		plannedTopics: [
 			'Prompt 工程：System Prompt、Few-shot 与结构化输出',
 			'Context Engineering：Agent 每一步究竟看到了什么',
@@ -35,13 +35,6 @@ export const agentSubcategories: Subcategory[] = [
 			'Reflection：模型自我反思什么时候真的有效',
 			'Skills 与 Memory：能力如何按需加载并跨会话保留',
 			'Subagent 与多 Agent：任务拆分、通信与结果汇总',
-		],
-	},
-	{
-		name: 'Agent 工程化',
-		slug: 'agent-engineering',
-		description: '把 Agent 做成可运行、可恢复、可观测、可评估且边界清晰的生产系统。',
-		plannedTopics: [
 			'Todo、Task Graph 与长任务状态管理',
 			'Background Task 与 Cron：任务如何跨时间运行',
 			'Workflow、Resume 与 Goal Loop：任务如何恢复并真正收口',
