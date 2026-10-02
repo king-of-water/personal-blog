@@ -2,7 +2,7 @@
 title: 从一个循环开始：用 Learn Claude Code 入门 Agent 开发
 description: 面向第一次开发 Agent 的工程师，从 Learn Claude Code 的 s01 到 s03 读懂 Agent Loop、工具协议、ReAct、权限边界与完成条件，再给出一条可动手的进阶路线。
 category: Agent
-subcategory: Agent 开发
+subcategory: Agent 工程化
 articleClass: focused
 featured: false
 publishedAt: 2026-10-02

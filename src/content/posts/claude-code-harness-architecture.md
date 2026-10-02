@@ -2,7 +2,7 @@
 title: Claude Code 架构拆解：Query Loop、Compact 与 Memory
 description: 以 Anthropic 官方文档为事实边界，结合特定版本的客户端还原资料，拆解 Claude Code 的主循环、上下文装配、五层压缩、自动记忆、工具权限与子 Agent。
 category: Agent
-subcategory: Agent 产品与架构
+subcategory: Agent 产品拆解
 articleClass: flagship
 featured: false
 publishedAt: 2026-10-01

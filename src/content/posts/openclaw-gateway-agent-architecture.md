@@ -2,7 +2,7 @@
 title: OpenClaw 架构拆解：从多渠道 Gateway 到长期在线的个人 Agent
 description: 从 Gateway 控制面、确定性路由、Agent Runtime、共享会话、工具权限、Sandbox、Heartbeat 与 Automations 出发，拆解 OpenClaw 如何把一个 Agent 变成跨聊天渠道持续运行的自托管系统。
 category: Agent
-subcategory: Agent 产品与架构
+subcategory: Agent 产品拆解
 articleClass: flagship
 featured: false
 publishedAt: 2026-10-02

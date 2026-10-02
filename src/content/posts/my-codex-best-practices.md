@@ -2,7 +2,7 @@
 title: 我的 Codex 最佳实践：把一句需求变成可验收的工程结果
 description: 从任务契约、Plan、AGENTS.md、Skills、线程与 Worktree，到 Goal、Review 和 Automation，整理一套适合日常开发的 Codex 协作方法。
 category: Agent
-subcategory: AI Coding
+subcategory: AI Coding 实践
 articleClass: flagship
 featured: false
 publishedAt: 2026-10-01
