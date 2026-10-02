@@ -48,22 +48,13 @@ export const agentSubcategories: Subcategory[] = [
 		name: 'RAG 与知识工程',
 		slug: 'rag-knowledge',
 		description: '让知识可检索、可理解、可维护，并成为模型能够使用的上下文。',
-		plannedTopics: [
-			'Chunking 与 Embedding：知识如何进入检索系统',
-			'混合检索与重排：召回结果怎样变得更可靠',
-			'RAG 评测：检索正确不等于回答正确',
-			'GraphRAG：什么时候需要图结构知识',
-			'Agentic RAG：让 Agent 自己规划检索过程',
-		],
 	},
 	{
 		name: 'Agent 产品拆解',
 		slug: 'agent-products',
 		description: '拆解 Codex、Claude Code、Hermes、OpenClaw 等真实系统的架构与实现。',
 		plannedTopics: [
-			'主流 Coding Agent 的工具版图与工作流对比',
-			'从产品交互反推 Agent Harness 的设计取舍',
-			'自研 Agent 还是接入现成产品：工程决策框架',
+			'横向拆解：不同 Agent 怎样实现 Context、权限、记忆与任务恢复',
 		],
 	},
 	{

@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="820" viewBox="0 0 1200 820" role="img" aria-labelledby="title desc">
+  <title id="title">三条 Agent 建设路线的责任所有权</title>
+  <desc id="desc">比较成熟产品、开发框架和自建 Harness 在界面、业务流程、Agent 策略、运行时、模型适配、执行环境和运维评测上的责任归属。</desc>
+  <rect width="1200" height="820" fill="#fbf8f1"/>
+  <text x="64" y="66" fill="#2b2620" font-size="34" font-weight="700">买到的是责任转移，不只是功能</text>
+  <text x="64" y="102" fill="#6f6659" font-size="18">越往右，团队拥有的运行语义越多，长期维护面也越大</text>
+
+  <text x="350" y="156" text-anchor="middle" fill="#2b2620" font-size="22" font-weight="700">成熟 Agent 产品</text>
+  <text x="650" y="156" text-anchor="middle" fill="#2b2620" font-size="22" font-weight="700">Agent 开发框架</text>
+  <text x="950" y="156" text-anchor="middle" fill="#2b2620" font-size="22" font-weight="700">自建 Harness</text>
+
+  <g font-size="17" fill="#2b2620">
+    <text x="64" y="216">用户界面与交互</text>
+    <text x="64" y="294">业务流程与集成</text>
+    <text x="64" y="372">Prompt、Context、工具</text>
+    <text x="64" y="450">Loop、状态与恢复</text>
+    <text x="64" y="528">模型与协议适配</text>
+    <text x="64" y="606">沙箱、权限与执行环境</text>
+    <text x="64" y="684">观测、评测与版本升级</text>
+  </g>
+
+  <g stroke="#8a7f6d" stroke-width="1.5">
+    <rect x="240" y="180" width="220" height="56" rx="10" fill="#d8dee0"/><rect x="540" y="180" width="220" height="56" rx="10" fill="#f5f0e4"/><rect x="840" y="180" width="220" height="56" rx="10" fill="#f5f0e4"/>
+    <rect x="240" y="258" width="220" height="56" rx="10" fill="#ebe4d4"/><rect x="540" y="258" width="220" height="56" rx="10" fill="#d8dee0"/><rect x="840" y="258" width="220" height="56" rx="10" fill="#f5f0e4"/>
+    <rect x="240" y="336" width="220" height="56" rx="10" fill="#ebe4d4"/><rect x="540" y="336" width="220" height="56" rx="10" fill="#d8dee0"/><rect x="840" y="336" width="220" height="56" rx="10" fill="#f5f0e4"/>
+    <rect x="240" y="414" width="220" height="56" rx="10" fill="#d8dee0"/><rect x="540" y="414" width="220" height="56" rx="10" fill="#d8dee0"/><rect x="840" y="414" width="220" height="56" rx="10" fill="#f5f0e4"/>
+    <rect x="240" y="492" width="220" height="56" rx="10" fill="#d8dee0"/><rect x="540" y="492" width="220" height="56" rx="10" fill="#d8dee0"/><rect x="840" y="492" width="220" height="56" rx="10" fill="#f5f0e4"/>
+    <rect x="240" y="570" width="220" height="56" rx="10" fill="#ebe4d4"/><rect x="540" y="570" width="220" height="56" rx="10" fill="#ebe4d4"/><rect x="840" y="570" width="220" height="56" rx="10" fill="#f5f0e4"/>
+    <rect x="240" y="648" width="220" height="56" rx="10" fill="#ebe4d4"/><rect x="540" y="648" width="220" height="56" rx="10" fill="#ebe4d4"/><rect x="840" y="648" width="220" height="56" rx="10" fill="#f5f0e4"/>
+  </g>
+
+  <g font-size="16" text-anchor="middle" fill="#2b2620">
+    <text x="350" y="215">产品方</text><text x="650" y="215">团队自建</text><text x="950" y="215">团队自建</text>
+    <text x="350" y="293">共同承担</text><text x="650" y="293">团队自建</text><text x="950" y="293">团队自建</text>
+    <text x="350" y="371">共同承担</text><text x="650" y="371">团队配置与扩展</text><text x="950" y="371">团队自建</text>
+    <text x="350" y="449">产品方</text><text x="650" y="449">框架提供语义</text><text x="950" y="449">团队自建</text>
+    <text x="350" y="527">产品方</text><text x="650" y="527">框架适配</text><text x="950" y="527">团队自建</text>
+    <text x="350" y="605">共同承担</text><text x="650" y="605">共同承担</text><text x="950" y="605">团队自建</text>
+    <text x="350" y="683">共同承担</text><text x="650" y="683">共同承担</text><text x="950" y="683">团队自建</text>
+  </g>
+
+  <rect x="240" y="750" width="20" height="20" rx="4" fill="#d8dee0" stroke="#8a7f6d"/>
+  <text x="272" y="766" fill="#554d42" font-size="15">产品或框架拥有主要语义</text>
+  <rect x="510" y="750" width="20" height="20" rx="4" fill="#ebe4d4" stroke="#8a7f6d"/>
+  <text x="542" y="766" fill="#554d42" font-size="15">双方共同承担</text>
+  <rect x="730" y="750" width="20" height="20" rx="4" fill="#f5f0e4" stroke="#8a7f6d"/>
+  <text x="762" y="766" fill="#554d42" font-size="15">团队直接拥有</text>
+</svg>

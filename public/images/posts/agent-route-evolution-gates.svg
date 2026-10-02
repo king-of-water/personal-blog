@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="690" viewBox="0 0 1200 690" role="img" aria-labelledby="title desc">
+  <title id="title">Agent 建设路线的渐进演化门槛</title>
+  <desc id="desc">从单次模型调用到成熟产品、开发框架和自建 Harness 的渐进路线，每次升级都要求可复现的失败证据。</desc>
+  <rect width="1200" height="690" fill="#fbf8f1"/>
+  <text x="64" y="68" fill="#2b2620" font-size="34" font-weight="700">升级路线需要失败证据</text>
+  <text x="64" y="104" fill="#6f6659" font-size="18">先用更小的系统交付，再让真实瓶颈决定下一层复杂度</text>
+
+  <path d="M165 352 H1035" stroke="#5b5245" stroke-width="4" fill="none"/>
+  <polygon points="1035,352 1014,340 1014,364" fill="#5b5245"/>
+
+  <g>
+    <circle cx="170" cy="352" r="28" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <circle cx="455" cy="352" r="28" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <circle cx="740" cy="352" r="28" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <circle cx="1025" cy="352" r="28" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="170" y="359" text-anchor="middle" fill="#2b2620" font-size="18" font-weight="700">0</text>
+    <text x="455" y="359" text-anchor="middle" fill="#2b2620" font-size="18" font-weight="700">1</text>
+    <text x="740" y="359" text-anchor="middle" fill="#2b2620" font-size="18" font-weight="700">2</text>
+    <text x="1025" y="359" text-anchor="middle" fill="#2b2620" font-size="18" font-weight="700">3</text>
+  </g>
+
+  <g fill="#2b2620" text-anchor="middle">
+    <text x="170" y="264" font-size="23" font-weight="700">调用模型或固定 Workflow</text>
+    <text x="455" y="434" font-size="23" font-weight="700">成熟 Agent 产品</text>
+    <text x="740" y="264" font-size="23" font-weight="700">Agent 开发框架</text>
+    <text x="1025" y="434" font-size="23" font-weight="700">自建 Harness</text>
+  </g>
+  <g fill="#554d42" font-size="16" text-anchor="middle">
+    <text x="170" y="294">先验证任务是否值得自动化</text>
+    <text x="455" y="466">验证已有产品能否闭环</text>
+    <text x="740" y="294">定制状态、编排和业务工具</text>
+    <text x="1025" y="466">拥有运行时和执行语义</text>
+  </g>
+
+  <rect x="270" y="132" width="310" height="112" rx="14" fill="#f4eace" stroke="#8a7f6d"/>
+  <text x="294" y="168" fill="#8a6b12" font-size="15" font-weight="700">升级门槛 A</text>
+  <text x="294" y="199" fill="#2b2620" font-size="16">固定调用无法处理开放步骤，</text>
+  <text x="294" y="225" fill="#2b2620" font-size="16">且任务有清晰的环境反馈与验收。</text>
+
+  <rect x="560" y="448" width="310" height="112" rx="14" fill="#f4eace" stroke="#8a7f6d"/>
+  <text x="584" y="484" fill="#8a6b12" font-size="15" font-weight="700">升级门槛 B</text>
+  <text x="584" y="515" fill="#2b2620" font-size="16">产品的状态、权限或界面无法承载</text>
+  <text x="584" y="541" fill="#2b2620" font-size="16">已经确认的业务流程。</text>
+
+  <rect x="842" y="132" width="310" height="112" rx="14" fill="#f4eace" stroke="#8a7f6d"/>
+  <text x="866" y="168" fill="#8a6b12" font-size="15" font-weight="700">升级门槛 C</text>
+  <text x="866" y="199" fill="#2b2620" font-size="16">框架语义阻碍关键需求，且团队能</text>
+  <text x="866" y="225" fill="#2b2620" font-size="16">长期承担兼容、安全、恢复和评测。</text>
+
+  <text x="64" y="636" fill="#6f6659" font-size="16">升级不是单向承诺。若复杂度没有带来可测收益，应退回更简单的路线。</text>
+</svg>

@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Agent 三条建设路线的决策树</title>
+  <desc id="desc">从任务是否已有成熟产品、是否需要自定义业务流程、是否必须拥有运行时语义三个问题，选择成熟 Agent 产品、开发框架或自建 Harness。</desc>
+  <rect width="1200" height="760" fill="#fbf8f1"/>
+  <text x="72" y="72" fill="#2b2620" font-size="34" font-weight="700">先判断责任边界，再选 Agent 建设路线</text>
+  <text x="72" y="108" fill="#6f6659" font-size="18">产品、框架和自建 Harness 的差别，在于运行责任由谁承担</text>
+
+  <rect x="380" y="150" width="440" height="92" rx="18" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+  <text x="600" y="188" text-anchor="middle" fill="#2b2620" font-size="21" font-weight="700">任务是否已有边界匹配的成熟 Agent？</text>
+  <text x="600" y="218" text-anchor="middle" fill="#554d42" font-size="16">工具、权限、验收和工作界面都基本适配</text>
+
+  <path d="M380 196 H235 V310" fill="none" stroke="#5b5245" stroke-width="2"/>
+  <path d="M820 196 H965 V310" fill="none" stroke="#5b5245" stroke-width="2"/>
+  <polygon points="235,310 227,296 243,296" fill="#5b5245"/>
+  <polygon points="965,310 957,296 973,296" fill="#5b5245"/>
+  <text x="286" y="184" fill="#3d6340" font-size="16" font-weight="700">是</text>
+  <text x="902" y="184" fill="#943b37" font-size="16" font-weight="700">否</text>
+
+  <rect x="72" y="310" width="326" height="178" rx="18" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+  <text x="98" y="350" fill="#2f5d8a" font-size="15" font-weight="700">路线 A</text>
+  <text x="98" y="384" fill="#2b2620" font-size="25" font-weight="700">使用成熟 Agent 产品</text>
+  <text x="98" y="420" fill="#554d42" font-size="16">例如 Claude Code、Codex、OpenClaw</text>
+  <text x="98" y="450" fill="#554d42" font-size="16">你负责配置、授权、集成与验收</text>
+
+  <rect x="802" y="310" width="326" height="112" rx="18" fill="#ebe4d4" stroke="#8a7f6d" stroke-width="2"/>
+  <text x="965" y="350" text-anchor="middle" fill="#2b2620" font-size="20" font-weight="700">业务流程需要多少自定义？</text>
+  <text x="965" y="382" text-anchor="middle" fill="#554d42" font-size="16">重点看状态、审批、部署和恢复</text>
+
+  <path d="M884 422 V530 H660" fill="none" stroke="#5b5245" stroke-width="2"/>
+  <path d="M1046 422 V530 H1034" fill="none" stroke="#5b5245" stroke-width="2"/>
+  <polygon points="660,530 674,522 674,538" fill="#5b5245"/>
+  <polygon points="1034,530 1020,522 1020,538" fill="#5b5245"/>
+  <text x="704" y="512" fill="#3d6340" font-size="15" font-weight="700">标准能力可复用</text>
+  <text x="923" y="512" fill="#943b37" font-size="15" font-weight="700">运行语义必须自有</text>
+
+  <rect x="424" y="530" width="326" height="172" rx="18" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+  <text x="450" y="570" fill="#2f5d8a" font-size="15" font-weight="700">路线 B</text>
+  <text x="450" y="604" fill="#2b2620" font-size="25" font-weight="700">基于开发框架搭建</text>
+  <text x="450" y="640" fill="#554d42" font-size="16">复用状态、编排、持久化与工具抽象</text>
+  <text x="450" y="670" fill="#554d42" font-size="16">你负责业务节点、策略、评测与部署</text>
+
+  <rect x="802" y="530" width="326" height="172" rx="18" fill="#f5f0e4" stroke="#5b5245" stroke-width="2"/>
+  <text x="828" y="570" fill="#2f5d8a" font-size="15" font-weight="700">路线 C</text>
+  <text x="828" y="604" fill="#2b2620" font-size="25" font-weight="700">自建 Agent Harness</text>
+  <text x="828" y="640" fill="#554d42" font-size="16">自己定义循环、事件、状态与恢复语义</text>
+  <text x="828" y="670" fill="#554d42" font-size="16">同时承担安全、兼容、运维和演进成本</text>
+</svg>
