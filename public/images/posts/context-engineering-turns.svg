@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">一次 Coding Agent 任务中 Context 的逐轮变化</title>
+  <desc id="desc">任务约束贯穿定位、取证、编辑和验证四轮，动态工作材料随阶段变化，大型结果进入 Artifact 存储并按需回读。</desc>
+  <rect width="1200" height="700" fill="#fdfaf3"/>
+  <text x="60" y="62" fill="#2b2620" font-family="system-ui, sans-serif" font-size="34" font-weight="700">同一个任务，每一轮需要的 Context 不同</text>
+  <text x="60" y="94" fill="#6f6659" font-family="system-ui, sans-serif" font-size="17">固定约束持续存在，工作证据围绕当前决定更换</text>
+
+  <g font-family="system-ui, sans-serif">
+    <rect x="60" y="132" width="1080" height="72" rx="14" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="88" y="163" fill="#2f5d8a" font-size="14" font-weight="700" letter-spacing="2">PINNED</text>
+    <text x="88" y="188" fill="#2b2620" font-size="18" font-weight="650">用户目标 · 仓库规则 · 权限边界 · 完成条件</text>
+
+    <line x1="195" y1="204" x2="195" y2="534" stroke="#8a7f6d" stroke-width="2"/>
+    <line x1="470" y1="204" x2="470" y2="534" stroke="#8a7f6d" stroke-width="2"/>
+    <line x1="745" y1="204" x2="745" y2="534" stroke="#8a7f6d" stroke-width="2"/>
+    <line x1="1020" y1="204" x2="1020" y2="534" stroke="#8a7f6d" stroke-width="2"/>
+
+    <circle cx="195" cy="238" r="20" fill="#2f5d8a"/><text x="195" y="245" text-anchor="middle" fill="#ffffff" font-size="17" font-weight="700">1</text>
+    <circle cx="470" cy="238" r="20" fill="#2f5d8a"/><text x="470" y="245" text-anchor="middle" fill="#ffffff" font-size="17" font-weight="700">2</text>
+    <circle cx="745" cy="238" r="20" fill="#2f5d8a"/><text x="745" y="245" text-anchor="middle" fill="#ffffff" font-size="17" font-weight="700">3</text>
+    <circle cx="1020" cy="238" r="20" fill="#2f5d8a"/><text x="1020" y="245" text-anchor="middle" fill="#ffffff" font-size="17" font-weight="700">4</text>
+
+    <text x="195" y="286" text-anchor="middle" fill="#2b2620" font-size="22" font-weight="700">定位</text>
+    <text x="470" y="286" text-anchor="middle" fill="#2b2620" font-size="22" font-weight="700">取证</text>
+    <text x="745" y="286" text-anchor="middle" fill="#2b2620" font-size="22" font-weight="700">编辑</text>
+    <text x="1020" y="286" text-anchor="middle" fill="#2b2620" font-size="22" font-weight="700">验证</text>
+
+    <rect x="80" y="310" width="230" height="154" rx="12" fill="#f5f0e4" stroke="#8a7f6d"/>
+    <text x="101" y="342" fill="#2b2620" font-size="17" font-weight="650">目录与 Repo Map</text><text x="101" y="374" fill="#554d42" font-size="15">符号搜索候选</text><text x="101" y="404" fill="#554d42" font-size="15">少量 README</text><text x="101" y="434" fill="#554d42" font-size="15">当前缺口</text>
+
+    <rect x="355" y="310" width="230" height="154" rx="12" fill="#f5f0e4" stroke="#8a7f6d"/>
+    <text x="376" y="342" fill="#2b2620" font-size="17" font-weight="650">精确文件与调用方</text><text x="376" y="374" fill="#554d42" font-size="15">日志摘要与证据</text><text x="376" y="404" fill="#554d42" font-size="15">配置来源</text><text x="376" y="434" fill="#554d42" font-size="15">假设与反例</text>
+
+    <rect x="630" y="310" width="230" height="154" rx="12" fill="#f5f0e4" stroke="#8a7f6d"/>
+    <text x="651" y="342" fill="#2b2620" font-size="17" font-weight="650">文件最新版本</text><text x="651" y="374" fill="#554d42" font-size="15">接口与测试约束</text><text x="651" y="404" fill="#554d42" font-size="15">当前 diff</text><text x="651" y="434" fill="#554d42" font-size="15">失败路径检查点</text>
+
+    <rect x="905" y="310" width="230" height="154" rx="12" fill="#f5f0e4" stroke="#8a7f6d"/>
+    <text x="926" y="342" fill="#2b2620" font-size="17" font-weight="650">最终 diff</text><text x="926" y="374" fill="#554d42" font-size="15">测试输出与状态</text><text x="926" y="404" fill="#554d42" font-size="15">验收条件</text><text x="926" y="434" fill="#554d42" font-size="15">未验证事项</text>
+
+    <path d="M310 387 H345" stroke="#5b5245" stroke-width="2"/><path d="M345 387 l-11 -7 v14 z" fill="#5b5245"/>
+    <path d="M585 387 H620" stroke="#5b5245" stroke-width="2"/><path d="M620 387 l-11 -7 v14 z" fill="#5b5245"/>
+    <path d="M860 387 H895" stroke="#5b5245" stroke-width="2"/><path d="M895 387 l-11 -7 v14 z" fill="#5b5245"/>
+
+    <rect x="148" y="542" width="904" height="94" rx="14" fill="#ebe4d4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="180" y="578" fill="#2f5d8a" font-size="14" font-weight="700" letter-spacing="2">ARTIFACT &amp; EVENT STORE</text>
+    <text x="180" y="609" fill="#2b2620" font-size="17">完整日志 · 旧文件版本 · 搜索结果 · Patch · 测试报告 · Context manifest</text>
+    <path d="M195 534 V514 H1020 V534" stroke="#8a7f6d" stroke-width="2" stroke-dasharray="6 6" fill="none"/>
+  </g>
+  <text x="600" y="672" text-anchor="middle" fill="#6f6659" font-family="system-ui, sans-serif" font-size="15">工作窗口只带当前阶段需要的材料；完整证据保存在外部，并能按引用重新读取</text>
+</svg>

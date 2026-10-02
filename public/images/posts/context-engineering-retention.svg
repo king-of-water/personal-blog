@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">Context 压缩时不同信息的保真策略</title>
+  <desc id="desc">权限和用户约束需要原文固定，当前事实与状态使用结构化快照，已完成过程可摘要，大型证据外置为 Artifact，噪声和过期内容淘汰。</desc>
+  <rect width="1200" height="700" fill="#fdfaf3"/>
+  <text x="60" y="62" fill="#2b2620" font-family="system-ui, sans-serif" font-size="34" font-weight="700">压缩不是统一缩短，而是分级保真</text>
+  <text x="60" y="94" fill="#6f6659" font-family="system-ui, sans-serif" font-size="17">信息承担的责任不同，保留方式也应不同</text>
+
+  <g font-family="system-ui, sans-serif">
+    <text x="60" y="145" fill="#2f5d8a" font-size="14" font-weight="700" letter-spacing="2">HIGH FIDELITY</text>
+    <rect x="60" y="166" width="1080" height="88" rx="14" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="90" y="201" fill="#2b2620" font-size="21" font-weight="700">原文固定</text>
+    <text x="272" y="201" fill="#2b2620" font-size="17">权限边界 · 用户明确约束 · 完成条件 · 不可逆动作规则</text>
+    <text x="272" y="229" fill="#554d42" font-size="15">普通摘要不能覆盖；动作层仍需确定性校验</text>
+
+    <rect x="100" y="274" width="1000" height="88" rx="14" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="130" y="309" fill="#2b2620" font-size="21" font-weight="700">结构化快照</text>
+    <text x="312" y="309" fill="#2b2620" font-size="17">当前计划 · 已验证事实 · 文件版本 · 未决问题 · 失败路径</text>
+    <text x="312" y="337" fill="#554d42" font-size="15">字段带来源与时间，阶段切换时更新</text>
+
+    <rect x="140" y="382" width="920" height="88" rx="14" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="170" y="417" fill="#2b2620" font-size="21" font-weight="700">摘要加引用</text>
+    <text x="352" y="417" fill="#2b2620" font-size="17">已完成阶段 · 探索结论 · 工具结果概览</text>
+    <text x="352" y="445" fill="#554d42" font-size="15">需要细节时回到 Artifact，不让摘要独自证明事实</text>
+
+    <rect x="180" y="490" width="840" height="88" rx="14" fill="#ebe4d4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="210" y="525" fill="#2b2620" font-size="21" font-weight="700">外置或淘汰</text>
+    <text x="392" y="525" fill="#2b2620" font-size="17">完整日志 · 重复输出 · 旧文件 · 无关候选 · 过程噪声</text>
+    <text x="392" y="553" fill="#554d42" font-size="15">完整材料留在存储中；过期内容退出工作 Context</text>
+
+    <path d="M600 254 V270" stroke="#5b5245" stroke-width="2"/><path d="M600 270 l-8 -12 h16 z" fill="#5b5245"/>
+    <path d="M600 362 V378" stroke="#5b5245" stroke-width="2"/><path d="M600 378 l-8 -12 h16 z" fill="#5b5245"/>
+    <path d="M600 470 V486" stroke="#5b5245" stroke-width="2"/><path d="M600 486 l-8 -12 h16 z" fill="#5b5245"/>
+  </g>
+  <text x="60" y="626" fill="#943b37" font-family="system-ui, sans-serif" font-size="16" font-weight="650">风险：</text>
+  <text x="114" y="626" fill="#554d42" font-family="system-ui, sans-serif" font-size="16">把所有层统一总结，会让一条权限规则和一段重复日志承担相同的信息损失。</text>
+  <text x="60" y="660" fill="#6f6659" font-family="system-ui, sans-serif" font-size="15">越靠上越影响系统行为边界；越靠下越适合压缩、引用或从工作窗口移除。</text>
+</svg>

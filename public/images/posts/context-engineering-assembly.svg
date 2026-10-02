@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Agent Context 从信息源到模型输入的装配过程</title>
+  <desc id="desc">外部信息源经过 Context Builder 的选择、标记、预算和排序，形成单次模型调用可见的上下文，模型输出和工具结果再反馈为下一轮候选材料。</desc>
+  <rect width="1200" height="720" fill="#fdfaf3"/>
+  <text x="64" y="66" fill="#2b2620" font-family="system-ui, sans-serif" font-size="34" font-weight="700">Context 是每一轮重新装配的运行时视图</text>
+  <text x="64" y="98" fill="#6f6659" font-family="system-ui, sans-serif" font-size="17">外部世界可以很大，模型只看到当前决策需要的切片</text>
+
+  <text x="64" y="150" fill="#2f5d8a" font-family="system-ui, sans-serif" font-size="14" font-weight="700" letter-spacing="2">CANDIDATE SPACE</text>
+  <rect x="64" y="174" width="282" height="420" rx="18" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+  <g font-family="system-ui, sans-serif">
+    <rect x="88" y="202" width="234" height="64" rx="10" fill="#fbf8f1" stroke="#8a7f6d"/><text x="110" y="229" fill="#2b2620" font-size="18" font-weight="650">任务与项目规则</text><text x="110" y="251" fill="#554d42" font-size="14">目标、权限、完成条件</text>
+    <rect x="88" y="282" width="234" height="64" rx="10" fill="#fbf8f1" stroke="#8a7f6d"/><text x="110" y="309" fill="#2b2620" font-size="18" font-weight="650">仓库与知识库</text><text x="110" y="331" fill="#554d42" font-size="14">文件、文档、规则、索引</text>
+    <rect x="88" y="362" width="234" height="64" rx="10" fill="#fbf8f1" stroke="#8a7f6d"/><text x="110" y="389" fill="#2b2620" font-size="18" font-weight="650">轨迹与 Memory</text><text x="110" y="411" fill="#554d42" font-size="14">事件、检查点、历史经验</text>
+    <rect x="88" y="442" width="234" height="64" rx="10" fill="#fbf8f1" stroke="#8a7f6d"/><text x="110" y="469" fill="#2b2620" font-size="18" font-weight="650">工具与外部世界</text><text x="110" y="491" fill="#554d42" font-size="14">日志、网页、API 返回</text>
+    <rect x="88" y="522" width="234" height="46" rx="10" fill="#ebe4d4" stroke="#8a7f6d"/><text x="110" y="551" fill="#2b2620" font-size="15">大部分材料本轮不会进入模型</text>
+  </g>
+
+  <path d="M346 384 H430" stroke="#5b5245" stroke-width="3" fill="none"/><path d="M430 384 l-14 -9 v18 z" fill="#5b5245"/>
+  <text x="402" y="365" text-anchor="middle" fill="#6f6659" font-family="system-ui, sans-serif" font-size="14">候选</text>
+
+  <text x="438" y="150" fill="#2f5d8a" font-family="system-ui, sans-serif" font-size="14" font-weight="700" letter-spacing="2">CONTEXT BUILDER</text>
+  <rect x="430" y="174" width="300" height="420" rx="18" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+  <g font-family="system-ui, sans-serif">
+    <text x="462" y="222" fill="#2b2620" font-size="24" font-weight="700">围绕下一步决策选材料</text>
+    <line x1="462" y1="244" x2="698" y2="244" stroke="#8a7f6d"/>
+    <text x="462" y="283" fill="#2b2620" font-size="18" font-weight="650">01 选择</text><text x="558" y="283" fill="#554d42" font-size="16">当前缺口与任务阶段</text>
+    <text x="462" y="333" fill="#2b2620" font-size="18" font-weight="650">02 标记</text><text x="558" y="333" fill="#554d42" font-size="16">来源、信任、版本、时效</text>
+    <text x="462" y="383" fill="#2b2620" font-size="18" font-weight="650">03 预算</text><text x="558" y="383" fill="#554d42" font-size="16">原文、摘要、引用、淘汰</text>
+    <text x="462" y="433" fill="#2b2620" font-size="18" font-weight="650">04 排序</text><text x="558" y="433" fill="#554d42" font-size="16">让约束与证据可被使用</text>
+    <rect x="462" y="476" width="236" height="80" rx="10" fill="#fbf8f1" stroke="#8a7f6d"/>
+    <text x="482" y="508" fill="#2b2620" font-size="17" font-weight="650">输出 Context manifest</text><text x="482" y="535" fill="#554d42" font-size="14">选了什么，也记录排除了什么</text>
+  </g>
+
+  <path d="M730 384 H814" stroke="#5b5245" stroke-width="3" fill="none"/><path d="M814 384 l-14 -9 v18 z" fill="#5b5245"/>
+  <text x="772" y="365" text-anchor="middle" fill="#6f6659" font-family="system-ui, sans-serif" font-size="14">装配</text>
+
+  <text x="822" y="150" fill="#2f5d8a" font-family="system-ui, sans-serif" font-size="14" font-weight="700" letter-spacing="2">ONE MODEL CALL</text>
+  <rect x="814" y="174" width="322" height="420" rx="18" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+  <g font-family="system-ui, sans-serif">
+    <rect x="840" y="202" width="270" height="54" rx="9" fill="#d8dee0" stroke="#295279"/><text x="862" y="235" fill="#2b2620" font-size="17" font-weight="650">固定：任务契约与权限</text>
+    <rect x="840" y="270" width="270" height="54" rx="9" fill="#fbf8f1" stroke="#8a7f6d"/><text x="862" y="303" fill="#2b2620" font-size="17">当前状态与计划节点</text>
+    <rect x="840" y="338" width="270" height="54" rx="9" fill="#fbf8f1" stroke="#8a7f6d"/><text x="862" y="371" fill="#2b2620" font-size="17">相关证据与最新版本</text>
+    <rect x="840" y="406" width="270" height="54" rx="9" fill="#fbf8f1" stroke="#8a7f6d"/><text x="862" y="439" fill="#2b2620" font-size="17">近期事件与工具结果</text>
+    <rect x="840" y="474" width="270" height="84" rx="9" fill="#ebe4d4" stroke="#8a7f6d"/><text x="862" y="507" fill="#2b2620" font-size="17" font-weight="650">模型输出</text><text x="862" y="533" fill="#554d42" font-size="14">回答或候选工具调用</text>
+  </g>
+  <path d="M978 594 V650 H580 V602" stroke="#8a7f6d" stroke-width="2" stroke-dasharray="7 7" fill="none"/><path d="M580 602 l-9 14 h18 z" fill="#8a7f6d"/>
+  <text x="780" y="675" text-anchor="middle" fill="#6f6659" font-family="system-ui, sans-serif" font-size="15">工具结果与新状态回到候选空间，下一轮重新装配</text>
+</svg>
