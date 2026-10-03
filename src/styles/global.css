@@ -31,10 +31,13 @@ img { max-width: 100%; height: auto; }
 .brand-copy strong { font-size: 15px; letter-spacing: -0.02em; }
 .brand-copy small { color: var(--muted); font-size: 10px; letter-spacing: 0.04em; }
 .nav-links { display: flex; align-items: center; gap: 22px; color: #555b56; font-size: 13px; }
-.nav-links a { position: relative; transition: color 150ms ease; }
-.nav-links a:hover { color: var(--accent); }
+.nav-links a { position: relative; display: inline-block; transform-origin: center bottom; transition: color 180ms ease, transform 420ms var(--spring); }
+.nav-links a::after { content: ""; position: absolute; right: 0; bottom: -8px; left: 0; height: 2px; background: var(--accent); transform: scaleX(0); transform-origin: center; transition: transform 440ms var(--spring); }
+.nav-links a:is(:hover, :focus-visible) { color: var(--accent); transform: translateY(-3px) scale(1.045); }
+.nav-links a:is(:hover, :focus-visible)::after { transform: scaleX(0.55); }
+.nav-links a:active { transform: translateY(-1px) scale(0.96); transition-duration: 90ms; }
 .nav-links a.is-active { color: var(--accent); font-weight: 650; }
-.nav-links a.is-active::after { content: ""; position: absolute; right: 0; bottom: -8px; left: 0; height: 2px; background: var(--accent); }
+.nav-links a.is-active::after, .nav-links a.is-active:is(:hover, :focus-visible)::after { transform: scaleX(1); }
 main { min-height: calc(100vh - 150px); }
 
 .eyebrow { margin: 0; color: var(--accent); font-size: 11px; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; }
@@ -249,6 +252,7 @@ main { min-height: calc(100vh - 150px); }
 	.nav { min-height: auto; align-items: flex-start; flex-direction: column; gap: 13px; padding: 17px 0; }
 	.nav-links { width: 100%; gap: 14px; overflow-x: auto; white-space: nowrap; padding-bottom: 2px; }
 	.nav-links a.is-active::after { bottom: -3px; }
+	.nav-links a:is(:hover, :focus-visible), .nav-links a:active { transform: none; }
 	.home-intro { grid-template-columns: 1fr; gap: 30px; padding: 48px 0 42px; }
 	.intro-main h1 { font-size: clamp(36px, 11vw, 52px); }
 	.intro-aside { max-width: 280px; }
@@ -302,5 +306,7 @@ main { min-height: calc(100vh - 150px); }
 	.subcategory-grid > a:is(:hover, :focus-visible) small,
 	.library-sections ul a:is(:hover, :focus-visible),
 	.library-projects a:is(:hover, :focus-visible),
-	.article-toc-sidebar a:is(:hover, :focus-visible) { transform: none !important; }
+	.article-toc-sidebar a:is(:hover, :focus-visible),
+	.nav-links a:is(:hover, :focus-visible),
+	.nav-links a:active { transform: none !important; }
 }
