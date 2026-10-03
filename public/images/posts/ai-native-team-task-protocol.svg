@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="860" viewBox="0 0 1440 860" role="img" aria-labelledby="title desc">
+  <title id="title">AI Native 研发任务的状态、门禁与回退路径</title>
+  <desc id="desc">任务从目标确认经过产品规格、方案契约、实现验证和灰度发布，每一步都有证据门禁；缺少事实、契约冲突、测试失败和护栏越界会回退或升级给人。</desc>
+  <rect width="1440" height="860" fill="#fdfaf3"/>
+  <style>
+    .title{font:700 32px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2b2620}.sub{font:400 16px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#6f6659}.k{font:700 13px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2f5d8a;letter-spacing:1px}.h{font:700 18px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2b2620}.p{font:400 13px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#554d42}.gate{font:600 13px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#466b48}.fail{font:600 13px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#943b37}
+  </style>
+  <text x="70" y="68" class="title">任务协议：每一步都要知道如何前进、回退和接管</text>
+  <text x="70" y="101" class="sub">自然语言工件承载复杂语义，状态机保存确定的运行边界</text>
+  <rect x="70" y="180" width="210" height="145" rx="10" fill="#f5f0e4" stroke="#8a7f6d"/>
+  <text x="95" y="216" class="k">01 · GOAL</text><text x="95" y="255" class="h">目标确认</text><text x="95" y="286" class="p">结果指标 · 护栏 · Owner</text>
+  <line x1="280" y1="252" x2="330" y2="252" stroke="#5b5245" stroke-width="2"/><path d="M320 244l10 8-10 8" fill="none" stroke="#5b5245" stroke-width="2"/><text x="286" y="234" class="gate">目标契约</text>
+  <rect x="330" y="180" width="210" height="145" rx="10" fill="#f5f0e4" stroke="#8a7f6d"/>
+  <text x="355" y="216" class="k">02 · PRODUCT</text><text x="355" y="255" class="h">产品规格</text><text x="355" y="286" class="p">行为 · 范围 · 未决问题</text>
+  <line x1="540" y1="252" x2="590" y2="252" stroke="#5b5245" stroke-width="2"/><path d="M580 244l10 8-10 8" fill="none" stroke="#5b5245" stroke-width="2"/><text x="547" y="234" class="gate">Owner 确认</text>
+  <rect x="590" y="180" width="210" height="145" rx="10" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+  <text x="615" y="216" class="k">03 · CONTRACT</text><text x="615" y="255" class="h">方案与契约</text><text x="615" y="286" class="p">依赖 · 责任 · 发布顺序</text>
+  <line x1="800" y1="252" x2="850" y2="252" stroke="#5b5245" stroke-width="2"/><path d="M840 244l10 8-10 8" fill="none" stroke="#5b5245" stroke-width="2"/><text x="806" y="234" class="gate">契约评审</text>
+  <rect x="850" y="180" width="210" height="145" rx="10" fill="#f5f0e4" stroke="#8a7f6d"/>
+  <text x="875" y="216" class="k">04 · BUILD</text><text x="875" y="255" class="h">实现与测试</text><text x="875" y="286" class="p">Diff · 单测 · 集成证据</text>
+  <line x1="1060" y1="252" x2="1110" y2="252" stroke="#5b5245" stroke-width="2"/><path d="M1100 244l10 8-10 8" fill="none" stroke="#5b5245" stroke-width="2"/><text x="1067" y="234" class="gate">验收通过</text>
+  <rect x="1110" y="180" width="260" height="145" rx="10" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+  <text x="1135" y="216" class="k">05 · RELEASE</text><text x="1135" y="255" class="h">灰度与观测</text><text x="1135" y="286" class="p">审批 · 回执 · 指标 · 回滚</text>
+  <rect x="100" y="470" width="250" height="105" rx="10" fill="#eee3dc" stroke="#943b37"/>
+  <text x="125" y="507" class="k">HUMAN DECISION</text><text x="125" y="542" class="h">目标冲突 / 规则例外</text>
+  <rect x="430" y="470" width="250" height="105" rx="10" fill="#eee3dc" stroke="#943b37"/>
+  <text x="455" y="507" class="k">CLARIFICATION</text><text x="455" y="542" class="h">事实缺失 / 规格驳回</text>
+  <rect x="760" y="470" width="250" height="105" rx="10" fill="#eee3dc" stroke="#943b37"/>
+  <text x="785" y="507" class="k">REWORK</text><text x="785" y="542" class="h">契约冲突 / 测试失败</text>
+  <rect x="1090" y="470" width="250" height="105" rx="10" fill="#eee3dc" stroke="#943b37"/>
+  <text x="1115" y="507" class="k">STOP / ROLLBACK</text><text x="1115" y="542" class="h">护栏越界 / 证据异常</text>
+  <path d="M175 325V470M435 325V430H555V470M695 325V410H885V470M955 325V450H885V470M1240 325V470" fill="none" stroke="#a8433f" stroke-width="2" stroke-dasharray="7 6"/>
+  <path d="M225 470V390H175V325M555 470V380H435V325M885 470V380H695V325M1215 470V390H1240V325" fill="none" stroke="#a8433f" stroke-width="1.5" opacity=".75"/>
+  <rect x="70" y="690" width="1300" height="92" rx="10" fill="#fbf8f1" stroke="#8a7f6d"/>
+  <text x="100" y="725" class="k">CONTROL PLANE GUARANTEES</text><text x="100" y="758" class="h">幂等 · 超时 · 预算 · 权限 · 审批 · 检查点 · 审计，不依赖模型自己记住</text>
+  <text x="70" y="825" class="fail">红色路径不是异常旁支，而是生产流程必须被设计和演练的部分</text>
+</svg>

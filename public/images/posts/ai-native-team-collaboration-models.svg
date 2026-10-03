@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900" role="img" aria-labelledby="title desc">
+  <title id="title">传统人肉接力、AI 辅助与 AI Native 任务网络的差别</title>
+  <desc id="desc">传统流程由人搬运信息，AI 辅助让每个角色局部提速，AI Native 通过共享任务状态和证据协议让 Agent 推进低风险流程、人负责关键判断。</desc>
+  <rect width="1440" height="900" fill="#fdfaf3"/>
+  <style>
+    .title{font:700 32px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2b2620}.sub{font:400 16px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#6f6659}.k{font:700 13px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2f5d8a;letter-spacing:1px}.h{font:700 21px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2b2620}.p{font:400 14px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#554d42}.note{font:600 14px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#943b37}
+  </style>
+  <text x="70" y="68" class="title">局部使用 AI，与重构协同是两件事</text>
+  <text x="70" y="101" class="sub">差别不在 Agent 数量，而在任务状态、交接协议和判断权如何安排</text>
+  <rect x="70" y="160" width="400" height="650" rx="14" fill="#f5f0e4" stroke="#8a7f6d"/>
+  <text x="100" y="205" class="k">01 · HUMAN RELAY</text><text x="100" y="245" class="h">传统人肉接力</text>
+  <rect x="100" y="295" width="82" height="64" rx="8" fill="#fbf8f1" stroke="#8a7f6d"/><text x="125" y="335" class="p">需求</text><line x1="182" y1="327" x2="208" y2="327" stroke="#5b5245" stroke-width="2"/>
+  <rect x="208" y="295" width="82" height="64" rx="8" fill="#fbf8f1" stroke="#8a7f6d"/><text x="233" y="335" class="p">产品</text><line x1="290" y1="327" x2="316" y2="327" stroke="#5b5245" stroke-width="2"/>
+  <rect x="316" y="295" width="82" height="64" rx="8" fill="#fbf8f1" stroke="#8a7f6d"/><text x="341" y="335" class="p">研发</text>
+  <circle cx="249" cy="490" r="52" fill="#eee3dc" stroke="#943b37"/><text x="220" y="486" class="h">人</text><text x="205" y="515" class="p">补上下文</text>
+  <path d="M141 359L220 448M249 359V438M357 359L278 448" stroke="#8a7f6d" stroke-width="1.8"/>
+  <text x="100" y="610" class="p">人负责传递、解释、催促</text><text x="100" y="640" class="p">状态散在聊天和个人记忆中</text><text x="100" y="690" class="note">瓶颈：等待与语义损失</text>
+  <rect x="520" y="160" width="400" height="650" rx="14" fill="#f5f0e4" stroke="#8a7f6d"/>
+  <text x="550" y="205" class="k">02 · AI ASSISTED</text><text x="550" y="245" class="h">旧流程上的局部提速</text>
+  <rect x="550" y="295" width="82" height="64" rx="8" fill="#d8dee0" stroke="#295279"/><text x="575" y="335" class="p">需求</text><line x1="632" y1="327" x2="658" y2="327" stroke="#5b5245" stroke-width="2"/>
+  <rect x="658" y="295" width="82" height="64" rx="8" fill="#d8dee0" stroke="#295279"/><text x="683" y="335" class="p">产品</text><line x1="740" y1="327" x2="766" y2="327" stroke="#5b5245" stroke-width="2"/>
+  <rect x="766" y="295" width="82" height="64" rx="8" fill="#d8dee0" stroke="#295279"/><text x="791" y="335" class="p">研发</text>
+  <circle cx="591" cy="430" r="29" fill="#dee3d6" stroke="#466b48"/><text x="577" y="436" class="p">AI</text><circle cx="699" cy="430" r="29" fill="#dee3d6" stroke="#466b48"/><text x="685" y="436" class="p">AI</text><circle cx="807" cy="430" r="29" fill="#dee3d6" stroke="#466b48"/><text x="793" y="436" class="p">AI</text>
+  <circle cx="699" cy="540" r="52" fill="#eee3dc" stroke="#943b37"/><text x="670" y="536" class="h">人</text><text x="655" y="565" class="p">继续串联</text>
+  <path d="M591 459L665 505M699 459V488M807 459L733 505" stroke="#8a7f6d" stroke-width="1.8"/>
+  <text x="550" y="640" class="p">每段生成更快，交接仍靠复制与确认</text><text x="550" y="690" class="note">风险：产物变多，审查和返工堆积</text>
+  <rect x="970" y="160" width="400" height="650" rx="14" fill="#dee3d6" stroke="#295279" stroke-width="2"/>
+  <text x="1000" y="205" class="k">03 · AI NATIVE</text><text x="1000" y="245" class="h">共享状态上的任务网络</text>
+  <rect x="1000" y="290" width="340" height="85" rx="9" fill="#fbf8f1" stroke="#8a7f6d"/><text x="1025" y="322" class="k">HUMAN CONTROL</text><text x="1025" y="352" class="p">目标 · 取舍 · 授权 · 例外</text>
+  <rect x="1000" y="420" width="340" height="115" rx="9" fill="#f5f0e4" stroke="#8a7f6d"/><text x="1025" y="452" class="k">SHARED TASK STATE</text><text x="1025" y="482" class="p">任务图 · 工件 · 证据 · 未决问题</text><text x="1025" y="510" class="p">确定性控制面保存状态与门禁</text>
+  <rect x="1000" y="585" width="98" height="70" rx="8" fill="#fbf8f1" stroke="#466b48"/><text x="1022" y="625" class="p">产品 Agent</text><rect x="1121" y="585" width="98" height="70" rx="8" fill="#fbf8f1" stroke="#466b48"/><text x="1143" y="625" class="p">研发 Agent</text><rect x="1242" y="585" width="98" height="70" rx="8" fill="#fbf8f1" stroke="#466b48"/><text x="1264" y="625" class="p">测试 Agent</text>
+  <path d="M1170 375V420M1049 535V585M1170 535V585M1291 535V585" stroke="#295279" stroke-width="2"/>
+  <text x="1000" y="715" class="p">Agent 执行和串联，人处理关键判断</text><text x="1000" y="750" class="note">收益：减少等待，同时保留责任边界</text>
+</svg>
