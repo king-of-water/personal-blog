@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
+  <title id="title">长任务运行闭环</title>
+  <desc id="desc">任务由事件唤醒，Worker 读取状态后推进有限步骤，记录动作和证据，随后等待、完成或进入人工处理。</desc>
+  <rect width="1200" height="620" fill="#f6f4ef"/>
+  <text x="70" y="70" fill="#1f2421" font-family="Arial, sans-serif" font-size="30" font-weight="700">长任务不是一条不断开的循环</text>
+  <text x="70" y="105" fill="#6f756f" font-family="Arial, sans-serif" font-size="16">每次唤醒只推进一段，事实与副作用独立落盘</text>
+  <g font-family="Arial, sans-serif">
+    <rect x="70" y="165" width="200" height="100" rx="12" fill="#e7efe9" stroke="#1b7655" stroke-width="2"/>
+    <text x="170" y="205" text-anchor="middle" fill="#1b7655" font-size="18" font-weight="700">唤醒事件</text>
+    <text x="170" y="235" text-anchor="middle" fill="#59615b" font-size="14">用户 · Webhook · Timer</text>
+    <path d="M270 215H345" stroke="#7d847e" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="350" y="145" width="260" height="140" rx="12" fill="#ffffff" stroke="#c8ccc7" stroke-width="2"/>
+    <text x="480" y="188" text-anchor="middle" fill="#1f2421" font-size="18" font-weight="700">读取快照与事件</text>
+    <text x="480" y="220" text-anchor="middle" fill="#59615b" font-size="14">校验 revision、租约与预算</text>
+    <text x="480" y="248" text-anchor="middle" fill="#59615b" font-size="14">恢复下一轮 Context</text>
+    <path d="M610 215H685" stroke="#7d847e" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="690" y="145" width="220" height="140" rx="12" fill="#ffffff" stroke="#c8ccc7" stroke-width="2"/>
+    <text x="800" y="188" text-anchor="middle" fill="#1f2421" font-size="18" font-weight="700">推进有限步骤</text>
+    <text x="800" y="220" text-anchor="middle" fill="#59615b" font-size="14">模型判断 · 工具执行</text>
+    <text x="800" y="248" text-anchor="middle" fill="#59615b" font-size="14">验收与预算检查</text>
+    <path d="M910 215H985" stroke="#7d847e" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="990" y="165" width="150" height="100" rx="12" fill="#e7efe9" stroke="#1b7655" stroke-width="2"/>
+    <text x="1065" y="205" text-anchor="middle" fill="#1b7655" font-size="18" font-weight="700">写入事实</text>
+    <text x="1065" y="235" text-anchor="middle" fill="#59615b" font-size="14">状态 · 回执 · 证据</text>
+    <path d="M1065 265V335" stroke="#7d847e" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="760" y="350" width="170" height="90" rx="12" fill="#ffffff" stroke="#c8ccc7" stroke-width="2"/>
+    <text x="845" y="388" text-anchor="middle" fill="#1f2421" font-size="17" font-weight="700">等待</text>
+    <text x="845" y="416" text-anchor="middle" fill="#59615b" font-size="13">释放 Worker</text>
+    <rect x="970" y="350" width="170" height="90" rx="12" fill="#e7efe9" stroke="#1b7655" stroke-width="2"/>
+    <text x="1055" y="388" text-anchor="middle" fill="#1b7655" font-size="17" font-weight="700">完成</text>
+    <text x="1055" y="416" text-anchor="middle" fill="#59615b" font-size="13">冻结证据与清理</text>
+    <rect x="550" y="350" width="170" height="90" rx="12" fill="#f5ece8" stroke="#a45d42" stroke-width="2"/>
+    <text x="635" y="388" text-anchor="middle" fill="#8d4c35" font-size="17" font-weight="700">需要人工处理</text>
+    <text x="635" y="416" text-anchor="middle" fill="#6d625d" font-size="13">结果未知 · 永久拒绝</text>
+    <path d="M1065 335H635" stroke="#7d847e" stroke-width="2"/>
+    <path d="M845 335V350M1055 335V350M635 335V350" stroke="#7d847e" stroke-width="2"/>
+    <path d="M845 440V505H170V265" fill="none" stroke="#1b7655" stroke-width="2" stroke-dasharray="8 7" marker-end="url(#arrowGreen)"/>
+    <text x="495" y="535" text-anchor="middle" fill="#1b7655" font-size="14">下一次事件再次唤醒同一任务</text>
+  </g>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0L8 3L0 6Z" fill="#7d847e"/></marker>
+    <marker id="arrowGreen" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0L8 3L0 6Z" fill="#1b7655"/></marker>
+  </defs>
+</svg>

@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520" role="img" aria-labelledby="title desc">
+  <title id="title">高风险 Agent 动作的执行关卡</title>
+  <desc id="desc">模型提出动作后，运行时依次检查身份、资源范围、策略与人工批准，工具执行后保存回执，任一关卡失败都不会执行。</desc>
+  <rect width="1200" height="520" fill="#f6f4ef"/>
+  <text x="65" y="65" fill="#1f2421" font-family="Arial, sans-serif" font-size="30" font-weight="700">模型提出动作，运行时决定是否执行</text>
+  <text x="65" y="100" fill="#6f756f" font-family="Arial, sans-serif" font-size="16">每个关卡产生结构化判定和审计证据</text>
+  <g font-family="Arial, sans-serif">
+    <rect x="65" y="185" width="165" height="110" rx="12" fill="#e7efe9" stroke="#1b7655" stroke-width="2"/>
+    <text x="147" y="228" text-anchor="middle" fill="#1b7655" font-size="17" font-weight="700">候选工具调用</text>
+    <text x="147" y="258" text-anchor="middle" fill="#59615b" font-size="13">模型无直接执行权</text>
+    <path d="M230 240H285" stroke="#7d847e" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="295" y="175" width="150" height="130" rx="12" fill="#ffffff" stroke="#c8ccc7" stroke-width="2"/>
+    <text x="370" y="218" text-anchor="middle" fill="#1f2421" font-size="17" font-weight="700">身份</text>
+    <text x="370" y="250" text-anchor="middle" fill="#59615b" font-size="13">用户 · 租户 · 任务</text>
+    <text x="370" y="276" text-anchor="middle" fill="#59615b" font-size="13">短期能力凭证</text>
+    <path d="M445 240H500" stroke="#7d847e" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="510" y="175" width="150" height="130" rx="12" fill="#ffffff" stroke="#c8ccc7" stroke-width="2"/>
+    <text x="585" y="218" text-anchor="middle" fill="#1f2421" font-size="17" font-weight="700">策略</text>
+    <text x="585" y="250" text-anchor="middle" fill="#59615b" font-size="13">Schema · 资源范围</text>
+    <text x="585" y="276" text-anchor="middle" fill="#59615b" font-size="13">风险与预算</text>
+    <path d="M660 240H715" stroke="#7d847e" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="725" y="175" width="150" height="130" rx="12" fill="#ffffff" stroke="#c8ccc7" stroke-width="2"/>
+    <text x="800" y="218" text-anchor="middle" fill="#1f2421" font-size="17" font-weight="700">批准</text>
+    <text x="800" y="250" text-anchor="middle" fill="#59615b" font-size="13">绑定参数与版本</text>
+    <text x="800" y="276" text-anchor="middle" fill="#59615b" font-size="13">内容变化即失效</text>
+    <path d="M875 240H930" stroke="#7d847e" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="940" y="175" width="195" height="130" rx="12" fill="#e7efe9" stroke="#1b7655" stroke-width="2"/>
+    <text x="1037" y="218" text-anchor="middle" fill="#1b7655" font-size="17" font-weight="700">执行与回执</text>
+    <text x="1037" y="250" text-anchor="middle" fill="#59615b" font-size="13">幂等键 · 外部 ID</text>
+    <text x="1037" y="276" text-anchor="middle" fill="#59615b" font-size="13">成功 / 失败 / 未知</text>
+    <path d="M370 305V365M585 305V365M800 305V365" stroke="#a45d42" stroke-width="2" stroke-dasharray="6 5"/>
+    <rect x="295" y="365" width="580" height="70" rx="10" fill="#f5ece8" stroke="#a45d42"/>
+    <text x="585" y="395" text-anchor="middle" fill="#8d4c35" font-size="15" font-weight="700">拒绝、等待授权或转人工</text>
+    <text x="585" y="420" text-anchor="middle" fill="#6d625d" font-size="13">失败停在执行之前，原因写入 Trace 与审计日志</text>
+  </g>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0L8 3L0 6Z" fill="#7d847e"/></marker></defs>
+</svg>

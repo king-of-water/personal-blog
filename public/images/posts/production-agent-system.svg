@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">生产 Agent 系统分层</title>
+  <desc id="desc">请求经身份与策略进入任务系统，控制面提供版本、权限和预算，执行面运行模型、工具与沙箱，所有动作进入状态和观测系统。</desc>
+  <rect width="1200" height="700" fill="#f6f4ef"/>
+  <text x="65" y="65" fill="#1f2421" font-family="Arial, sans-serif" font-size="30" font-weight="700">生产化把概率决策放进确定边界</text>
+  <text x="65" y="100" fill="#6f756f" font-family="Arial, sans-serif" font-size="16">身份、权限、预算、状态和证据由运行平台持有</text>
+  <g font-family="Arial, sans-serif">
+    <rect x="65" y="145" width="1070" height="100" rx="14" fill="#e7efe9" stroke="#1b7655" stroke-width="2"/>
+    <text x="95" y="183" fill="#1b7655" font-size="16" font-weight="700">控制面</text>
+    <text x="95" y="216" fill="#445049" font-size="15">租户配置</text>
+    <text x="285" y="216" fill="#445049" font-size="15">身份与策略</text>
+    <text x="485" y="216" fill="#445049" font-size="15">模型 / Prompt / 工具版本</text>
+    <text x="780" y="216" fill="#445049" font-size="15">预算与并发</text>
+    <text x="965" y="216" fill="#445049" font-size="15">灰度与 Kill switch</text>
+    <rect x="65" y="285" width="220" height="160" rx="12" fill="#ffffff" stroke="#c8ccc7" stroke-width="2"/>
+    <text x="175" y="325" text-anchor="middle" fill="#1f2421" font-size="18" font-weight="700">入口与队列</text>
+    <text x="175" y="360" text-anchor="middle" fill="#59615b" font-size="14">认证 · 限流 · 优先级</text>
+    <text x="175" y="390" text-anchor="middle" fill="#59615b" font-size="14">Webhook · Timer · 背压</text>
+    <path d="M285 365H350" stroke="#7d847e" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="360" y="285" width="260" height="160" rx="12" fill="#ffffff" stroke="#c8ccc7" stroke-width="2"/>
+    <text x="490" y="325" text-anchor="middle" fill="#1f2421" font-size="18" font-weight="700">Agent Runtime</text>
+    <text x="490" y="360" text-anchor="middle" fill="#59615b" font-size="14">Context · Model · Loop</text>
+    <text x="490" y="390" text-anchor="middle" fill="#59615b" font-size="14">恢复 · 验收 · Human-in-loop</text>
+    <path d="M620 365H685" stroke="#7d847e" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="695" y="285" width="200" height="160" rx="12" fill="#ffffff" stroke="#c8ccc7" stroke-width="2"/>
+    <text x="795" y="325" text-anchor="middle" fill="#1f2421" font-size="18" font-weight="700">工具网关</text>
+    <text x="795" y="360" text-anchor="middle" fill="#59615b" font-size="14">Schema · Policy</text>
+    <text x="795" y="390" text-anchor="middle" fill="#59615b" font-size="14">幂等 · 回执 · 对账</text>
+    <path d="M895 365H960" stroke="#7d847e" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="970" y="285" width="165" height="160" rx="12" fill="#ffffff" stroke="#c8ccc7" stroke-width="2"/>
+    <text x="1052" y="325" text-anchor="middle" fill="#1f2421" font-size="18" font-weight="700">隔离执行</text>
+    <text x="1052" y="360" text-anchor="middle" fill="#59615b" font-size="14">API · Browser</text>
+    <text x="1052" y="390" text-anchor="middle" fill="#59615b" font-size="14">CLI · Sandbox</text>
+    <rect x="65" y="490" width="1070" height="115" rx="14" fill="#ffffff" stroke="#c8ccc7" stroke-width="2"/>
+    <text x="95" y="530" fill="#1f2421" font-size="16" font-weight="700">状态与证据面</text>
+    <text x="95" y="565" fill="#59615b" font-size="14">任务状态 / 动作账本</text>
+    <text x="345" y="565" fill="#59615b" font-size="14">Trace / Log / Metric</text>
+    <text x="585" y="565" fill="#59615b" font-size="14">成本 / 预算 / 配额</text>
+    <text x="815" y="565" fill="#59615b" font-size="14">审计 / 评测 / 事故对账</text>
+    <path d="M175 445V490M490 445V490M795 445V490M1052 445V490" stroke="#1b7655" stroke-width="2" stroke-dasharray="7 6" marker-end="url(#arrowGreen)"/>
+    <path d="M600 245V275" stroke="#1b7655" stroke-width="2" marker-end="url(#arrowGreen)"/>
+  </g>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0L8 3L0 6Z" fill="#7d847e"/></marker>
+    <marker id="arrowGreen" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0L8 3L0 6Z" fill="#1b7655"/></marker>
+  </defs>
+</svg>

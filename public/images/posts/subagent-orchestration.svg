@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="650" viewBox="0 0 1200 650" role="img" aria-labelledby="title desc">
+  <title id="title">Subagent 协作与汇总</title>
+  <desc id="desc">主 Agent 依据任务图把独立调查交给三个隔离的 Subagent，子任务返回结构化证据，汇总器检查覆盖与冲突后产生一个结果。</desc>
+  <rect width="1200" height="650" fill="#f6f4ef"/>
+  <text x="70" y="68" fill="#1f2421" font-family="Arial, sans-serif" font-size="30" font-weight="700">并行的前提是独立，汇总的前提是证据</text>
+  <text x="70" y="102" fill="#6f756f" font-family="Arial, sans-serif" font-size="16">主 Agent 保留根任务所有权，Subagent 只拥有有限 Context、工具与预算</text>
+  <g font-family="Arial, sans-serif">
+    <rect x="70" y="165" width="220" height="120" rx="12" fill="#e7efe9" stroke="#1b7655" stroke-width="2"/>
+    <text x="180" y="205" text-anchor="middle" fill="#1b7655" font-size="19" font-weight="700">主 Agent</text>
+    <text x="180" y="236" text-anchor="middle" fill="#59615b" font-size="14">目标 · 依赖图 · 总预算</text>
+    <text x="180" y="261" text-anchor="middle" fill="#59615b" font-size="14">唯一结果 Owner</text>
+    <path d="M290 225H360" stroke="#7d847e" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="370" y="145" width="210" height="90" rx="10" fill="#ffffff" stroke="#c8ccc7" stroke-width="2"/>
+    <text x="475" y="181" text-anchor="middle" fill="#1f2421" font-size="17" font-weight="700">服务端调查</text>
+    <text x="475" y="208" text-anchor="middle" fill="#59615b" font-size="13">只读代码 · 调用面证据</text>
+    <rect x="370" y="260" width="210" height="90" rx="10" fill="#ffffff" stroke="#c8ccc7" stroke-width="2"/>
+    <text x="475" y="296" text-anchor="middle" fill="#1f2421" font-size="17" font-weight="700">Web 调查</text>
+    <text x="475" y="323" text-anchor="middle" fill="#59615b" font-size="13">独立 Context · 文件范围</text>
+    <rect x="370" y="375" width="210" height="90" rx="10" fill="#ffffff" stroke="#c8ccc7" stroke-width="2"/>
+    <text x="475" y="411" text-anchor="middle" fill="#1f2421" font-size="17" font-weight="700">移动端调查</text>
+    <text x="475" y="438" text-anchor="middle" fill="#59615b" font-size="13">独立工具 · 调用预算</text>
+    <path d="M290 225V420H360M290 305H360M290 190H360" fill="none" stroke="#7d847e" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="680" y="195" width="210" height="220" rx="12" fill="#ffffff" stroke="#c8ccc7" stroke-width="2"/>
+    <text x="785" y="235" text-anchor="middle" fill="#1f2421" font-size="18" font-weight="700">结构化产物</text>
+    <text x="710" y="275" fill="#59615b" font-size="14">• claim</text>
+    <text x="710" y="307" fill="#59615b" font-size="14">• evidence</text>
+    <text x="710" y="339" fill="#59615b" font-size="14">• gaps</text>
+    <text x="710" y="371" fill="#59615b" font-size="14">• confidence</text>
+    <path d="M580 190H650V260H680M580 305H680M580 420H650V350H680" fill="none" stroke="#7d847e" stroke-width="2" marker-end="url(#arrow)"/>
+    <path d="M890 305H950" stroke="#7d847e" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="960" y="195" width="170" height="220" rx="12" fill="#e7efe9" stroke="#1b7655" stroke-width="2"/>
+    <text x="1045" y="235" text-anchor="middle" fill="#1b7655" font-size="18" font-weight="700">汇总与验收</text>
+    <text x="1045" y="278" text-anchor="middle" fill="#59615b" font-size="14">覆盖检查</text>
+    <text x="1045" y="310" text-anchor="middle" fill="#59615b" font-size="14">冲突验证</text>
+    <text x="1045" y="342" text-anchor="middle" fill="#59615b" font-size="14">依赖排序</text>
+    <text x="1045" y="374" text-anchor="middle" fill="#59615b" font-size="14">根任务收口</text>
+    <rect x="285" y="520" width="630" height="58" rx="10" fill="#f5ece8" stroke="#a45d42"/>
+    <text x="600" y="555" text-anchor="middle" fill="#7e4f3d" font-size="15">共享上下文多、修改资源重叠、依赖频繁时，保持单 Agent 或串行 Workflow</text>
+  </g>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0L8 3L0 6Z" fill="#7d847e"/></marker></defs>
+</svg>
