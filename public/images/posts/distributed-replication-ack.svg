@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="760" viewBox="0 0 1440 760" role="img" aria-labelledby="title desc">
+  <title id="title">复制链路中的三个确认点</title>
+  <desc id="desc">客户端写入 Primary 后，可以在本地写入、Replica 收到或 Replica 持久化三个位置返回成功，不同确认点对应不同的数据保留条件。</desc>
+  <rect width="1440" height="760" fill="#f7f7f3"/>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#17684f"/></marker></defs>
+  <style>
+    .title{font:700 34px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#1d201e}
+    .sub{font:400 17px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#69716d}
+    .h{font:700 22px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#1d201e}
+    .p{font:400 16px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#59605d}
+    .small{font:600 15px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#17684f}
+  </style>
+  <text x="90" y="72" class="title">副本数量不决定语义，确认点才决定</text>
+  <text x="90" y="108" class="sub">同样是 Primary + Replica，成功响应可以代表三种不同强度的事实</text>
+
+  <rect x="90" y="190" width="220" height="96" rx="12" fill="#ffffff" stroke="#d8ddd9"/>
+  <text x="152" y="232" class="h">客户端</text><text x="131" y="262" class="p">request_id = 001</text>
+  <rect x="455" y="190" width="250" height="96" rx="12" fill="#e9f2ee" stroke="#b8d1c7"/>
+  <text x="527" y="232" class="h">Primary</text><text x="501" y="262" class="p">追加本地 WAL</text>
+  <rect x="850" y="190" width="250" height="96" rx="12" fill="#ffffff" stroke="#d8ddd9"/>
+  <text x="923" y="232" class="h">Replica</text><text x="899" y="262" class="p">接收并持久化</text>
+  <rect x="1195" y="190" width="155" height="96" rx="12" fill="#ffffff" stroke="#d8ddd9"/>
+  <text x="1236" y="232" class="h">磁盘</text><text x="1228" y="262" class="p">稳定介质</text>
+  <path d="M310 238h135M705 238h135M1100 238h85" stroke="#17684f" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+
+  <rect x="90" y="346" width="1260" height="92" rx="10" fill="#ffffff" stroke="#d8ddd9"/>
+  <circle cx="475" cy="392" r="15" fill="#17684f"/><text x="470" y="398" style="font:700 15px sans-serif;fill:#fff">1</text>
+  <text x="515" y="383" class="h">Primary 本地写入后确认</text><text x="515" y="414" class="p">延迟最低；Primary 永久损坏时，已返回成功的写入仍可能丢失</text>
+
+  <rect x="90" y="458" width="1260" height="92" rx="10" fill="#ffffff" stroke="#d8ddd9"/>
+  <circle cx="870" cy="504" r="15" fill="#17684f"/><text x="865" y="510" style="font:700 15px sans-serif;fill:#fff">2</text>
+  <text x="910" y="495" class="h">Replica 收到后确认</text><text x="910" y="526" class="p">跨节点已有副本；进程或机器断电后的保留条件取决于刷盘语义</text>
+
+  <rect x="90" y="570" width="1260" height="92" rx="10" fill="#e9f2ee" stroke="#b8d1c7"/>
+  <circle cx="1215" cy="616" r="15" fill="#17684f"/><text x="1210" y="622" style="font:700 15px sans-serif;fill:#fff">3</text>
+  <text x="300" y="607" class="h">Replica 稳定持久化后确认</text><text x="300" y="638" class="p">故障后保留条件更强；写延迟包含网络与副本刷盘，少数派失联时可能无法完成</text>
+
+  <path d="M475 302v44M870 302v156M1215 302v268" fill="none" stroke="#17684f" stroke-width="2" stroke-dasharray="7 7"/>
+  <text x="90" y="710" class="small">设计检查：收到 success 时，哪些进程、内存和稳定介质已经保存了这条写入？</text>
+</svg>

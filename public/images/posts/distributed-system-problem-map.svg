@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="850" viewBox="0 0 1440 850" role="img" aria-labelledby="title desc">
+  <title id="title">分布式系统的五层问题地图</title>
+  <desc id="desc">从故障模型、复制与共识、事务与消息、应用协议到验证的分层关系。</desc>
+  <rect width="1440" height="850" fill="#f7f7f3"/>
+  <style>
+    .title{font:700 34px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#1d201e}
+    .sub{font:400 17px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#69716d}
+    .n{font:700 17px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#17684f;letter-spacing:1px}
+    .h{font:700 23px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#1d201e}
+    .p{font:400 16px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#59605d}
+    .tag{font:600 15px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#17684f}
+  </style>
+  <text x="90" y="72" class="title">分布式系统的机制从故障假设开始</text>
+  <text x="90" y="108" class="sub">每一层缩小一种不确定性，上层仍需处理下层无法回答的业务问题</text>
+
+  <rect x="90" y="154" width="1260" height="112" rx="12" fill="#ffffff" stroke="#d8ddd9"/>
+  <text x="122" y="191" class="n">05 · 验证</text>
+  <text x="122" y="229" class="h">运行历史与故障注入</text>
+  <text x="485" y="206" class="p">记录 invocation / completion，检查线性一致与事务不变量</text>
+  <text x="485" y="236" class="p">在提交、响应、Leader 切换和补偿窗口制造故障</text>
+  <rect x="1125" y="186" width="183" height="42" rx="21" fill="#e9f2ee"/><text x="1160" y="213" class="tag">证明承诺成立</text>
+
+  <rect x="130" y="285" width="1180" height="112" rx="12" fill="#ffffff" stroke="#d8ddd9"/>
+  <text x="162" y="322" class="n">04 · 应用协议</text>
+  <text x="162" y="360" class="h">幂等、状态查询与 Fencing</text>
+  <text x="570" y="337" class="p">处理超时后的结果未知、重复请求和恢复后的旧进程</text>
+  <text x="570" y="367" class="p">把“业务动作”与某一次网络调用分开</text>
+
+  <rect x="170" y="416" width="1100" height="112" rx="12" fill="#ffffff" stroke="#d8ddd9"/>
+  <text x="202" y="453" class="n">03 · 事务与消息</text>
+  <text x="202" y="491" class="h">2PC、Saga 与 Outbox</text>
+  <text x="545" y="468" class="p">组织多个资源的原子提交、补偿与事件投递</text>
+  <text x="545" y="498" class="p">明确中间状态、恢复责任和交付语义</text>
+
+  <rect x="210" y="547" width="1020" height="112" rx="12" fill="#e9f2ee" stroke="#b8d1c7"/>
+  <text x="242" y="584" class="n">02 · 复制与共识</text>
+  <text x="242" y="622" class="h">副本、Quorum 与 Raft</text>
+  <text x="585" y="599" class="p">决定状态保存几份、谁能写、日志何时提交</text>
+  <text x="585" y="629" class="p">故障后继续维护一条合法历史</text>
+
+  <rect x="250" y="678" width="940" height="112" rx="12" fill="#17684f"/>
+  <text x="282" y="715" style="font:700 17px ui-sans-serif,system-ui,-apple-system,'PingFang SC',sans-serif;fill:#dcece6;letter-spacing:1px">01 · 故障模型</text>
+  <text x="282" y="755" style="font:700 23px ui-sans-serif,system-ui,-apple-system,'PingFang SC',sans-serif;fill:#ffffff">进程、网络与时钟</text>
+  <text x="585" y="731" style="font:400 16px ui-sans-serif,system-ui,-apple-system,'PingFang SC',sans-serif;fill:#edf6f2">节点会崩溃或停顿，消息会丢失、延迟和乱序</text>
+  <text x="585" y="761" style="font:400 16px ui-sans-serif,system-ui,-apple-system,'PingFang SC',sans-serif;fill:#edf6f2">算法的安全性与活性只在声明的模型内成立</text>
+
+  <path d="M720 678v-19m-8 8 8-8 8 8M720 547v-19m-8 8 8-8 8 8M720 416v-19m-8 8 8-8 8 8M720 285v-19m-8 8 8-8 8 8" fill="none" stroke="#17684f" stroke-width="2"/>
+</svg>

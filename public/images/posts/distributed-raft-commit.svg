@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="820" viewBox="0 0 1440 820" role="img" aria-labelledby="title desc">
+  <title id="title">Raft 日志提交路径</title>
+  <desc id="desc">客户端向 Leader 提交命令，Leader 复制到两个 Follower，获得多数确认后推进 commitIndex 并返回；少数派未响应不影响安全提交。</desc>
+  <rect width="1440" height="820" fill="#f7f7f3"/>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#17684f"/></marker></defs>
+  <style>
+    .title{font:700 34px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#1d201e}
+    .sub{font:400 17px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#69716d}
+    .h{font:700 20px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#1d201e}
+    .p{font:400 15px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#59605d}
+    .msg{font:600 14px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#17684f}
+    .muted{font:400 14px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#8a918d}
+  </style>
+  <text x="90" y="72" class="title">一条日志经过多数派后才能成为已提交事实</text>
+  <text x="90" y="108" class="sub">示例为三节点集群；term = 8，日志 index = 42</text>
+
+  <rect x="80" y="158" width="210" height="72" rx="10" fill="#ffffff" stroke="#d8ddd9"/><text x="145" y="187" class="h">客户端</text><text x="119" y="213" class="p">扣款 request 001</text>
+  <rect x="405" y="158" width="230" height="72" rx="10" fill="#e9f2ee" stroke="#17684f" stroke-width="2"/><text x="480" y="187" class="h">Leader A</text><text x="459" y="213" class="p">term 8 · commit 41</text>
+  <rect x="770" y="158" width="230" height="72" rx="10" fill="#ffffff" stroke="#d8ddd9"/><text x="837" y="187" class="h">Follower B</text><text x="824" y="213" class="p">term 8 · match 41</text>
+  <rect x="1130" y="158" width="230" height="72" rx="10" fill="#ffffff" stroke="#d8ddd9"/><text x="1197" y="187" class="h">Follower C</text><text x="1184" y="213" class="p">term 8 · match 41</text>
+  <path d="M185 230v500M520 230v500M885 230v500M1245 230v500" stroke="#cdd3cf" stroke-width="2" stroke-dasharray="7 7"/>
+
+  <path d="M185 284h325" stroke="#17684f" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/><text x="272" y="273" class="msg">提交 command</text>
+  <rect x="438" y="310" width="164" height="58" rx="8" fill="#ffffff" stroke="#d8ddd9"/><text x="460" y="334" class="p">本地追加 [8,42]</text><text x="470" y="355" class="muted">尚未提交</text>
+
+  <path d="M520 404h355" stroke="#17684f" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/><text x="610" y="393" class="msg">AppendEntries [8,42]</text>
+  <path d="M520 450h715" stroke="#8a918d" stroke-width="2" fill="none" marker-end="url(#arrow)"/><text x="845" y="439" class="muted">AppendEntries · 网络延迟</text>
+
+  <rect x="807" y="478" width="156" height="58" rx="8" fill="#ffffff" stroke="#d8ddd9"/><text x="828" y="502" class="p">持久化 [8,42]</text><text x="836" y="523" class="muted">match = 42</text>
+  <path d="M885 558H530" stroke="#17684f" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/><text x="649" y="547" class="msg">success</text>
+
+  <rect x="438" y="584" width="164" height="74" rx="8" fill="#e9f2ee" stroke="#17684f"/><text x="465" y="610" class="p">A + B 已过多数</text><text x="466" y="633" class="msg">commitIndex = 42</text><text x="466" y="650" class="muted">应用状态机</text>
+  <path d="M510 686H195" stroke="#17684f" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/><text x="302" y="675" class="msg">返回成功</text>
+
+  <rect x="1112" y="478" width="266" height="92" rx="10" fill="#ffffff" stroke="#d8ddd9" stroke-dasharray="6 5"/>
+  <text x="1156" y="510" class="h">C 暂时未响应</text><text x="1145" y="540" class="p">不影响本次形成多数</text><text x="1146" y="560" class="p">恢复后从 Leader 追赶</text>
+  <text x="80" y="778" class="msg">安全边界：多数派 + term 与日志匹配规则共同决定提交，不能只数 ACK 数量。</text>
+</svg>
