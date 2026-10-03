@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="820" viewBox="0 0 1440 820" role="img" aria-labelledby="title desc">
+  <title id="title">请求从路由键经过逻辑桶到物理分片</title>
+  <desc id="desc">路由键先经过稳定哈希落入固定的 1024 个逻辑桶，再由带版本的映射表找到物理分片。扩容只移动部分桶，哈希规则不变。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#8a7f6d"/></marker>
+    <style>
+      .bg{fill:#fdfaf3}.panel{fill:#f5f0e4;stroke:#8a7f6d;stroke-width:2}.accent{fill:#d8dee0;stroke:#295279;stroke-width:2}.selected{fill:#dee3d6;stroke:#466b48;stroke-width:3}.moved{fill:#f4eace;stroke:#8a7f6d;stroke-width:2}.title{font:700 34px system-ui,sans-serif;fill:#2b2620}.h{font:700 22px system-ui,sans-serif;fill:#2b2620}.body{font:18px system-ui,sans-serif;fill:#554d42}.small{font:16px system-ui,sans-serif;fill:#6f6659}.code{font:17px ui-monospace,monospace;fill:#2b2620}.line{fill:none;stroke:#8a7f6d;stroke-width:3;marker-end:url(#arrow)}.dash{fill:none;stroke:#8a7f6d;stroke-width:2;stroke-dasharray:8 7;marker-end:url(#arrow)}
+    </style>
+  </defs>
+  <rect class="bg" width="1440" height="820"/>
+  <text class="title" x="70" y="70">固定逻辑桶把数据归属与机器数量分开</text>
+  <text class="body" x="70" y="108">稳定哈希永远产生 0～1023；拓扑版本只决定这些桶现在放在哪台机器。</text>
+
+  <rect class="accent" x="70" y="205" width="250" height="145" rx="16"/>
+  <text class="h" x="105" y="250">路由输入</text>
+  <text class="code" x="105" y="292">link_id = 300001</text>
+  <text class="small" x="105" y="325">或 user_id / tenant_id</text>
+
+  <rect class="panel" x="405" y="185" width="300" height="185" rx="16"/>
+  <text class="h" x="445" y="235">稳定哈希</text>
+  <text class="code" x="445" y="280">H(link_id) % 1024</text>
+  <text class="code" x="445" y="320">= bucket 417</text>
+  <path class="line" d="M320 277 H395"/>
+
+  <rect class="selected" x="800" y="175" width="260" height="205" rx="16"/>
+  <text class="h" x="838" y="225">逻辑桶 417</text>
+  <text class="body" x="838" y="268">身份长期稳定</text>
+  <text class="body" x="838" y="303">可独立迁移、校验</text>
+  <text class="small" x="838" y="340">不等于数据库编号</text>
+  <path class="line" d="M705 277 H790"/>
+
+  <rect class="panel" x="1140" y="145" width="230" height="105" rx="14"/>
+  <text class="h" x="1175" y="188">route v17</text>
+  <text class="code" x="1175" y="222">417 → shard-3</text>
+  <rect class="moved" x="1140" y="300" width="230" height="105" rx="14"/>
+  <text class="h" x="1175" y="343">route v18</text>
+  <text class="code" x="1175" y="377">417 → shard-9</text>
+  <path class="line" d="M1060 250 C1100 250 1100 198 1130 198"/>
+  <path class="dash" d="M1060 300 C1100 300 1100 352 1130 352"/>
+
+  <line x1="70" y1="475" x2="1370" y2="475" stroke="#8a7f6d" stroke-width="2"/>
+  <text class="h" x="70" y="525">1024 个桶可以重新放置，Key 不需要重新计算</text>
+
+  <g>
+    <rect class="panel" x="70" y="570" width="250" height="150" rx="16"/>
+    <text class="h" x="105" y="615">shard-0</text>
+    <text class="code" x="105" y="655">0, 8, 16, ...</text>
+    <text class="small" x="105" y="690">约 96 个桶</text>
+
+    <rect class="panel" x="350" y="570" width="250" height="150" rx="16"/>
+    <text class="h" x="385" y="615">shard-3</text>
+    <text class="code" x="385" y="655">3, 11, 19, ...</text>
+    <text class="small" x="385" y="690">迁出 bucket 417</text>
+
+    <rect class="panel" x="630" y="570" width="250" height="150" rx="16"/>
+    <text class="h" x="665" y="615">shard-7</text>
+    <text class="code" x="665" y="655">7, 15, 23, ...</text>
+    <text class="small" x="665" y="690">约 96 个桶</text>
+
+    <rect class="selected" x="910" y="570" width="250" height="150" rx="16"/>
+    <text class="h" x="945" y="615">shard-9</text>
+    <text class="code" x="945" y="655">417, 601, ...</text>
+    <text class="small" x="945" y="690">新增节点接收一批桶</text>
+
+    <rect class="panel" x="1190" y="570" width="180" height="150" rx="16"/>
+    <text class="h" x="1225" y="615">其他分片</text>
+    <text class="body" x="1225" y="655">未迁桶</text>
+    <text class="small" x="1225" y="690">保持原位</text>
+  </g>
+</svg>

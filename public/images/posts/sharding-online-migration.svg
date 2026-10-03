@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900" role="img" aria-labelledby="title desc">
+  <title id="title">逻辑桶在线迁移的复制、追赶、校验与切换</title>
+  <desc id="desc">bucket 417 从 shard-3 迁往 shard-9。源分片先保持唯一写入，目标执行基线复制和 CDC，校验后通过写屏障与路由版本切换 owner，最后保留旧数据用于回退再清理。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#8a7f6d"/></marker>
+    <style>
+      .bg{fill:#fdfaf3}.panel{fill:#f5f0e4;stroke:#8a7f6d;stroke-width:2}.accent{fill:#d8dee0;stroke:#295279;stroke-width:2}.good{fill:#dee3d6;stroke:#466b48;stroke-width:2}.warn{fill:#f4eace;stroke:#8a7f6d;stroke-width:2}.title{font:700 34px system-ui,sans-serif;fill:#2b2620}.h{font:700 21px system-ui,sans-serif;fill:#2b2620}.body{font:17px system-ui,sans-serif;fill:#554d42}.small{font:15px system-ui,sans-serif;fill:#6f6659}.code{font:16px ui-monospace,monospace;fill:#2b2620}.line{fill:none;stroke:#8a7f6d;stroke-width:3;marker-end:url(#arrow)}.dash{fill:none;stroke:#8a7f6d;stroke-width:2;stroke-dasharray:8 7;marker-end:url(#arrow)}
+    </style>
+  </defs>
+  <rect class="bg" width="1440" height="900"/>
+  <text class="title" x="70" y="68">迁移期间，写入始终只有一个权威 owner</text>
+  <text class="body" x="70" y="105">基线复制解决历史数据，CDC 追赶增量，route_version 阻止旧客户端在切换后继续写源库。</text>
+
+  <rect class="accent" x="70" y="175" width="245" height="150" rx="16"/>
+  <text class="h" x="105" y="220">1　COPYING</text>
+  <text class="body" x="105" y="260">源库保持唯一写入</text>
+  <text class="body" x="105" y="292">按主键分批复制快照</text>
+
+  <rect class="panel" x="350" y="175" width="245" height="150" rx="16"/>
+  <text class="h" x="385" y="220">2　CATCHING UP</text>
+  <text class="body" x="385" y="260">CDC 应用增删改</text>
+  <text class="body" x="385" y="292">记录源位置与版本</text>
+
+  <rect class="panel" x="630" y="175" width="245" height="150" rx="16"/>
+  <text class="h" x="665" y="220">3　VERIFYING</text>
+  <text class="body" x="665" y="260">分段 checksum</text>
+  <text class="body" x="665" y="292">影子读比较结果</text>
+
+  <rect class="warn" x="910" y="175" width="210" height="150" rx="16"/>
+  <text class="h" x="945" y="220">4　BARRIER</text>
+  <text class="body" x="945" y="260">短暂写屏障</text>
+  <text class="body" x="945" y="292">追到最终位置</text>
+
+  <rect class="good" x="1155" y="175" width="215" height="150" rx="16"/>
+  <text class="h" x="1190" y="220">5　CUTOVER</text>
+  <text class="body" x="1190" y="260">v18 指向新 owner</text>
+  <text class="body" x="1190" y="292">旧版本写入被拒绝</text>
+
+  <path class="line" d="M315 250 H340"/><path class="line" d="M595 250 H620"/><path class="line" d="M875 250 H900"/><path class="line" d="M1120 250 H1145"/>
+
+  <text class="h" x="70" y="405">bucket 417 的数据流</text>
+  <rect class="panel" x="70" y="450" width="365" height="245" rx="18"/>
+  <text class="h" x="110" y="500">shard-3 · 源</text>
+  <text class="code" x="110" y="542">route v17 owner</text>
+  <text class="body" x="110" y="585">接收线上读写</text>
+  <text class="body" x="110" y="620">保留 binlog / CDC position</text>
+  <text class="small" x="110" y="660">切换后只读保留，等待回退窗口</text>
+
+  <rect class="good" x="1005" y="450" width="365" height="245" rx="18"/>
+  <text class="h" x="1045" y="500">shard-9 · 目标</text>
+  <text class="code" x="1045" y="542">route v18 owner</text>
+  <text class="body" x="1045" y="585">接收快照与增量</text>
+  <text class="body" x="1045" y="620">切换后承接线上读写</text>
+  <text class="small" x="1045" y="660">所有写入校验 route_version</text>
+
+  <rect class="accent" x="535" y="445" width="365" height="110" rx="16"/>
+  <text class="h" x="575" y="490">基线复制</text>
+  <text class="body" x="575" y="527">限速分批、可重试、按源主键 upsert</text>
+  <path class="line" d="M435 500 H525"/><path class="line" d="M900 500 H995"/>
+
+  <rect class="panel" x="535" y="585" width="365" height="110" rx="16"/>
+  <text class="h" x="575" y="630">CDC 增量</text>
+  <text class="body" x="575" y="667">包含删除、顺序位置和幂等版本</text>
+  <path class="dash" d="M435 640 H525"/><path class="dash" d="M900 640 H995"/>
+
+  <line x1="70" y1="760" x2="1370" y2="760" stroke="#8a7f6d" stroke-width="2"/>
+  <text class="h" x="70" y="812">回退条件</text>
+  <text class="body" x="220" y="812">新 owner 产生写入后，必须把增量反向同步回旧库；保留旧数据本身不足以安全回滚。</text>
+  <text class="small" x="70" y="855">完成条件：目标追平最终位置、校验通过、旧版本写入被拒绝、回退链路已验证。</text>
+</svg>

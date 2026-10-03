@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="820" viewBox="0 0 1440 820" role="img" aria-labelledby="title desc">
+  <title id="title">主键、全局 ID、分片键与副本的职责关系</title>
+  <desc id="desc">短链接请求以短码或用户编号为输入，分片键经过路由规则选择逻辑分片；全局 ID 标识对象，主键定位物理表内记录，复制组为同一分片保存多个副本。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#8a7f6d"/>
+    </marker>
+    <style>
+      .bg{fill:#fdfaf3}.panel{fill:#f5f0e4;stroke:#8a7f6d;stroke-width:2}.accent{fill:#d8dee0;stroke:#295279;stroke-width:2}.soft{fill:#ebe4d4;stroke:#8a7f6d;stroke-width:2}.good{fill:#dee3d6;stroke:#466b48;stroke-width:2}.title{font:700 34px system-ui,sans-serif;fill:#2b2620}.h{font:700 23px system-ui,sans-serif;fill:#2b2620}.body{font:18px system-ui,sans-serif;fill:#554d42}.small{font:16px system-ui,sans-serif;fill:#6f6659}.code{font:17px ui-monospace,monospace;fill:#2b2620}.line{fill:none;stroke:#8a7f6d;stroke-width:3;marker-end:url(#arrow)}
+    </style>
+  </defs>
+  <rect class="bg" width="1440" height="820"/>
+  <text class="title" x="70" y="70">四种 ID 相关职责，只有分片键负责找到数据</text>
+  <text class="body" x="70" y="108">一列可以兼任多项职责，但唯一性不会自动推出路由能力。</text>
+
+  <rect class="accent" x="70" y="180" width="250" height="150" rx="16"/>
+  <text class="h" x="100" y="225">请求携带的条件</text>
+  <text class="code" x="100" y="267">short_code = 1G2j</text>
+  <text class="code" x="100" y="300">user_id = 42</text>
+
+  <rect class="panel" x="410" y="160" width="300" height="190" rx="16"/>
+  <text class="h" x="445" y="210">路由规则</text>
+  <text class="code" x="445" y="255">bucket = H(key) % 1024</text>
+  <text class="code" x="445" y="290">shard = map[bucket]</text>
+  <text class="small" x="445" y="325">分片键是函数输入</text>
+
+  <rect class="good" x="810" y="145" width="250" height="220" rx="16"/>
+  <text class="h" x="850" y="195">逻辑分片 07</text>
+  <text class="body" x="850" y="235">复制组</text>
+  <rect class="bg" x="850" y="260" width="80" height="64" rx="10"/>
+  <rect class="bg" x="945" y="260" width="80" height="64" rx="10"/>
+  <text class="small" x="868" y="299">主库</text>
+  <text class="small" x="962" y="299">从库</text>
+
+  <path class="line" d="M320 255 H400"/>
+  <path class="line" d="M710 255 H800"/>
+
+  <rect class="soft" x="1130" y="175" width="240" height="160" rx="16"/>
+  <text class="h" x="1165" y="220">物理表中的行</text>
+  <text class="code" x="1165" y="260">id = 918</text>
+  <text class="code" x="1165" y="294">link_id = 300001</text>
+  <path class="line" d="M1060 255 H1120"/>
+
+  <line x1="70" y1="430" x2="1370" y2="430" stroke="#8a7f6d" stroke-width="2"/>
+  <text class="h" x="70" y="485">每个字段回答的问题</text>
+
+  <rect class="panel" x="70" y="525" width="285" height="200" rx="16"/>
+  <text class="h" x="100" y="570">数据库主键 id</text>
+  <text class="body" x="100" y="615">在一张物理表内</text>
+  <text class="body" x="100" y="647">定位一行、组织索引</text>
+  <text class="small" x="100" y="688">不要求跨分片唯一</text>
+
+  <rect class="panel" x="400" y="525" width="285" height="200" rx="16"/>
+  <text class="h" x="430" y="570">全局 ID link_id</text>
+  <text class="body" x="430" y="615">跨节点标识对象</text>
+  <text class="body" x="430" y="647">防止编号冲突</text>
+  <text class="small" x="430" y="688">未必能推出分片</text>
+
+  <rect class="accent" x="730" y="525" width="285" height="200" rx="16"/>
+  <text class="h" x="760" y="570">分片键 route_key</text>
+  <text class="body" x="760" y="615">决定逻辑桶与物理分片</text>
+  <text class="body" x="760" y="647">必须出现在访问路径</text>
+  <text class="small" x="760" y="688">唯一负责“去哪找”</text>
+
+  <rect class="panel" x="1060" y="525" width="310" height="200" rx="16"/>
+  <text class="h" x="1090" y="570">复制组 replica set</text>
+  <text class="body" x="1090" y="615">保存同一分片的副本</text>
+  <text class="body" x="1090" y="647">处理节点故障与读扩展</text>
+  <text class="small" x="1090" y="688">不改变数据归属</text>
+</svg>
