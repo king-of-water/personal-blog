@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900" role="img" aria-labelledby="title desc">
+  <title id="title">AI Coding 任务的目标传达复杂度与执行复杂度四象限</title>
+  <desc id="desc">横轴是执行复杂度，纵轴是目标传达复杂度。企业核心研发通常位于双高象限；目标明确但执行复杂的任务更适合优先自动化。</desc>
+  <rect width="1440" height="900" fill="#fdfaf3"/>
+  <style>
+    .title{font:700 32px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2b2620}.sub{font:400 16px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#6f6659}.axis{font:700 15px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2f5d8a;letter-spacing:1px}.q{font:700 14px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2f5d8a}.h{font:700 22px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2b2620}.p{font:400 15px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#554d42}.hint{font:600 15px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#943b37}
+  </style>
+  <text x="80" y="70" class="title">两种复杂度，决定自动化从哪里开始</text>
+  <text x="80" y="103" class="sub">任务可以被工程化地移动：知识降低目标传达成本，Harness 与验证降低执行失败率</text>
+  <rect x="190" y="160" width="1120" height="610" rx="16" fill="#fbf8f1" stroke="#8a7f6d"/>
+  <line x1="750" y1="160" x2="750" y2="770" stroke="#8a7f6d" stroke-width="2"/>
+  <line x1="190" y1="465" x2="1310" y2="465" stroke="#8a7f6d" stroke-width="2"/>
+  <rect x="750" y="160" width="560" height="305" fill="#eee3dc" opacity=".8"/><rect x="750" y="465" width="560" height="305" fill="#dee3d6" opacity=".9"/>
+  <text x="225" y="200" class="q">01 · 判断密集</text><text x="225" y="245" class="h">先辅助决策</text><text x="225" y="285" class="p">策略取舍、架构决策、风险评估</text><text x="225" y="317" class="p">AI 找证据，人类承担最终责任</text>
+  <text x="785" y="200" class="q">02 · 企业核心研发</text><text x="785" y="245" class="h">双高，潜力与风险都最大</text><text x="785" y="285" class="p">跨领域需求、跨仓库实现、长期维护</text><text x="785" y="317" class="p">知识供给与可靠执行必须同时建设</text><text x="785" y="365" class="hint">不能从“会写代码”直接跳到端到端自治</text>
+  <text x="225" y="510" class="q">03 · 普通自动化</text><text x="225" y="555" class="h">优先使用确定性程序</text><text x="225" y="595" class="p">固定校验、模板生成、简单配置</text><text x="225" y="627" class="p">模型带来的波动通常不值得</text>
+  <text x="785" y="510" class="q">04 · 自动化优先区</text><text x="785" y="555" class="h">目标明确，执行繁琐</text><text x="785" y="595" class="p">依赖升级、API 迁移、按范式补测试</text><text x="785" y="627" class="p">适合 Agent 反复执行并收集证据</text><text x="785" y="680" class="hint">先从这里建立稳定收益</text>
+  <path d="M190 815H1310" stroke="#295279" stroke-width="2"/><path d="M1298 807l12 8-12 8" fill="none" stroke="#295279" stroke-width="2"/><text x="620" y="855" class="axis">执行复杂度 →</text>
+  <path d="M130 770V160" stroke="#295279" stroke-width="2"/><path d="M122 172l8-12 8 12" fill="none" stroke="#295279" stroke-width="2"/><text x="48" y="520" class="axis" transform="rotate(-90 48 520)">目标传达复杂度 →</text>
+</svg>

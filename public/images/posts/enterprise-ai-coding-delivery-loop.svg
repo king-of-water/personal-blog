@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="820" viewBox="0 0 1440 820" role="img" aria-labelledby="title desc">
+  <title id="title">知识从需求、设计、实现流向验收并反馈更新</title>
+  <desc id="desc">组织知识作为每个研发阶段的输入，需求依次形成领域决定、规格、任务、代码和验收证据；被确认的新决定与事实反馈到知识供给链。</desc>
+  <rect width="1440" height="820" fill="#fdfaf3"/>
+  <style>
+    .title{font:700 32px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2b2620}.sub{font:400 16px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#6f6659}.k{font:700 13px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2f5d8a;letter-spacing:1px}.h{font:700 18px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2b2620}.p{font:400 14px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#554d42}.loop{font:600 14px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#943b37}
+  </style>
+  <text x="70" y="68" class="title">一次交付，也是一次知识消费与更新</text>
+  <text x="70" y="101" class="sub">组织级知识提供长期事实，任务工件保存本次决定，验证证据判断两者是否真正落地</text>
+  <rect x="70" y="145" width="1300" height="94" rx="10" fill="#ebe4d4" stroke="#8a7f6d"/><text x="100" y="180" class="k">ORGANIZATIONAL KNOWLEDGE</text><text x="100" y="213" class="h">基础技术 · 业务不变量 · 团队边界 · 仓库事实</text><text x="1050" y="203" class="p">每个阶段只读取所需切片</text>
+  <rect x="70" y="330" width="190" height="160" rx="10" fill="#f5f0e4" stroke="#8a7f6d"/><text x="95" y="366" class="k">01 · INTENT</text><text x="95" y="406" class="h">需求目标</text><text x="95" y="438" class="p">用户结果、范围</text><text x="95" y="465" class="p">待澄清问题</text>
+  <line x1="260" y1="410" x2="300" y2="410" stroke="#5b5245" stroke-width="2"/><path d="M290 402l10 8-10 8" fill="none" stroke="#5b5245" stroke-width="2"/>
+  <rect x="300" y="330" width="190" height="160" rx="10" fill="#f5f0e4" stroke="#8a7f6d"/><text x="325" y="366" class="k">02 · DOMAIN</text><text x="325" y="406" class="h">领域决定</text><text x="325" y="438" class="p">责任边界、不变量</text><text x="325" y="465" class="p">跨系统契约</text>
+  <line x1="490" y1="410" x2="530" y2="410" stroke="#5b5245" stroke-width="2"/><path d="M520 402l10 8-10 8" fill="none" stroke="#5b5245" stroke-width="2"/>
+  <rect x="530" y="330" width="190" height="160" rx="10" fill="#d8dee0" stroke="#295279" stroke-width="2"/><text x="555" y="366" class="k">03 · SPEC / PLAN</text><text x="555" y="406" class="h">任务规格</text><text x="555" y="438" class="p">方案、风险、顺序</text><text x="555" y="465" class="p">可检查验收条件</text>
+  <line x1="720" y1="410" x2="760" y2="410" stroke="#5b5245" stroke-width="2"/><path d="M750 402l10 8-10 8" fill="none" stroke="#5b5245" stroke-width="2"/>
+  <rect x="760" y="330" width="190" height="160" rx="10" fill="#f5f0e4" stroke="#8a7f6d"/><text x="785" y="366" class="k">04 · TASKS</text><text x="785" y="406" class="h">执行任务</text><text x="785" y="438" class="p">仓库、依赖、工具</text><text x="785" y="465" class="p">检查点与接管条件</text>
+  <line x1="950" y1="410" x2="990" y2="410" stroke="#5b5245" stroke-width="2"/><path d="M980 402l10 8-10 8" fill="none" stroke="#5b5245" stroke-width="2"/>
+  <rect x="990" y="330" width="190" height="160" rx="10" fill="#f5f0e4" stroke="#8a7f6d"/><text x="1015" y="366" class="k">05 · CODE</text><text x="1015" y="406" class="h">实现变更</text><text x="1015" y="438" class="p">代码、配置、迁移</text><text x="1015" y="465" class="p">局部测试结果</text>
+  <line x1="1180" y1="410" x2="1220" y2="410" stroke="#5b5245" stroke-width="2"/><path d="M1210 402l10 8-10 8" fill="none" stroke="#5b5245" stroke-width="2"/>
+  <rect x="1220" y="330" width="150" height="160" rx="10" fill="#dee3d6" stroke="#466b48" stroke-width="2"/><text x="1245" y="366" class="k">06 · VERIFY</text><text x="1245" y="406" class="h">验收证据</text><text x="1245" y="438" class="p">契约、集成</text><text x="1245" y="465" class="p">灰度与回滚</text>
+  <path d="M165 239V330M395 239V330M625 239V330M855 239V330M1085 239V330M1295 239V330" stroke="#8a7f6d" stroke-width="1.5" stroke-dasharray="5 5"/>
+  <path d="M1295 490V615H395V525" fill="none" stroke="#a8433f" stroke-width="2" stroke-dasharray="8 7"/><path d="M387 535l8-10 8 10" fill="none" stroke="#a8433f" stroke-width="2"/>
+  <rect x="300" y="625" width="900" height="90" rx="10" fill="#eee3dc" stroke="#943b37"/><text x="330" y="659" class="k">REVIEWED FEEDBACK</text><text x="330" y="692" class="h">确认后的新业务决定、仓库事实和失败证据，进入知识候选与版本更新</text>
+  <text x="850" y="760" class="loop">任务产物不会自动成为真相，先经过验证与 Owner 审核</text>
+</svg>

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900" role="img" aria-labelledby="title desc">
+  <title id="title">企业 AI Coding 的知识供给链</title>
+  <desc id="desc">基础技术、业务、团队和仓库事实经过提取、校验与版本化，形成知识对象，由 Context Builder 按任务装配给 Code Agent，任务证据再反馈到更新流程。</desc>
+  <rect width="1440" height="900" fill="#fdfaf3"/>
+  <style>
+    .title{font:700 32px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2b2620}.sub{font:400 16px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#6f6659}.k{font:700 13px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2f5d8a;letter-spacing:1px}.h{font:700 19px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#2b2620}.p{font:400 14px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#554d42}.loop{font:600 14px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#943b37}
+  </style>
+  <text x="70" y="68" class="title">知识不是一次检索，而是一条有反馈的供给链</text>
+  <text x="70" y="101" class="sub">统一协议、身份、版本和证据；内容可以继续留在最合适的事实源中</text>
+  <text x="70" y="155" class="k">FACT SOURCES</text>
+  <rect x="70" y="180" width="245" height="115" rx="10" fill="#f5f0e4" stroke="#8a7f6d"/><text x="94" y="216" class="h">基础技术</text><text x="94" y="249" class="p">平台规范 · 模板 · 策略</text><text x="94" y="276" class="p">CI/CD · 安全合规</text>
+  <rect x="70" y="315" width="245" height="115" rx="10" fill="#f5f0e4" stroke="#8a7f6d"/><text x="94" y="351" class="h">业务领域</text><text x="94" y="384" class="p">术语 · 规则 · 不变量</text><text x="94" y="411" class="p">领域模型 · 决策记录</text>
+  <rect x="70" y="450" width="245" height="115" rx="10" fill="#f5f0e4" stroke="#8a7f6d"/><text x="94" y="486" class="h">团队协作</text><text x="94" y="519" class="p">Owner · 审查 · 发布</text><text x="94" y="546" class="p">例外流程 · 权限</text>
+  <rect x="70" y="585" width="245" height="115" rx="10" fill="#f5f0e4" stroke="#8a7f6d"/><text x="94" y="621" class="h">仓库事实</text><text x="94" y="654" class="p">代码 · Schema · 测试</text><text x="94" y="681" class="p">依赖 · 配置 · 运行结果</text>
+  <path d="M315 440H385" stroke="#5b5245" stroke-width="2"/><path d="M375 432l10 8-10 8" fill="none" stroke="#5b5245" stroke-width="2"/>
+  <rect x="385" y="180" width="250" height="520" rx="12" fill="#ebe4d4" stroke="#8a7f6d"/><text x="414" y="220" class="k">KNOWLEDGE PIPELINE</text>
+  <text x="414" y="275" class="h">提取候选</text><text x="414" y="304" class="p">解析来源，保留血缘</text><line x1="414" y1="330" x2="606" y2="330" stroke="#b6ac9b"/>
+  <text x="414" y="380" class="h">校验冲突</text><text x="414" y="409" class="p">证据、Owner、权限</text><line x1="414" y1="435" x2="606" y2="435" stroke="#b6ac9b"/>
+  <text x="414" y="485" class="h">版本发布</text><text x="414" y="514" class="p">作用域、有效期、替代关系</text><line x1="414" y1="540" x2="606" y2="540" stroke="#b6ac9b"/>
+  <text x="414" y="590" class="h">观测退役</text><text x="414" y="619" class="p">消费效果、漂移与删除</text>
+  <path d="M635 440H705" stroke="#5b5245" stroke-width="2"/><path d="M695 432l10 8-10 8" fill="none" stroke="#5b5245" stroke-width="2"/>
+  <rect x="705" y="220" width="300" height="440" rx="12" fill="#d8dee0" stroke="#295279" stroke-width="2"/><text x="735" y="260" class="k">KNOWLEDGE OBJECTS</text><text x="735" y="310" class="h">可消费知识对象</text>
+  <text x="735" y="355" class="p">ID 与 Kind</text><text x="735" y="392" class="p">Statement 与 Scope</text><text x="735" y="429" class="p">Evidence 与 Owner</text><text x="735" y="466" class="p">Version 与 Freshness</text><text x="735" y="503" class="p">Trust 与 Permission</text>
+  <rect x="735" y="550" width="240" height="72" rx="8" fill="#fbf8f1" stroke="#8a7f6d"/><text x="758" y="580" class="p">缺失与冲突也成为输出</text><text x="758" y="607" class="p">不让 Agent 静默补全</text>
+  <path d="M1005 440H1075" stroke="#5b5245" stroke-width="2"/><path d="M1065 432l10 8-10 8" fill="none" stroke="#5b5245" stroke-width="2"/>
+  <rect x="1075" y="220" width="295" height="180" rx="12" fill="#dee3d6" stroke="#466b48" stroke-width="2"/><text x="1105" y="260" class="k">CONTEXT BUILDER</text><text x="1105" y="307" class="h">按任务渐进装配</text><text x="1105" y="342" class="p">约束 · 代码入口 · 工具</text><text x="1105" y="369" class="p">未决问题 · 验收条件</text>
+  <rect x="1075" y="480" width="295" height="180" rx="12" fill="#eee3dc" stroke="#943b37"/><text x="1105" y="520" class="k">AGENT + DELIVERY</text><text x="1105" y="567" class="h">执行与验证</text><text x="1105" y="602" class="p">方案 · 代码 · 测试 · 发布证据</text><text x="1105" y="629" class="p">记录知识实际如何被使用</text>
+  <path d="M1222 400V480" stroke="#5b5245" stroke-width="2"/><path d="M1214 470l8 10 8-10" fill="none" stroke="#5b5245" stroke-width="2"/>
+  <path d="M1222 660V790H510V710" fill="none" stroke="#a8433f" stroke-width="2" stroke-dasharray="8 7"/><path d="M502 720l8-10 8 10" fill="none" stroke="#a8433f" stroke-width="2"/><text x="720" y="825" class="loop">任务证据、失败与新决定进入候选更新，而不是直接改写权威知识</text>
+</svg>
