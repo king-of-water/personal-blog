@@ -11,7 +11,7 @@ const posts = defineCollection({
 		subcategory: z.enum([
 			'Agent 开发',
 			'Agent 产品拆解',
-			'AI Coding 实践',
+			'AI 应用与思考',
 			'RAG 与知识工程',
 			'LLM 原理与训练',
 			'Java',

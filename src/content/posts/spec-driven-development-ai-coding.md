@@ -2,7 +2,7 @@
 title: SDD：把模糊需求编译成 Coding Agent 能执行的开发流程
 description: Spec-Driven Development 用 Spec、Plan、Tasks 和 Converge 管理 AI 编程中的意图、技术方案与验收证据。本文通过一个博客搜索功能，完整演示从需求澄清到实现收敛的流程。
 category: Agent
-subcategory: AI Coding 实践
+subcategory: AI 应用与思考
 articleClass: flagship
 seriesOrder: 30
 featured: false

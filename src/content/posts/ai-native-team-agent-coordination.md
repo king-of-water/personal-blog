@@ -2,7 +2,7 @@
 title: AI Native 团队如何协同：从人肉接力到 Agent 任务网络
 description: 每个岗位都用上 AI，不等于端到端交付变快。本文从共享目标、任务状态、交接契约、权限门禁和证据闭环出发，拆解人、Agent、知识与工具怎样组成可运行的 AI Native 团队。
 category: Agent
-subcategory: AI Coding 实践
+subcategory: AI 应用与思考
 articleClass: flagship
 seriesOrder: 50
 featured: false

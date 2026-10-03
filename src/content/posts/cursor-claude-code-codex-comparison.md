@@ -2,7 +2,7 @@
 title: Cursor、Claude Code 与 Codex：编程 Agent 到底怎么选
 description: 不比一次生成了多少代码，改从工作中心、上下文、执行环境、并行方式和审查出发，比较三种常见 AI 编程工具。
 category: Agent
-subcategory: AI Coding 实践
+subcategory: AI 应用与思考
 articleClass: flagship
 seriesOrder: 10
 featured: false

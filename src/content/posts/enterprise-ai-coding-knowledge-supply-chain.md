@@ -2,7 +2,7 @@
 title: 企业级 AI Coding 为什么还没发生质变：从工具提效到知识供给链
 description: Code Agent 已经能完成越来越复杂的修改，企业研发却没有同步获得同等幅度的提效。问题横跨目标传达、执行验证与知识保鲜，需要把零散上下文升级成可追溯、可更新、可评测的知识供给链。
 category: Agent
-subcategory: AI Coding 实践
+subcategory: AI 应用与思考
 articleClass: flagship
 seriesOrder: 40
 featured: false

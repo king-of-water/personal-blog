@@ -42,9 +42,9 @@ export const agentSubcategories: Subcategory[] = [
 		],
 	},
 	{
-		name: 'AI Coding 实践',
+		name: 'AI 应用与思考',
 		slug: 'ai-coding',
-		description: '在需求、编码、Review、测试与交付中更好地使用现成 AI 工具。',
+		description: '从 AI 工具使用、AI Coding 到业务流程与组织协同，讨论 AI 怎样进入真实工作。',
 		plannedTopics: [
 			'如何给 Coding Agent 准备高质量上下文',
 			'从需求到提交：AI 辅助开发的完整工作流',
