@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="760" viewBox="0 0 1440 760" role="img" aria-labelledby="title desc">
+  <title id="title">Continuous Batching 与量化：提升 GPU 利用率的两条路径</title>
+  <desc id="desc">左侧对比静态 Batching 与 Continuous Batching：静态 Batching 等最长请求完成后才释放位置，GPU 有大量空闲；Continuous Batching 一个请求完成立刻插入新请求，GPU 几乎无空闲。右侧展示量化精度与显存占用对比：float16 140GB、INT8 70GB、INT4 35GB，以 LLaMA 3 70B 为例。</desc>
+  <defs>
+    <style>.sans{font-family:Inter,"PingFang SC","Microsoft YaHei",sans-serif}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.ink{fill:#2b2620}.muted{fill:#6f6659}.green{fill:#2f6f5f}.box{fill:#fffdf8;stroke:#b9ae9c;stroke-width:2}.soft{fill:#f5f0e4}.accent{fill:#dfe9df}.blue{fill:#dce6ee}.warn{fill:#fef3ee}</style>
+  </defs>
+  <rect width="1440" height="760" fill="#fdfaf3"/>
+
+  <!-- Header -->
+  <text x="90" y="70" class="mono green" font-size="17" font-weight="700" letter-spacing="3">INFERENCE OPTIMIZATION</text>
+  <text x="90" y="122" class="sans ink" font-size="40" font-weight="720">让 GPU 不空转，让模型更小</text>
+  <text x="90" y="158" class="sans muted" font-size="19">Continuous Batching 消除等待浪费；量化把显存需求压低 2–4 倍，扩大可部署范围。</text>
+
+  <!-- LEFT: Batching comparison -->
+  <rect x="90" y="192" width="610" height="530" rx="16" class="box"/>
+  <text x="120" y="230" class="mono green" font-size="14" font-weight="700">CONTINUOUS BATCHING</text>
+  <text x="120" y="258" class="sans ink" font-size="20" font-weight="700">静态 Batching vs 动态插入</text>
+
+  <!-- Static batching -->
+  <text x="120" y="292" class="sans ink" font-size="15" font-weight="700" fill="#a04020">静态 Batching（朴素方式）</text>
+  <!-- Timeline rows -->
+  <rect x="120" y="302" width="440" height="34" rx="6" fill="#fde8de" style="stroke:#c4836a;stroke-width:1.5"/>
+  <text x="130" y="324" class="sans ink" font-size="13">请求 A（长，500 Token）</text>
+  <rect x="570" y="302" width="110" height="34" rx="6" fill="#e8e0d0" style="stroke:#b9ae9c;stroke-width:1"/>
+  <text x="576" y="324" class="sans muted" font-size="12">空等 A 结束</text>
+
+  <rect x="120" y="344" width="220" height="34" rx="6" fill="#dce6ee" style="stroke:#6a9ab4;stroke-width:1.5"/>
+  <text x="130" y="366" class="sans ink" font-size="13">请求 B（短，100 Token）</text>
+  <rect x="348" y="344" width="332" height="34" rx="6" fill="#e8e8e8" style="stroke:#ccc;stroke-width:1"/>
+  <text x="400" y="366" class="sans muted" font-size="12">B 已完成，位置空置，等 A 跑完</text>
+
+  <rect x="120" y="386" width="160" height="34" rx="6" fill="#d4e8d4" style="stroke:#5a9a6a;stroke-width:1.5"/>
+  <text x="130" y="408" class="sans ink" font-size="13">请求 C（极短）</text>
+  <rect x="288" y="386" width="392" height="34" rx="6" fill="#e8e8e8" style="stroke:#ccc;stroke-width:1"/>
+  <text x="380" y="408" class="sans muted" font-size="12">C 完成，继续空置……</text>
+
+  <rect x="120" y="430" width="560" height="28" rx="6" fill="#fde8de" style="stroke:#c4836a;stroke-width:1"/>
+  <text x="300" y="449" class="sans ink" font-size="13" text-anchor="middle" fill="#a04020">整个 batch 等 A 跑完才释放，GPU 大量空转</text>
+
+  <!-- Continuous batching -->
+  <text x="120" y="490" class="sans ink" font-size="15" font-weight="700" fill="#2f6f5f">Continuous Batching（vLLM 等）</text>
+
+  <rect x="120" y="500" width="440" height="34" rx="6" fill="#fde8de" style="stroke:#c4836a;stroke-width:1.5"/>
+  <text x="130" y="522" class="sans ink" font-size="13">请求 A（长）</text>
+
+  <rect x="120" y="542" width="220" height="34" rx="6" fill="#dce6ee" style="stroke:#6a9ab4;stroke-width:1.5"/>
+  <text x="130" y="564" class="sans ink" font-size="13">请求 B（短）</text>
+  <!-- New request D fills B's slot -->
+  <rect x="348" y="542" width="212" height="34" rx="6" fill="#d4e8d4" style="stroke:#5a9a6a;stroke-width:1.5"/>
+  <text x="354" y="564" class="sans ink" font-size="13" fill="#2f6f5f">→ B 完成即插入请求 D</text>
+
+  <rect x="120" y="584" width="160" height="34" rx="6" fill="#d4e8d4" style="stroke:#5a9a6a;stroke-width:1.5"/>
+  <text x="130" y="606" class="sans ink" font-size="13">请求 C（极短）</text>
+  <rect x="288" y="584" width="272" height="34" rx="6" fill="#d4e8d4" style="stroke:#5a9a6a;stroke-width:1.5"/>
+  <text x="294" y="606" class="sans ink" font-size="13" fill="#2f6f5f">→ C 完成即插入请求 E、F…</text>
+
+  <rect x="120" y="628" width="560" height="28" rx="6" fill="#d4e8d4" style="stroke:#5a9a6a;stroke-width:1.5"/>
+  <text x="300" y="647" class="sans ink" font-size="13" text-anchor="middle" fill="#2f6f5f">请求完成立刻腾位，GPU 近乎无空闲，吞吐量最高提升 23 倍</text>
+
+  <!-- RIGHT: Quantization -->
+  <rect x="760" y="192" width="590" height="530" rx="16" class="soft" style="stroke:#b9ae9c;stroke-width:2"/>
+  <text x="790" y="230" class="mono green" font-size="14" font-weight="700">QUANTIZATION</text>
+  <text x="790" y="258" class="sans ink" font-size="20" font-weight="700">量化：显存减半到四分之一</text>
+  <text x="790" y="284" class="sans muted" font-size="14">LLaMA 3 70B 在不同精度下的显存占用</text>
+
+  <!-- float16 bar -->
+  <text x="790" y="318" class="sans ink" font-size="15" font-weight="700">float16（原始精度）</text>
+  <rect x="790" y="328" width="520" height="40" rx="8" fill="#fde8de" style="stroke:#c4836a;stroke-width:2"/>
+  <text x="800" y="354" class="mono ink" font-size="15" font-weight="700" fill="#a04020">约 140 GB</text>
+  <text x="960" y="354" class="sans muted" font-size="13">需 8 × A100 80GB</text>
+
+  <!-- INT8 bar -->
+  <text x="790" y="392" class="sans ink" font-size="15" font-weight="700">INT8（LLM.int8() 等）</text>
+  <rect x="790" y="402" width="260" height="40" rx="8" fill="#ece8f8" style="stroke:#8a7aaa;stroke-width:2"/>
+  <text x="800" y="428" class="mono ink" font-size="15" font-weight="700" fill="#5a4a8a">约 70 GB</text>
+  <text x="960" y="428" class="sans muted" font-size="13">4 × A100</text>
+
+  <!-- INT4 bar -->
+  <text x="790" y="466" class="sans ink" font-size="15" font-weight="700">INT4（GPTQ / AWQ）</text>
+  <rect x="790" y="476" width="130" height="40" rx="8" fill="#d4e8d4" style="stroke:#5a9a6a;stroke-width:2"/>
+  <text x="800" y="502" class="mono ink" font-size="15" font-weight="700" fill="#2f6f5f">约 35 GB</text>
+  <text x="930" y="502" class="sans muted" font-size="13">单卡 A100 80GB 可运行</text>
+
+  <!-- Quality note -->
+  <rect x="790" y="538" width="520" height="80" rx="12" class="box"/>
+  <text x="810" y="566" class="sans ink" font-size="14" font-weight="700">精度代价</text>
+  <text x="810" y="588" class="sans muted" font-size="13">INT8：几乎无感知的质量损失，适合大多数生产场景</text>
+  <text x="810" y="608" class="sans muted" font-size="13">INT4：轻微质量下降，复杂推理稍有影响，日常问答可接受</text>
+
+  <!-- AWQ note -->
+  <rect x="790" y="632" width="520" height="72" rx="12" fill="#d4e8d4" style="stroke:#5a9a6a;stroke-width:1.5"/>
+  <text x="810" y="658" class="sans ink" font-size="14" font-weight="700" fill="#2f6f5f">AWQ vs GPTQ</text>
+  <text x="810" y="678" class="sans muted" font-size="13">AWQ 感知激活值分布，对多语言和代码任务精度更好</text>
+  <text x="810" y="696" class="sans muted" font-size="13">GPTQ 使用 Hessian 优化量化误差，速度快，适合快速量化</text>
+</svg>
