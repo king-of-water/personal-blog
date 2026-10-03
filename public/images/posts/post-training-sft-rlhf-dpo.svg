@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="760" viewBox="0 0 1440 760" role="img" aria-labelledby="title desc">
+  <title id="title">SFT、RLHF 与 DPO 三种后训练路径对比</title>
+  <desc id="desc">三列对比：SFT 用示范数据直接训练，一个阶段；RLHF 分三阶段，先 SFT 再训练奖励模型再用 PPO 强化学习；DPO 把奖励模型和 RL 合并为单一监督目标，直接在偏好数据上优化语言模型，工程最简单。</desc>
+  <defs>
+    <style>.sans{font-family:Inter,"PingFang SC","Microsoft YaHei",sans-serif}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.ink{fill:#2b2620}.muted{fill:#6f6659}.green{fill:#2f6f5f}.box{fill:#fffdf8;stroke:#b9ae9c;stroke-width:2}.soft{fill:#f5f0e4}.accent{fill:#dfe9df}.blue{fill:#dce6ee}.warn{fill:#fef3ee}</style>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#6f6659"/></marker>
+    <marker id="arr-g" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#2f6f5f"/></marker>
+    <marker id="arr-b" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#4a7aaa"/></marker>
+  </defs>
+  <rect width="1440" height="760" fill="#fdfaf3"/>
+
+  <!-- Header -->
+  <text x="90" y="70" class="mono green" font-size="17" font-weight="700" letter-spacing="3">POST-TRAINING METHODS</text>
+  <text x="90" y="122" class="sans ink" font-size="40" font-weight="720">三条路径，目标都是让模型更有用</text>
+  <text x="90" y="158" class="sans muted" font-size="19">SFT 教模型格式，RLHF 让模型符合偏好，DPO 去掉 RL 用闭合解直接优化。</text>
+
+  <!-- === SFT Column === -->
+  <rect x="90" y="192" width="380" height="530" rx="16" class="soft" style="stroke:#b9ae9c;stroke-width:2"/>
+  <rect x="90" y="192" width="380" height="52" rx="16" class="blue"/>
+  <text x="280" y="224" class="sans ink" font-size="20" font-weight="700" text-anchor="middle">SFT</text>
+  <text x="280" y="244" class="sans muted" font-size="13" text-anchor="middle">监督微调</text>
+
+  <!-- SFT stage 1 -->
+  <rect x="110" y="264" width="340" height="72" rx="10" class="box"/>
+  <text x="280" y="292" class="sans ink" font-size="15" font-weight="700" text-anchor="middle">数据：指令 → 理想回答</text>
+  <text x="280" y="314" class="sans muted" font-size="13" text-anchor="middle">高质量示范对，500–50000 条</text>
+  <text x="280" y="332" class="sans muted" font-size="12" text-anchor="middle">只计算 Assistant 部分的损失</text>
+
+  <path d="M280 336 V366" stroke="#6f6659" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="110" y="366" width="340" height="72" rx="10" class="box"/>
+  <text x="280" y="394" class="sans ink" font-size="15" font-weight="700" text-anchor="middle">训练：最小化交叉熵损失</text>
+  <text x="280" y="414" class="sans muted" font-size="13" text-anchor="middle">和预训练目标相同，数据换成示范</text>
+  <text x="280" y="432" class="sans muted" font-size="12" text-anchor="middle">1–3 个 epoch，学习率较小</text>
+
+  <path d="M280 438 V468" stroke="#6f6659" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="110" y="468" width="340" height="56" rx="10" fill="#d4e8d4" style="stroke:#5a9a6a;stroke-width:1.5"/>
+  <text x="280" y="494" class="sans ink" font-size="15" font-weight="700" text-anchor="middle" fill="#2f6f5f">输出：SFT 模型</text>
+  <text x="280" y="514" class="sans muted" font-size="13" text-anchor="middle">会对话，遵循格式，但无法区分</text>
+
+  <rect x="110" y="548" width="340" height="144" rx="10" class="warn" style="stroke:#c4836a;stroke-width:1.5"/>
+  <text x="130" y="574" class="sans ink" font-size="14" font-weight="700" fill="#a04020">局限</text>
+  <text x="130" y="596" class="sans muted" font-size="13">无法区分多个合理回答的质量优劣</text>
+  <text x="130" y="616" class="sans muted" font-size="13">没有偏好信号，倾向于模仿风格</text>
+  <text x="130" y="636" class="sans muted" font-size="13">而非"理解"什么是更好的回答</text>
+  <text x="130" y="660" class="sans muted" font-size="13">幻觉问题：学会自信语气不等于</text>
+  <text x="130" y="680" class="sans muted" font-size="13">学会区分自己知道和不知道的</text>
+
+  <!-- === RLHF Column === -->
+  <rect x="530" y="192" width="380" height="530" rx="16" class="warn" style="stroke:#c4836a;stroke-width:2"/>
+  <rect x="530" y="192" width="380" height="52" rx="16" fill="#fde8de" style="stroke:#c4836a;stroke-width:2"/>
+  <text x="720" y="224" class="sans ink" font-size="20" font-weight="700" text-anchor="middle">RLHF</text>
+  <text x="720" y="244" class="sans muted" font-size="13" text-anchor="middle">人类反馈强化学习</text>
+
+  <!-- RLHF stage 1 -->
+  <rect x="550" y="264" width="340" height="56" rx="10" fill="#dce6ee" style="stroke:#6a9ab4;stroke-width:1.5"/>
+  <text x="720" y="289" class="sans ink" font-size="14" font-weight="700" text-anchor="middle">阶段 1：SFT</text>
+  <text x="720" y="309" class="sans muted" font-size="12" text-anchor="middle">同左侧，得到 SFT 基础模型</text>
+
+  <path d="M720 320 V350" stroke="#6f6659" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- RLHF stage 2 -->
+  <rect x="550" y="350" width="340" height="72" rx="10" fill="#fde8de" style="stroke:#c4836a;stroke-width:1.5"/>
+  <text x="720" y="375" class="sans ink" font-size="14" font-weight="700" text-anchor="middle">阶段 2：训练奖励模型（RM）</text>
+  <text x="720" y="395" class="sans muted" font-size="12" text-anchor="middle">标注者比较同一问题的多个回答</text>
+  <text x="720" y="413" class="sans muted" font-size="12" text-anchor="middle">RM 学会为好回答打高分</text>
+
+  <path d="M720 422 V452" stroke="#6f6659" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- RLHF stage 3 -->
+  <rect x="550" y="452" width="340" height="72" rx="10" fill="#fde8de" style="stroke:#c4836a;stroke-width:1.5"/>
+  <text x="720" y="477" class="sans ink" font-size="14" font-weight="700" text-anchor="middle">阶段 3：PPO 强化学习</text>
+  <text x="720" y="497" class="sans muted" font-size="12" text-anchor="middle">用 RM 分数作为奖励，PPO 优化</text>
+  <text x="720" y="515" class="sans muted" font-size="12" text-anchor="middle">KL 散度惩罚防止偏离 SFT 模型</text>
+
+  <path d="M720 524 V548" stroke="#6f6659" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="550" y="548" width="340" height="40" rx="10" fill="#d4e8d4" style="stroke:#5a9a6a;stroke-width:1.5"/>
+  <text x="720" y="572" class="sans ink" font-size="14" font-weight="700" text-anchor="middle" fill="#2f6f5f">输出：偏好对齐的模型</text>
+
+  <rect x="550" y="600" width="340" height="96" rx="10" fill="#fff3e8" style="stroke:#c4836a;stroke-width:1.5"/>
+  <text x="568" y="622" class="sans ink" font-size="14" font-weight="700" fill="#a04020">代价</text>
+  <text x="568" y="642" class="sans muted" font-size="13">同时维护 4 个模型，工程复杂</text>
+  <text x="568" y="662" class="sans muted" font-size="13">PPO 不稳定，超参数多</text>
+  <text x="568" y="682" class="sans muted" font-size="13">奖励黑客风险，标注成本高</text>
+
+  <!-- === DPO Column === -->
+  <rect x="970" y="192" width="380" height="530" rx="16" class="accent" style="stroke:#5a9a6a;stroke-width:2"/>
+  <rect x="970" y="192" width="380" height="52" rx="16" fill="#d4e8d4" style="stroke:#5a9a6a;stroke-width:2"/>
+  <text x="1160" y="224" class="sans ink" font-size="20" font-weight="700" text-anchor="middle">DPO</text>
+  <text x="1160" y="244" class="sans muted" font-size="13" text-anchor="middle">直接偏好优化</text>
+
+  <!-- DPO content -->
+  <rect x="990" y="264" width="340" height="56" rx="10" fill="#dce6ee" style="stroke:#6a9ab4;stroke-width:1.5"/>
+  <text x="1160" y="289" class="sans ink" font-size="14" font-weight="700" text-anchor="middle">前置：SFT 基础模型（参考模型）</text>
+  <text x="1160" y="309" class="sans muted" font-size="12" text-anchor="middle">和 RLHF 相同的起点</text>
+
+  <path d="M1160 320 V350" stroke="#5a9a6a" stroke-width="2" marker-end="url(#arr-g)"/>
+
+  <rect x="990" y="350" width="340" height="56" rx="10" fill="#d4e8d4" style="stroke:#5a9a6a;stroke-width:1.5"/>
+  <text x="1160" y="375" class="sans ink" font-size="14" font-weight="700" text-anchor="middle">数据：偏好对（好/差回答对）</text>
+  <text x="1160" y="395" class="sans muted" font-size="12" text-anchor="middle">格式与 RLHF 阶段 2 相同，不需 RM</text>
+
+  <path d="M1160 406 V436" stroke="#5a9a6a" stroke-width="2" marker-end="url(#arr-g)"/>
+
+  <rect x="990" y="436" width="340" height="88" rx="10" fill="#d4e8d4" style="stroke:#5a9a6a;stroke-width:1.5"/>
+  <text x="1160" y="460" class="sans ink" font-size="14" font-weight="700" text-anchor="middle">单一损失函数直接训练</text>
+  <text x="1160" y="480" class="sans muted" font-size="12" text-anchor="middle">提高好回答相对参考模型的概率</text>
+  <text x="1160" y="498" class="sans muted" font-size="12" text-anchor="middle">降低差回答相对参考模型的概率</text>
+  <text x="1160" y="516" class="sans muted" font-size="12" text-anchor="middle">无 RM，无 PPO，只需调 β 一个参数</text>
+
+  <path d="M1160 524 V548" stroke="#5a9a6a" stroke-width="2" marker-end="url(#arr-g)"/>
+
+  <rect x="990" y="548" width="340" height="40" rx="10" fill="#b8ddb8" style="stroke:#5a9a6a;stroke-width:1.5"/>
+  <text x="1160" y="572" class="sans ink" font-size="14" font-weight="700" text-anchor="middle" fill="#2f6f5f">输出：偏好对齐的模型（更稳定）</text>
+
+  <rect x="990" y="600" width="340" height="96" rx="10" fill="#edf5ed" style="stroke:#5a9a6a;stroke-width:1.5"/>
+  <text x="1008" y="622" class="sans ink" font-size="14" font-weight="700" fill="#2f6f5f">优势</text>
+  <text x="1008" y="642" class="sans muted" font-size="13">训练稳定，工程实现简单</text>
+  <text x="1008" y="662" class="sans muted" font-size="13">无需训练奖励模型，显存更低</text>
+  <text x="1008" y="682" class="sans muted" font-size="13">大多数任务效果与 RLHF 相当</text>
+</svg>
