@@ -12,16 +12,6 @@ export const agentSubcategories: Subcategory[] = [
 		name: 'LLM 原理与训练',
 		slug: 'llm-fundamentals',
 		description: '从零理解 Token、Transformer、训练、后训练与推理。',
-		plannedTopics: [
-			'《Attention Is All You Need》精读：Transformer 解决了什么',
-			'现代 LLM 的 Transformer：从 Token 输入到下一个 Token',
-			'Tokenization：模型看到的文字为什么和人不一样',
-			'KV Cache：大模型生成为什么越来越占显存',
-			'LLM 预训练：数据、目标函数与 Scaling Law',
-			'大模型微调：Full Fine-tuning、LoRA 与 QLoRA',
-			'LLM 后训练：从 SFT、RLHF、DPO 到 GRPO',
-			'推理优化：Continuous Batching、PagedAttention、量化与投机解码',
-		],
 	},
 	{
 		name: 'Agent 开发',
