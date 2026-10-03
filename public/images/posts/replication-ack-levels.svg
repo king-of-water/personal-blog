@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900" role="img" aria-labelledby="title desc">
+  <title id="title">复制系统的四种确认层级</title>
+  <desc id="desc">异步复制、半同步复制、远端落盘和远端应用分别在主库持久化、从库接收日志、从库持久化日志、从库应用并可查询四个阶段向客户端确认。</desc>
+  <rect width="1440" height="900" fill="#fdfaf3"/>
+  <text x="80" y="76" fill="#2b2620" font-family="system-ui, sans-serif" font-size="34" font-weight="700">“写成功”可以停在四个不同位置</text>
+  <text x="80" y="116" fill="#6f6659" font-family="system-ui, sans-serif" font-size="20">确认点越靠右，副本保障越强，写入等待通常也越长</text>
+
+  <g font-family="system-ui, sans-serif">
+    <line x1="150" y1="245" x2="1290" y2="245" stroke="#5b5245" stroke-width="5"/>
+    <g fill="#fbf8f1" stroke="#5b5245" stroke-width="3">
+      <circle cx="170" cy="245" r="24"/>
+      <circle cx="495" cy="245" r="24"/>
+      <circle cx="820" cy="245" r="24"/>
+      <circle cx="1145" cy="245" r="24"/>
+    </g>
+    <g fill="#2b2620" font-size="22" font-weight="650" text-anchor="middle">
+      <text x="170" y="185">主库提交</text>
+      <text x="495" y="168">从库收到</text>
+      <text x="495" y="196">复制日志</text>
+      <text x="820" y="168">从库持久化</text>
+      <text x="820" y="196">日志</text>
+      <text x="1145" y="168">从库应用</text>
+      <text x="1145" y="196">查询可见</text>
+    </g>
+    <g fill="#6f6659" font-size="17" text-anchor="middle">
+      <text x="170" y="294">primary durable</text>
+      <text x="495" y="294">received / logged</text>
+      <text x="820" y="294">remote flush</text>
+      <text x="1145" y="294">remote apply</text>
+    </g>
+
+    <g>
+      <rect x="80" y="348" width="1280" height="92" rx="14" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+      <rect x="80" y="462" width="1280" height="92" rx="14" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+      <rect x="80" y="576" width="1280" height="92" rx="14" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+      <rect x="80" y="690" width="1280" height="92" rx="14" fill="#f4eace" stroke="#8a6a24" stroke-width="2"/>
+    </g>
+    <g fill="#2b2620" font-size="21">
+      <text x="112" y="386" font-weight="700">异步复制</text>
+      <text x="112" y="417" fill="#554d42" font-size="18">主库提交后即可返回；副本此刻可能还没有收到日志。</text>
+      <text x="112" y="500" font-weight="700">MySQL 半同步</text>
+      <text x="112" y="531" fill="#554d42" font-size="18">至少一个副本确认收到并记录事件；不等于副本已经执行，也不保证查询可见。</text>
+      <text x="112" y="614" font-weight="700">远端落盘</text>
+      <text x="112" y="645" fill="#554d42" font-size="18">等待远端持久化日志；例如 PostgreSQL 同步提交的 durable acknowledgement。</text>
+      <text x="112" y="728" font-weight="700">远端应用</text>
+      <text x="112" y="759" fill="#554d42" font-size="18">等待副本重放完成；PostgreSQL 的 remote_apply 可把确认推进到查询可见阶段。</text>
+    </g>
+    <g stroke-width="4">
+      <line x1="170" y1="335" x2="170" y2="440" stroke="#5b5245"/>
+      <line x1="495" y1="335" x2="495" y2="554" stroke="#295279"/>
+      <line x1="820" y1="335" x2="820" y2="668" stroke="#466b48"/>
+      <line x1="1145" y1="335" x2="1145" y2="782" stroke="#8a6a24"/>
+    </g>
+
+    <rect x="80" y="824" width="1280" height="50" rx="12" fill="#fbf8f1" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="105" y="856" fill="#554d42" font-size="18">确认等级回答的是“成功返回时复制走到了哪里”，读取路由仍需单独设计。</text>
+  </g>
+</svg>

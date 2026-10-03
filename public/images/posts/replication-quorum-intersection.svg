@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="850" viewBox="0 0 1440 850" role="img" aria-labelledby="title desc">
+  <title id="title">N 等于 3、W 等于 2、R 等于 2 时的 Quorum 集合相交</title>
+  <desc id="desc">写集合包含副本 A 与 B，读集合包含副本 B 与 C。由于 W 加 R 大于 N，两个集合至少在 B 相交，但客户端仍需比较版本并处理冲突。</desc>
+  <rect width="1440" height="850" fill="#fdfaf3"/>
+  <text x="80" y="78" fill="#2b2620" font-family="system-ui, sans-serif" font-size="34" font-weight="700">Quorum 保证读写集合相交</text>
+  <text x="80" y="118" fill="#6f6659" font-family="system-ui, sans-serif" font-size="20">示例：N = 3，W = 2，R = 2，因此 W + R &gt; N</text>
+
+  <g font-family="system-ui, sans-serif">
+    <rect x="80" y="168" width="1280" height="92" rx="16" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="112" y="207" fill="#2b2620" font-size="21" font-weight="700">第一步：一次写入获得两个副本确认</text>
+    <text x="112" y="239" fill="#554d42" font-size="18">写集合 W = {A, B}，A 与 B 保存新版本 v7，尚未更新的 C 仍是 v6。</text>
+
+    <g>
+      <rect x="155" y="320" width="290" height="190" rx="22" fill="#d8dee0" stroke="#295279" stroke-width="3"/>
+      <rect x="575" y="320" width="290" height="190" rx="22" fill="#dee3d6" stroke="#466b48" stroke-width="4"/>
+      <rect x="995" y="320" width="290" height="190" rx="22" fill="#fbf8f1" stroke="#8a7f6d" stroke-width="3"/>
+      <text x="300" y="372" text-anchor="middle" fill="#2b2620" font-size="26" font-weight="700">副本 A</text>
+      <text x="720" y="372" text-anchor="middle" fill="#2b2620" font-size="26" font-weight="700">副本 B</text>
+      <text x="1140" y="372" text-anchor="middle" fill="#2b2620" font-size="26" font-weight="700">副本 C</text>
+      <text x="300" y="432" text-anchor="middle" fill="#295279" font-size="38" font-weight="750">v7</text>
+      <text x="720" y="432" text-anchor="middle" fill="#466b48" font-size="38" font-weight="750">v7</text>
+      <text x="1140" y="432" text-anchor="middle" fill="#943b37" font-size="38" font-weight="750">v6</text>
+      <text x="300" y="477" text-anchor="middle" fill="#554d42" font-size="17">属于写集合</text>
+      <text x="720" y="477" text-anchor="middle" fill="#554d42" font-size="17">写集合 ∩ 读集合</text>
+      <text x="1140" y="477" text-anchor="middle" fill="#554d42" font-size="17">尚未同步</text>
+    </g>
+
+    <path d="M570 532 Q720 575 870 532" fill="none" stroke="#466b48" stroke-width="4"/>
+    <path d="M580 525 L568 532 L582 540" fill="none" stroke="#466b48" stroke-width="4"/>
+    <path d="M858 525 L872 532 L858 540" fill="none" stroke="#466b48" stroke-width="4"/>
+    <path d="M990 532 Q1065 575 1140 532" fill="none" stroke="#466b48" stroke-width="4"/>
+    <text x="855" y="598" text-anchor="middle" fill="#466b48" font-size="20" font-weight="700">第二步：读取 B 与 C，R = {B, C}</text>
+
+    <rect x="80" y="640" width="1280" height="146" rx="16" fill="#f4eace" stroke="#8a6a24" stroke-width="2"/>
+    <text x="112" y="682" fill="#2b2620" font-size="21" font-weight="700">交集带来了什么</text>
+    <text x="112" y="719" fill="#554d42" font-size="18">读集合必然碰到至少一个已确认新写入的副本。这里 B 返回 v7，C 返回 v6，协调者比较版本后选择 v7。</text>
+    <text x="112" y="754" fill="#943b37" font-size="18">集合相交本身不等于线性一致：版本规则、并发写冲突、故障模型与读修复仍属于协议的一部分。</text>
+
+    <text x="1120" y="225" text-anchor="middle" fill="#295279" font-size="28" font-weight="750">2 + 2 &gt; 3</text>
+  </g>
+</svg>

@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="820" viewBox="0 0 1440 820" role="img" aria-labelledby="title desc">
+  <title id="title">异步复制中的旧读时间窗口</title>
+  <desc id="desc">客户端写入主库并收到成功后，复制接收线程已经收到日志但应用线程尚未执行，此时从库查询仍会返回旧数据。应用完成后，从库才可读到新值。</desc>
+  <rect width="1440" height="820" fill="#fdfaf3"/>
+  <text x="80" y="78" fill="#2b2620" font-family="system-ui, sans-serif" font-size="34" font-weight="700">写成功之后，从库还可能读不到</text>
+  <text x="80" y="118" fill="#6f6659" font-family="system-ui, sans-serif" font-size="20">异步复制把“主库提交”与“副本可见”分成了两个时刻</text>
+
+  <g font-family="system-ui, sans-serif">
+    <g fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2">
+      <rect x="80" y="165" width="260" height="76" rx="14"/>
+      <rect x="410" y="165" width="260" height="76" rx="14"/>
+      <rect x="740" y="165" width="260" height="76" rx="14"/>
+      <rect x="1070" y="165" width="290" height="76" rx="14"/>
+    </g>
+    <g fill="#2b2620" font-size="24" font-weight="650" text-anchor="middle">
+      <text x="210" y="211">客户端</text>
+      <text x="540" y="211">主库</text>
+      <text x="870" y="195">从库接收线程</text>
+      <text x="870" y="224" fill="#6f6659" font-size="17" font-weight="500">relay log / WAL</text>
+      <text x="1215" y="195">从库应用线程</text>
+      <text x="1215" y="224" fill="#6f6659" font-size="17" font-weight="500">查询可见的数据</text>
+    </g>
+
+    <g stroke="#8a7f6d" stroke-width="2" stroke-dasharray="7 8">
+      <line x1="210" y1="260" x2="210" y2="690"/>
+      <line x1="540" y1="260" x2="540" y2="690"/>
+      <line x1="870" y1="260" x2="870" y2="690"/>
+      <line x1="1215" y1="260" x2="1215" y2="690"/>
+    </g>
+
+    <g fill="none" stroke="#2f5d8a" stroke-width="3">
+      <path d="M210 305 H520"/>
+      <path d="M510 295 L525 305 L510 315"/>
+      <path d="M540 375 H850"/>
+      <path d="M840 365 L855 375 L840 385"/>
+      <path d="M540 445 H230"/>
+      <path d="M240 435 L225 445 L240 455"/>
+    </g>
+    <g fill="#2b2620" font-size="19">
+      <text x="300" y="292">① INSERT 短链映射</text>
+      <text x="635" y="362">② 发送复制日志</text>
+      <text x="300" y="432">③ COMMIT 成功</text>
+    </g>
+
+    <rect x="79" y="478" width="1261" height="94" rx="16" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+    <text x="110" y="516" fill="#943b37" font-family="system-ui, sans-serif" font-size="19" font-weight="700">旧读窗口</text>
+    <text x="110" y="548" fill="#554d42" font-family="system-ui, sans-serif" font-size="18">日志已经到达从库，但应用线程还没执行；此时查询从库，短链可能返回 404。</text>
+    <path d="M210 600 H1195" fill="none" stroke="#943b37" stroke-width="3"/>
+    <path d="M1185 590 L1200 600 L1185 610" fill="none" stroke="#943b37" stroke-width="3"/>
+    <text x="510" y="590" fill="#943b37" font-family="system-ui, sans-serif" font-size="18">④ GET /x7a9 → 从库：未找到</text>
+
+    <path d="M870 645 H1195" fill="none" stroke="#466b48" stroke-width="3"/>
+    <path d="M1185 635 L1200 645 L1185 655" fill="none" stroke="#466b48" stroke-width="3"/>
+    <text x="914" y="632" fill="#466b48" font-family="system-ui, sans-serif" font-size="18">⑤ 应用日志</text>
+
+    <rect x="80" y="713" width="1280" height="66" rx="14" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="110" y="755" fill="#2b2620" font-family="system-ui, sans-serif" font-size="19">副本应用完成后，下一次查询才会命中新映射。复制延迟不是一个点，而是一段业务可见性窗口。</text>
+  </g>
+</svg>
