@@ -1,0 +1,152 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 760" role="img" aria-labelledby="transformer-block-title transformer-block-desc">
+  <title id="transformer-block-title">Transformer Block 的完整结构</title>
+  <desc id="transformer-block-desc">展示一个 Transformer Decoder Block 的内部组成：输入经过 Multi-Head Self-Attention 子层、残差连接与 LayerNorm，再经过 FFN 子层、残差连接与 LayerNorm，最终输出。右侧注释说明各部件功能。</desc>
+
+  <!-- background -->
+  <rect width="1440" height="760" fill="#fdfaf3"/>
+
+  <!-- title -->
+  <text x="720" y="52" font-family="system-ui, -apple-system, sans-serif" font-size="22" font-weight="600" fill="#1a1a1a" text-anchor="middle">Transformer Decoder Block：从输入到输出的完整路径</text>
+
+  <!-- ============================================================
+       LEFT: flow diagram
+  ============================================================ -->
+
+  <!-- Input box -->
+  <rect x="200" y="100" width="320" height="52" rx="8" fill="#e8f0ed" stroke="#2f6f5f" stroke-width="1.5"/>
+  <text x="360" y="131" font-family="system-ui, sans-serif" font-size="16" fill="#1a1a1a" text-anchor="middle">输入向量序列</text>
+  <text x="360" y="147" font-family="system-ui, sans-serif" font-size="13" fill="#5a6e69" text-anchor="middle">Token Embedding + 位置编码</text>
+
+  <!-- arrow down to fork -->
+  <line x1="360" y1="152" x2="360" y2="185" stroke="#888" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- residual branch fork point 1 -->
+  <circle cx="360" cy="190" r="5" fill="#2f6f5f"/>
+  <!-- residual horizontal left -->
+  <line x1="360" y1="190" x2="170" y2="190" stroke="#2f6f5f" stroke-width="1.5" stroke-dasharray="5,3"/>
+
+  <!-- arrow down to MHA box -->
+  <line x1="360" y1="195" x2="360" y2="225" stroke="#888" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Multi-Head Attention box -->
+  <rect x="200" y="225" width="320" height="68" rx="8" fill="#2f6f5f" stroke="#2f6f5f" stroke-width="1.5"/>
+  <text x="360" y="252" font-family="system-ui, sans-serif" font-size="16" font-weight="600" fill="#fff" text-anchor="middle">Multi-Head Self-Attention</text>
+  <text x="360" y="272" font-family="system-ui, sans-serif" font-size="13" fill="#c8e0da" text-anchor="middle">Q · Kᵀ / √d_k → Softmax → · V</text>
+  <text x="360" y="287" font-family="system-ui, sans-serif" font-size="12" fill="#a8ccc4" text-anchor="middle">（Causal Mask 遮住未来位置）</text>
+
+  <!-- arrow down from MHA -->
+  <line x1="360" y1="293" x2="360" y2="330" stroke="#888" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- residual add circle 1 -->
+  <circle cx="360" cy="340" r="16" fill="#fff" stroke="#2f6f5f" stroke-width="2"/>
+  <text x="360" y="346" font-family="system-ui, sans-serif" font-size="18" fill="#2f6f5f" text-anchor="middle">+</text>
+
+  <!-- residual line from fork to add -->
+  <line x1="170" y1="190" x2="170" y2="340" stroke="#2f6f5f" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <line x1="170" y1="340" x2="344" y2="340" stroke="#2f6f5f" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrgn)"/>
+
+  <!-- arrow down to norm1 -->
+  <line x1="360" y1="356" x2="360" y2="383" stroke="#888" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- LayerNorm 1 -->
+  <rect x="263" y="383" width="194" height="40" rx="8" fill="#f5efe0" stroke="#c8a96e" stroke-width="1.5"/>
+  <text x="360" y="408" font-family="system-ui, sans-serif" font-size="15" fill="#7a5520" text-anchor="middle">RMSNorm（Pre-Norm）</text>
+
+  <!-- arrow down to fork2 -->
+  <line x1="360" y1="423" x2="360" y2="455" stroke="#888" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- residual branch fork point 2 -->
+  <circle cx="360" cy="460" r="5" fill="#2f6f5f"/>
+  <line x1="360" y1="460" x2="170" y2="460" stroke="#2f6f5f" stroke-width="1.5" stroke-dasharray="5,3"/>
+
+  <!-- arrow down to FFN -->
+  <line x1="360" y1="465" x2="360" y2="495" stroke="#888" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- FFN box -->
+  <rect x="200" y="495" width="320" height="66" rx="8" fill="#4a8a7a" stroke="#2f6f5f" stroke-width="1.5"/>
+  <text x="360" y="521" font-family="system-ui, sans-serif" font-size="16" font-weight="600" fill="#fff" text-anchor="middle">前馈网络（FFN）</text>
+  <text x="360" y="541" font-family="system-ui, sans-serif" font-size="13" fill="#c8e0da" text-anchor="middle">x → Linear → SwiGLU → Linear</text>
+  <text x="360" y="556" font-family="system-ui, sans-serif" font-size="12" fill="#a8ccc4" text-anchor="middle">中间维度 4× 扩展，逐位置独立计算</text>
+
+  <!-- arrow down from FFN -->
+  <line x1="360" y1="561" x2="360" y2="595" stroke="#888" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- residual add circle 2 -->
+  <circle cx="360" cy="605" r="16" fill="#fff" stroke="#2f6f5f" stroke-width="2"/>
+  <text x="360" y="611" font-family="system-ui, sans-serif" font-size="18" fill="#2f6f5f" text-anchor="middle">+</text>
+
+  <!-- residual line 2 -->
+  <line x1="170" y1="460" x2="170" y2="605" stroke="#2f6f5f" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <line x1="170" y1="605" x2="344" y2="605" stroke="#2f6f5f" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrgn)"/>
+
+  <!-- arrow down to norm2 -->
+  <line x1="360" y1="621" x2="360" y2="648" stroke="#888" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- LayerNorm 2 -->
+  <rect x="263" y="648" width="194" height="40" rx="8" fill="#f5efe0" stroke="#c8a96e" stroke-width="1.5"/>
+  <text x="360" y="673" font-family="system-ui, sans-serif" font-size="15" fill="#7a5520" text-anchor="middle">RMSNorm（Pre-Norm）</text>
+
+  <!-- arrow down to output -->
+  <line x1="360" y1="688" x2="360" y2="715" stroke="#888" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Output box -->
+  <rect x="200" y="715" width="320" height="36" rx="8" fill="#e8f0ed" stroke="#2f6f5f" stroke-width="1.5"/>
+  <text x="360" y="738" font-family="system-ui, sans-serif" font-size="15" fill="#1a1a1a" text-anchor="middle">输出向量序列（送入下一层 Block）</text>
+
+  <!-- residual label -->
+  <text x="148" y="378" font-family="system-ui, sans-serif" font-size="12" fill="#2f6f5f" text-anchor="middle" transform="rotate(-90,148,378)">残差连接（Residual）</text>
+
+  <!-- ============================================================
+       RIGHT: annotation panel
+  ============================================================ -->
+
+  <!-- panel background -->
+  <rect x="600" y="90" width="760" height="580" rx="12" fill="#f7f3ea" stroke="#d4c9a8" stroke-width="1"/>
+
+  <text x="980" y="122" font-family="system-ui, sans-serif" font-size="17" font-weight="600" fill="#2f6f5f" text-anchor="middle">各部件的职责与现代变体</text>
+
+  <!-- Section 1: Self-Attention -->
+  <rect x="628" y="138" width="704" height="118" rx="8" fill="#e8f4f0" stroke="#2f6f5f" stroke-width="1"/>
+  <text x="648" y="162" font-family="system-ui, sans-serif" font-size="15" font-weight="600" fill="#2f6f5f">Multi-Head Self-Attention</text>
+  <text x="648" y="182" font-family="system-ui, sans-serif" font-size="13" fill="#333">• 每个位置通过 Q·Kᵀ 直接读取序列中所有其他位置的信息</text>
+  <text x="648" y="200" font-family="system-ui, sans-serif" font-size="13" fill="#333">• 多个头在不同子空间学习不同类型的关系（句法、语义、共指）</text>
+  <text x="648" y="218" font-family="system-ui, sans-serif" font-size="13" fill="#333">• 现代变体：GQA / MQA 共享 K/V 头，减少推理时 KV Cache 体积</text>
+  <text x="648" y="236" font-family="system-ui, sans-serif" font-size="13" fill="#888">原论文：8 头，d_model=512；LLaMA 3 8B：32 头（GQA 8 个 K/V 头）</text>
+
+  <!-- Section 2: Residual -->
+  <rect x="628" y="266" width="704" height="100" rx="8" fill="#fef8ec" stroke="#c8a96e" stroke-width="1"/>
+  <text x="648" y="290" font-family="system-ui, sans-serif" font-size="15" font-weight="600" fill="#7a5520">残差连接 + RMSNorm</text>
+  <text x="648" y="310" font-family="system-ui, sans-serif" font-size="13" fill="#333">• 残差连接（x + Sublayer(x)）为梯度提供"高速公路"，让深层网络可训练</text>
+  <text x="648" y="328" font-family="system-ui, sans-serif" font-size="13" fill="#333">• RMSNorm 控制数值分布，比 LayerNorm 计算量更小，效果相当</text>
+  <text x="648" y="346" font-family="system-ui, sans-serif" font-size="13" fill="#888">Pre-Norm（归一化在子层之前）比原论文的 Post-Norm 训练更稳定</text>
+
+  <!-- Section 3: FFN -->
+  <rect x="628" y="376" width="704" height="100" rx="8" fill="#edf4f0" stroke="#4a8a7a" stroke-width="1"/>
+  <text x="648" y="400" font-family="system-ui, sans-serif" font-size="15" font-weight="600" fill="#2f6f5f">前馈网络（FFN）</text>
+  <text x="648" y="420" font-family="system-ui, sans-serif" font-size="13" fill="#333">• 对每个位置独立做非线性变换，Attention 负责位置间通信，FFN 负责特征变换</text>
+  <text x="648" y="438" font-family="system-ui, sans-serif" font-size="13" fill="#333">• 中间维度通常是 d_model 的 4 倍（8/3 倍用于 SwiGLU）</text>
+  <text x="648" y="456" font-family="system-ui, sans-serif" font-size="13" fill="#888">原论文 ReLU → 现代模型 SwiGLU（门控激活，更好的梯度流动）</text>
+
+  <!-- Section 4: stacking -->
+  <rect x="628" y="486" width="704" height="84" rx="8" fill="#f0edf8" stroke="#8070c0" stroke-width="1"/>
+  <text x="648" y="510" font-family="system-ui, sans-serif" font-size="15" font-weight="600" fill="#5040a0">Block 堆叠与规模</text>
+  <text x="648" y="530" font-family="system-ui, sans-serif" font-size="13" fill="#333">• 同样结构的 Block 重复 N 层：原论文 N=6，LLaMA 3 8B N=32，405B N=126</text>
+  <text x="648" y="548" font-family="system-ui, sans-serif" font-size="13" fill="#333">• 每层 Attention + FFN 逐渐融合局部到全局上下文，参数集中在 W_Q/K/V 和 FFN 权重</text>
+  <text x="648" y="562" font-family="system-ui, sans-serif" font-size="13" fill="#888">7B = ≈32 层；70B = ≈80 层；405B = 126 层（各层参数不共享）</text>
+
+  <!-- Section 5: summary -->
+  <rect x="628" y="580" width="704" height="72" rx="8" fill="#2f6f5f"/>
+  <text x="980" y="606" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#fff" text-anchor="middle">设计哲学：用统一的可复用 Block 堆叠深度，而非手工设计复杂结构</text>
+  <text x="980" y="626" font-family="system-ui, sans-serif" font-size="13" fill="#c8e0da" text-anchor="middle">Attention 跨位置通信 + FFN 位置内变换 + 残差保证梯度流动 = 可扩展的基础单元</text>
+  <text x="980" y="642" font-family="system-ui, sans-serif" font-size="13" fill="#a8ccc4" text-anchor="middle">7 年后主流 LLM 仍用此结构，改变的只是各部件的具体实现</text>
+
+  <!-- arrow markers -->
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#888"/>
+    </marker>
+    <marker id="arrgn" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#2f6f5f"/>
+    </marker>
+  </defs>
+</svg>
