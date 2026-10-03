@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="760" viewBox="0 0 1440 760" role="img" aria-labelledby="title desc">
+  <title id="title">预训练数据配比与质量对模型能力的影响</title>
+  <desc id="desc">左侧展示预训练数据来源配比：网页数据约60%、代码约10%、书籍约15%、学术论文约8%、Wikipedia约7%；右侧展示Kaplan与Chinchilla两种Scaling Law的参数与数据配比建议对比，Chinchilla建议每个参数对应约20个训练Token。</desc>
+  <defs>
+    <style>.sans{font-family:Inter,"PingFang SC","Microsoft YaHei",sans-serif}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.ink{fill:#2b2620}.muted{fill:#6f6659}.green{fill:#2f6f5f}.box{fill:#fffdf8;stroke:#b9ae9c;stroke-width:2}.soft{fill:#f5f0e4}.accent{fill:#dfe9df}.blue{fill:#dce6ee}.warn{fill:#fef3ee}</style>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#6f6659"/></marker>
+  </defs>
+  <rect width="1440" height="760" fill="#fdfaf3"/>
+
+  <!-- Header -->
+  <text x="90" y="70" class="mono green" font-size="17" font-weight="700" letter-spacing="3">PRETRAINING DATA &amp; SCALING</text>
+  <text x="90" y="122" class="sans ink" font-size="40" font-weight="720">数据配比与规模定律</text>
+  <text x="90" y="158" class="sans muted" font-size="19">训练数据的来源与质量决定能力上限；Scaling Law 让研究者在训练前就能估算最终效果。</text>
+
+  <!-- LEFT: Data composition -->
+  <rect x="90" y="192" width="620" height="530" rx="16" class="box"/>
+  <text x="120" y="230" class="mono green" font-size="14" font-weight="700">DATA COMPOSITION</text>
+  <text x="120" y="258" class="sans ink" font-size="22" font-weight="700">预训练数据来源与配比</text>
+
+  <!-- Bar chart rows -->
+  <!-- Web data 60% -->
+  <text x="120" y="300" class="sans ink" font-size="15">网页数据（Common Crawl）</text>
+  <rect x="120" y="308" width="372" height="28" rx="6" fill="#dce6ee"/>
+  <text x="500" y="328" class="mono ink" font-size="14">~60%</text>
+  <text x="120" y="352" class="sans muted" font-size="13">体量最大，质量参差，需大量清洗去重</text>
+
+  <!-- Code 10% -->
+  <text x="120" y="382" class="sans ink" font-size="15">代码（GitHub）</text>
+  <rect x="120" y="390" width="62" height="28" rx="6" fill="#d4e8d4" style="stroke:#5a9a6a;stroke-width:1"/>
+  <text x="190" y="410" class="mono ink" font-size="14">~10%</text>
+  <text x="120" y="434" class="sans muted" font-size="13">对推理能力贡献远超其体量占比</text>
+
+  <!-- Books 15% -->
+  <text x="120" y="464" class="sans ink" font-size="15">书籍与文学</text>
+  <rect x="120" y="472" width="93" height="28" rx="6" fill="#ece8f8" style="stroke:#8a7aaa;stroke-width:1"/>
+  <text x="221" y="492" class="mono ink" font-size="14">~15%</text>
+  <text x="120" y="516" class="sans muted" font-size="13">长文档，语言多样，写作风格来源</text>
+
+  <!-- Academic 8% -->
+  <text x="120" y="546" class="sans ink" font-size="15">学术论文（arXiv 等）</text>
+  <rect x="120" y="554" width="50" height="28" rx="6" fill="#fde8de" style="stroke:#c4836a;stroke-width:1"/>
+  <text x="178" y="574" class="mono ink" font-size="14">~8%</text>
+  <text x="120" y="598" class="sans muted" font-size="13">科学推理与数学能力关键来源</text>
+
+  <!-- Wikipedia 7% -->
+  <text x="120" y="628" class="sans ink" font-size="15">Wikipedia / 知识库</text>
+  <rect x="120" y="636" width="43" height="28" rx="6" fill="#f5f0e4" style="stroke:#b9ae9c;stroke-width:1.5"/>
+  <text x="171" y="656" class="mono ink" font-size="14">~7%</text>
+  <text x="120" y="682" class="sans muted" font-size="13">高质量事实，体量小但密度高</text>
+
+  <text x="120" y="710" class="sans muted" font-size="13">* 实际配比按模型目标调整；高质量来源通常做过采样（upsampling）</text>
+
+  <!-- RIGHT: Scaling Law comparison -->
+  <rect x="770" y="192" width="580" height="530" rx="16" class="soft" style="stroke:#b9ae9c;stroke-width:2"/>
+  <text x="800" y="230" class="mono green" font-size="14" font-weight="700">SCALING LAW</text>
+  <text x="800" y="258" class="sans ink" font-size="22" font-weight="700">Kaplan vs Chinchilla 配比建议</text>
+
+  <!-- Kaplan box -->
+  <rect x="800" y="276" width="520" height="148" rx="12" class="warn" style="stroke:#c4836a;stroke-width:1.5"/>
+  <text x="820" y="306" class="sans ink" font-size="16" font-weight="700" fill="#a04020">Kaplan Scaling Law（2020，OpenAI）</text>
+  <text x="820" y="330" class="sans muted" font-size="14">给定计算预算，优先扩大参数量</text>
+  <text x="820" y="354" class="sans muted" font-size="14">数据量相对保守——GPT-3（175B）只训了约 300B Token</text>
+  <text x="820" y="378" class="sans muted" font-size="14">结论：每个参数对应约 1.7 个训练 Token</text>
+  <rect x="820" y="392" width="480" height="24" rx="6" fill="#fde8de"/>
+  <text x="830" y="409" class="mono ink" font-size="13">175B 参数 × 1.7 ≈ 300B Token  →  GPT-3 的训练配比</text>
+
+  <!-- Arrow -->
+  <path d="M1060 424 V454" stroke="#6f6659" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="1070" y="444" class="sans muted" font-size="13">后续实验发现数据被严重低估</text>
+
+  <!-- Chinchilla box -->
+  <rect x="800" y="460" width="520" height="172" rx="12" fill="#d4e8d4" style="stroke:#5a9a6a;stroke-width:2"/>
+  <text x="820" y="490" class="sans ink" font-size="16" font-weight="700" fill="#2f6f5f">Chinchilla Scaling Law（2022，DeepMind）</text>
+  <text x="820" y="514" class="sans muted" font-size="14">最优配比：参数量 N 与训练 Token 数 D 大致等比</text>
+  <text x="820" y="538" class="sans muted" font-size="14">每个参数对应约 20 个训练 Token（N ≈ D / 20）</text>
+  <rect x="820" y="550" width="480" height="24" rx="6" fill="#b8ddb8"/>
+  <text x="830" y="567" class="mono ink" font-size="13">10B 参数 × 20 = 200B Token  →  Chinchilla 最优点</text>
+  <text x="820" y="600" class="sans muted" font-size="14">推论：GPT-3 是"参数过多、数据太少"的欠训练模型</text>
+  <text x="820" y="622" class="sans muted" font-size="14">LLaMA 3 8B 训了 15T Token，远超最优——追求推理时高效</text>
+
+  <!-- Key insight box -->
+  <rect x="800" y="652" width="520" height="56" rx="12" class="accent" style="stroke:#5a9a6a;stroke-width:1.5"/>
+  <text x="820" y="678" class="sans ink" font-size="15" font-weight="700">实践取舍：推理成本 &gt; 训练成本</text>
+  <text x="820" y="698" class="sans muted" font-size="13">多花训练预算换更小参数量，每次推理节省的成本会持续摊销回来</text>
+</svg>
