@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 760" role="img" aria-labelledby="transformer-evolution-title transformer-evolution-desc">
+  <title id="transformer-evolution-title">现代 LLM 各组件改动总览</title>
+  <desc id="transformer-evolution-desc">对比表格展示原始 Transformer（2017）与现代 LLM（2024-2025）在架构形态、位置编码、归一化、激活函数、Attention 变体、参数规模等方面的改动，以及每项改动的核心动机。</desc>
+
+  <!-- background -->
+  <rect width="1440" height="760" fill="#fdfaf3"/>
+
+  <!-- title -->
+  <text x="720" y="46" font-family="system-ui, -apple-system, sans-serif" font-size="22" font-weight="600" fill="#1a1a1a" text-anchor="middle">从原始 Transformer 到现代 LLM：每项改动与动机</text>
+  <text x="720" y="70" font-family="system-ui, -apple-system, sans-serif" font-size="14" fill="#5a6e69" text-anchor="middle">核心骨架七年未变；改动的是各部件的具体实现，每一处都有明确工程或性能动机</text>
+
+  <!-- table header -->
+  <rect x="40" y="88" width="1360" height="44" rx="6" fill="#2f6f5f"/>
+  <text x="120" y="116" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#fff">组件</text>
+  <text x="340" y="116" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#fff">原始 Transformer（2017）</text>
+  <text x="640" y="116" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#fff">现代 LLM（2024-2025）</text>
+  <text x="980" y="116" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#fff">改动动机</text>
+
+  <!-- row 1: architecture -->
+  <rect x="40" y="132" width="1360" height="66" rx="0" fill="#f0f7f4"/>
+  <line x1="40" y1="198" x2="1400" y2="198" stroke="#d4e8e0" stroke-width="1"/>
+  <text x="80" y="158" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#2f6f5f">架构形态</text>
+  <text x="80" y="178" font-family="system-ui, sans-serif" font-size="12" fill="#5a6e69">整体结构</text>
+  <rect x="290" y="140" width="4" height="50" rx="2" fill="#c8a96e"/>
+  <text x="310" y="158" font-family="system-ui, sans-serif" font-size="14" fill="#333">Encoder-Decoder（面向翻译）</text>
+  <text x="310" y="178" font-family="system-ui, sans-serif" font-size="12" fill="#888">源语言 Encoder + 目标语言 Decoder</text>
+  <rect x="590" y="140" width="4" height="50" rx="2" fill="#2f6f5f"/>
+  <text x="610" y="158" font-family="system-ui, sans-serif" font-size="14" fill="#333">Decoder-only（统一序列）</text>
+  <text x="610" y="178" font-family="system-ui, sans-serif" font-size="12" fill="#888">GPT、LLaMA、Claude 全部采用</text>
+  <rect x="930" y="140" width="4" height="50" rx="2" fill="#2f6f5f"/>
+  <text x="950" y="158" font-family="system-ui, sans-serif" font-size="13" fill="#333">统一序列处理，规模化训练更简单</text>
+  <text x="950" y="178" font-family="system-ui, sans-serif" font-size="12" fill="#888">in-context learning 天然适配</text>
+
+  <!-- row 2: position encoding -->
+  <rect x="40" y="198" width="1360" height="66" rx="0" fill="#fff"/>
+  <line x1="40" y1="264" x2="1400" y2="264" stroke="#d4e8e0" stroke-width="1"/>
+  <text x="80" y="224" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#2f6f5f">位置编码</text>
+  <text x="80" y="244" font-family="system-ui, sans-serif" font-size="12" fill="#5a6e69">RoPE</text>
+  <rect x="290" y="206" width="4" height="50" rx="2" fill="#c8a96e"/>
+  <text x="310" y="224" font-family="system-ui, sans-serif" font-size="14" fill="#333">正弦绝对位置编码（Sinusoidal）</text>
+  <text x="310" y="244" font-family="system-ui, sans-serif" font-size="12" fill="#888">加到 Embedding 上，不可学习，仅加一次</text>
+  <rect x="590" y="206" width="4" height="50" rx="2" fill="#2f6f5f"/>
+  <text x="610" y="224" font-family="system-ui, sans-serif" font-size="14" fill="#333">RoPE（旋转位置编码）</text>
+  <text x="610" y="244" font-family="system-ui, sans-serif" font-size="12" fill="#888">每层对 Q/K 做旋转，编码相对距离</text>
+  <rect x="930" y="206" width="4" height="50" rx="2" fill="#2f6f5f"/>
+  <text x="950" y="224" font-family="system-ui, sans-serif" font-size="13" fill="#333">相对位置更有用；外推性更好</text>
+  <text x="950" y="244" font-family="system-ui, sans-serif" font-size="12" fill="#888">每层生效；配合 ABF/YaRN 可扩展到 128K+</text>
+
+  <!-- row 3: norm type -->
+  <rect x="40" y="264" width="1360" height="66" rx="0" fill="#f0f7f4"/>
+  <line x1="40" y1="330" x2="1400" y2="330" stroke="#d4e8e0" stroke-width="1"/>
+  <text x="80" y="290" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#2f6f5f">归一化类型</text>
+  <text x="80" y="310" font-family="system-ui, sans-serif" font-size="12" fill="#5a6e69">RMSNorm</text>
+  <rect x="290" y="272" width="4" height="50" rx="2" fill="#c8a96e"/>
+  <text x="310" y="290" font-family="system-ui, sans-serif" font-size="14" fill="#333">LayerNorm（均值中心化 + 方差缩放）</text>
+  <text x="310" y="310" font-family="system-ui, sans-serif" font-size="12" fill="#888">含 β 偏移参数，计算量更大</text>
+  <rect x="590" y="272" width="4" height="50" rx="2" fill="#2f6f5f"/>
+  <text x="610" y="290" font-family="system-ui, sans-serif" font-size="14" fill="#333">RMSNorm（仅 RMS 缩放）</text>
+  <text x="610" y="310" font-family="system-ui, sans-serif" font-size="12" fill="#888">去掉均值中心化，无 β 参数</text>
+  <rect x="930" y="272" width="4" height="50" rx="2" fill="#2f6f5f"/>
+  <text x="950" y="290" font-family="system-ui, sans-serif" font-size="13" fill="#333">更快（约 10-15%），参数更少，效果持平</text>
+  <text x="950" y="310" font-family="system-ui, sans-serif" font-size="12" fill="#888">32 层模型累计节省显著</text>
+
+  <!-- row 4: norm position -->
+  <rect x="40" y="330" width="1360" height="66" rx="0" fill="#fff"/>
+  <line x1="40" y1="396" x2="1400" y2="396" stroke="#d4e8e0" stroke-width="1"/>
+  <text x="80" y="356" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#2f6f5f">归一化位置</text>
+  <text x="80" y="376" font-family="system-ui, sans-serif" font-size="12" fill="#5a6e69">Pre-Norm</text>
+  <rect x="290" y="338" width="4" height="50" rx="2" fill="#c8a96e"/>
+  <text x="310" y="356" font-family="system-ui, sans-serif" font-size="14" fill="#333">Post-Norm（子层输出后归一化）</text>
+  <text x="310" y="376" font-family="system-ui, sans-serif" font-size="12" fill="#888">x = LayerNorm(x + Sublayer(x))</text>
+  <rect x="590" y="338" width="4" height="50" rx="2" fill="#2f6f5f"/>
+  <text x="610" y="356" font-family="system-ui, sans-serif" font-size="14" fill="#333">Pre-Norm（子层输入前归一化）</text>
+  <text x="610" y="376" font-family="system-ui, sans-serif" font-size="12" fill="#888">x = x + Sublayer(RMSNorm(x))</text>
+  <rect x="930" y="338" width="4" height="50" rx="2" fill="#2f6f5f"/>
+  <text x="950" y="356" font-family="system-ui, sans-serif" font-size="13" fill="#333">深层训练更稳定，不易梯度爆炸/消失</text>
+  <text x="950" y="376" font-family="system-ui, sans-serif" font-size="12" fill="#888">32-128 层规模下工程可靠性更强</text>
+
+  <!-- row 5: activation -->
+  <rect x="40" y="396" width="1360" height="66" rx="0" fill="#f0f7f4"/>
+  <line x1="40" y1="462" x2="1400" y2="462" stroke="#d4e8e0" stroke-width="1"/>
+  <text x="80" y="422" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#2f6f5f">FFN 激活函数</text>
+  <text x="80" y="442" font-family="system-ui, sans-serif" font-size="12" fill="#5a6e69">SwiGLU</text>
+  <rect x="290" y="404" width="4" height="50" rx="2" fill="#c8a96e"/>
+  <text x="310" y="422" font-family="system-ui, sans-serif" font-size="14" fill="#333">ReLU（max(0, x)）</text>
+  <text x="310" y="442" font-family="system-ui, sans-serif" font-size="12" fill="#888">x=0 处不可导，2 个矩阵，中间维度 4×</text>
+  <rect x="590" y="404" width="4" height="50" rx="2" fill="#2f6f5f"/>
+  <text x="610" y="422" font-family="system-ui, sans-serif" font-size="14" fill="#333">SwiGLU（门控 + Swish 激活）</text>
+  <text x="610" y="442" font-family="system-ui, sans-serif" font-size="12" fill="#888">3 个矩阵，中间维度约 8/3×，门控结构</text>
+  <rect x="930" y="404" width="4" height="50" rx="2" fill="#2f6f5f"/>
+  <text x="950" y="422" font-family="system-ui, sans-serif" font-size="13" fill="#333">门控提升选择性表达；Swish 梯度更平滑</text>
+  <text x="950" y="442" font-family="system-ui, sans-serif" font-size="12" fill="#888">PaLM、LLaMA 等验证效果更优</text>
+
+  <!-- row 6: attention variant -->
+  <rect x="40" y="462" width="1360" height="66" rx="0" fill="#fff"/>
+  <line x1="40" y1="528" x2="1400" y2="528" stroke="#d4e8e0" stroke-width="1"/>
+  <text x="80" y="488" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#2f6f5f">Attention 变体</text>
+  <text x="80" y="508" font-family="system-ui, sans-serif" font-size="12" fill="#5a6e69">GQA</text>
+  <rect x="290" y="470" width="4" height="50" rx="2" fill="#c8a96e"/>
+  <text x="310" y="488" font-family="system-ui, sans-serif" font-size="14" fill="#333">Multi-Head Attention（MHA）</text>
+  <text x="310" y="508" font-family="system-ui, sans-serif" font-size="12" fill="#888">h 个 Q 头 = h 个 KV 头，KV Cache 最大</text>
+  <rect x="590" y="470" width="4" height="50" rx="2" fill="#2f6f5f"/>
+  <text x="610" y="488" font-family="system-ui, sans-serif" font-size="14" fill="#333">GQA（Grouped-Query Attention）</text>
+  <text x="610" y="508" font-family="system-ui, sans-serif" font-size="12" fill="#888">32 Q 头共享 8 KV 头，Cache 缩至 1/4</text>
+  <rect x="930" y="470" width="4" height="50" rx="2" fill="#2f6f5f"/>
+  <text x="950" y="488" font-family="system-ui, sans-serif" font-size="13" fill="#333">减少 KV Cache 体积和内存带宽消耗</text>
+  <text x="950" y="508" font-family="system-ui, sans-serif" font-size="12" fill="#888">推理吞吐提升显著，质量损失极小</text>
+
+  <!-- row 7: scale -->
+  <rect x="40" y="528" width="1360" height="66" rx="0" fill="#f0f7f4"/>
+  <line x1="40" y1="594" x2="1400" y2="594" stroke="#d4e8e0" stroke-width="1"/>
+  <text x="80" y="554" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#2f6f5f">参数规模</text>
+  <text x="80" y="574" font-family="system-ui, sans-serif" font-size="12" fill="#5a6e69">Scaling Laws</text>
+  <rect x="290" y="536" width="4" height="50" rx="2" fill="#c8a96e"/>
+  <text x="310" y="554" font-family="system-ui, sans-serif" font-size="14" fill="#333">~65M 参数（论文原型）</text>
+  <text x="310" y="574" font-family="system-ui, sans-serif" font-size="12" fill="#888">6 层，d_model=512，WMT 翻译数据</text>
+  <rect x="590" y="536" width="4" height="50" rx="2" fill="#2f6f5f"/>
+  <text x="610" y="554" font-family="system-ui, sans-serif" font-size="14" fill="#333">7B – 405B 参数</text>
+  <text x="610" y="574" font-family="system-ui, sans-serif" font-size="12" fill="#888">32-128 层，d_model=4096-16384，数万亿 Token</text>
+  <rect x="930" y="536" width="4" height="50" rx="2" fill="#2f6f5f"/>
+  <text x="950" y="554" font-family="system-ui, sans-serif" font-size="13" fill="#333">规模定律（Chinchilla）驱动；能力随规模涌现</text>
+  <text x="950" y="574" font-family="system-ui, sans-serif" font-size="12" fill="#888">参数量与数据量需匹配才高效</text>
+
+  <!-- bottom summary bar -->
+  <rect x="40" y="608" width="1360" height="72" rx="8" fill="#2f6f5f"/>
+  <text x="720" y="636" font-family="system-ui, sans-serif" font-size="15" font-weight="600" fill="#fff" text-anchor="middle">七年不变的核心骨架</text>
+  <text x="720" y="658" font-family="system-ui, sans-serif" font-size="13" fill="#c8e0da" text-anchor="middle">Token Embedding → 多层 Self-Attention（Q·Kᵀ/√d · V）+ FFN → 残差连接 → 输出 logits</text>
+  <text x="720" y="674" font-family="system-ui, sans-serif" font-size="13" fill="#a8ccc4" text-anchor="middle">理解了原始 Transformer 的骨架，就理解了所有现代 LLM 的结构；改动的只是各部件的具体实现</text>
+
+  <!-- column dividers -->
+  <line x1="290" y1="88" x2="290" y2="594" stroke="#d4e8e0" stroke-width="1"/>
+  <line x1="590" y1="88" x2="590" y2="594" stroke="#d4e8e0" stroke-width="1"/>
+  <line x1="930" y1="88" x2="930" y2="594" stroke="#d4e8e0" stroke-width="1"/>
+
+  <!-- outer border -->
+  <rect x="40" y="88" width="1360" height="506" rx="0" fill="none" stroke="#d4e8e0" stroke-width="1"/>
+</svg>
