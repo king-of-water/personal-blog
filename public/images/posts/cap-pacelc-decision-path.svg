@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="680" viewBox="0 0 1440 680" role="img" aria-labelledby="title desc">
+  <title id="title">CAP 与 PACELC 的两段决策</title>
+  <desc id="desc">先判断副本之间是否发生网络分区。分区时在可用性与一致性之间决定；未分区时在延迟与一致性之间决定。下方提示每条业务操作都需要单独定义成功语义。</desc>
+  <style>
+    .bg{fill:#f7f7f3}.panel{fill:#fff;stroke:#d7ddd6;stroke-width:2}.accent{fill:#17684f}.soft{fill:#e7f1eb}.warm{fill:#f4eee1}.line{stroke:#46534d;stroke-width:3;fill:none}.dash{stroke:#86948c;stroke-width:3;stroke-dasharray:9 8;fill:none}.h{font:700 30px Arial,'PingFang SC','Microsoft YaHei',sans-serif;fill:#1d2823}.k{font:700 21px Arial,'PingFang SC','Microsoft YaHei',sans-serif;fill:#17684f}.b{font:500 19px Arial,'PingFang SC','Microsoft YaHei',sans-serif;fill:#34423b}.s{font:500 16px Arial,'PingFang SC','Microsoft YaHei',sans-serif;fill:#58655e}.w{font:700 18px Arial,'PingFang SC','Microsoft YaHei',sans-serif;fill:#fff}
+  </style>
+  <rect class="bg" width="1440" height="680"/>
+  <text x="78" y="74" class="h">CAP 和 PACELC：同一套复制系统，要回答两段不同的问题</text>
+  <text x="78" y="108" class="s">先看网络是否把副本隔开；再看正常路径愿意为确认多等多久。</text>
+  <rect x="78" y="154" width="328" height="116" rx="14" class="panel"/>
+  <text x="108" y="202" class="k">起点：一次跨副本读写</text>
+  <text x="108" y="235" class="b">请求成功时，调用方能相信什么？</text>
+  <path d="M406 212 H490" class="line"/><path d="M478 202 l18 10 -18 10" fill="#46534d"/>
+  <rect x="496" y="154" width="330" height="116" rx="14" class="soft" stroke="#a9c7b5" stroke-width="2"/>
+  <text x="526" y="202" class="k">副本之间是否分区？</text>
+  <text x="526" y="235" class="b">消息可能丢失或无限延迟？</text>
+  <path d="M661 270 V332 H301" class="line"/><path d="M313 322 l-18 10 18 10" fill="#46534d"/>
+  <path d="M661 270 V332 H1048" class="line"/><path d="M1036 322 l18 10 -18 10" fill="#46534d"/>
+  <rect x="78" y="352" width="450" height="216" rx="16" class="panel"/>
+  <text x="108" y="401" class="k">P：发生网络分区</text>
+  <text x="108" y="435" class="h" style="font-size:25px">CAP 问：A 还是 C？</text>
+  <rect x="108" y="462" width="178" height="72" rx="10" class="warm"/>
+  <text x="128" y="492" class="b">偏向 C</text><text x="128" y="518" class="s">无法确认就拒绝</text>
+  <rect x="308" y="462" width="188" height="72" rx="10" class="soft"/>
+  <text x="328" y="492" class="b">偏向 A</text><text x="328" y="518" class="s">本地继续，再合并</text>
+  <rect x="906" y="352" width="456" height="216" rx="16" class="panel"/>
+  <text x="936" y="401" class="k">E：网络仍可通信</text>
+  <text x="936" y="435" class="h" style="font-size:25px">PACELC 问：L 还是 C？</text>
+  <rect x="936" y="462" width="184" height="72" rx="10" class="soft"/>
+  <text x="956" y="492" class="b">偏向 L</text><text x="956" y="518" class="s">本地确认、就近读取</text>
+  <rect x="1140" y="462" width="190" height="72" rx="10" class="warm"/>
+  <text x="1160" y="492" class="b">偏向 C</text><text x="1160" y="518" class="s">等待复制或协调读取</text>
+  <path d="M528 460 H906" class="dash"/>
+  <text x="617" y="449" class="s">两段都是每个操作的选择</text>
+  <rect x="78" y="602" width="1284" height="42" rx="10" class="accent"/>
+  <text x="104" y="630" class="w">BASE 不是第三条分支：它要求业务显式承担异步收敛、冲突处理、幂等和补偿，而不是把这些问题留给“最终一致”。</text>
+</svg>
