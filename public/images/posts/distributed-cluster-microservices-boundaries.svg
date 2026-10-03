@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="780" viewBox="0 0 1440 780" role="img" aria-labelledby="title desc">
+  <title id="title">同一订单系统的集群、分布式与微服务边界</title>
+  <desc id="desc">订单系统先由单体多副本形成集群，再按商品、订单和支付划分微服务，最后让每项服务跨多个节点运行，显示三种概念可以叠加但关注层次不同。</desc>
+  <rect width="1440" height="780" fill="#f7f7f3"/>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0L0 6L9 3z" fill="#17684f"/></marker></defs>
+  <style>
+    .title{font:700 34px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#1d201e}
+    .sub{font:400 17px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#69716d}
+    .n{font:700 16px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#17684f;letter-spacing:1px}
+    .h{font:700 22px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#1d201e}
+    .p{font:400 15px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#59605d}
+    .w{font:600 15px ui-sans-serif,system-ui,-apple-system,"PingFang SC",sans-serif;fill:#fff}
+  </style>
+  <text x="80" y="70" class="title">三个词描述同一系统的不同层次</text>
+  <text x="80" y="106" class="sub">集群增加同类副本，微服务划分业务边界，分布式系统处理跨节点协作</text>
+
+  <rect x="80" y="152" width="390" height="500" rx="14" fill="#fff" stroke="#d8ddd9"/>
+  <text x="112" y="190" class="n">01 · 集群：同一程序多副本</text>
+  <text x="112" y="226" class="h">订单单体应用</text>
+  <text x="112" y="254" class="p">解决容量与单实例故障</text>
+  <rect x="126" y="306" width="298" height="52" rx="8" fill="#e9f2ee" stroke="#b8d1c7"/><text x="206" y="338" class="h">负载均衡器</text>
+  <path d="M275 359v32m-8-9 8 9 8-9" fill="none" stroke="#17684f" stroke-width="2"/>
+  <rect x="126" y="404" width="86" height="74" rx="8" fill="#fff" stroke="#d8ddd9"/><text x="145" y="438" class="p">app #1</text>
+  <rect x="257" y="404" width="86" height="74" rx="8" fill="#fff" stroke="#d8ddd9"/><text x="276" y="438" class="p">app #2</text>
+  <rect x="388" y="404" width="86" height="74" rx="8" fill="#fff" stroke="#d8ddd9"/><text x="407" y="438" class="p">app #3</text>
+  <path d="M169 478v40m131-40v40m131-40v40" fill="none" stroke="#8b9690" stroke-width="2"/>
+  <rect x="126" y="530" width="298" height="64" rx="8" fill="#17684f"/><text x="208" y="568" class="w">共享数据库</text>
+  <text x="112" y="623" class="p">关注：流量分配、Session、任务重复执行</text>
+
+  <path d="M492 405h66" fill="none" stroke="#17684f" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="500" y="382" class="n">改变业务边界</text>
+
+  <rect x="582" y="152" width="390" height="500" rx="14" fill="#fff" stroke="#d8ddd9"/>
+  <text x="614" y="190" class="n">02 · 微服务：独立业务能力</text>
+  <text x="614" y="226" class="h">三个可独立演进的服务</text>
+  <text x="614" y="254" class="p">解决发布、团队与负载差异</text>
+  <rect x="630" y="310" width="294" height="70" rx="8" fill="#e9f2ee" stroke="#b8d1c7"/><text x="716" y="343" class="h">商品服务</text><text x="689" y="366" class="p">目录与搜索</text>
+  <rect x="630" y="410" width="294" height="70" rx="8" fill="#e9f2ee" stroke="#b8d1c7"/><text x="716" y="443" class="h">订单服务</text><text x="689" y="466" class="p">订单状态</text>
+  <rect x="630" y="510" width="294" height="70" rx="8" fill="#e9f2ee" stroke="#b8d1c7"/><text x="716" y="543" class="h">支付服务</text><text x="689" y="566" class="p">渠道与账本</text>
+  <text x="614" y="623" class="p">关注：数据归属、API 契约、独立发布</text>
+
+  <path d="M994 405h66" fill="none" stroke="#17684f" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="1005" y="382" class="n">改变运行边界</text>
+
+  <rect x="1084" y="152" width="276" height="500" rx="14" fill="#e9f2ee" stroke="#b8d1c7"/>
+  <text x="1116" y="190" class="n">03 · 分布式运行时</text>
+  <text x="1116" y="226" class="h">跨节点协作</text>
+  <text x="1116" y="254" class="p">处理网络与部分失败</text>
+  <rect x="1130" y="310" width="184" height="58" rx="8" fill="#fff" stroke="#d8ddd9"/><text x="1180" y="345" class="p">商品 #1 / #2</text>
+  <rect x="1130" y="400" width="184" height="58" rx="8" fill="#fff" stroke="#d8ddd9"/><text x="1180" y="435" class="p">订单 #1 / #2</text>
+  <rect x="1130" y="490" width="184" height="58" rx="8" fill="#fff" stroke="#d8ddd9"/><text x="1180" y="525" class="p">支付 #1 / #2</text>
+  <text x="1116" y="605" class="p">关注：超时、重试、</text><text x="1116" y="629" class="p">一致性与故障恢复</text>
+  <text x="80" y="720" class="n">判断顺序：先问是否增加副本，再问是否建立业务边界，最后问跨节点操作怎样在失败后收敛。</text>
+</svg>
