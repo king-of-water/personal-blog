@@ -56,8 +56,7 @@ export const backendSubcategories: Subcategory[] = [
 		plannedTopics: [
 			'多台机器怎样只让一个实例操作资源：分布式锁与 Fencing Token',
 			'多台机器怎样生成不重复的 ID：UUID、Snowflake 与号段模式',
-			'分布式事务（一）：一次操作跨多个数据库时怎样一起提交',
-			'分布式事务（二）：2PC、TCC、Saga、Outbox 与事务消息怎样选',
+			'分布式事务：2PC、TCC、Saga、Outbox 与事务消息怎样选',
 			'服务地址总在变化，调用方怎样找到它：服务发现、健康检查与故障摘除',
 			'下游故障时怎样避免拖垮整个系统：限流、熔断、隔离与降级',
 			'多台机器怎样确保定时任务只执行一次：任务调度、租约与幂等',
