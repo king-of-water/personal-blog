@@ -54,7 +54,6 @@ export const backendSubcategories: Subcategory[] = [
 		slug: 'distributed-systems',
 		description: '一致性、容错、协调与系统设计。',
 		plannedTopics: [
-			'多台机器怎样只让一个实例操作资源：分布式锁与 Fencing Token',
 			'多台机器怎样生成不重复的 ID：UUID、Snowflake 与号段模式',
 			'分布式事务：2PC、TCC、Saga、Outbox 与事务消息怎样选',
 			'服务地址总在变化，调用方怎样找到它：服务发现、健康检查与故障摘除',

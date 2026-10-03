@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="690" viewBox="0 0 1440 690" role="img" aria-labelledby="title desc">
+  <title id="title">Redis 锁过期后旧 Worker 与新 Worker 的执行时间线</title>
+  <desc id="desc">Worker A 获得三十秒租约后暂停，锁到期后 Worker B 获得新租约并写入；A 恢复后仍可继续写数据库，说明锁过期不会停止旧进程。</desc>
+  <style>.bg{fill:#f7f7f3}.p{fill:#fff;stroke:#d5ddd6;stroke-width:2}.soft{fill:#e7f1eb;stroke:#a9c7b5;stroke-width:2}.warm{fill:#f4eee1;stroke:#dfcfae;stroke-width:2}.g{fill:#17684f}.h{font:700 28px Arial,'PingFang SC',sans-serif;fill:#1d2823}.t{font:700 19px Arial,'PingFang SC',sans-serif;fill:#233129}.b{font:500 16px Arial,'PingFang SC',sans-serif;fill:#46534c}.s{font:500 14px Arial,'PingFang SC',sans-serif;fill:#617067}.l{stroke:#53635a;stroke-width:3;fill:none}.d{stroke:#8b9990;stroke-width:3;stroke-dasharray:9 8;fill:none}.bad{stroke:#9f5d4a;stroke-width:4;fill:none}</style>
+  <rect class="bg" width="1440" height="690"/><text x="70" y="62" class="h">Redis 中没有两个同时存在的锁，数据库仍可能收到两个持有者的写入</text><text x="70" y="96" class="s">时间从左向右；虚线表示进程暂停期间没有机会续期或检查租约。</text>
+  <text x="70" y="165" class="t">Worker A</text><text x="70" y="300" class="t">Redis</text><text x="70" y="435" class="t">Worker B</text><text x="70" y="570" class="t">订单数据库</text>
+  <path d="M235 155 H1365" class="l"/><path d="M235 290 H1365" class="l"/><path d="M235 425 H1365" class="l"/><path d="M235 560 H1365" class="l"/>
+  <rect x="265" y="118" width="180" height="74" rx="12" class="soft"/><text x="290" y="149" class="t">A 获得锁</text><text x="290" y="175" class="b">owner=A，TTL=30s</text><path d="M355 192 V278" class="l"/><path d="M345 266 l10 18 10-18" fill="#53635a"/>
+  <rect x="485" y="118" width="250" height="74" rx="12" class="warm"/><text x="510" y="149" class="t">A 暂停 40 秒</text><text x="510" y="175" class="b">Full GC / VM suspend</text><path d="M485 205 H735" class="d"/>
+  <rect x="650" y="253" width="210" height="74" rx="12" class="p"/><text x="682" y="284" class="t">第 30 秒</text><text x="682" y="310" class="b">锁自然过期</text>
+  <rect x="785" y="388" width="220" height="74" rx="12" class="soft"/><text x="815" y="419" class="t">B 获得新锁</text><text x="815" y="445" class="b">owner=B，TTL=30s</text><path d="M895 388 V327" class="l"/><path d="M885 339 l10-18 10 18" fill="#53635a"/>
+  <rect x="1010" y="523" width="190" height="74" rx="12" class="soft"/><text x="1038" y="554" class="t">B 写入成功</text><text x="1038" y="580" class="b">订单已关闭</text><path d="M1005 462 L1080 523" class="l"/><path d="M1066 507 l18 19 -26-3" fill="#53635a"/>
+  <rect x="995" y="118" width="205" height="74" rx="12" class="warm"/><text x="1022" y="149" class="t">A 恢复运行</text><text x="1022" y="175" class="b">调用栈仍在临界区</text>
+  <rect x="1215" y="523" width="160" height="74" rx="12" class="p"/><text x="1241" y="554" class="t">A 再写入</text><text x="1241" y="580" class="b">旧 owner</text><path d="M1120 192 L1270 523" class="bad"/><path d="M1255 506 l20 20 -27-2" fill="#9f5d4a"/>
+  <rect x="410" y="625" width="620" height="45" rx="10" class="g"/><text x="455" y="654" style="font:700 17px Arial,'PingFang SC',sans-serif;fill:#fff">TTL 释放的是锁记录；只有资源端 Token 校验能拒绝恢复后的旧写入</text>
+</svg>
