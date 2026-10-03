@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900" role="img" aria-labelledby="title desc">
+  <title id="title">Agent Team 的七个协作机制</title>
+  <desc id="desc">Mission 与核心宗旨在最上层锚定方向，Leader 负责方案制定、变更审查与兜底，Worker 之间通过横向通信共享信息，OKR 承接目标与进度，任务结束后由集体复盘把经验回流为团队资产。</desc>
+  <defs>
+    <style>.sans{font-family:Inter,"PingFang SC","Microsoft YaHei",sans-serif}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.ink{fill:#2b2620}.muted{fill:#6f6659}.green{fill:#2f6f5f}.line{stroke:#8a7f6d;stroke-width:2}.dash{stroke:#8a7f6d;stroke-width:2;stroke-dasharray:7 6}.box{fill:#fffdf8;stroke:#b9ae9c;stroke-width:2}.soft{fill:#f5f0e4}.accent{fill:#dfe9df}.blue{fill:#dce6ee}</style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#6f6659"/></marker>
+    <marker id="arrowStart" markerWidth="10" markerHeight="10" refX="2" refY="5" orient="auto"><path d="M10 0 L0 5 L10 10 Z" fill="#6f6659"/></marker>
+    <marker id="arrowGreen" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#2f6f5f"/></marker>
+  </defs>
+  <rect width="1440" height="900" fill="#fdfaf3"/>
+  <text x="110" y="72" class="mono green" font-size="17" font-weight="700" letter-spacing="3">AGENT TEAM MECHANISM MAP</text>
+  <text x="110" y="126" class="sans ink" font-size="42" font-weight="720">七个机制共同决定团队产出</text>
+  <text x="110" y="164" class="sans muted" font-size="20">它们不缺一不可：少掉任何一环，多 Agent 都会退化成把同一个执行者复印若干份。</text>
+
+  <rect x="110" y="200" width="1220" height="96" rx="16" class="soft"/>
+  <text x="140" y="238" class="mono green" font-size="14" font-weight="700">MISSION 与核心宗旨</text>
+  <text x="140" y="274" class="sans ink" font-size="23">回答我们为什么存在、用什么原则做取舍，是无人拍板时的方向锚点</text>
+
+  <path d="M720 296 V330" class="line" marker-end="url(#arrow)"/>
+  <text x="742" y="320" class="sans muted" font-size="15">锚定</text>
+
+  <rect x="560" y="330" width="320" height="120" rx="16" class="box"/>
+  <text x="590" y="364" class="mono green" font-size="14" font-weight="700">LEADER</text>
+  <text x="590" y="402" class="sans ink" font-size="26" font-weight="700">资深角色 + 兜底人</text>
+  <text x="590" y="432" class="sans muted" font-size="16">提方案、审变更、能力上限更高</text>
+
+  <path d="M600 450 L300 530" class="line" marker-start="url(#arrowStart)" marker-end="url(#arrow)"/>
+  <path d="M720 450 V530" class="line" marker-start="url(#arrowStart)" marker-end="url(#arrow)"/>
+  <path d="M840 450 L1140 530" class="line" marker-start="url(#arrowStart)" marker-end="url(#arrow)"/>
+  <text x="180" y="500" class="sans muted" font-size="15">方案 与 反馈</text>
+
+  <rect x="110" y="530" width="300" height="150" rx="16" class="box"/>
+  <rect x="110" y="530" width="300" height="46" rx="16" class="blue"/>
+  <text x="134" y="561" class="mono green" font-size="14" font-weight="700">WORKER · 岗位 JD</text>
+  <text x="134" y="614" class="sans ink" font-size="23" font-weight="700">数据侧岗位</text>
+  <text x="134" y="646" class="sans muted" font-size="16">能力要求、Skill 池、SLA</text>
+
+  <rect x="570" y="530" width="300" height="150" rx="16" class="box"/>
+  <rect x="570" y="530" width="300" height="46" rx="16" class="accent"/>
+  <text x="594" y="561" class="mono green" font-size="14" font-weight="700">WORKER · 岗位 JD</text>
+  <text x="594" y="614" class="sans ink" font-size="23" font-weight="700">缓存侧岗位</text>
+  <text x="594" y="646" class="sans muted" font-size="16">认领 KR、上报进度</text>
+
+  <rect x="1030" y="530" width="300" height="150" rx="16" class="box"/>
+  <rect x="1030" y="530" width="300" height="46" rx="16" class="blue"/>
+  <text x="1054" y="561" class="mono green" font-size="14" font-weight="700">WORKER · 岗位 JD</text>
+  <text x="1054" y="614" class="sans ink" font-size="23" font-weight="700">压测侧岗位</text>
+  <text x="1054" y="646" class="sans muted" font-size="16">独立验证、给出证据</text>
+
+  <path d="M410 590 H570" class="line" marker-start="url(#arrowStart)" marker-end="url(#arrow)"/>
+  <path d="M870 590 H1030" class="line" marker-start="url(#arrowStart)" marker-end="url(#arrow)"/>
+  <text x="424" y="578" class="sans muted" font-size="15">横向通信</text>
+  <text x="884" y="578" class="sans muted" font-size="15">横向通信</text>
+  <text x="110" y="712" class="sans muted" font-size="15">广播 / 查询 / 求助升级，需要通信预算与能力路由约束，全连接会指数级放大上下文</text>
+
+  <path d="M720 680 V740" class="line" marker-end="url(#arrow)"/>
+
+  <rect x="110" y="740" width="1220" height="96" rx="16" class="soft"/>
+  <text x="140" y="778" class="mono green" font-size="14" font-weight="700">OKR 与进度管理</text>
+  <text x="140" y="814" class="sans ink" font-size="23">Team OKR 由 Leader 与 Worker 共同协商，里程碑触发、偏离预警、达成即关闭</text>
+
+  <path d="M1330 788 H1400 V390 H882" class="dash" marker-end="url(#arrowGreen)"/>
+  <text x="1140" y="760" class="sans green" font-size="16" font-weight="700">复盘回流</text>
+  <text x="1140" y="726" class="sans muted" font-size="15">方法论 / 协作模式 / 反模式</text>
+
+  <text x="110" y="878" class="sans muted" font-size="16">机制层回答的是"该说什么、怎么达成共识、说完如何沉淀"，而不是"消息能不能发出去"。</text>
+</svg>

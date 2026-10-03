@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="820" viewBox="0 0 1440 820" role="img" aria-labelledby="title desc">
+  <title id="title">团队复盘与演化的三个层次</title>
+  <desc id="desc">复盘分三层：Agent 层修订自身提示与技能，交互层更新对队友的理解与协作方式，团队层讨论组织与规则本身；知识从强 Agent 非对称地流向弱 Agent，而不是向所有人对称广播。</desc>
+  <defs>
+    <style>.sans{font-family:Inter,"PingFang SC","Microsoft YaHei",sans-serif}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.ink{fill:#2b2620}.muted{fill:#6f6659}.green{fill:#2f6f5f}.line{stroke:#8a7f6d;stroke-width:2}.dash{stroke:#2f6f5f;stroke-width:2.5;stroke-dasharray:8 6}.box{fill:#fffdf8;stroke:#b9ae9c;stroke-width:2}.soft{fill:#f5f0e4}.accent{fill:#dfe9df}.blue{fill:#dce6ee}</style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#6f6659"/></marker>
+  </defs>
+  <rect width="1440" height="820" fill="#fdfaf3"/>
+  <text x="90" y="70" class="mono green" font-size="17" font-weight="700" letter-spacing="3">TEAM RETROSPECTIVE</text>
+  <text x="90" y="122" class="sans ink" font-size="40" font-weight="720">团队复盘改的是三层，而不是一份总结</text>
+  <text x="90" y="158" class="sans muted" font-size="19">只做个体反思，团队会停留在"每个人更熟练"；只有改动协作规则，团队才会变得更好配合。</text>
+
+  <rect x="90" y="200" width="780" height="120" rx="16" class="box"/>
+  <rect x="90" y="200" width="14" height="120" rx="7" class="blue"/>
+  <text x="126" y="240" class="mono green" font-size="14" font-weight="700">L1 · AGENT 层 · 每次任务后</text>
+  <text x="126" y="276" class="sans ink" font-size="23" font-weight="700">修订自己的提示与技能</text>
+  <text x="126" y="302" class="sans muted" font-size="16">用本地执行轨迹，加上主动向队友索取的影响反馈</text>
+
+  <rect x="90" y="340" width="780" height="120" rx="16" class="box"/>
+  <rect x="90" y="340" width="14" height="120" rx="7" class="accent"/>
+  <text x="126" y="380" class="mono green" font-size="14" font-weight="700">L2 · 交互层 · 阶段交付后</text>
+  <text x="126" y="416" class="sans ink" font-size="23" font-weight="700">更新对彼此能力与沟通方式的理解</text>
+  <text x="126" y="442" class="sans muted" font-size="16">队友画像、协作笔记、哪种组合在这类任务上更有效</text>
+
+  <rect x="90" y="480" width="780" height="120" rx="16" class="box"/>
+  <rect x="90" y="480" width="14" height="120" rx="7" fill="#eee3dc"/>
+  <text x="126" y="520" class="mono green" font-size="14" font-weight="700">L3 · 团队层 · 周期或任务结束</text>
+  <text x="126" y="556" class="sans ink" font-size="23" font-weight="700">讨论组织与规则本身</text>
+  <text x="126" y="582" class="sans muted" font-size="16">岗位是否合理、要不要引入或退休角色、共享规则如何修订</text>
+
+  <rect x="930" y="200" width="420" height="400" rx="16" class="soft"/>
+  <text x="960" y="242" class="mono green" font-size="14" font-weight="700">知识流向</text>
+  <rect x="960" y="270" width="150" height="66" rx="12" class="box"/>
+  <text x="1035" y="310" class="sans ink" font-size="19" text-anchor="middle">强 Agent</text>
+  <rect x="960" y="470" width="150" height="66" rx="12" class="box"/>
+  <text x="1035" y="510" class="sans ink" font-size="19" text-anchor="middle">弱 Agent</text>
+  <path d="M1035 336 V470" class="dash" marker-end="url(#arrow)"/>
+  <text x="1054" y="410" class="sans green" font-size="17" font-weight="700">非对称</text>
+  <text x="1130" y="300" class="sans muted" font-size="16">生产经验</text>
+  <text x="1130" y="500" class="sans muted" font-size="16">消费经验</text>
+  <text x="960" y="562" class="sans ink" font-size="16">只喂给在该细分上低于中位数的成员，</text>
+  <text x="960" y="586" class="sans ink" font-size="16">把专精保留下来，而不是向所有人广播。</text>
+
+  <text x="90" y="680" class="sans ink" font-size="18" font-weight="700">复盘要产出三类资产，而不是一份流水账</text>
+  <rect x="90" y="700" width="386" height="76" rx="14" class="blue"/>
+  <text x="118" y="734" class="sans ink" font-size="19" font-weight="700">方法论</text>
+  <text x="118" y="760" class="sans muted" font-size="15">成功与失败的关键因素，抽象为可复用原则</text>
+  <rect x="492" y="700" width="386" height="76" rx="14" class="accent"/>
+  <text x="520" y="734" class="sans ink" font-size="19" font-weight="700">协作模式</text>
+  <text x="520" y="760" class="sans muted" font-size="15">哪种组合与通信方式在这类任务上有效</text>
+  <rect x="894" y="700" width="456" height="76" rx="14" class="soft"/>
+  <text x="922" y="734" class="sans ink" font-size="19" font-weight="700">反模式</text>
+  <text x="922" y="760" class="sans muted" font-size="15">踩过的坑与弯路，作为下次提前规避的清单</text>
+</svg>
