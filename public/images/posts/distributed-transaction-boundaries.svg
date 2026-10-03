@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900" role="img" aria-labelledby="title desc">
+  <title id="title">五种分布式事务方案覆盖的边界</title>
+  <desc id="desc">2PC 覆盖多个事务资源的共同提交，TCC 覆盖业务资源预留与确认取消，Saga 覆盖多个本地事务及补偿，Outbox 和事务消息覆盖本地事务与可靠消息发布。</desc>
+  <rect width="1440" height="900" fill="#fdfaf3"/>
+  <g font-family="system-ui, sans-serif">
+    <text x="80" y="72" fill="#2b2620" font-size="34" font-weight="700">五种方案处理的不是同一段边界</text>
+    <text x="80" y="112" fill="#6f6659" font-size="20">先定位需要共同提交、需要补偿，还是需要可靠通知</text>
+
+    <rect x="80" y="160" width="1280" height="110" rx="16" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <g fill="#2b2620" font-size="20" font-weight="650" text-anchor="middle">
+      <text x="230" y="210">数据库 A</text>
+      <text x="490" y="210">数据库 B</text>
+      <text x="750" y="210">钱包 / 库存</text>
+      <text x="1010" y="210">业务服务</text>
+      <text x="1240" y="210">消息 Broker</text>
+    </g>
+    <g fill="#6f6659" font-size="16" text-anchor="middle">
+      <text x="230" y="241">事务资源</text>
+      <text x="490" y="241">事务资源</text>
+      <text x="750" y="241">业务资源</text>
+      <text x="1010" y="241">本地事务</text>
+      <text x="1240" y="241">异步投递</text>
+    </g>
+
+    <rect x="80" y="310" width="1280" height="96" rx="16" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="112" y="348" fill="#2b2620" font-size="22" font-weight="700">2PC / XA</text>
+    <text x="112" y="381" fill="#554d42" font-size="18">协调数据库 A 与 B 共同 Prepare，再统一 Commit 或 Rollback。</text>
+    <path d="M230 295 V280 H490 V295" fill="none" stroke="#295279" stroke-width="4"/>
+
+    <rect x="80" y="430" width="1280" height="96" rx="16" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="112" y="468" fill="#2b2620" font-size="22" font-weight="700">TCC</text>
+    <text x="112" y="501" fill="#554d42" font-size="18">钱包或库存先 Try 预留资源，再由协调者调用 Confirm 或 Cancel。</text>
+    <path d="M750 415 V400 H1010 V415" fill="none" stroke="#466b48" stroke-width="4"/>
+
+    <rect x="80" y="550" width="1280" height="96" rx="16" fill="#f4eace" stroke="#8a6a24" stroke-width="2"/>
+    <text x="112" y="588" fill="#2b2620" font-size="22" font-weight="700">Saga / 状态机</text>
+    <text x="112" y="621" fill="#554d42" font-size="18">多个步骤各自提交。后续失败时继续前向恢复，或执行退款等补偿动作。</text>
+    <path d="M490 535 V520 H1010 V535" fill="none" stroke="#8a6a24" stroke-width="4"/>
+
+    <rect x="80" y="670" width="620" height="142" rx="16" fill="#fbf8f1" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="112" y="710" fill="#2b2620" font-size="22" font-weight="700">Outbox</text>
+    <text x="112" y="744" fill="#554d42" font-size="18">业务行与待发送事件在同库提交，</text>
+    <text x="112" y="774" fill="#554d42" font-size="18">publisher 或 CDC 再投递到 Broker。</text>
+
+    <rect x="740" y="670" width="620" height="142" rx="16" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+    <text x="772" y="710" fill="#2b2620" font-size="22" font-weight="700">事务消息</text>
+    <text x="772" y="744" fill="#554d42" font-size="18">Broker 先保存半消息，再根据本地事务结果</text>
+    <text x="772" y="774" fill="#554d42" font-size="18">Commit、Rollback 或回查。</text>
+
+    <rect x="80" y="844" width="1280" height="42" rx="10" fill="#f5f0e4"/>
+    <text x="103" y="872" fill="#554d42" font-size="17">Saga 可以由 Outbox 或事务消息驱动；可靠发消息并不自动完成业务补偿。</text>
+  </g>
+</svg>

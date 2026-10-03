@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="920" viewBox="0 0 1440 920" role="img" aria-labelledby="title desc">
+  <title id="title">支付、业务确认与退款状态机</title>
+  <desc id="desc">支付流水从等待支付进入支付中，明确失败进入支付失败，成功进入已支付。业务确认成功进入业务成功，明确不可恢复时进入退款中，退款成功进入已退款。</desc>
+  <rect width="1440" height="920" fill="#fdfaf3"/>
+  <g font-family="system-ui, sans-serif">
+    <text x="80" y="72" fill="#2b2620" font-size="34" font-weight="700">支付成功只是中间事实</text>
+    <text x="80" y="112" fill="#6f6659" font-size="20">状态机分别记录资金结果、业务结果和补偿结果</text>
+
+    <rect x="80" y="160" width="1280" height="132" rx="18" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="112" y="202" fill="#2b2620" font-size="21" font-weight="700">一个 bizKey：同一次续签业务目标</text>
+    <text x="112" y="238" fill="#554d42" font-size="18">attempt 1 明确失败后可以创建 attempt 2；结果未知时必须复用原 tradeOrderNo 查询，不能换单。</text>
+    <text x="112" y="269" fill="#554d42" font-size="18">每个 attempt 拥有固定 tradeOrderNo 与 refundOrderNo，晚到消息只能唤醒对应流水。</text>
+
+    <g fill="#fbf8f1" stroke="#5b5245" stroke-width="3">
+      <rect x="90" y="382" width="190" height="86" rx="18"/>
+      <rect x="350" y="382" width="190" height="86" rx="18"/>
+      <rect x="610" y="382" width="190" height="86" rx="18"/>
+      <rect x="1130" y="326" width="220" height="86" rx="18" fill="#dee3d6" stroke="#466b48"/>
+      <rect x="870" y="566" width="220" height="86" rx="18" fill="#f4eace" stroke="#8a6a24"/>
+      <rect x="1130" y="566" width="220" height="86" rx="18" fill="#dee3d6" stroke="#466b48"/>
+      <rect x="350" y="610" width="190" height="86" rx="18" fill="#eed9d3" stroke="#943b37"/>
+    </g>
+    <g fill="#2b2620" font-size="20" font-weight="700" text-anchor="middle">
+      <text x="185" y="420">WAIT_PAY</text><text x="185" y="447" font-size="16" font-weight="500">等待支付</text>
+      <text x="445" y="420">PAYING</text><text x="445" y="447" font-size="16" font-weight="500">支付结果未知</text>
+      <text x="705" y="420">PAYED</text><text x="705" y="447" font-size="16" font-weight="500">资金已扣</text>
+      <text x="1240" y="364">BIZ_SUCCESS</text><text x="1240" y="391" font-size="16" font-weight="500">业务终态，永久禁退</text>
+      <text x="980" y="604">REFUNDING</text><text x="980" y="631" font-size="16" font-weight="500">补偿处理中</text>
+      <text x="1240" y="604">REFUNDED</text><text x="1240" y="631" font-size="16" font-weight="500">退款终态</text>
+      <text x="445" y="648">PAY_FAIL</text><text x="445" y="675" font-size="16" font-weight="500">本 attempt 终态</text>
+    </g>
+
+    <g fill="none" stroke="#295279" stroke-width="4">
+      <path d="M280 425 H330"/><path d="M320 415 L335 425 L320 435"/>
+      <path d="M540 425 H590"/><path d="M580 415 L595 425 L580 435"/>
+      <path d="M800 405 C940 405 990 369 1110 369"/><path d="M1100 359 L1115 369 L1100 379"/>
+    </g>
+    <g fill="none" stroke="#943b37" stroke-width="4">
+      <path d="M445 468 V590"/><path d="M435 580 L445 595 L455 580"/>
+    </g>
+    <g fill="none" stroke="#8a6a24" stroke-width="4">
+      <path d="M760 468 C800 520 850 574 850 609 H850"/>
+      <path d="M850 599 L865 609 L850 619"/>
+      <path d="M1090 609 H1110"/><path d="M1100 599 L1115 609 L1100 619"/>
+    </g>
+
+    <g fill="#554d42" font-size="17">
+      <text x="295" y="408">建单</text>
+      <text x="552" y="408">扣款成功</text>
+      <text x="877" y="354">任务事实属于本单</text>
+      <text x="463" y="538">明确失败</text>
+      <text x="732" y="529">业务明确失败且满足退款条件</text>
+      <text x="1100" y="590">退款成功</text>
+    </g>
+
+    <rect x="80" y="744" width="1280" height="116" rx="16" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="112" y="786" fill="#2b2620" font-size="21" font-weight="700">所有非终态都能被再次发现</text>
+    <text x="112" y="821" fill="#554d42" font-size="18">同步入口首次推进，MQ 秒级唤醒，Scanner 分钟级扫描。每次推进都重读主库，并用 CAS 仲裁状态写入。</text>
+  </g>
+</svg>

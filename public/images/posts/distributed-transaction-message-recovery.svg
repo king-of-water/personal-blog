@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="920" viewBox="0 0 1440 920" role="img" aria-labelledby="title desc">
+  <title id="title">Outbox、事务消息和状态扫描的恢复路径</title>
+  <desc id="desc">Outbox 通过同库消息表与发布器恢复消息发送，事务消息通过半消息和本地事务回查恢复，状态扫描则直接查询业务非终态并重新调用状态推进器。</desc>
+  <rect width="1440" height="920" fill="#fdfaf3"/>
+  <g font-family="system-ui, sans-serif">
+    <text x="80" y="72" fill="#2b2620" font-size="34" font-weight="700">DB 成功、MQ 没发：三种恢复路径</text>
+    <text x="80" y="112" fill="#6f6659" font-size="20">三种方法都允许重复触发，恢复依据不同</text>
+
+    <g>
+      <rect x="80" y="156" width="1280" height="210" rx="18" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+      <text x="112" y="198" fill="#2b2620" font-size="24" font-weight="700">Outbox：数据库里保留一条待发布事件</text>
+      <g fill="#fbf8f1" stroke="#295279" stroke-width="2">
+        <rect x="120" y="236" width="250" height="76" rx="12"/>
+        <rect x="455" y="236" width="250" height="76" rx="12"/>
+        <rect x="790" y="236" width="250" height="76" rx="12"/>
+        <rect x="1125" y="236" width="195" height="76" rx="12"/>
+      </g>
+      <g fill="#2b2620" font-size="18" text-anchor="middle">
+        <text x="245" y="270">业务行 + Outbox</text><text x="245" y="294">同一事务提交</text>
+        <text x="580" y="270">publisher / CDC</text><text x="580" y="294">读取 Outbox</text>
+        <text x="915" y="282">发送 Broker</text>
+        <text x="1222" y="282">消费者幂等</text>
+      </g>
+      <g stroke="#295279" stroke-width="3" fill="none">
+        <path d="M370 274 H435"/><path d="M425 264 L440 274 L425 284"/>
+        <path d="M705 274 H770"/><path d="M760 264 L775 274 L760 284"/>
+        <path d="M1040 274 H1105"/><path d="M1095 264 L1110 274 L1095 284"/>
+      </g>
+    </g>
+
+    <g>
+      <rect x="80" y="392" width="1280" height="210" rx="18" fill="#f4eace" stroke="#8a6a24" stroke-width="2"/>
+      <text x="112" y="434" fill="#2b2620" font-size="24" font-weight="700">事务消息：Broker 保存半消息并回查本地事务</text>
+      <g fill="#fbf8f1" stroke="#8a6a24" stroke-width="2">
+        <rect x="120" y="472" width="250" height="76" rx="12"/>
+        <rect x="455" y="472" width="250" height="76" rx="12"/>
+        <rect x="790" y="472" width="250" height="76" rx="12"/>
+        <rect x="1125" y="472" width="195" height="76" rx="12"/>
+      </g>
+      <g fill="#2b2620" font-size="18" text-anchor="middle">
+        <text x="245" y="506">发送 Half Message</text>
+        <text x="580" y="506">执行本地事务</text>
+        <text x="915" y="496">Commit / Rollback</text><text x="915" y="522">未知则回查</text>
+        <text x="1222" y="506">消息可投递</text>
+      </g>
+      <g stroke="#8a6a24" stroke-width="3" fill="none">
+        <path d="M370 510 H435"/><path d="M425 500 L440 510 L425 520"/>
+        <path d="M705 510 H770"/><path d="M760 500 L775 510 L760 520"/>
+        <path d="M1040 510 H1105"/><path d="M1095 500 L1110 510 L1095 520"/>
+      </g>
+    </g>
+
+    <g>
+      <rect x="80" y="628" width="1280" height="210" rx="18" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+      <text x="112" y="670" fill="#2b2620" font-size="24" font-weight="700">状态扫描：非终态本身就是待办依据</text>
+      <g fill="#fbf8f1" stroke="#466b48" stroke-width="2">
+        <rect x="120" y="708" width="250" height="76" rx="12"/>
+        <rect x="455" y="708" width="250" height="76" rx="12"/>
+        <rect x="790" y="708" width="250" height="76" rx="12"/>
+        <rect x="1125" y="708" width="195" height="76" rx="12"/>
+      </g>
+      <g fill="#2b2620" font-size="18" text-anchor="middle">
+        <text x="245" y="742">提交 PAYING /</text><text x="245" y="766">PAYED / REFUNDING</text>
+        <text x="580" y="754">Scanner 查询超时状态</text>
+        <text x="915" y="754">调用 advance()</text>
+        <text x="1222" y="742">主库重读</text><text x="1222" y="766">幂等推进</text>
+      </g>
+      <g stroke="#466b48" stroke-width="3" fill="none">
+        <path d="M370 746 H435"/><path d="M425 736 L440 746 L425 756"/>
+        <path d="M705 746 H770"/><path d="M760 736 L775 746 L760 756"/>
+        <path d="M1040 746 H1105"/><path d="M1095 736 L1110 746 L1095 756"/>
+      </g>
+    </g>
+
+    <text x="80" y="882" fill="#554d42" font-size="18">状态扫描适合“数据库状态完整表达下一步”的工作流；对外广播领域事件仍应使用 Outbox 或事务消息。</text>
+  </g>
+</svg>
