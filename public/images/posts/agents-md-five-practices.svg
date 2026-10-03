@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="780" viewBox="0 0 1440 780" role="img" aria-labelledby="title desc">
+  <title id="title">五个实践让 AI 从"能改代码"到"能自主验证"</title>
+  <desc id="desc">仓库聚合解决上下文割裂，统一环境配置让 AI 能启动项目，验证闭环让 AI 能自测，自动化检查让规则有执行力，参考项目引入为私域知识提供准确来源。五个实践共同把 AI 的工作闭环补全。</desc>
+  <defs>
+    <style>.sans{font-family:Inter,"PingFang SC","Microsoft YaHei",sans-serif}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.ink{fill:#2b2620}.muted{fill:#6f6659}.green{fill:#2f6f5f}.line{stroke:#8a7f6d;stroke-width:2}.box{fill:#fffdf8;stroke:#b9ae9c;stroke-width:2}.soft{fill:#f5f0e4}.accent{fill:#dfe9df}.blue{fill:#dce6ee}</style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#6f6659"/></marker>
+  </defs>
+  <rect width="1440" height="780" fill="#fdfaf3"/>
+
+  <text x="90" y="70" class="mono green" font-size="17" font-weight="700" letter-spacing="3">FIVE PRACTICES</text>
+  <text x="90" y="122" class="sans ink" font-size="40" font-weight="720">补全 AI 的工作闭环</text>
+  <text x="90" y="158" class="sans muted" font-size="19">每一个实践解决一个具体的断点；缺少其中一环，AI 只能完成循环中的某几步。</text>
+
+  <!-- Loop arrow at top: 改 → 构建 → 启动 → 验证 → 修复 -->
+  <rect x="90" y="196" width="1260" height="64" rx="14" class="soft"/>
+  <text x="200" y="226" class="sans ink" font-size="19" font-weight="700" text-anchor="middle">改代码</text>
+  <path d="M310 228 H400" class="line" marker-end="url(#arrow)"/>
+  <text x="480" y="226" class="sans ink" font-size="19" font-weight="700" text-anchor="middle">构建</text>
+  <path d="M548 228 H640" class="line" marker-end="url(#arrow)"/>
+  <text x="720" y="226" class="sans ink" font-size="19" font-weight="700" text-anchor="middle">启动</text>
+  <path d="M788 228 H880" class="line" marker-end="url(#arrow)"/>
+  <text x="960" y="226" class="sans ink" font-size="19" font-weight="700" text-anchor="middle">验证</text>
+  <path d="M1026 228 H1120" class="line" marker-end="url(#arrow)"/>
+  <text x="1230" y="226" class="sans ink" font-size="19" font-weight="700" text-anchor="middle">修复 / 收口</text>
+  <text x="90" y="250" class="sans muted" font-size="14">AI 工作闭环</text>
+
+  <!-- 5 cards in 2 rows -->
+  <!-- Row 1: cards 1 2 3 -->
+  <!-- Card 1 -->
+  <rect x="90" y="296" width="380" height="172" rx="16" class="box"/>
+  <rect x="90" y="296" width="380" height="44" rx="16" class="blue"/>
+  <text x="110" y="325" class="mono green" font-size="13" font-weight="700">实践一</text>
+  <text x="220" y="325" class="sans ink" font-size="15" font-weight="700">仓库聚合</text>
+  <text x="110" y="368" class="sans ink" font-size="19" font-weight="700">解决上下文割裂</text>
+  <text x="110" y="398" class="sans muted" font-size="15">前后端同仓，AI 同窗口看到</text>
+  <text x="110" y="420" class="sans muted" font-size="15">Controller 和前端 API 调用</text>
+  <text x="110" y="448" class="sans muted" font-size="15">脚本聚合或 monorepo 均可</text>
+
+  <!-- Card 2 -->
+  <rect x="530" y="296" width="380" height="172" rx="16" class="box"/>
+  <rect x="530" y="296" width="380" height="44" rx="16" class="accent"/>
+  <text x="550" y="325" class="mono green" font-size="13" font-weight="700">实践二</text>
+  <text x="660" y="325" class="sans ink" font-size="15" font-weight="700">统一环境配置</text>
+  <text x="550" y="368" class="sans ink" font-size="19" font-weight="700">让 AI 能启动项目</text>
+  <text x="550" y="398" class="sans muted" font-size="15">~/.&lt;project&gt;_env 统一存环境变量</text>
+  <text x="550" y="420" class="sans muted" font-size="15">start-server.sh 封装构建+健康检查</text>
+  <text x="550" y="448" class="sans muted" font-size="15">AI 只需调用一条命令</text>
+
+  <!-- Card 3 -->
+  <rect x="970" y="296" width="380" height="172" rx="16" class="box"/>
+  <rect x="970" y="296" width="380" height="44" rx="16" class="blue"/>
+  <text x="990" y="325" class="mono green" font-size="13" font-weight="700">实践三</text>
+  <text x="1100" y="325" class="sans ink" font-size="15" font-weight="700">验证闭环</text>
+  <text x="990" y="368" class="sans ink" font-size="19" font-weight="700">改完才算完</text>
+  <text x="990" y="398" class="sans muted" font-size="15">curl 临时文件中转，避免 shell 兼容问题</text>
+  <text x="990" y="420" class="sans muted" font-size="15">后端跑接口，前端用 Agent Browser 截屏</text>
+  <text x="990" y="448" class="sans muted" font-size="15">「功能跑通」不是「代码编译过」</text>
+
+  <!-- Row 2: cards 4 5 centred -->
+  <!-- Card 4 -->
+  <rect x="310" y="510" width="380" height="172" rx="16" class="box"/>
+  <rect x="310" y="510" width="380" height="44" rx="16" class="soft"/>
+  <text x="330" y="539" class="mono green" font-size="13" font-weight="700">实践四</text>
+  <text x="440" y="539" class="sans ink" font-size="15" font-weight="700">自动化检查</text>
+  <text x="330" y="582" class="sans ink" font-size="19" font-weight="700">规则要有执行力</text>
+  <text x="330" y="612" class="sans muted" font-size="15">make lint-arch 扫描 import 违反分层</text>
+  <text x="330" y="634" class="sans muted" font-size="15">错误信息 WHAT + WHY + HOW</text>
+  <text x="330" y="662" class="sans muted" font-size="15">AI 读到就能直接按 HOW 修复</text>
+
+  <!-- Card 5 -->
+  <rect x="750" y="510" width="380" height="172" rx="16" class="box"/>
+  <rect x="750" y="510" width="380" height="44" rx="16" class="accent"/>
+  <text x="770" y="539" class="mono green" font-size="13" font-weight="700">实践五</text>
+  <text x="880" y="539" class="sans ink" font-size="15" font-weight="700">参考项目引入</text>
+  <text x="770" y="582" class="sans ink" font-size="19" font-weight="700">给 AI 喂够上下文</text>
+  <text x="770" y="612" class="sans muted" font-size="15">源码 > 文档，永远不会过时</text>
+  <text x="770" y="634" class="sans muted" font-size="15">git submodule + ref-*.md 地图</text>
+  <text x="770" y="662" class="sans muted" font-size="15">闭源组件、内部项目均适用</text>
+</svg>

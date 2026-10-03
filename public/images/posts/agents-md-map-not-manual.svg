@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="760" viewBox="0 0 1440 760" role="img" aria-labelledby="title desc">
+  <title id="title">AGENTS.md 的结构：地图而非手册</title>
+  <desc id="desc">AGENTS.md 作为一张约 200 行的导航地图，只存两类内容：理解项目全貌的必要信息和违反即出错的硬性规则。其余细节通过链接引向 docs/ 下的专题文档、参考项目和脚本。</desc>
+  <defs>
+    <style>.sans{font-family:Inter,"PingFang SC","Microsoft YaHei",sans-serif}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.ink{fill:#2b2620}.muted{fill:#6f6659}.green{fill:#2f6f5f}.line{stroke:#8a7f6d;stroke-width:2}.dash{stroke:#8a7f6d;stroke-width:2;stroke-dasharray:7 6}.box{fill:#fffdf8;stroke:#b9ae9c;stroke-width:2}.soft{fill:#f5f0e4}.accent{fill:#dfe9df}.blue{fill:#dce6ee}</style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#6f6659"/></marker>
+  </defs>
+  <rect width="1440" height="760" fill="#fdfaf3"/>
+
+  <text x="90" y="70" class="mono green" font-size="17" font-weight="700" letter-spacing="3">AGENTS.md STRUCTURE</text>
+  <text x="90" y="122" class="sans ink" font-size="40" font-weight="720">地图，而不是手册</text>
+  <text x="90" y="158" class="sans muted" font-size="19">什么都重要的时候，什么都不重要。约 200 行的入口，把注意力留给真正关键的部分。</text>
+
+  <!-- Center AGENTS.md box -->
+  <rect x="550" y="200" width="340" height="300" rx="18" class="soft"/>
+  <rect x="550" y="200" width="340" height="56" rx="18" fill="#e8e0d0" stroke="#b9ae9c" stroke-width="2"/>
+  <text x="720" y="236" class="mono green" font-size="15" font-weight="700" text-anchor="middle">AGENTS.md  ≈ 200 行</text>
+  <text x="720" y="290" class="sans ink" font-size="18" font-weight="700" text-anchor="middle">写进来的两类内容</text>
+  <text x="580" y="326" class="sans ink" font-size="16">① 理解项目全貌的必要信息</text>
+  <text x="596" y="352" class="sans muted" font-size="15">技术栈、仓库结构、核心模块</text>
+  <text x="580" y="390" class="sans ink" font-size="16">② 违反会直接导致问题的硬规则</text>
+  <text x="596" y="416" class="sans muted" font-size="15">禁止跨层依赖、统一异常方式</text>
+  <text x="580" y="460" class="sans muted" font-size="15">快速命令速查表</text>
+  <text x="580" y="484" class="sans muted" font-size="15">→ 引用链接，细节在外部文档</text>
+
+  <!-- Left: docs/ -->
+  <rect x="90" y="230" width="380" height="240" rx="16" class="box"/>
+  <text x="110" y="268" class="mono green" font-size="14" font-weight="700">docs/</text>
+  <text x="110" y="300" class="sans ink" font-size="17" font-weight="700">详细文档</text>
+  <text x="110" y="332" class="sans muted" font-size="15">architecture.md — 分层架构与依赖规则</text>
+  <text x="110" y="358" class="sans muted" font-size="15">development.md — 环境搭建与构建</text>
+  <text x="110" y="384" class="sans muted" font-size="15">design-docs/*.md — 模块开发规范</text>
+  <text x="110" y="410" class="sans muted" font-size="15">ref-*.md — 参考项目架构说明</text>
+  <text x="110" y="452" class="sans ink" font-size="15">判断标准：缺少它会写错代码 → AGENTS.md</text>
+  <text x="110" y="474" class="sans ink" font-size="15">只是写得不够好 → docs/ + 链接</text>
+  <path d="M470 350 H550" class="line" marker-end="url(#arrow)"/>
+
+  <!-- Right: reference-projects/ + scripts/ -->
+  <rect x="970" y="230" width="380" height="120" rx="16" class="box"/>
+  <text x="990" y="268" class="mono green" font-size="14" font-weight="700">reference-projects/</text>
+  <text x="990" y="300" class="sans ink" font-size="17" font-weight="700">参考项目源码</text>
+  <text x="990" y="328" class="sans muted" font-size="15">比文档更准确；git submodule 按需拉取</text>
+
+  <rect x="970" y="370" width="380" height="100" rx="16" class="box"/>
+  <text x="990" y="408" class="mono green" font-size="14" font-weight="700">scripts/ + Makefile</text>
+  <text x="990" y="440" class="sans ink" font-size="17" font-weight="700">封装好的操作入口</text>
+  <text x="990" y="464" class="sans muted" font-size="15">人和 AI 共用，一条命令触发</text>
+  <path d="M890 350 H970" class="dash" marker-end="url(#arrow)"/>
+
+  <!-- Bottom: feedback loop -->
+  <rect x="90" y="540" width="1260" height="92" rx="16" class="accent"/>
+  <text x="120" y="578" class="mono green" font-size="14" font-weight="700">BAD CASE 驱动迭代</text>
+  <text x="120" y="612" class="sans ink" font-size="20">AI 犯了错 → 判断是全局规则（→ AGENTS.md）还是模块细节（→ docs/）→ 补一条，而不是全部塞进来</text>
+
+  <path d="M720 500 V540" class="line" marker-end="url(#arrow)"/>
+</svg>
