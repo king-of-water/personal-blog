@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="760" viewBox="0 0 1440 760" role="img" aria-labelledby="title desc">
+  <title id="title">BPE 合并规则迭代过程示意</title>
+  <desc id="desc">BPE 从字符级词表开始，每轮统计相邻对出现频率，把频率最高的对合并成新符号写入词表，重复直到词表大小达到目标。三轮示例：lo+w→low，lo+wer→lower，ne+w→new。</desc>
+  <defs>
+    <style>.sans{font-family:Inter,"PingFang SC","Microsoft YaHei",sans-serif}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.ink{fill:#2b2620}.muted{fill:#6f6659}.green{fill:#2f6f5f}.line{stroke:#8a7f6d;stroke-width:2}.box{fill:#fffdf8;stroke:#b9ae9c;stroke-width:2}.soft{fill:#f5f0e4}.accent{fill:#dfe9df}.blue{fill:#dce6ee}</style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#6f6659"/></marker>
+  </defs>
+  <rect width="1440" height="760" fill="#fdfaf3"/>
+
+  <text x="90" y="70" class="mono green" font-size="17" font-weight="700" letter-spacing="3">BPE MERGE ITERATIONS</text>
+  <text x="90" y="122" class="sans ink" font-size="40" font-weight="720">词表从字符出发，一步步合并出高频片段</text>
+  <text x="90" y="158" class="sans muted" font-size="19">训练语料决定哪对字符先被合并；同一个词在不同 Tokenizer 下可能切出完全不同的结果。</text>
+
+  <!-- Training data box -->
+  <rect x="90" y="196" width="1260" height="72" rx="14" class="soft"/>
+  <text x="120" y="230" class="mono green" font-size="14" font-weight="700">训练语料（简化）</text>
+  <text x="120" y="260" class="sans ink" font-size="17">"low low low lower lower newest newest widest"  →  统计每个词的出现频次，先拆成字符 + 词边界符</text>
+
+  <!-- Round 1 -->
+  <rect x="90" y="290" width="380" height="200" rx="16" class="box"/>
+  <rect x="90" y="290" width="380" height="48" rx="16" class="blue"/>
+  <text x="110" y="322" class="mono green" font-size="14" font-weight="700">ROUND 1</text>
+  <text x="250" y="322" class="sans ink" font-size="16">统计相邻对频率</text>
+  <text x="110" y="366" class="sans muted" font-size="15">l o w </text><text x="200" y="366" class="mono ink" font-size="15">→ 频率最高对: (l, o)</text>
+  <text x="110" y="394" class="sans muted" font-size="15">l o w e r</text>
+  <text x="110" y="422" class="sans muted" font-size="15">n e w e s t</text>
+  <text x="110" y="450" class="sans muted" font-size="15">w i d e s t</text>
+  <text x="110" y="478" class="sans ink" font-size="15" font-weight="700">合并 → 词表新增: lo</text>
+
+  <path d="M470 390 H530" class="line" marker-end="url(#arrow)"/>
+
+  <!-- Round 2 -->
+  <rect x="530" y="290" width="380" height="200" rx="16" class="box"/>
+  <rect x="530" y="290" width="380" height="48" rx="16" class="accent"/>
+  <text x="550" y="322" class="mono green" font-size="14" font-weight="700">ROUND 2</text>
+  <text x="690" y="322" class="sans ink" font-size="16">l → lo 替换后重新统计</text>
+  <text x="550" y="366" class="sans muted" font-size="15">lo w</text><text x="640" y="366" class="mono ink" font-size="15"> → 频率最高对: (lo, w)</text>
+  <text x="550" y="394" class="sans muted" font-size="15">lo w e r</text>
+  <text x="550" y="422" class="sans muted" font-size="15">n e w e s t</text>
+  <text x="550" y="450" class="sans muted" font-size="15">w i d e s t</text>
+  <text x="550" y="478" class="sans ink" font-size="15" font-weight="700">合并 → 词表新增: low</text>
+
+  <path d="M910 390 H970" class="line" marker-end="url(#arrow)"/>
+
+  <!-- Round 3 -->
+  <rect x="970" y="290" width="380" height="200" rx="16" class="box"/>
+  <rect x="970" y="290" width="380" height="48" rx="16" class="soft"/>
+  <text x="990" y="322" class="mono green" font-size="14" font-weight="700">ROUND 3</text>
+  <text x="1130" y="322" class="sans ink" font-size="16">继续合并</text>
+  <text x="990" y="366" class="sans muted" font-size="15">low</text>
+  <text x="990" y="394" class="sans muted" font-size="15">low e r</text><text x="1130" y="394" class="mono ink" font-size="15"> → (e, r) 高频</text>
+  <text x="990" y="422" class="sans muted" font-size="15">n e w e s t</text>
+  <text x="990" y="450" class="sans muted" font-size="15">w i d e s t</text>
+  <text x="990" y="478" class="sans ink" font-size="15" font-weight="700">合并 → 词表新增: er</text>
+
+  <!-- Outcome box -->
+  <rect x="90" y="520" width="1260" height="188" rx="16" class="accent"/>
+  <text x="120" y="558" class="mono green" font-size="14" font-weight="700">结果：词表从字符膨胀为子词</text>
+  <text x="120" y="592" class="sans ink" font-size="18">初始词表: { l, o, w, e, r, n, s, t, i, d, &lt;/w&gt; ... }</text>
+  <text x="120" y="626" class="sans ink" font-size="18">若干轮后: { ..., lo, low, lower, ne, new, newest, er, est, wi, wid, wide, widest ... }</text>
+  <text x="120" y="668" class="sans muted" font-size="16">高频词直接映射到一个 Token ID；低频词或未见词被拆成更小的已知片段。</text>
+  <text x="120" y="698" class="sans muted" font-size="16">词表规模（32K / 50K / 128K）由你在训练前设定；合并的轮数就是词表大小减去初始字符数。</text>
+</svg>

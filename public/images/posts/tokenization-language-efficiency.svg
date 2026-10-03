@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="720" viewBox="0 0 1440 720" role="img" aria-labelledby="title desc">
+  <title id="title">中文、英文与代码的 Token 效率对比</title>
+  <desc id="desc">相同语义内容在三种语言类型下的 Token 数量对比：英文约 1 个单词 1.3 Token，中文约 1 个汉字 0.6 Token（常见词），代码空格缩进和特殊字符各自占 Token，导致三者相同信息量下 Token 数差异显著。</desc>
+  <defs>
+    <style>.sans{font-family:Inter,"PingFang SC","Microsoft YaHei",sans-serif}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.ink{fill:#2b2620}.muted{fill:#6f6659}.green{fill:#2f6f5f}.line{stroke:#8a7f6d;stroke-width:2}.box{fill:#fffdf8;stroke:#b9ae9c;stroke-width:2}.soft{fill:#f5f0e4}.accent{fill:#dfe9df}.blue{fill:#dce6ee}</style>
+  </defs>
+  <rect width="1440" height="720" fill="#fdfaf3"/>
+
+  <text x="90" y="70" class="mono green" font-size="17" font-weight="700" letter-spacing="3">TOKEN EFFICIENCY</text>
+  <text x="90" y="122" class="sans ink" font-size="40" font-weight="720">同样的信息，Token 数量差很多</text>
+  <text x="90" y="158" class="sans muted" font-size="19">Token 数直接决定 API 成本、上下文容量和生成速度——理解差异是省钱的第一步。</text>
+
+  <!-- English -->
+  <rect x="90" y="196" width="390" height="460" rx="18" class="box"/>
+  <rect x="90" y="196" width="390" height="54" rx="18" class="blue"/>
+  <text x="285" y="230" class="sans ink" font-size="20" font-weight="700" text-anchor="middle">英文</text>
+  <text x="285" y="252" class="sans muted" font-size="14" text-anchor="middle">约 1 单词 = 1–2 Token</text>
+  <text x="110" y="296" class="mono muted" font-size="14">文本：</text>
+  <text x="110" y="318" class="mono ink" font-size="15">"The function returns"</text>
+  <text x="110" y="354" class="mono muted" font-size="14">切分结果：</text>
+  <rect x="110" y="364" width="64" height="30" rx="6" class="accent"/>
+  <text x="142" y="384" class="mono ink" font-size="14" text-anchor="middle">The</text>
+  <rect x="184" y="364" width="86" height="30" rx="6" class="accent"/>
+  <text x="227" y="384" class="mono ink" font-size="14" text-anchor="middle">function</text>
+  <rect x="280" y="364" width="76" height="30" rx="6" class="accent"/>
+  <text x="318" y="384" class="mono ink" font-size="14" text-anchor="middle">returns</text>
+  <text x="110" y="420" class="sans muted" font-size="14">= 3 Token</text>
+  <text x="110" y="456" class="mono muted" font-size="14">复杂词示例：</text>
+  <text x="110" y="478" class="mono ink" font-size="15">"tokenization"</text>
+  <rect x="110" y="490" width="52" height="30" rx="6" class="soft"/>
+  <text x="136" y="510" class="mono ink" font-size="14" text-anchor="middle">token</text>
+  <rect x="170" y="490" width="36" height="30" rx="6" class="soft"/>
+  <text x="188" y="510" class="mono ink" font-size="14" text-anchor="middle">ization</text>
+  <text x="110" y="546" class="sans muted" font-size="14">= 2 Token（子词拆分）</text>
+  <text x="110" y="590" class="sans muted" font-size="14">平均密度：</text>
+  <text x="110" y="614" class="sans ink" font-size="22" font-weight="700">≈ 0.75 词/Token</text>
+  <text x="110" y="640" class="sans muted" font-size="14">（常见英文词接近 1:1）</text>
+
+  <!-- Chinese -->
+  <rect x="530" y="196" width="390" height="460" rx="18" class="box"/>
+  <rect x="530" y="196" width="390" height="54" rx="18" class="accent"/>
+  <text x="725" y="230" class="sans ink" font-size="20" font-weight="700" text-anchor="middle">中文</text>
+  <text x="725" y="252" class="sans muted" font-size="14" text-anchor="middle">常见词 2–3 字 = 1–2 Token</text>
+  <text x="550" y="296" class="mono muted" font-size="14">文本：</text>
+  <text x="550" y="318" class="mono ink" font-size="15">"函数返回值"</text>
+  <text x="550" y="354" class="mono muted" font-size="14">切分结果（GPT-4o 风格）：</text>
+  <rect x="550" y="364" width="52" height="30" rx="6" class="blue"/>
+  <text x="576" y="384" class="mono ink" font-size="14" text-anchor="middle">函数</text>
+  <rect x="612" y="364" width="52" height="30" rx="6" class="blue"/>
+  <text x="638" y="384" class="mono ink" font-size="14" text-anchor="middle">返回</text>
+  <rect x="674" y="364" width="26" height="30" rx="6" class="blue"/>
+  <text x="687" y="384" class="mono ink" font-size="14" text-anchor="middle">值</text>
+  <text x="550" y="420" class="sans muted" font-size="14">= 3 Token（5 个字）</text>
+  <text x="550" y="456" class="mono muted" font-size="14">低频字示例：</text>
+  <text x="550" y="478" class="mono ink" font-size="15">"璃"（低频字）</text>
+  <text x="550" y="502" class="sans muted" font-size="14">可能被拆为 2–3 个 Token</text>
+  <text x="550" y="538" class="sans muted" font-size="14">（UTF-8 字节级回退）</text>
+  <text x="550" y="590" class="sans muted" font-size="14">平均密度：</text>
+  <text x="550" y="614" class="sans ink" font-size="22" font-weight="700">≈ 1.5–2 字/Token</text>
+  <text x="550" y="640" class="sans muted" font-size="14">（比英文信息密度更高）</text>
+
+  <!-- Code -->
+  <rect x="970" y="196" width="390" height="460" rx="18" class="box"/>
+  <rect x="970" y="196" width="390" height="54" rx="18" class="soft"/>
+  <text x="1165" y="230" class="sans ink" font-size="20" font-weight="700" text-anchor="middle">代码</text>
+  <text x="1165" y="252" class="sans muted" font-size="14" text-anchor="middle">空格和符号各自占 Token</text>
+  <text x="990" y="296" class="mono muted" font-size="14">文本：</text>
+  <text x="990" y="318" class="mono ink" font-size="15">"    return value"</text>
+  <text x="990" y="350" class="sans muted" font-size="13">（4 个空格缩进 + 返回语句）</text>
+  <text x="990" y="384" class="mono muted" font-size="14">切分结果：</text>
+  <rect x="990" y="394" width="68" height="30" rx="6" fill="#f0e2dc" stroke="#b9ae9c" stroke-width="1.5"/>
+  <text x="1024" y="414" class="mono ink" font-size="13" text-anchor="middle">····</text>
+  <rect x="1068" y="394" width="56" height="30" rx="6" class="soft"/>
+  <text x="1096" y="414" class="mono ink" font-size="13" text-anchor="middle">return</text>
+  <rect x="1134" y="394" width="50" height="30" rx="6" class="soft"/>
+  <text x="1159" y="414" class="mono ink" font-size="13" text-anchor="middle">value</text>
+  <text x="990" y="450" class="sans muted" font-size="14">空格缩进单独占 1 Token</text>
+  <text x="990" y="476" class="mono muted" font-size="14">符号密集示例：</text>
+  <text x="990" y="498" class="mono ink" font-size="15">"dict[key]['val']"</text>
+  <text x="990" y="522" class="sans muted" font-size="14">括号、引号、方括号均计 Token</text>
+  <text x="990" y="548" class="sans muted" font-size="14">实际 Token 数约 8–10</text>
+  <text x="990" y="590" class="sans muted" font-size="14">平均密度：</text>
+  <text x="990" y="614" class="sans ink" font-size="22" font-weight="700">≈ 1 字符 ≈ 0.3–0.5 Token</text>
+  <text x="990" y="640" class="sans muted" font-size="14">（密集符号比自然语言贵）</text>
+</svg>
