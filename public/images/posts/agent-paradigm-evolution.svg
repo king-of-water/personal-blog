@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="710" viewBox="0 0 1440 710" role="img" aria-labelledby="title desc">
+  <title id="title">Agent 的四段能力演进</title>
+  <desc id="desc">从被动式 ReAct、工作流 Agent、自主 Agent 到自进化 Agent，任务范围、状态管理和反馈闭环逐步增加。这四种形态仍可并存。</desc>
+  <defs>
+    <style>.sans{font-family:Inter,"PingFang SC","Microsoft YaHei",sans-serif}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.ink{fill:#2b2620}.muted{fill:#6f6659}.green{fill:#2f6f5f}.line{stroke:#8a7f6d;stroke-width:2}.box{fill:#fffdf8;stroke:#b9ae9c;stroke-width:2}.soft{fill:#f5f0e4}.accent{fill:#dfe9df}.blue{fill:#dce6ee}</style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#6f6659"/></marker>
+  </defs>
+  <rect width="1440" height="710" fill="#fdfaf3"/>
+  <text x="92" y="76" class="mono green" font-size="17" font-weight="700" letter-spacing="3">AGENT PARADIGM MAP</text>
+  <text x="92" y="130" class="sans ink" font-size="42" font-weight="720">四种能力形态，常常同时存在</text>
+  <text x="92" y="166" class="sans muted" font-size="20">它不是严格的产品年代史，更像一张选择 Agent 结构时可用的能力地图。</text>
+  <g transform="translate(92 235)">
+    <path d="M240 175 H1160" class="line" marker-end="url(#arrow)"/>
+    <g transform="translate(0 0)">
+      <rect width="245" height="290" rx="16" class="box"/>
+      <rect width="245" height="58" rx="16" class="blue"/><text x="24" y="37" class="mono green" font-size="14" font-weight="700">STAGE 01</text>
+      <text x="24" y="103" class="sans ink" font-size="27" font-weight="700">被动式 ReAct</text>
+      <text x="24" y="140" class="sans muted" font-size="17">理解请求 → 调工具 → 回复</text>
+      <text x="24" y="186" class="sans ink" font-size="18">适合</text><text x="24" y="217" class="sans muted" font-size="17">短任务、问答、单次操作</text>
+      <text x="24" y="258" class="sans muted" font-size="16">核心问题：当前一轮能否做对</text>
+    </g>
+    <g transform="translate(300 0)">
+      <rect width="245" height="290" rx="16" class="box"/>
+      <rect width="245" height="58" rx="16" class="soft"/><text x="24" y="37" class="mono green" font-size="14" font-weight="700">STAGE 02</text>
+      <text x="24" y="103" class="sans ink" font-size="27" font-weight="700">工作流 Agent</text>
+      <text x="24" y="140" class="sans muted" font-size="17">节点、分支、审批与兜底</text>
+      <text x="24" y="186" class="sans ink" font-size="18">适合</text><text x="24" y="217" class="sans muted" font-size="17">规则明确、稳定重复的流程</text>
+      <text x="24" y="258" class="sans muted" font-size="16">核心问题：如何稳定完成流程</text>
+    </g>
+    <g transform="translate(600 0)">
+      <rect width="245" height="290" rx="16" class="box"/>
+      <rect width="245" height="58" rx="16" class="accent"/><text x="24" y="37" class="mono green" font-size="14" font-weight="700">STAGE 03</text>
+      <text x="24" y="103" class="sans ink" font-size="27" font-weight="700">自主 Agent</text>
+      <text x="24" y="140" class="sans muted" font-size="17">拆任务、持续执行、校验修正</text>
+      <text x="24" y="186" class="sans ink" font-size="18">适合</text><text x="24" y="217" class="sans muted" font-size="17">长程、开放且可验证的任务</text>
+      <text x="24" y="258" class="sans muted" font-size="16">核心问题：如何保持任务状态</text>
+    </g>
+    <g transform="translate(900 0)">
+      <rect width="245" height="290" rx="16" class="box"/>
+      <rect width="245" height="58" rx="16" fill="#eee3dc"/><text x="24" y="37" class="mono green" font-size="14" font-weight="700">STAGE 04</text>
+      <text x="24" y="103" class="sans ink" font-size="27" font-weight="700">自进化 Agent</text>
+      <text x="24" y="140" class="sans muted" font-size="17">沉淀经验，评测后更新策略</text>
+      <text x="24" y="186" class="sans ink" font-size="18">适合</text><text x="24" y="217" class="sans muted" font-size="17">高频任务的持续优化</text>
+      <text x="24" y="258" class="sans muted" font-size="16">核心问题：怎样证明真的变好</text>
+    </g>
+  </g>
+  <text x="92" y="650" class="sans muted" font-size="17">任务跨度、可执行动作、持久状态与反馈闭环逐步增加；选择时先看业务边界和风险，而非追逐最新名词。</text>
+</svg>
