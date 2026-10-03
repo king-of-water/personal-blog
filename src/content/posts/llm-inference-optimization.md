@@ -26,6 +26,8 @@ tools:
 2. **量化（Quantization）**：缩小模型，降低显存压力和带宽需求
 3. **投机解码（Speculative Decoding）**：用小模型猜，用大模型验，整体更快
 
+理解这些优化的共同前提是弄清楚 Decode 阶段的性能瓶颈在哪。大模型推理不缺算力（GPU 的浮点运算能力通常远超需求），缺的是**内存带宽**：每生成一个 Token，系统必须把模型全部权重和当前 KV Cache 从显存读到计算单元，即便新的计算量只需要其中极小一部分。对于 LLaMA 3 8B 这样的模型，权重约 16GB（BF16），每次 Decode 步骤都要读一遍。高端 GPU 的 HBM 带宽约 2-3 TB/s，纯算一个 Token 不到 1ms，但"搬运数据"的时间可能占掉了 90% 以上，真正做矩阵乘法的比例极低。这个现象叫做**内存带宽瓶颈（Memory-Bound）**，与之对应的是 Prefill 阶段——处理整段 Prompt 时 batch 里有很多 Token 可以并行算，算力被充分利用，处于**计算瓶颈（Compute-Bound）**。推理优化的核心逻辑就是：让更多时间花在真正的计算上，减少带宽浪费。
+
 ## 为什么朴素的 Batching 方案很低效
 
 先理解问题。同时服务多个用户请求时，最自然的做法是把多个请求拼成一个 batch 一起送进模型，让 GPU 并行处理，提高利用率。这在 Prefill 阶段（处理用户输入）工作得很好——不同请求的 prompt 可以并行处理。
@@ -48,7 +50,11 @@ Continuous Batching（也叫 In-flight Batching）是 vLLM 等推理框架的核
 
 Continuous Batching 能工作的前提是 **PagedAttention**（同样来自 vLLM，Kwon et al., 2023）：把每个请求的 KV Cache 按页管理，不要求物理连续，不预先分配最大长度的空间，按需分配释放。没有 PagedAttention，动态加入和移走请求会导致显存碎片，Continuous Batching 的效益会大打折扣。
 
-![Continuous Batching 与量化：提升 GPU 利用率的两条路径](/images/posts/inference-continuous-batching-quantization.svg)
+**Chunked Prefill** 是 Continuous Batching 的一个重要配套机制：一个很长的 Prompt（比如 32K Token）的 Prefill 本身就很耗时，如果让它独占 GPU 直到完成，其他等待中的请求会感受到明显的首 Token 延迟抖动。Chunked Prefill 把长 Prompt 的 Prefill 切成若干小块（比如每块 1024 Token），每个 Decode 步骤里穿插处理一小块，让 Prefill 和 Decode 请求交错调度，避免一个长 Prefill "卡住"整个调度循环，让延迟更平稳。vLLM 从 0.3 版本开始默认开启 Chunked Prefill。
+
+**Prefix Caching** 是另一个高频优化：如果多个请求共享相同的系统提示（System Prompt），PagedAttention 可以让这些请求的 KV Cache 共享同一批物理内存页，只在第一个请求到来时计算一次，后续请求直接复用。这在 System Prompt 很长（数千 Token）的场景里可以大幅降低首次响应延迟，也节省了显存。Prefix Caching 要求请求的 Token 序列严格从头匹配，哪怕有一个 Token 不同也无法复用。
+
+![Continuous Batching 与量化：提升 GPU 利用率的两条路径](/images/posts/inference-continuous-batching-quantization.svgContinuous Batching 与量化：提升 GPU 利用率的两条路径](/images/posts/inference-continuous-batching-quantization.svg)
 
 ## 量化：用精度换速度和显存
 
@@ -129,6 +135,10 @@ INT4 量化是"能不能跑"和"能跑好"之间的重要里程碑——它让�
 
 投机解码在 llama.cpp、vLLM 和 Hugging Face TGI 等主流推理框架里已有集成实现。对于需要低延迟、单用户实时交互的场景（比如编程助手的 token streaming），投机解码通常能带来 2-3 倍的速度提升。
 
+**Medusa（Cai et al., 2024）**是投机解码的一个变体，不用单独的草稿模型，而是给目标模型加若干个额外的"Medusa Head"——在最后一层隐藏状态上并联多个预测头，每个头预测不同位置的 Token（第 +1、+2、+3 个），同时也对这些候选做树形搜索和验证。Medusa 不改变模型主干，只加少量参数，避免了维护两个完整模型的部署麻烦，实测在 batch size=1 场景下加速比与有匹配草稿模型的投机解码接近。
+
+**Eagle（Li et al., 2024）**同样走无外部草稿模型路线，训练一个轻量的特征级 Draft 模块，直接预测目标模型下一步的隐藏状态（而不是 Token），再走目标模型的 LM Head 得到候选 Token。因为在特征空间匹配而不是 Token 空间，接受率更高，速度提升更稳定。Eagle-2 进一步引入了动态草稿长度，根据当前输入的难度自适应调整每次生成多少候选，避免在"模型非常确定"的情况下过度生成候选浪费验证时间。
+
 ## Flash Attention：让 Attention 计算本身更快
 
 Attention 计算是推理的另一个瓶颈，尤其是在长上下文场景。
@@ -193,6 +203,22 @@ response = client.chat.completions.create(
 for chunk in response:
     print(chunk.choices[0].delta.content or "", end="", flush=True)
 ```
+
+### 延迟 vs 吞吐量的权衡
+
+推理优化里有一个永恒的张力：**延迟（Latency）**和**吞吐量（Throughput）**不总是同向优化的。
+
+Continuous Batching 提升吞吐量，但会让单个请求的响应时间有时变长——当 GPU 在并发处理 64 个请求时，每一个的平均生成速度都不如独占 GPU 时快。对于交互式场景（用户盯着屏幕等），首 Token 延迟和每 Token 延迟是关键指标；对于批处理场景（离线评估、数据合成），总吞吐量是关键。
+
+量化能同时改善两者：模型更小，每次前向传播更快，KV Cache 也更小，能容纳更大的 batch，延迟和吞吐量都受益。但量化有精度成本，对质量敏感的任务（复杂推理、数学）要先测评。
+
+投机解码针对低延迟优化，在大 batch 下收益缩小甚至为负（草稿模型占用的显存和带宽对大 batch 来说是净开销）。
+
+实际部署时的决策框架：
+- **交互式服务（Chatbot、编程助手）**：优先 Continuous Batching + Flash Attention + INT4 量化；单用户实时流式输出场景考虑投机解码
+- **高并发 API 服务**：优先最大化 batch size，INT4 量化让同等显存容纳更多并发
+- **离线批处理**：关注吞吐量，INT4 量化 + 最大 batch，延迟不是主要约束
+- **边缘/消费级设备**：llama.cpp + GGUF 量化，INT4 甚至 INT3，优先能跑起来
 
 ## 参考资料
 
