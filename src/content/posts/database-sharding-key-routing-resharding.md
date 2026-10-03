@@ -1,6 +1,6 @@
 ---
 title: 数据超过单机后怎么拆：分片键、路由、扩容迁移与一致性哈希
-description: 从短链接读写路径出发，讲清分片键怎么选、全局 ID 为什么不能自动路由、取模与基因法怎样工作，以及扩容时如何迁移数据并验证正确性。
+description: 从短链接读写路径与支付流水实战出发，讲清分片键怎么选、全局 ID 为什么不能自动路由、取模与基因法怎样工作，以及扩容时如何迁移数据并验证正确性。
 category: 后端
 subcategory: 分布式
 articleClass: flagship
@@ -13,7 +13,7 @@ tags: [分布式系统, 分库分表, 分片键, 数据路由, 一致性哈希, 
 
 上一篇讨论了 UUID、Snowflake 和 Leaf，它们解决多台机器怎样生成不重复的 ID。唯一 ID 只标识对象，并不会自动告诉中间件对象在哪个分片。除非路由规则能从 ID 计算出分片，或者另有一张映射表，否则拿着全局唯一的 `link_id` 仍可能要查询全部 32 个库。
 
-这篇文章回答另一个问题：数据超过单机容量后，怎样把它拆到多个节点，同时让常用请求能够确定路由，让扩容期间的新旧数据保持一致。全文以关系型数据库水平分片为主，短链接作为贯穿案例。算法配置参照 [Apache ShardingSphere 的分片算法文档](https://shardingsphere.apache.org/document/current/en/user-manual/common-config/builtin-algorithm/sharding/)，分片键与在线重分片部分参考 [Vitess Vindex](https://vitess.io/docs/21.0/reference/features/vindexes/) 和 [VReplication](https://vitess.io/docs/25.0/reference/vreplication/vreplication/)，一致性哈希部分回到 Amazon 的 [Dynamo 论文](https://www.allthingsdistributed.com/files/amazon-dynamo-sosp2007.pdf)。
+这篇文章回答另一个问题：数据超过单机容量后，怎样把它拆到多个节点，同时让常用请求能够确定路由，让扩容期间的新旧数据保持一致。全文以关系型数据库水平分片为主，短链接作为贯穿案例，支付流水用于展示一套已经落到查询、回调与扫描路径的路由设计。算法配置参照 [Apache ShardingSphere 的分片算法文档](https://shardingsphere.apache.org/document/current/en/user-manual/common-config/builtin-algorithm/sharding/)，分片键与在线重分片部分参考 [Vitess Vindex](https://vitess.io/docs/21.0/reference/features/vindexes/) 和 [VReplication](https://vitess.io/docs/25.0/reference/vreplication/vreplication/)，一致性哈希部分回到 Amazon 的 [Dynamo 论文](https://www.allthingsdistributed.com/files/amazon-dynamo-sosp2007.pdf)。
 
 ## 先把四件事拆开：唯一、定位、分布与复制
 
@@ -248,6 +248,78 @@ repository.insert(shard, linkId, shortCode, userId, targetUrl);
 ```
 
 Base62 只缩短展示，不隐藏递增关系。若不希望外部推测业务量，可以在编码前做可逆置换，或生成独立随机短码；一旦改成不可逆哈希或随机码，就可能需要目录来定位。安全需求和路由需求应分别设计。
+
+### 实战：支付流水怎样落到 1000 张物理表
+
+支付流水提供了另一种组合方式。它的高频访问围绕用户展开：发起支付时查询该用户同一业务目标的最新 attempt，处理中继续查询原 attempt，用户查看结果时也天然携带 `user_id`。因此主流水按 `user_id % 1000` 分表：
+
+```java
+int tableIndex(long userId) {
+    return Math.floorMod(userId, 1000);
+}
+
+String tableName(long userId) {
+    return "internal_pay_flow_" + tableIndex(userId);
+}
+```
+
+这里的 1000 来自长期容量预算。支付行为可能很低频，流水却会按年累积；同时，现有数据源若已经采用 1000 张表，复用它的路由、主从配置、监控和运维脚本，通常比再建立一套相近拓扑便宜。在线 QPS 并不是决定这个数字的指标。具体数量仍要以保留周期、单行与索引大小、增长率和团队运维能力为依据，不能把 1000 当作通用经验值。
+
+一行流水同时拥有四种标识：
+
+| 字段 | 作用域 | 负责什么 |
+| --- | --- | --- |
+| `id` | 单张物理表 | InnoDB 主键、CAS 更新和表内游标 |
+| `user_id` | 全链路 | 分片键，决定物理表 |
+| `biz_key` | 一个业务目标 | 把同一次续签或任务的多个支付 attempt 归在一起 |
+| `trade_order_no` | 全局 | 标识一次支付 attempt，并为钱包幂等提供稳定单号 |
+
+`id` 使用物理表自增即可。查询已经由 `user_id` 定位到一张表，主键只需在该表内唯一；对外支付单号则可以由场景、用户和表内主键确定性组成：
+
+```text
+trade_order_no = h2r_{base36(user_id)}_{base36(id)}
+refund_order_no = r_{trade_order_no}
+```
+
+这种做法直接把路由输入写成业务单号里的可解析字段，没有改写 Snowflake 的 bit 布局。固定路由规则下，全局唯一性来自 `user_id + id`：同一用户始终进入同一张表，表内自增 `id` 不重复；不同用户即使拿到相同的局部 `id`，单号里的用户部分也不同。场景前缀还可以区分续签、付费跳过等订单域。
+
+这个唯一性证明把“同一用户不更换局部 ID 命名空间”作为前提。以后若把某个用户迁移到新表，迁移工具必须保留历史 `id`，并让新表的自增水位越过已使用最大值；否则同一用户可能再次获得旧 `id`，重新生成相同支付单号。另一种办法是让订单号使用独立全局序列。路由迁移会不会破坏发号前提，也属于扩容协议的一部分。
+
+它解决了异步入口缺少分片键的问题。钱包回调或 MQ 消息若只有 `trade_order_no`，服务可以解析出 `user_id`，再计算表后缀，而不需要广播 1000 张表：
+
+```java
+PayOrderNo orderNo = PayOrderNo.parse(rawOrderNo);
+long userId = orderNo.userId();
+int table = tableIndex(userId);
+
+PayFlow flow = repository.findByTradeOrderNo(
+    table,
+    userId,
+    rawOrderNo
+);
+```
+
+解析后的 `user_id` 不能只用于选表，SQL 仍应带上它。这样查询契约与分片规则一致，也能防止格式解析错误后在错误表中误命中其他记录。若业务单号已经公开且格式将长期存在，还要为前缀和编码保留版本，避免将来调整路由时无法识别历史订单。
+
+退款单号直接包住原支付单号，因此也能恢复相同的 `user_id`。`biz_key` 则没有承担路由职责，因为同步入口原本就有用户上下文，而且业务目标的格式可能随场景变化。一个字段是否适合作为分片键，要看所有入口能否稳定获得它，不取决于名字里是否带 `key`。
+
+#### Scanner 为什么要遍历 1000 张表
+
+在线请求和消息针对一笔具体订单，可以单路由；DB Scanner 的任务是发现全局所有长时间没有收敛的非终态流水，它在查询前没有某个 `user_id`。这时遍历物理表是需求本身，不属于误广播：
+
+```sql
+SELECT id, user_id, status, version
+FROM internal_pay_flow_017
+WHERE status IN (1, 2, 4, 6)
+  AND update_time < :threshold
+  AND id >= :cursor
+ORDER BY id
+LIMIT 100;
+```
+
+调度器把 1000 张表拆成多轮，限制每轮表数、batch、RPC 并发和总处理量。每张表使用 `(status, update_time, id)` 索引，只扫描超过等待窗口的非终态记录；取到 `user_id` 后，后续状态推进重新回到单表路径。Scanner 的命中量还能反映实时 MQ 链路是否退化，正常情况下大部分流水应在进入扫描窗口前收敛。
+
+这个例子也说明“禁止广播”不是绝对规则。面向用户的在线点查缺少分片键，通常表示接口或索引设计有问题；覆盖全部分片的运维任务、对账和兜底扫描可以显式 fan-out，但必须有批次、索引、限流、进度和失败恢复。支付状态如何由 MQ 与 Scanner 共同推进，在[分布式事务文章](/posts/distributed-transactions-2pc-tcc-saga-outbox/)中继续展开。
 
 ## 五、SQL 能否单路由取决于查询形状
 
