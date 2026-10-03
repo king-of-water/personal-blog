@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="560" viewBox="0 0 1440 560" role="img" aria-labelledby="title desc">
+  <title id="title">Snowflake 的 64 bit 布局</title>
+  <desc id="desc">经典 Snowflake 使用一个符号位、41 位毫秒时间戳、5 位数据中心编号、5 位 worker 编号和 12 位毫秒内序列号。</desc>
+  <style>
+    .bg{fill:#fdfaf3}.surface{fill:#f5f0e4;stroke:#8a7f6d;stroke-width:2}.time{fill:#d8dee0;stroke:#295279;stroke-width:2}.node{fill:#dee3d6;stroke:#466b48;stroke-width:2}.seq{fill:#e3dde2;stroke:#5e5083;stroke-width:2}.h{font:700 30px Arial,'PingFang SC',sans-serif;fill:#2b2620}.t{font:700 20px Arial,'PingFang SC',sans-serif;fill:#2b2620}.b{font:500 16px Arial,'PingFang SC',sans-serif;fill:#554d42}.s{font:500 14px Arial,'PingFang SC',sans-serif;fill:#6f6659}.mono{font:600 18px 'SFMono-Regular',Consolas,monospace;fill:#2b2620}.line{stroke:#8a7f6d;stroke-width:2;fill:none}
+  </style>
+  <rect class="bg" width="1440" height="560"/>
+  <text x="70" y="66" class="h">经典 Snowflake：时间决定大区间，节点与序列避免同毫秒冲突</text>
+  <text x="70" y="101" class="s">位宽不是标准，可按容量重新分配；解析方必须使用同一个 epoch 和布局。</text>
+
+  <rect x="70" y="160" width="60" height="120" class="surface"/>
+  <rect x="130" y="160" width="720" height="120" class="time"/>
+  <rect x="850" y="160" width="150" height="120" class="node"/>
+  <rect x="1000" y="160" width="150" height="120" class="node"/>
+  <rect x="1150" y="160" width="220" height="120" class="seq"/>
+  <text x="91" y="211" class="t">0</text><text x="84" y="244" class="s">1 bit</text>
+  <text x="390" y="210" class="t">相对毫秒时间戳</text><text x="450" y="246" class="mono">41 bit</text>
+  <text x="870" y="207" class="t">数据中心</text><text x="900" y="244" class="mono">5 bit</text>
+  <text x="1027" y="207" class="t">Worker</text><text x="1050" y="244" class="mono">5 bit</text>
+  <text x="1202" y="207" class="t">序列号</text><text x="1224" y="244" class="mono">12 bit</text>
+
+  <path d="M490 280 V340" class="line"/><path d="M925 280 V340" class="line"/><path d="M1075 280 V340" class="line"/><path d="M1260 280 V340" class="line"/>
+  <rect x="290" y="340" width="400" height="120" rx="14" class="surface"/>
+  <text x="325" y="382" class="t">约 69 年时间范围</text>
+  <text x="325" y="418" class="b">高位随毫秒推进，使数值整体趋势递增</text>
+  <rect x="745" y="340" width="330" height="120" rx="14" class="surface"/>
+  <text x="780" y="382" class="t">最多 1024 个节点组合</text>
+  <text x="780" y="418" class="b">身份重复会直接破坏唯一性</text>
+  <rect x="1130" y="340" width="240" height="120" rx="14" class="surface"/>
+  <text x="1164" y="382" class="t">4096 ID/ms</text>
+  <text x="1164" y="418" class="b">耗尽后等待下一毫秒</text>
+</svg>

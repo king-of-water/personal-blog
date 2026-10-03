@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="720" viewBox="0 0 1440 720" role="img" aria-labelledby="title desc">
+  <title id="title">Leaf-segment 双 Buffer 的预取与切换</title>
+  <desc id="desc">Leaf Server 从当前 Segment 在内存中发号，消费超过约百分之十后异步从数据库申请下一号段。当前段耗尽时切换到已经准备好的备用段；如果数据库长期未恢复且两个段都耗尽，发号失败。</desc>
+  <style>
+    .bg{fill:#fdfaf3}.panel{fill:#fbf8f1;stroke:#8a7f6d;stroke-width:2}.card{fill:#f5f0e4;stroke:#8a7f6d;stroke-width:2}.active{fill:#d8dee0;stroke:#295279;stroke-width:2.5}.ready{fill:#dee3d6;stroke:#466b48;stroke-width:2.5}.warn{fill:#f4eace;stroke:#8a7f6d;stroke-width:2}.h{font:700 30px Arial,'PingFang SC',sans-serif;fill:#2b2620}.t{font:700 20px Arial,'PingFang SC',sans-serif;fill:#2b2620}.b{font:500 16px Arial,'PingFang SC',sans-serif;fill:#554d42}.s{font:500 14px Arial,'PingFang SC',sans-serif;fill:#6f6659}.mono{font:600 16px 'SFMono-Regular',Consolas,monospace;fill:#2b2620}.line{stroke:#8a7f6d;stroke-width:3;fill:none}.dash{stroke:#8a7f6d;stroke-width:3;stroke-dasharray:10 8;fill:none}.strong{stroke:#5b5245;stroke-width:3;fill:none}
+  </style>
+  <rect class="bg" width="1440" height="720"/>
+  <text x="70" y="62" class="h">Leaf 用当前段服务请求，在后台准备下一段</text>
+  <text x="70" y="98" class="s">双 Buffer 隐藏数据库加载延迟，但可用时间仍受两个号段的剩余容量限制。</text>
+
+  <rect x="70" y="150" width="300" height="130" rx="14" class="card"/>
+  <text x="105" y="197" class="t">业务请求</text>
+  <text x="105" y="235" class="b">get("short_link")</text>
+
+  <rect x="515" y="135" width="390" height="410" rx="18" class="panel"/>
+  <text x="555" y="185" class="t">Leaf Server / SegmentBuffer</text>
+  <rect x="555" y="225" width="310" height="110" rx="12" class="active"/>
+  <text x="585" y="266" class="t">Current Segment</text>
+  <text x="585" y="302" class="mono">[300000, 310000)</text>
+  <rect x="555" y="385" width="310" height="110" rx="12" class="ready"/>
+  <text x="585" y="426" class="t">Next Segment</text>
+  <text x="585" y="462" class="mono">[310000, 320000)</text>
+
+  <rect x="1070" y="150" width="300" height="190" rx="14" class="card"/>
+  <text x="1105" y="197" class="t">MySQL `leaf_alloc`</text>
+  <text x="1105" y="235" class="mono">biz_tag=short_link</text>
+  <text x="1105" y="269" class="mono">max_id=320000</text>
+  <text x="1105" y="303" class="mono">step=10000</text>
+
+  <path d="M370 215 H515" class="strong"/><path d="M503 205 l18 10 -18 10" fill="#5b5245"/>
+  <text x="390" y="195" class="s">内存原子递增</text>
+  <path d="M905 440 H990 V245 H1070" class="dash"/><path d="M1058 235 l18 10 -18 10" fill="#8a7f6d"/>
+  <text x="928" y="405" class="s">异步申请</text>
+  <path d="M710 335 V385" class="line"/><path d="M700 373 l10 18 10 -18" fill="#8a7f6d"/>
+  <text x="735" y="365" class="s">耗尽后切换</text>
+
+  <rect x="140" y="590" width="1160" height="75" rx="14" class="warn"/>
+  <text x="185" y="622" class="b">数据库在 Current 耗尽前恢复：Next 加载成功，请求无感切换</text>
+  <text x="185" y="650" class="b">数据库长期不可用且两个 Segment 都耗尽：Leaf 明确返回发号失败</text>
+</svg>

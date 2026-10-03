@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="720" viewBox="0 0 1440 720" role="img" aria-labelledby="title desc">
+  <title id="title">主键、全局 ID、业务 ID 与分片键的职责边界</title>
+  <desc id="desc">一条短链接记录同时包含数据库主键、全局唯一 ID、对外短码和分片键。四种标识回答不同问题，可以共用字段，也可以分别设计。</desc>
+  <style>
+    .bg{fill:#fdfaf3}.panel{fill:#fbf8f1;stroke:#8a7f6d;stroke-width:2}.card{fill:#f5f0e4;stroke:#8a7f6d;stroke-width:2}.accent{fill:#d8dee0;stroke:#295279;stroke-width:2.5}.h{font:700 30px Arial,'PingFang SC',sans-serif;fill:#2b2620}.t{font:700 21px Arial,'PingFang SC',sans-serif;fill:#2b2620}.b{font:500 17px Arial,'PingFang SC',sans-serif;fill:#554d42}.s{font:500 15px Arial,'PingFang SC',sans-serif;fill:#6f6659}.mono{font:600 16px 'SFMono-Regular',Consolas,monospace;fill:#2b2620}.line{stroke:#8a7f6d;stroke-width:3;fill:none}.strong{stroke:#5b5245;stroke-width:3;fill:none}
+  </style>
+  <rect class="bg" width="1440" height="720"/>
+  <text x="70" y="62" class="h">同一个“ID”可能承担四种职责</text>
+  <text x="70" y="98" class="s">唯一性、存储和路由是不同问题；是否合并到一列取决于系统约束。</text>
+
+  <rect x="70" y="145" width="1300" height="505" rx="20" class="panel"/>
+  <rect x="530" y="205" width="380" height="165" rx="16" class="accent"/>
+  <text x="570" y="250" class="t">一条短链接记录</text>
+  <text x="570" y="292" class="mono">id = 300001</text>
+  <text x="570" y="325" class="mono">short_code = "1G2j"</text>
+
+  <rect x="120" y="185" width="300" height="150" rx="14" class="card"/>
+  <text x="155" y="230" class="t">数据库主键</text>
+  <text x="155" y="270" class="b">在一张表内定位一行</text>
+  <text x="155" y="300" class="s">影响聚簇索引和二级索引</text>
+
+  <rect x="1020" y="185" width="300" height="150" rx="14" class="card"/>
+  <text x="1055" y="230" class="t">全局唯一 ID</text>
+  <text x="1055" y="270" class="b">跨节点、库表避免重复</text>
+  <text x="1055" y="300" class="s">由生成协议定义范围</text>
+
+  <rect x="120" y="455" width="300" height="150" rx="14" class="card"/>
+  <text x="155" y="500" class="t">业务 ID</text>
+  <text x="155" y="540" class="b">供接口和用户识别对象</text>
+  <text x="155" y="570" class="s">可有独立格式与生命周期</text>
+
+  <rect x="1020" y="455" width="300" height="150" rx="14" class="card"/>
+  <text x="1055" y="500" class="t">分片键</text>
+  <text x="1055" y="540" class="b">决定请求访问哪个库表</text>
+  <text x="1055" y="570" class="s">全局唯一不自动提供路由</text>
+
+  <path d="M420 260 H530" class="line"/><path d="M518 250 l18 10 -18 10" fill="#8a7f6d"/>
+  <path d="M910 260 H1020" class="line"/><path d="M1008 250 l18 10 -18 10" fill="#8a7f6d"/>
+  <path d="M420 530 H485 V350 H530" class="line"/><path d="M518 340 l18 10 -18 10" fill="#8a7f6d"/>
+  <path d="M910 350 H955 V530 H1020" class="line"/><path d="M1008 520 l18 10 -18 10" fill="#8a7f6d"/>
+  <text x="555" y="420" class="b">一列可以同时承担多项职责</text>
+  <text x="548" y="449" class="s">拆分职责可以降低发号、存储与路由的耦合</text>
+</svg>
