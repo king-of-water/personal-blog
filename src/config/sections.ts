@@ -49,7 +49,32 @@ export const backendSubcategories: Subcategory[] = [
 	{ name: 'Redis', slug: 'redis', description: '缓存、数据结构、集群与稳定性。' },
 	{ name: 'MySQL', slug: 'mysql', description: '索引、事务、执行计划与数据库工程。' },
 	{ name: '消息队列', slug: 'message-queue', description: '异步通信、削峰、顺序与消息可靠性。' },
-	{ name: '分布式', slug: 'distributed-systems', description: '一致性、容错、协调与系统设计。' },
+	{
+		name: '分布式',
+		slug: 'distributed-systems',
+		description: '一致性、容错、协调与系统设计。',
+		plannedTopics: [
+			'分布式、集群与微服务分别解决什么问题',
+			'CAP、PACELC 与 BASE 究竟在讨论什么',
+			'一致性模型：从最终一致到线性一致',
+			'复制与 Quorum：副本越多越可靠吗',
+			'Raft：从 Leader 选举到日志提交',
+			'Paxos、Raft 与 ZAB 的问题边界和取舍',
+			'分布式锁：Redis、ZooKeeper 与 Fencing Token',
+			'超时、重试、幂等与 Exactly-once 的边界',
+			'分布式 ID：UUID、Snowflake 与号段模式',
+			'RPC：一次远程调用可能处于哪些状态',
+			'2PC 为什么会阻塞，故障后怎样恢复',
+			'TCC、Saga、Outbox 与事务消息怎样选择',
+			'Seata 怎样处理锁、回滚与事务恢复',
+			'分片、一致性哈希与扩容迁移',
+			'服务发现、健康检查与故障摘除',
+			'限流、熔断、隔离与降级分别保护什么',
+			'分布式任务调度怎样避免重复执行',
+			'多机房容灾：故障域、RPO 与 RTO',
+			'怎样用故障注入与 Jepsen 验证分布式系统',
+		],
+	},
 ];
 
 export const categoryPath = (category: MainCategory) => (

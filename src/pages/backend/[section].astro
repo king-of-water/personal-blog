@@ -10,5 +10,9 @@ interface Props { section: Subcategory }
 const { section } = Astro.props;
 ---
 
-<SubcategoryPage category="后端" name={section.name} description={section.description} />
-
+<SubcategoryPage
+	category="后端"
+	name={section.name}
+	description={section.description}
+	plannedTopics={section.plannedTopics}
+/>
