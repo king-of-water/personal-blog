@@ -1,0 +1,156 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="760" viewBox="0 0 1440 760" role="img" aria-labelledby="title desc">
+  <title id="title">现代 Decoder-only Transformer 的完整结构：从 Token Embedding 到采样输出</title>
+  <desc id="desc">展示现代 LLM 推理的完整流程：左侧纵向展示 Token ID 输入、Embedding 查表、N 层 Transformer Block（每层含 RMSNorm + GQA + RoPE + 残差、RMSNorm + SwiGLU FFN + 残差）、最终 RMSNorm 和 LM Head；右侧展示单个 Transformer Block 内部结构和采样参数（temperature、top-p、top-k）。</desc>
+  <defs>
+    <style>.sans{font-family:Inter,"PingFang SC","Microsoft YaHei",sans-serif}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.ink{fill:#2b2620}.muted{fill:#6f6659}.green{fill:#2f6f5f}.box{fill:#fffdf8;stroke:#b9ae9c;stroke-width:2}.soft{fill:#f5f0e4}.accent{fill:#dfe9df}.blue{fill:#dce6ee}.warn{fill:#fef3ee}</style>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#6f6659"/></marker>
+    <marker id="arr-g" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#2f6f5f"/></marker>
+  </defs>
+  <rect width="1440" height="760" fill="#fdfaf3"/>
+
+  <!-- Header -->
+  <text x="90" y="70" class="mono green" font-size="17" font-weight="700" letter-spacing="3">MODERN DECODER-ONLY TRANSFORMER</text>
+  <text x="90" y="122" class="sans ink" font-size="38" font-weight="720">从 Token 输入到下一个 Token 的完整路径</text>
+  <text x="90" y="158" class="sans muted" font-size="18">LLaMA 3 / Mistral 等现代 LLM 的推理流程：RoPE、RMSNorm、GQA、SwiGLU 各司其职。</text>
+
+  <!-- LEFT: Full pipeline -->
+  <rect x="90" y="186" width="340" height="546" rx="16" class="box"/>
+
+  <!-- Step 1: Input -->
+  <rect x="110" y="200" width="300" height="42" rx="10" class="blue"/>
+  <text x="260" y="226" class="sans ink" font-size="14" font-weight="700" text-anchor="middle">Token ID 序列</text>
+  <text x="260" y="240" class="sans muted" font-size="12" text-anchor="middle">[42, 1831, 9624, ...]</text>
+  <path d="M260 244 V266" stroke="#6f6659" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Step 2: Embedding -->
+  <rect x="110" y="266" width="300" height="42" rx="10" class="soft"/>
+  <text x="260" y="290" class="sans ink" font-size="14" font-weight="700" text-anchor="middle">Token Embedding</text>
+  <text x="260" y="306" class="sans muted" font-size="12" text-anchor="middle">查表 vocab×d_model，得到向量序列</text>
+  <path d="M260 310 V332" stroke="#6f6659" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- N Transformer Blocks -->
+  <rect x="110" y="332" width="300" height="238" rx="10" fill="#edf5ed" style="stroke:#5a9a6a;stroke-width:2"/>
+  <text x="260" y="354" class="mono green" font-size="13" font-weight="700" text-anchor="middle">× N 层 Transformer Block</text>
+  <text x="260" y="370" class="sans muted" font-size="11" text-anchor="middle">（LLaMA 3 8B: N=32）</text>
+
+  <rect x="124" y="378" width="272" height="34" rx="8" class="soft"/>
+  <text x="260" y="400" class="sans ink" font-size="12" text-anchor="middle">RMSNorm（Pre-Norm）</text>
+
+  <rect x="124" y="420" width="272" height="44" rx="8" class="accent"/>
+  <text x="260" y="440" class="sans ink" font-size="12" font-weight="700" text-anchor="middle">GQA + RoPE + Causal Mask</text>
+  <text x="260" y="458" class="sans muted" font-size="11" text-anchor="middle">32 Q 头 / 8 KV 头，旋转位置编码</text>
+
+  <rect x="124" y="472" width="272" height="28" rx="8" class="soft" style="stroke:#5a9a6a;stroke-width:1"/>
+  <text x="260" y="491" class="sans ink" font-size="12" text-anchor="middle">残差连接：x = x + Attention(RMSNorm(x))</text>
+
+  <rect x="124" y="508" width="272" height="28" rx="8" class="soft"/>
+  <text x="260" y="527" class="sans ink" font-size="12" text-anchor="middle">RMSNorm（Pre-Norm）</text>
+
+  <rect x="124" y="544" width="272" height="28" rx="8" class="accent"/>
+  <text x="260" y="563" class="sans ink" font-size="12" font-weight="700" text-anchor="middle">SwiGLU FFN（d_model × 14336 × d_model）</text>
+
+  <path d="M260 572 V578" stroke="#5a9a6a" stroke-width="1.5" marker-end="url(#arr-g)"/>
+  <text x="260" y="568" class="sans muted" font-size="10" text-anchor="middle"></text>
+
+  <path d="M260 570 V578" stroke="#6f6659" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Step 4: Final norm -->
+  <rect x="110" y="578" width="300" height="34" rx="10" class="soft"/>
+  <text x="260" y="600" class="sans ink" font-size="14" font-weight="700" text-anchor="middle">最终 RMSNorm</text>
+  <path d="M260 614 V634" stroke="#6f6659" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Step 5: LM Head -->
+  <rect x="110" y="634" width="300" height="42" rx="10" fill="#d4e8d4" style="stroke:#5a9a6a;stroke-width:2"/>
+  <text x="260" y="658" class="sans ink" font-size="14" font-weight="700" text-anchor="middle" fill="#2f6f5f">LM Head → logits</text>
+  <text x="260" y="674" class="sans muted" font-size="12" text-anchor="middle">hidden × Embedding^T → [vocab_size]</text>
+  <path d="M260 678 V700" stroke="#5a9a6a" stroke-width="1.5" marker-end="url(#arr-g)"/>
+
+  <!-- Step 6: Sampling -->
+  <rect x="110" y="700" width="300" height="22" rx="8" fill="#b8ddb8" style="stroke:#5a9a6a;stroke-width:1.5"/>
+  <text x="260" y="715" class="sans ink" font-size="12" font-weight="700" text-anchor="middle" fill="#2f6f5f">采样 → 下一个 Token</text>
+
+  <!-- RIGHT: Detail panels -->
+  <!-- Block detail -->
+  <rect x="490" y="186" width="420" height="340" rx="16" class="box"/>
+  <text x="520" y="218" class="mono green" font-size="13" font-weight="700">TRANSFORMER BLOCK 详解</text>
+
+  <!-- RoPE -->
+  <rect x="510" y="228" width="380" height="66" rx="10" class="soft"/>
+  <text x="530" y="248" class="sans ink" font-size="14" font-weight="700">RoPE 旋转位置编码</text>
+  <text x="530" y="266" class="sans muted" font-size="12">在每层 Attention 前对 Q/K 做旋转变换</text>
+  <text x="530" y="282" class="sans muted" font-size="12">只编码相对位置，外推性比绝对位置编码好</text>
+
+  <!-- RMSNorm -->
+  <rect x="510" y="302" width="380" height="66" rx="10" class="soft"/>
+  <text x="530" y="322" class="sans ink" font-size="14" font-weight="700">RMSNorm（Pre-Norm）</text>
+  <text x="530" y="340" class="sans muted" font-size="12">去掉均值中心化，只做 RMS 缩放，比 LayerNorm 快 10-15%</text>
+  <text x="530" y="356" class="sans muted" font-size="12">Pre-Norm 位置：在子层输入前归一化，训练更稳定</text>
+
+  <!-- GQA -->
+  <rect x="510" y="376" width="380" height="66" rx="10" class="accent"/>
+  <text x="530" y="396" class="sans ink" font-size="14" font-weight="700">GQA 分组查询注意力</text>
+  <text x="530" y="414" class="sans muted" font-size="12">32 Q 头 / 8 KV 头：每 4 个 Q 共享 1 对 KV</text>
+  <text x="530" y="430" class="sans muted" font-size="12">KV Cache 缩减为 MHA 的 1/4，推理带宽压力大幅降低</text>
+
+  <!-- SwiGLU -->
+  <rect x="510" y="450" width="380" height="66" rx="10" class="soft"/>
+  <text x="530" y="470" class="sans ink" font-size="14" font-weight="700">SwiGLU 前馈层</text>
+  <text x="530" y="488" class="sans muted" font-size="12">两分支门控：Swish(xW) ⊙ xV，比 ReLU 有更强选择性</text>
+  <text x="530" y="504" class="sans muted" font-size="12">中间维度约 2.67×d_model，与 ReLU FFN 参数量相当</text>
+
+  <!-- Sampling panel -->
+  <rect x="490" y="542" width="420" height="190" rx="16" class="box"/>
+  <text x="520" y="572" class="mono green" font-size="13" font-weight="700">采样参数说明</text>
+
+  <rect x="510" y="582" width="380" height="36" rx="8" fill="#fde8de" style="stroke:#c4836a;stroke-width:1"/>
+  <text x="530" y="602" class="sans ink" font-size="13" font-weight="700">Temperature</text>
+  <text x="640" y="602" class="sans muted" font-size="12">logit / T：T↓ 分布更尖，T↑ 更随机；T=0 变 argmax</text>
+
+  <rect x="510" y="626" width="380" height="36" rx="8" class="soft"/>
+  <text x="530" y="646" class="sans ink" font-size="13" font-weight="700">Top-p（Nucleus）</text>
+  <text x="640" y="646" class="sans muted" font-size="12">保留累积概率超过 p 的最少 Token 集合，自适应截断</text>
+
+  <rect x="510" y="670" width="380" height="36" rx="8" class="soft"/>
+  <text x="530" y="690" class="sans ink" font-size="13" font-weight="700">Top-k</text>
+  <text x="600" y="690" class="sans muted" font-size="12">只保留概率最高的 k 个候选，在其中按概率采样</text>
+
+  <rect x="510" y="714" width="380" height="10" rx="4" class="accent"/>
+  <text x="700" y="723" class="sans muted" font-size="11" text-anchor="middle">通常组合使用：temperature → top-p → 采样</text>
+
+  <!-- LLaMA config panel -->
+  <rect x="970" y="186" width="380" height="546" rx="16" class="soft" style="stroke:#b9ae9c;stroke-width:2"/>
+  <text x="1000" y="218" class="mono green" font-size="13" font-weight="700">LLAMA 3 8B 配置一览</text>
+
+  <text x="1000" y="248" class="sans ink" font-size="15" font-weight="700">架构参数</text>
+  <rect x="1000" y="256" width="330" height="24" rx="6" class="box"/>
+  <text x="1010" y="273" class="mono ink" font-size="13">层数（n_layers）：32</text>
+  <rect x="1000" y="284" width="330" height="24" rx="6" class="box"/>
+  <text x="1010" y="301" class="mono ink" font-size="13">隐藏维度（d_model）：4096</text>
+  <rect x="1000" y="312" width="330" height="24" rx="6" class="box"/>
+  <text x="1010" y="329" class="mono ink" font-size="13">Q 头数：32  |  KV 头数：8（GQA）</text>
+  <rect x="1000" y="340" width="330" height="24" rx="6" class="box"/>
+  <text x="1010" y="357" class="mono ink" font-size="13">头维度（head_dim）：128</text>
+  <rect x="1000" y="368" width="330" height="24" rx="6" class="box"/>
+  <text x="1010" y="385" class="mono ink" font-size="13">FFN 中间维度：14336</text>
+  <rect x="1000" y="396" width="330" height="24" rx="6" class="box"/>
+  <text x="1010" y="413" class="mono ink" font-size="13">词表大小（vocab_size）：128,256</text>
+  <rect x="1000" y="424" width="330" height="24" rx="6" class="box"/>
+  <text x="1010" y="441" class="mono ink" font-size="13">上下文长度：128K Token</text>
+
+  <text x="1000" y="478" class="sans ink" font-size="15" font-weight="700">参数量来源（近似）</text>
+  <rect x="1000" y="486" width="330" height="24" rx="6" class="blue"/>
+  <text x="1010" y="503" class="mono ink" font-size="13">Embedding：128K × 4096 ≈ 0.5B</text>
+  <rect x="1000" y="514" width="330" height="24" rx="6" class="accent"/>
+  <text x="1010" y="531" class="mono ink" font-size="13">Attention × 32 层 ≈ 2.1B</text>
+  <rect x="1000" y="542" width="330" height="24" rx="6" class="accent"/>
+  <text x="1010" y="559" class="mono ink" font-size="13">FFN × 32 层 ≈ 3.2B</text>
+  <rect x="1000" y="570" width="330" height="28" rx="6" fill="#d4e8d4" style="stroke:#5a9a6a;stroke-width:1.5"/>
+  <text x="1010" y="589" class="mono ink" font-size="14" font-weight="700" fill="#2f6f5f">合计 ≈ 8B 参数</text>
+
+  <text x="1000" y="626" class="sans ink" font-size="15" font-weight="700">与原始 Transformer（2017）的差异</text>
+  <text x="1000" y="648" class="sans muted" font-size="12">位置编码：正弦绝对编码 → RoPE 相对编码</text>
+  <text x="1000" y="666" class="sans muted" font-size="12">归一化：LayerNorm Post-Norm → RMSNorm Pre-Norm</text>
+  <text x="1000" y="684" class="sans muted" font-size="12">激活函数：ReLU → SwiGLU</text>
+  <text x="1000" y="702" class="sans muted" font-size="12">注意力：MHA（32 KV 头）→ GQA（8 KV 头）</text>
+  <text x="1000" y="720" class="sans muted" font-size="12">架构形态：Encoder-Decoder → Decoder-only</text>
+</svg>
