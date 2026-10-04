@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="820" viewBox="0 0 1440 820" role="img" aria-labelledby="title desc">
+  <title id="title">吞吐、利用率与尾延迟的容量拐点</title>
+  <desc id="desc">负载增加时，完成吞吐先近似线性增长，接近容量拐点后趋于平坦；p99 延迟在高利用率区域快速上升。安全运行点应位于拐点之前，并保留突发与故障余量。</desc>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#8a7f6d"/></marker></defs>
+  <rect width="1440" height="820" fill="#fdfaf3"/>
+  <g font-family="system-ui, sans-serif">
+    <text x="70" y="70" fill="#2b2620" font-size="34" font-weight="700">吞吐停止增长以前，尾延迟往往已经越过 SLO</text>
+    <text x="70" y="110" fill="#6f6659" font-size="20">容量取决于目标延迟与错误率，不能取机器最后还能返回响应的点</text>
+    <line x1="150" y1="650" x2="1290" y2="650" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+    <line x1="150" y1="650" x2="150" y2="165" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+    <text x="720" y="710" text-anchor="middle" fill="#554d42" font-size="19">输入负载 / 资源利用率 →</text>
+    <text x="60" y="420" transform="rotate(-90 60 420)" text-anchor="middle" fill="#554d42" font-size="19">完成吞吐与延迟</text>
+    <path d="M170 620 C360 570 520 500 690 420 C820 360 930 330 1030 322 C1120 317 1200 316 1260 315" fill="none" stroke="#295279" stroke-width="7"/>
+    <path d="M170 610 C500 605 730 590 860 545 C970 505 1040 405 1100 270 C1150 195 1205 160 1260 145" fill="none" stroke="#943b37" stroke-width="7"/>
+    <line x1="930" y1="195" x2="930" y2="650" stroke="#8a6b12" stroke-width="3" stroke-dasharray="10 8"/>
+    <line x1="1080" y1="195" x2="1080" y2="650" stroke="#943b37" stroke-width="3" stroke-dasharray="10 8"/>
+    <circle cx="930" cy="522" r="11" fill="#8a6b12"/><circle cx="1080" cy="320" r="11" fill="#943b37"/>
+    <rect x="635" y="205" width="250" height="104" rx="16" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="760" y="245" text-anchor="middle" fill="#2b2620" font-size="20" font-weight="700">安全运行区</text><text x="760" y="278" text-anchor="middle" fill="#554d42" font-size="16">延迟稳定，有扩容时间</text>
+    <rect x="985" y="430" width="270" height="112" rx="16" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+    <text x="1120" y="470" text-anchor="middle" fill="#2b2620" font-size="20" font-weight="700">非线性过载区</text><text x="1120" y="503" text-anchor="middle" fill="#554d42" font-size="16">吞吐持平，排队与超时增长</text>
+    <text x="430" y="495" fill="#295279" font-size="20" font-weight="700">完成吞吐</text>
+    <text x="1110" y="210" fill="#943b37" font-size="20" font-weight="700">p99 延迟</text>
+    <text x="930" y="683" text-anchor="middle" fill="#8a6b12" font-size="16">目标利用率（示意）</text>
+    <text x="1080" y="683" text-anchor="middle" fill="#943b37" font-size="16">容量拐点</text>
+    <rect x="195" y="755" width="1050" height="42" rx="10" fill="#f5f0e4"/>
+    <text x="220" y="782" fill="#554d42" font-size="17">拐点位置必须由真实工作负载压测得出；图中的位置和比例不代表通用阈值。</text>
+  </g>
+</svg>

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="790" viewBox="0 0 1440 790" role="img" aria-labelledby="title desc">
+  <title id="title">从基础实例数到可故障运行预算</title>
+  <desc id="desc">基础实例数只能承接预测峰值，生产预算还需加入目标利用率、发布下线、单机或可用区故障与增长提前量；相同余量不能在计划中重复使用。</desc>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#8a7f6d"/></marker></defs>
+  <rect width="1440" height="790" fill="#fdfaf3"/>
+  <g font-family="system-ui, sans-serif">
+    <text x="70" y="70" fill="#2b2620" font-size="34" font-weight="700">理论实例数只覆盖“正常峰值”这一种状态</text>
+    <text x="70" y="110" fill="#6f6659" font-size="20">容量余量要注明用途，并在发布和故障真实发生时仍满足服务目标</text>
+    <g text-anchor="middle">
+      <rect x="80" y="205" width="270" height="155" rx="20" fill="#d8dee0" stroke="#295279" stroke-width="3"/>
+      <text x="215" y="250" fill="#2b2620" font-size="22" font-weight="700">基础容量</text><text x="215" y="288" fill="#554d42" font-size="17">39,000 ÷ 1,500</text><text x="215" y="326" fill="#295279" font-size="24" font-weight="700">26 instances</text>
+      <rect x="445" y="205" width="270" height="155" rx="20" fill="#f4eace" stroke="#8a6b12" stroke-width="3"/>
+      <text x="580" y="250" fill="#2b2620" font-size="22" font-weight="700">目标利用率</text><text x="580" y="288" fill="#554d42" font-size="17">26 ÷ 60%</text><text x="580" y="326" fill="#8a6b12" font-size="24" font-weight="700">44 instances</text>
+      <rect x="810" y="205" width="270" height="155" rx="20" fill="#dee3d6" stroke="#466b48" stroke-width="3"/>
+      <text x="945" y="250" fill="#2b2620" font-size="22" font-weight="700">发布与单机故障</text><text x="945" y="288" fill="#554d42" font-size="17">同时下线 2 + 故障 1</text><text x="945" y="326" fill="#466b48" font-size="24" font-weight="700">47 instances</text>
+      <rect x="1175" y="205" width="210" height="155" rx="20" fill="#eed9d3" stroke="#943b37" stroke-width="3"/>
+      <text x="1280" y="250" fill="#2b2620" font-size="21" font-weight="700">区域故障</text><text x="1280" y="288" fill="#554d42" font-size="16">按剩余比例反推</text><text x="1280" y="326" fill="#943b37" font-size="18" font-weight="700">单独计算</text>
+    </g>
+    <g fill="none" stroke="#8a7f6d" stroke-width="4" marker-end="url(#arrow)"><path d="M350 282 H430"/><path d="M715 282 H795"/><path d="M1080 282 H1160"/></g>
+    <rect x="110" y="455" width="1220" height="200" rx="22" fill="#fbf8f1" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="145" y="498" fill="#6f6659" font-size="18" font-weight="700">余量台账</text>
+    <g text-anchor="middle">
+      <rect x="160" y="535" width="235" height="75" rx="14" fill="#f5f0e4"/><text x="277" y="566" fill="#2b2620" font-size="19" font-weight="700">突发与预测误差</text><text x="277" y="592" fill="#554d42" font-size="15">给扩容争取时间</text>
+      <rect x="455" y="535" width="235" height="75" rx="14" fill="#f5f0e4"/><text x="572" y="566" fill="#2b2620" font-size="19" font-weight="700">滚动发布</text><text x="572" y="592" fill="#554d42" font-size="15">计划内容量损失</text>
+      <rect x="750" y="535" width="235" height="75" rx="14" fill="#f5f0e4"/><text x="867" y="566" fill="#2b2620" font-size="19" font-weight="700">故障域</text><text x="867" y="592" fill="#554d42" font-size="15">实例 · 节点 · 可用区</text>
+      <rect x="1045" y="535" width="235" height="75" rx="14" fill="#f5f0e4"/><text x="1162" y="566" fill="#2b2620" font-size="19" font-weight="700">增长提前量</text><text x="1162" y="592" fill="#554d42" font-size="15">覆盖资源交付周期</text>
+    </g>
+    <rect x="180" y="700" width="1080" height="42" rx="10" fill="#f5f0e4"/>
+    <text x="205" y="727" fill="#554d42" font-size="17">同一批空闲资源可以在不同时间承担多种风险，但评审时不能被重复承诺。</text>
+  </g>
+</svg>

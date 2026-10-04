@@ -60,7 +60,6 @@ export const backendSubcategories: Subcategory[] = [
 		slug: 'system-design',
 		description: '从容量、性能、并发与可用性出发，把数据库、缓存、消息队列和分布式机制组合成完整系统。',
 		plannedTopics: [
-			{ title: '容量评估：QPS、并发数、响应时间与资源预算', seriesOrder: 20 },
 			{ title: '性能优化与压测：怎样找到系统的真实瓶颈', seriesOrder: 30 },
 			{ title: '缓存怎样扛住高并发：穿透、击穿、雪崩与一致性', seriesOrder: 40 },
 			{ title: '消息队列怎样削峰：积压、消费能力与流量整形', seriesOrder: 50 },

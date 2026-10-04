@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="800" viewBox="0 0 1440 800" role="img" aria-labelledby="title desc">
+  <title id="title">业务事件逐层转换为系统资源负载</title>
+  <desc id="desc">用户报名事件先形成多个接口请求，再按照重试、缓存命中和调用放大转换成应用、数据库、缓存与消息队列负载，最后落到 CPU、连接、网络、内存和磁盘。</desc>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#8a7f6d"/></marker></defs>
+  <rect width="1440" height="800" fill="#fdfaf3"/>
+  <g font-family="system-ui, sans-serif">
+    <text x="70" y="70" fill="#2b2620" font-size="34" font-weight="700">容量模型沿调用路径逐层展开</text>
+    <text x="70" y="110" fill="#6f6659" font-size="20">入口 QPS 经过时间分布、重试、命中率与扇出后，才成为各资源面对的真实工作</text>
+    <g text-anchor="middle">
+      <rect x="55" y="195" width="245" height="150" rx="20" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+      <text x="177" y="240" fill="#2b2620" font-size="22" font-weight="700">业务事件</text><text x="177" y="278" fill="#554d42" font-size="17">30 万用户 / 10 秒</text><text x="177" y="309" fill="#554d42" font-size="16">开放瞬间高度倾斜</text>
+      <rect x="390" y="195" width="245" height="150" rx="20" fill="#d8dee0" stroke="#295279" stroke-width="3"/>
+      <text x="512" y="240" fill="#2b2620" font-size="22" font-weight="700">接口请求</text><text x="512" y="278" fill="#554d42" font-size="17">详情 · 报名 · 查询</text><text x="512" y="309" fill="#295279" font-size="16">刷新与重试 × 1.3</text>
+      <rect x="725" y="195" width="245" height="150" rx="20" fill="#f4eace" stroke="#8a6b12" stroke-width="3"/>
+      <text x="847" y="240" fill="#2b2620" font-size="22" font-weight="700">组件操作</text><text x="847" y="278" fill="#554d42" font-size="17">RPC · SQL · Cache · MQ</text><text x="847" y="309" fill="#8a6b12" font-size="16">命中率与扇出倍率</text>
+      <rect x="1060" y="195" width="320" height="150" rx="20" fill="#dee3d6" stroke="#466b48" stroke-width="3"/>
+      <text x="1220" y="240" fill="#2b2620" font-size="22" font-weight="700">资源负载</text><text x="1220" y="278" fill="#554d42" font-size="17">CPU · 内存 · 连接 · 网络</text><text x="1220" y="309" fill="#466b48" font-size="16">IOPS · 磁盘 · 消费并行度</text>
+    </g>
+    <g fill="none" stroke="#8a7f6d" stroke-width="4" marker-end="url(#arrow)">
+      <path d="M300 270 H375"/><path d="M635 270 H710"/><path d="M970 270 H1045"/>
+    </g>
+    <rect x="85" y="450" width="1270" height="225" rx="22" fill="#fbf8f1" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="120" y="493" fill="#6f6659" font-size="18" font-weight="700">每个箭头都要保留倍率及其依据</text>
+    <g text-anchor="middle">
+      <rect x="135" y="535" width="250" height="90" rx="15" fill="#eed9d3"/><text x="260" y="572" fill="#2b2620" font-size="19" font-weight="700">时间峰值系数</text><text x="260" y="602" fill="#554d42" font-size="16">分钟平均不能代替首秒</text>
+      <rect x="445" y="535" width="250" height="90" rx="15" fill="#f4eace"/><text x="570" y="572" fill="#2b2620" font-size="19" font-weight="700">调用放大</text><text x="570" y="602" fill="#554d42" font-size="16">一次请求产生几次下游操作</text>
+      <rect x="755" y="535" width="250" height="90" rx="15" fill="#dee3d6"/><text x="880" y="572" fill="#2b2620" font-size="19" font-weight="700">分布与热点</text><text x="880" y="602" fill="#554d42" font-size="16">总容量能否被均匀使用</text>
+      <rect x="1065" y="535" width="240" height="90" rx="15" fill="#d8dee0"/><text x="1185" y="572" fill="#2b2620" font-size="19" font-weight="700">版本化实测</text><text x="1185" y="602" fill="#554d42" font-size="16">用压测替换初始假设</text>
+    </g>
+    <rect x="180" y="715" width="1080" height="42" rx="10" fill="#f5f0e4"/>
+    <text x="205" y="742" fill="#554d42" font-size="17">任何倍率变化都会向后传播；容量表必须能重新计算，不能只保存最终机器数。</text>
+  </g>
+</svg>
