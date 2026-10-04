@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="690" viewBox="0 0 1200 690" role="img" aria-labelledby="title desc">
+  <title id="title">从用户请求到共享依赖的故障域</title>
+  <desc id="desc">三个可用区分别部署网关与应用，但共同依赖数据库、配置中心和网络出口。跨区副本只能覆盖部分故障，共享依赖和统一发布仍会形成相关故障域。</desc>
+  <rect width="1200" height="690" rx="24" fill="#fdfaf3"/>
+  <text x="64" y="68" fill="#2b2620" font-size="30" font-weight="700">副本跨区后，仍要检查共享依赖</text>
+  <text x="64" y="106" fill="#6f6658" font-size="18">物理隔离解决机器与可用区故障，逻辑共享仍可能让三套副本一起失败</text>
+  <defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#466b48"/></marker></defs>
+  <rect x="455" y="135" width="290" height="68" rx="16" fill="#f4eace" stroke="#8a6b12" stroke-width="2"/>
+  <text x="513" y="178" fill="#2b2620" font-size="22" font-weight="700">用户与全局入口</text>
+  <path d="M600 203V238" stroke="#466b48" stroke-width="4" marker-end="url(#a)"/>
+  <g font-family="sans-serif">
+    <rect x="55" y="250" width="330" height="230" rx="19" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="82" y="288" fill="#2b2620" font-size="21" font-weight="700">可用区 A</text>
+    <rect x="86" y="315" width="130" height="54" rx="10" fill="#fffdf8"/><rect x="240" y="315" width="112" height="54" rx="10" fill="#fffdf8"/>
+    <text x="118" y="348" fill="#5f5548" font-size="16">网关</text><text x="270" y="348" fill="#5f5548" font-size="16">应用</text>
+    <rect x="86" y="390" width="266" height="55" rx="10" fill="#d8dee0"/><text x="143" y="424" fill="#295279" font-size="16">同区缓存 / 本地依赖</text>
+    <rect x="435" y="250" width="330" height="230" rx="19" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="462" y="288" fill="#2b2620" font-size="21" font-weight="700">可用区 B</text>
+    <rect x="466" y="315" width="130" height="54" rx="10" fill="#fffdf8"/><rect x="620" y="315" width="112" height="54" rx="10" fill="#fffdf8"/>
+    <text x="498" y="348" fill="#5f5548" font-size="16">网关</text><text x="650" y="348" fill="#5f5548" font-size="16">应用</text>
+    <rect x="466" y="390" width="266" height="55" rx="10" fill="#d8dee0"/><text x="523" y="424" fill="#295279" font-size="16">同区缓存 / 本地依赖</text>
+    <rect x="815" y="250" width="330" height="230" rx="19" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="842" y="288" fill="#2b2620" font-size="21" font-weight="700">可用区 C</text>
+    <rect x="846" y="315" width="130" height="54" rx="10" fill="#fffdf8"/><rect x="1000" y="315" width="112" height="54" rx="10" fill="#fffdf8"/>
+    <text x="878" y="348" fill="#5f5548" font-size="16">网关</text><text x="1030" y="348" fill="#5f5548" font-size="16">应用</text>
+    <rect x="846" y="390" width="266" height="55" rx="10" fill="#d8dee0"/><text x="903" y="424" fill="#295279" font-size="16">同区缓存 / 本地依赖</text>
+  </g>
+  <path d="M600 238L220 250M600 238V250M600 238L980 250" stroke="#466b48" stroke-width="3" fill="none"/>
+  <rect x="105" y="540" width="990" height="90" rx="18" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+  <text x="145" y="578" fill="#2b2620" font-size="21" font-weight="700">共享故障域</text>
+  <text x="145" y="610" fill="#5f5548" font-size="17">数据库主节点 · 配置 / 服务发现 · 网络出口 · 账号与密钥 · 同一版本和配置发布</text>
+  <path d="M220 480V540M600 480V540M980 480V540" stroke="#943b37" stroke-width="3" stroke-dasharray="8 7"/>
+  <text x="64" y="666" fill="#6f6658" font-size="16">副本数要和故障域一起阅读；共享依赖决定了整体仍可能同时失效。</text>
+</svg>

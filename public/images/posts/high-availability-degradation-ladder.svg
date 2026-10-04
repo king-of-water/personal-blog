@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="650" viewBox="0 0 1200 650" role="img" aria-labelledby="title desc">
+  <title id="title">故障期间的业务能力降级阶梯</title>
+  <desc id="desc">系统从完整服务依次下降到精简、可靠受理、只读和关闭。越往下依赖越少，写能力逐步收缩，核心正确性边界保持不变。</desc>
+  <rect width="1200" height="650" rx="24" fill="#fdfaf3"/>
+  <text x="65" y="68" fill="#2b2620" font-size="30" font-weight="700">降级收缩能力，不能放松核心正确性</text>
+  <text x="65" y="106" fill="#6f6658" font-size="18">每一级都有进入条件、允许结果和禁止行为</text>
+  <path d="M210 180H990" stroke="#ded8cc" stroke-width="2"/>
+  <g font-family="sans-serif">
+    <rect x="90" y="160" width="1020" height="74" rx="15" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="125" y="204" fill="#2b2620" font-size="22" font-weight="700">L0 完整</text><text x="300" y="204" fill="#5f5548" font-size="17">核心读写 + 推荐 + 榜单 + 通知</text><text x="900" y="204" fill="#466b48" font-size="16">全部依赖健康</text>
+    <rect x="145" y="255" width="910" height="74" rx="15" fill="#e5e7dc" stroke="#6e7c59" stroke-width="2"/>
+    <text x="180" y="299" fill="#2b2620" font-size="22" font-weight="700">L1 精简</text><text x="355" y="299" fill="#5f5548" font-size="17">保留核心读写，关闭推荐与昂贵计算</text><text x="847" y="299" fill="#6e7c59" font-size="16">容量紧张</text>
+    <rect x="205" y="350" width="790" height="74" rx="15" fill="#f4eace" stroke="#8a6b12" stroke-width="2"/>
+    <text x="240" y="394" fill="#2b2620" font-size="22" font-weight="700">L2 受理</text><text x="415" y="394" fill="#5f5548" font-size="17">可靠排队，结果明确标记处理中</text><text x="800" y="394" fill="#8a6b12" font-size="16">写库短时异常</text>
+    <rect x="265" y="445" width="670" height="74" rx="15" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+    <text x="300" y="489" fill="#2b2620" font-size="22" font-weight="700">L3 只读</text><text x="475" y="489" fill="#5f5548" font-size="17">查询已确认结果，停止新写入</text><text x="755" y="489" fill="#943b37" font-size="16">无法证明唯一主</text>
+    <rect x="325" y="540" width="550" height="74" rx="15" fill="#e8ded8" stroke="#6e5149" stroke-width="2"/>
+    <text x="360" y="584" fill="#2b2620" font-size="22" font-weight="700">L4 关闭</text><text x="535" y="584" fill="#5f5548" font-size="17">明确不可用，不伪造成功</text><text x="713" y="584" fill="#6e5149" font-size="16">权威状态不可用</text>
+  </g>
+  <text x="930" y="126" fill="#943b37" font-size="16">依赖减少 · 写能力收缩 ↓</text>
+</svg>

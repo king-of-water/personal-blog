@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="650" viewBox="0 0 1200 650" role="img" aria-labelledby="title desc">
+  <title id="title">有状态服务的故障检测与接管状态机</title>
+  <desc id="desc">故障转移从异常检测开始，经过多数派确认、隔离旧主、选择最新安全副本、提升新主、传播路由和渐进恢复。无法隔离旧主或找不到安全副本时进入只读或不可用状态。</desc>
+  <rect width="1200" height="650" rx="24" fill="#fdfaf3"/>
+  <text x="65" y="68" fill="#2b2620" font-size="30" font-weight="700">接管之前先证明旧所有者已经失去写权限</text>
+  <text x="65" y="106" fill="#6f6658" font-size="18">检测快不等于切换安全；每一步都要留下可验证状态</text>
+  <defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#466b48"/></marker><marker id="r" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#943b37"/></marker></defs>
+  <g font-family="sans-serif">
+    <rect x="55" y="205" width="145" height="100" rx="16" fill="#f4eace" stroke="#8a6b12" stroke-width="2"/><text x="82" y="245" fill="#2b2620" font-size="20" font-weight="700">发现异常</text><text x="78" y="278" fill="#5f5548" font-size="15">主动 + 被动信号</text>
+    <rect x="235" y="205" width="145" height="100" rx="16" fill="#f4eace" stroke="#8a6b12" stroke-width="2"/><text x="257" y="245" fill="#2b2620" font-size="20" font-weight="700">确认故障</text><text x="257" y="278" fill="#5f5548" font-size="15">多数派 / 故障域</text>
+    <rect x="415" y="180" width="160" height="150" rx="16" fill="#eed9d3" stroke="#943b37" stroke-width="2"/><text x="445" y="223" fill="#2b2620" font-size="20" font-weight="700">隔离旧主</text><text x="444" y="258" fill="#5f5548" font-size="15">租约 / epoch</text><text x="444" y="286" fill="#5f5548" font-size="15">撤权 / fencing</text>
+    <rect x="610" y="180" width="160" height="150" rx="16" fill="#d8dee0" stroke="#295279" stroke-width="2"/><text x="636" y="223" fill="#2b2620" font-size="20" font-weight="700">选择候选</text><text x="637" y="258" fill="#5f5548" font-size="15">提交点 / lag</text><text x="637" y="286" fill="#5f5548" font-size="15">故障域 / 优先级</text>
+    <rect x="805" y="205" width="145" height="100" rx="16" fill="#dee3d6" stroke="#466b48" stroke-width="2"/><text x="827" y="245" fill="#2b2620" font-size="20" font-weight="700">提升新主</text><text x="827" y="278" fill="#5f5548" font-size="15">新 epoch 生效</text>
+    <rect x="985" y="205" width="160" height="100" rx="16" fill="#dee3d6" stroke="#466b48" stroke-width="2"/><text x="1012" y="245" fill="#2b2620" font-size="20" font-weight="700">渐进恢复</text><text x="1005" y="278" fill="#5f5548" font-size="15">路由 · 预热 · 放量</text>
+  </g>
+  <path d="M200 255H235M380 255H415M575 255H610M770 255H805M950 255H985" stroke="#466b48" stroke-width="4" marker-end="url(#a)"/>
+  <path d="M495 330V430H340" fill="none" stroke="#943b37" stroke-width="4" marker-end="url(#r)"/>
+  <path d="M690 330V430H340" fill="none" stroke="#943b37" stroke-width="4" marker-end="url(#r)"/>
+  <rect x="120" y="410" width="220" height="105" rx="17" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+  <text x="157" y="450" fill="#2b2620" font-size="21" font-weight="700">安全降级</text>
+  <text x="153" y="483" fill="#5f5548" font-size="16">只读 / 排队中 / 明确失败</text>
+  <text x="416" y="400" fill="#943b37" font-size="16">无法 fence 旧主</text>
+  <text x="637" y="400" fill="#943b37" font-size="16">没有安全候选</text>
+  <rect x="65" y="570" width="1070" height="1" fill="#ded8cc"/>
+  <text x="65" y="606" fill="#6f6658" font-size="16">DNS 或服务发现只负责传播新地址；旧写权限必须在资源端失效。</text>
+</svg>
