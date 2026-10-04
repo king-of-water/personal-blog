@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900" role="img" aria-labelledby="title desc">
+  <title id="title">主机房失效后的隔离、提升、校验和渐进切流</title>
+  <desc id="desc">主机房 A 故障后，恢复流程先隔离旧主写权限，再停止复制并提升 B 的数据库，校验核心依赖和业务数据，最后从少量流量逐步切到全部流量。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#8a7f6d"/></marker>
+    <marker id="good" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#466b48"/></marker>
+    <marker id="bad" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#943b37"/></marker>
+  </defs>
+  <rect width="1440" height="900" fill="#fdfaf3"/>
+  <g font-family="system-ui, sans-serif">
+    <text x="70" y="68" fill="#2b2620" font-size="34" font-weight="700">先阻止旧主写入，再让备用侧成为新主</text>
+    <text x="70" y="108" fill="#6f6659" font-size="20">切流发生在数据提升与业务校验之后，并按容量逐级放量</text>
+    <rect x="70" y="155" width="570" height="290" rx="23" fill="#eed9d3" stroke="#943b37" stroke-width="3"/>
+    <text x="105" y="200" fill="#943b37" font-size="19" font-weight="700">机房 A · 原主</text>
+    <rect x="120" y="245" width="210" height="105" rx="15" fill="#fbf8f1" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="225" y="288" text-anchor="middle" fill="#2b2620" font-size="21" font-weight="700">应用集群</text>
+    <text x="225" y="320" text-anchor="middle" fill="#554d42" font-size="16">失联 / 部分存活</text>
+    <rect x="390" y="245" width="200" height="105" rx="15" fill="#fbf8f1" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="490" y="288" text-anchor="middle" fill="#2b2620" font-size="21" font-weight="700">数据库 A</text>
+    <text x="490" y="320" text-anchor="middle" fill="#554d42" font-size="16">旧 epoch</text>
+    <rect x="150" y="375" width="410" height="48" rx="12" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+    <text x="355" y="406" text-anchor="middle" fill="#943b37" font-size="17">撤销入口与写权限 · 拒绝旧 epoch</text>
+
+    <rect x="800" y="155" width="570" height="290" rx="23" fill="#dee3d6" stroke="#466b48" stroke-width="3"/>
+    <text x="835" y="200" fill="#466b48" font-size="19" font-weight="700">机房 B · 新主</text>
+    <rect x="850" y="245" width="210" height="105" rx="15" fill="#fbf8f1" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="955" y="288" text-anchor="middle" fill="#2b2620" font-size="21" font-weight="700">应用集群</text>
+    <text x="955" y="320" text-anchor="middle" fill="#554d42" font-size="16">扩容并预热</text>
+    <rect x="1120" y="245" width="200" height="105" rx="15" fill="#fbf8f1" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="1220" y="288" text-anchor="middle" fill="#2b2620" font-size="21" font-weight="700">数据库 B</text>
+    <text x="1220" y="320" text-anchor="middle" fill="#554d42" font-size="16">提升到新 epoch</text>
+    <rect x="880" y="375" width="410" height="48" rx="12" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="1085" y="406" text-anchor="middle" fill="#466b48" font-size="17">停止复制 · 校验日志 · 提升写主</text>
+    <path d="M640 290 H785" fill="none" stroke="#943b37" stroke-width="4" stroke-dasharray="10 8" marker-end="url(#bad)"/>
+    <text x="712" y="267" text-anchor="middle" fill="#943b37" font-size="15">切断旧复制关系</text>
+
+    <rect x="140" y="545" width="250" height="115" rx="17" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="265" y="590" text-anchor="middle" fill="#2b2620" font-size="21" font-weight="700">1. 故障判定</text>
+    <text x="265" y="626" text-anchor="middle" fill="#554d42" font-size="16">多源证据与冻结变更</text>
+    <rect x="455" y="545" width="250" height="115" rx="17" fill="#eed9d3" stroke="#943b37" stroke-width="3"/>
+    <text x="580" y="590" text-anchor="middle" fill="#2b2620" font-size="21" font-weight="700">2. 隔离旧主</text>
+    <text x="580" y="626" text-anchor="middle" fill="#554d42" font-size="16">入口、权限与 epoch</text>
+    <rect x="770" y="545" width="250" height="115" rx="17" fill="#d8dee0" stroke="#295279" stroke-width="3"/>
+    <text x="895" y="590" text-anchor="middle" fill="#2b2620" font-size="21" font-weight="700">3. 提升与校验</text>
+    <text x="895" y="626" text-anchor="middle" fill="#554d42" font-size="16">数据、依赖与容量</text>
+    <rect x="1085" y="545" width="250" height="115" rx="17" fill="#dee3d6" stroke="#466b48" stroke-width="3"/>
+    <text x="1210" y="590" text-anchor="middle" fill="#2b2620" font-size="21" font-weight="700">4. 渐进切流</text>
+    <text x="1210" y="626" text-anchor="middle" fill="#554d42" font-size="16">1% → 10% → 100%</text>
+    <path d="M390 602 H440" fill="none" stroke="#8a7f6d" stroke-width="4" marker-end="url(#arrow)"/>
+    <path d="M705 602 H755" fill="none" stroke="#8a7f6d" stroke-width="4" marker-end="url(#arrow)"/>
+    <path d="M1020 602 H1070" fill="none" stroke="#466b48" stroke-width="4" marker-end="url(#good)"/>
+    <rect x="150" y="730" width="1140" height="90" rx="17" fill="#f4eace" stroke="#8a6b12" stroke-width="2"/>
+    <text x="720" y="767" text-anchor="middle" fill="#2b2620" font-size="20" font-weight="700">事故窗口的结果未知请求进入对账与补偿</text>
+    <text x="720" y="798" text-anchor="middle" fill="#554d42" font-size="16">网关日志 + 订单业务号 + 钱包流水 + MQ 记录共同重建证据</text>
+  </g>
+</svg>

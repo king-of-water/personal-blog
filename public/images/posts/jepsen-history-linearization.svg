@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="820" viewBox="0 0 1440 820" role="img" aria-labelledby="title desc">
+  <title id="title">并发历史的真实时间约束与候选线性化顺序</title>
+  <desc id="desc">两个写操作的时间区间重叠，因此顺序可选；读操作在写二完成后开始，必须排在写二之后，若返回旧值一便无法满足寄存器模型。</desc>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#8a7f6d"/></marker></defs>
+  <rect width="1440" height="820" fill="#fdfaf3"/>
+  <g font-family="system-ui, sans-serif">
+    <text x="70" y="68" fill="#2b2620" font-size="34" font-weight="700">线性化点必须落在调用与返回之间</text>
+    <text x="70" y="108" fill="#6f6659" font-size="20">重叠操作可以换序，已经完成后才开始的操作必须保留真实时间顺序</text>
+
+    <text x="90" y="190" fill="#2b2620" font-size="21" font-weight="700">观测历史</text>
+    <line x1="250" y1="185" x2="1290" y2="185" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+    <text x="250" y="165" fill="#6f6659" font-size="15">早</text><text x="1260" y="165" fill="#6f6659" font-size="15">晚</text>
+    <text x="90" y="280" fill="#554d42" font-size="18">P1</text>
+    <rect x="300" y="240" width="420" height="70" rx="14" fill="#d8dee0" stroke="#295279" stroke-width="3"/>
+    <text x="510" y="283" text-anchor="middle" fill="#2b2620" font-size="19" font-weight="700">write(1) · ok</text>
+    <circle cx="515" cy="275" r="9" fill="#295279"/>
+    <text x="90" y="390" fill="#554d42" font-size="18">P2</text>
+    <rect x="560" y="350" width="360" height="70" rx="14" fill="#f4eace" stroke="#8a6b12" stroke-width="3"/>
+    <text x="740" y="393" text-anchor="middle" fill="#2b2620" font-size="19" font-weight="700">write(2) · ok</text>
+    <circle cx="750" cy="385" r="9" fill="#8a6b12"/>
+    <text x="90" y="500" fill="#554d42" font-size="18">P3</text>
+    <rect x="990" y="460" width="250" height="70" rx="14" fill="#eed9d3" stroke="#943b37" stroke-width="3"/>
+    <text x="1115" y="503" text-anchor="middle" fill="#2b2620" font-size="19" font-weight="700">read() → 1</text>
+    <circle cx="1120" cy="495" r="9" fill="#943b37"/>
+
+    <text x="90" y="625" fill="#2b2620" font-size="21" font-weight="700">模型约束</text>
+    <rect x="285" y="580" width="240" height="100" rx="16" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="405" y="640" text-anchor="middle" fill="#2b2620" font-size="20" font-weight="700">write(1)</text>
+    <rect x="600" y="580" width="240" height="100" rx="16" fill="#f4eace" stroke="#8a6b12" stroke-width="2"/>
+    <text x="720" y="640" text-anchor="middle" fill="#2b2620" font-size="20" font-weight="700">write(2)</text>
+    <rect x="915" y="580" width="240" height="100" rx="16" fill="#eed9d3" stroke="#943b37" stroke-width="3"/>
+    <text x="1035" y="625" text-anchor="middle" fill="#2b2620" font-size="20" font-weight="700">read() → 1</text>
+    <text x="1035" y="657" text-anchor="middle" fill="#943b37" font-size="16">无法解释</text>
+    <path d="M525 630 H585" fill="none" stroke="#8a7f6d" stroke-width="4" marker-end="url(#arrow)"/>
+    <path d="M840 630 H900" fill="none" stroke="#943b37" stroke-width="4" marker-end="url(#arrow)"/>
+    <text x="720" y="735" text-anchor="middle" fill="#554d42" font-size="17">write(2) 已在 read 调用前完成，寄存器最新值应为 2；返回 1 构成反例。</text>
+    <rect x="150" y="765" width="1140" height="40" rx="10" fill="#f5f0e4"/>
+    <text x="175" y="792" fill="#554d42" font-size="16">圆点表示候选线性化点；checker 会搜索所有满足时间区间与状态机规则的放置方式。</text>
+  </g>
+</svg>

@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="880" viewBox="0 0 1440 880" role="img" aria-labelledby="title desc">
+  <title id="title">Jepsen 从负载与故障生成到历史检查的闭环</title>
+  <desc id="desc">Generator 产生客户端操作，Nemesis 注入故障，Client 调用被测集群并记录调用与结果，Checker 根据历史和一致性模型判断是否合法。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#8a7f6d"/></marker>
+    <marker id="good" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#466b48"/></marker>
+    <marker id="bad" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#943b37"/></marker>
+  </defs>
+  <rect width="1440" height="880" fill="#fdfaf3"/>
+  <g font-family="system-ui, sans-serif">
+    <text x="70" y="68" fill="#2b2620" font-size="34" font-weight="700">Jepsen 把操作和故障都记录成可检查历史</text>
+    <text x="70" y="108" fill="#6f6659" font-size="20">测试结果来自模型与历史的比较，不来自故障后副本是否最终相同</text>
+
+    <rect x="75" y="175" width="290" height="130" rx="18" fill="#d8dee0" stroke="#295279" stroke-width="3"/>
+    <text x="220" y="224" text-anchor="middle" fill="#2b2620" font-size="23" font-weight="700">Generator</text>
+    <text x="220" y="262" text-anchor="middle" fill="#554d42" font-size="17">read · write · CAS · txn</text>
+    <rect x="75" y="420" width="290" height="130" rx="18" fill="#eed9d3" stroke="#943b37" stroke-width="3"/>
+    <text x="220" y="469" text-anchor="middle" fill="#2b2620" font-size="23" font-weight="700">Nemesis</text>
+    <text x="220" y="507" text-anchor="middle" fill="#554d42" font-size="17">partition · pause · kill · clock</text>
+    <rect x="510" y="175" width="300" height="145" rx="18" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="3"/>
+    <text x="660" y="225" text-anchor="middle" fill="#2b2620" font-size="23" font-weight="700">Client 进程</text>
+    <text x="660" y="263" text-anchor="middle" fill="#554d42" font-size="17">invoke → API → ok/fail/info</text>
+    <text x="660" y="294" text-anchor="middle" fill="#554d42" font-size="16">分类结果未知</text>
+    <rect x="950" y="210" width="370" height="300" rx="22" fill="#fbf8f1" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="1135" y="255" text-anchor="middle" fill="#2b2620" font-size="24" font-weight="700">被测分布式系统</text>
+    <circle cx="1050" cy="345" r="52" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <circle cx="1220" cy="345" r="52" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <circle cx="1135" cy="440" r="52" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="1050" y="352" text-anchor="middle" fill="#2b2620" font-size="19" font-weight="700">N1</text>
+    <text x="1220" y="352" text-anchor="middle" fill="#2b2620" font-size="19" font-weight="700">N2</text>
+    <text x="1135" y="447" text-anchor="middle" fill="#2b2620" font-size="19" font-weight="700">N3</text>
+    <path d="M365 240 H495" fill="none" stroke="#295279" stroke-width="4" marker-end="url(#arrow)"/>
+    <path d="M810 247 H935" fill="none" stroke="#8a7f6d" stroke-width="4" marker-end="url(#arrow)"/>
+    <path d="M365 485 Q650 560 935 450" fill="none" stroke="#943b37" stroke-width="4" stroke-dasharray="9 7" marker-end="url(#bad)"/>
+
+    <rect x="500" y="610" width="320" height="130" rx="18" fill="#f4eace" stroke="#8a6b12" stroke-width="3"/>
+    <text x="660" y="658" text-anchor="middle" fill="#2b2620" font-size="23" font-weight="700">History</text>
+    <text x="660" y="695" text-anchor="middle" fill="#554d42" font-size="17">时间 · 进程 · 操作 · 结果 · 故障</text>
+    <rect x="980" y="610" width="340" height="130" rx="18" fill="#dee3d6" stroke="#466b48" stroke-width="3"/>
+    <text x="1150" y="658" text-anchor="middle" fill="#2b2620" font-size="23" font-weight="700">Checker + Model</text>
+    <text x="1150" y="695" text-anchor="middle" fill="#554d42" font-size="17">合法历史 / 反例 / 无法判定</text>
+    <path d="M660 320 V595" fill="none" stroke="#8a6b12" stroke-width="4" marker-end="url(#arrow)"/>
+    <path d="M820 675 H965" fill="none" stroke="#466b48" stroke-width="4" marker-end="url(#good)"/>
+    <path d="M1135 510 V595" fill="none" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+    <rect x="150" y="790" width="1140" height="45" rx="11" fill="#f5f0e4"/>
+    <text x="175" y="819" fill="#554d42" font-size="17">一次 false 反例足以推翻对应承诺；一次 true 只覆盖本次操作、故障和 checker 能观察到的历史。</text>
+  </g>
+</svg>

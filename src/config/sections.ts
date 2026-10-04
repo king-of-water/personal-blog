@@ -49,12 +49,6 @@ export const backendSubcategories: Subcategory[] = [
 		name: '分布式',
 		slug: 'distributed-systems',
 		description: '理解多节点系统中的一致性、复制、协调、故障恢复与数据正确性。',
-		plannedTopics: [
-			'多台机器怎样确保定时任务只执行一次：任务调度、租约与幂等',
-			'用一个最小 Raft 实现理解选主、日志复制与成员变更',
-			'一个机房整体故障后怎样恢复：多机房、RPO 与 RTO',
-			'怎样证明系统在故障中仍然正确：故障注入与 Jepsen',
-		],
 	},
 	{
 		name: '系统设计与高并发',

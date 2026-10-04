@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="790" viewBox="0 0 1440 790" role="img" aria-labelledby="title desc">
+  <title id="title">Raft 节点角色状态机</title>
+  <desc id="desc">节点启动为 Follower，选举超时后成为 Candidate，获得多数票后成为 Leader；任何角色看到更高任期都会回到 Follower。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#8a7f6d"/></marker>
+    <marker id="good" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#466b48"/></marker>
+    <marker id="bad" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#943b37"/></marker>
+  </defs>
+  <rect width="1440" height="790" fill="#fdfaf3"/>
+  <g font-family="system-ui, sans-serif">
+    <text x="70" y="68" fill="#2b2620" font-size="34" font-weight="700">超时发起选举，term 与多数票决定合法性</text>
+    <text x="70" y="108" fill="#6f6659" font-size="20">超时可以误判故障；更高 term 会让旧 Leader 失去协议资格</text>
+
+    <rect x="110" y="295" width="300" height="160" rx="22" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="3"/>
+    <text x="260" y="355" text-anchor="middle" fill="#2b2620" font-size="28" font-weight="700">FOLLOWER</text>
+    <text x="260" y="397" text-anchor="middle" fill="#554d42" font-size="17">响应投票与日志复制</text>
+    <text x="260" y="427" text-anchor="middle" fill="#554d42" font-size="17">重置 election timer</text>
+    <rect x="570" y="295" width="300" height="160" rx="22" fill="#f4eace" stroke="#8a6b12" stroke-width="3"/>
+    <text x="720" y="355" text-anchor="middle" fill="#2b2620" font-size="28" font-weight="700">CANDIDATE</text>
+    <text x="720" y="397" text-anchor="middle" fill="#554d42" font-size="17">term++，先投自己</text>
+    <text x="720" y="427" text-anchor="middle" fill="#554d42" font-size="17">向所有节点 RequestVote</text>
+    <rect x="1030" y="295" width="300" height="160" rx="22" fill="#dee3d6" stroke="#466b48" stroke-width="3"/>
+    <text x="1180" y="355" text-anchor="middle" fill="#2b2620" font-size="28" font-weight="700">LEADER</text>
+    <text x="1180" y="397" text-anchor="middle" fill="#554d42" font-size="17">维护 nextIndex / matchIndex</text>
+    <text x="1180" y="427" text-anchor="middle" fill="#554d42" font-size="17">周期发送 AppendEntries</text>
+
+    <path d="M410 375 H555" fill="none" stroke="#8a6b12" stroke-width="4" marker-end="url(#arrow)"/>
+    <text x="482" y="350" text-anchor="middle" fill="#8a6b12" font-size="16">选举超时</text>
+    <path d="M870 375 H1015" fill="none" stroke="#466b48" stroke-width="4" marker-end="url(#good)"/>
+    <text x="942" y="350" text-anchor="middle" fill="#466b48" font-size="16">获得多数票</text>
+    <path d="M720 295 V205 Q720 165 680 165 H300 Q260 165 260 280" fill="none" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+    <text x="485" y="145" text-anchor="middle" fill="#6f6659" font-size="16">收到同任期合法 Leader 的 AppendEntries</text>
+    <path d="M1180 295 V170 Q1180 130 1140 130 H320 Q280 130 280 280" fill="none" stroke="#943b37" stroke-width="3" stroke-dasharray="9 7" marker-end="url(#bad)"/>
+    <text x="730" y="105" text-anchor="middle" fill="#943b37" font-size="17">任何角色收到更高 term 的 RPC 或响应，立即转为 Follower</text>
+    <path d="M650 455 Q570 570 700 620 Q830 570 790 470" fill="none" stroke="#8a6b12" stroke-width="3" marker-end="url(#arrow)"/>
+    <text x="700" y="655" text-anchor="middle" fill="#8a6b12" font-size="16">选举再次超时：进入新 term，重新请求投票</text>
+    <rect x="145" y="705" width="1150" height="45" rx="11" fill="#f5f0e4"/>
+    <text x="170" y="734" fill="#554d42" font-size="17">同一 term 最多一个节点获得多数票；短暂出现多个“自认为是 Leader”的进程不会产生两个合法多数派。</text>
+  </g>
+</svg>

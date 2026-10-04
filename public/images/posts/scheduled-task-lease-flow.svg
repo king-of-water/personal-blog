@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="860" viewBox="0 0 1440 860" role="img" aria-labelledby="title desc">
+  <title id="title">计划点、任务实例、租约与业务副作用之间的关系</title>
+  <desc id="desc">调度器为确定的计划时间创建唯一任务实例，Worker 通过租约和 Fencing Token 获得执行资格，业务系统再使用业务键和状态机保证副作用幂等。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#8a7f6d"/></marker>
+    <marker id="good" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#466b48"/></marker>
+  </defs>
+  <rect width="1440" height="860" fill="#fdfaf3"/>
+  <g font-family="system-ui, sans-serif">
+    <text x="70" y="68" fill="#2b2620" font-size="34" font-weight="700">“这一轮任务”与“这笔业务动作”使用两种唯一键</text>
+    <text x="70" y="108" fill="#6f6659" font-size="20">调度层限制重复工作，业务层决定重复执行是否产生第二次副作用</text>
+    <rect x="65" y="155" width="1310" height="270" rx="22" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="95" y="197" fill="#6f6659" font-size="18" font-weight="700">控制面：生成并分配任务实例</text>
+    <rect x="105" y="245" width="235" height="115" rx="16" fill="#fbf8f1" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="222" y="288" text-anchor="middle" fill="#2b2620" font-size="22" font-weight="700">计划点</text>
+    <text x="222" y="323" text-anchor="middle" fill="#554d42" font-size="16">12:01:00 UTC</text>
+    <rect x="480" y="225" width="330" height="155" rx="18" fill="#d8dee0" stroke="#295279" stroke-width="3"/>
+    <text x="645" y="270" text-anchor="middle" fill="#2b2620" font-size="22" font-weight="700">唯一任务实例</text>
+    <text x="645" y="307" text-anchor="middle" fill="#554d42" font-size="16">unique(job_name, scheduled_at)</text>
+    <text x="645" y="339" text-anchor="middle" fill="#295279" font-size="16">READY · RUNNING · SUCCEEDED</text>
+    <rect x="955" y="225" width="315" height="155" rx="18" fill="#dee3d6" stroke="#466b48" stroke-width="3"/>
+    <text x="1112" y="270" text-anchor="middle" fill="#2b2620" font-size="22" font-weight="700">Worker 执行资格</text>
+    <text x="1112" y="307" text-anchor="middle" fill="#554d42" font-size="16">owner · lease_until</text>
+    <text x="1112" y="339" text-anchor="middle" fill="#466b48" font-size="16">fencing_token = 42</text>
+    <path d="M340 302 H465" fill="none" stroke="#8a7f6d" stroke-width="4" marker-end="url(#arrow)"/>
+    <path d="M810 302 H940" fill="none" stroke="#466b48" stroke-width="4" marker-end="url(#good)"/>
+    <text x="402" y="282" text-anchor="middle" fill="#6f6659" font-size="15">唯一插入</text>
+    <text x="875" y="282" text-anchor="middle" fill="#466b48" font-size="15">CAS 领取</text>
+
+    <rect x="65" y="485" width="1310" height="285" rx="22" fill="#fbf8f1" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="95" y="527" fill="#6f6659" font-size="18" font-weight="700">数据面：每条业务记录独立收敛</text>
+    <rect x="155" y="585" width="290" height="120" rx="17" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="300" y="630" text-anchor="middle" fill="#2b2620" font-size="21" font-weight="700">订单 T1001</text>
+    <text x="300" y="665" text-anchor="middle" fill="#554d42" font-size="16">trade_order_no = K20261004</text>
+    <rect x="575" y="570" width="300" height="150" rx="18" fill="#f4eace" stroke="#8a6b12" stroke-width="3"/>
+    <text x="725" y="616" text-anchor="middle" fill="#2b2620" font-size="22" font-weight="700">业务状态机</text>
+    <text x="725" y="653" text-anchor="middle" fill="#554d42" font-size="16">PROCESSING → PAID</text>
+    <text x="725" y="685" text-anchor="middle" fill="#8a6b12" font-size="16">version 条件更新</text>
+    <rect x="1010" y="585" width="280" height="120" rx="17" fill="#dee3d6" stroke="#466b48" stroke-width="3"/>
+    <text x="1150" y="630" text-anchor="middle" fill="#2b2620" font-size="21" font-weight="700">唯一副作用</text>
+    <text x="1150" y="665" text-anchor="middle" fill="#554d42" font-size="16">扣款 / 发券 / 推进状态</text>
+    <path d="M445 645 H560" fill="none" stroke="#8a7f6d" stroke-width="4" marker-end="url(#arrow)"/>
+    <path d="M875 645 H995" fill="none" stroke="#466b48" stroke-width="4" marker-end="url(#good)"/>
+    <path d="M1112 380 V465 Q1112 505 875 585" fill="none" stroke="#466b48" stroke-width="3" marker-end="url(#good)"/>
+    <text x="1080" y="482" text-anchor="end" fill="#466b48" font-size="15">携带 token 与业务键</text>
+    <rect x="130" y="795" width="1180" height="42" rx="10" fill="#f5f0e4"/>
+    <text x="155" y="822" fill="#554d42" font-size="17">租约过期允许接管；旧 Worker 恢复后，由 token、唯一键和状态条件共同拒绝重复写。</text>
+  </g>
+</svg>

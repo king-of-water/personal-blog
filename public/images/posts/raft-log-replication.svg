@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="880" viewBox="0 0 1440 880" role="img" aria-labelledby="title desc">
+  <title id="title">Raft 从客户端命令到多数派提交和状态机应用的路径</title>
+  <desc id="desc">客户端把命令交给 Leader，Leader 追加日志并复制到两个 Follower，在多数派持久化后推进提交位置，各节点随后按顺序应用到状态机。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#8a7f6d"/></marker>
+    <marker id="good" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#466b48"/></marker>
+  </defs>
+  <rect width="1440" height="880" fill="#fdfaf3"/>
+  <g font-family="system-ui, sans-serif">
+    <text x="70" y="68" fill="#2b2620" font-size="34" font-weight="700">日志先形成多数派事实，再驱动状态机</text>
+    <text x="70" y="108" fill="#6f6659" font-size="20">复制、提交、应用和客户端响应是四个不同位置</text>
+    <rect x="70" y="165" width="220" height="100" rx="16" fill="#fbf8f1" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="180" y="225" text-anchor="middle" fill="#2b2620" font-size="22" font-weight="700">客户端 set x=1</text>
+    <rect x="420" y="145" width="310" height="145" rx="18" fill="#d8dee0" stroke="#295279" stroke-width="3"/>
+    <text x="575" y="193" text-anchor="middle" fill="#2b2620" font-size="24" font-weight="700">Leader A · term 7</text>
+    <text x="575" y="230" text-anchor="middle" fill="#554d42" font-size="17">append log[21]=(7,set x=1)</text>
+    <text x="575" y="260" text-anchor="middle" fill="#295279" font-size="16">先持久化本地 WAL</text>
+    <path d="M290 215 H405" fill="none" stroke="#8a7f6d" stroke-width="4" marker-end="url(#arrow)"/>
+
+    <rect x="910" y="145" width="330" height="125" rx="17" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="1075" y="190" text-anchor="middle" fill="#2b2620" font-size="22" font-weight="700">Follower B</text>
+    <text x="1075" y="226" text-anchor="middle" fill="#554d42" font-size="16">PrevLog 匹配，持久化 21</text>
+    <rect x="910" y="335" width="330" height="125" rx="17" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="1075" y="380" text-anchor="middle" fill="#2b2620" font-size="22" font-weight="700">Follower C</text>
+    <text x="1075" y="416" text-anchor="middle" fill="#554d42" font-size="16">暂时超时，不影响 A+B 多数</text>
+    <path d="M730 190 H895" fill="none" stroke="#466b48" stroke-width="4" marker-end="url(#good)"/>
+    <path d="M730 245 Q805 397 895 397" fill="none" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+    <path d="M910 240 H800 Q760 240 745 255" fill="none" stroke="#466b48" stroke-width="3" marker-end="url(#good)"/>
+    <text x="815" y="170" fill="#466b48" font-size="15">AppendEntries</text>
+    <text x="813" y="226" fill="#466b48" font-size="15">success</text>
+
+    <rect x="350" y="385" width="450" height="130" rx="20" fill="#dee3d6" stroke="#466b48" stroke-width="3"/>
+    <text x="575" y="432" text-anchor="middle" fill="#2b2620" font-size="23" font-weight="700">多数派持久化：commitIndex = 21</text>
+    <text x="575" y="470" text-anchor="middle" fill="#554d42" font-size="17">条目属于当前 term 7，可以直接提交</text>
+    <path d="M575 290 V370" fill="none" stroke="#466b48" stroke-width="4" marker-end="url(#good)"/>
+
+    <rect x="160" y="625" width="280" height="125" rx="17" fill="#fbf8f1" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="300" y="672" text-anchor="middle" fill="#2b2620" font-size="21" font-weight="700">A 状态机</text>
+    <text x="300" y="709" text-anchor="middle" fill="#554d42" font-size="17">apply[21] → x=1</text>
+    <rect x="580" y="625" width="280" height="125" rx="17" fill="#fbf8f1" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="720" y="672" text-anchor="middle" fill="#2b2620" font-size="21" font-weight="700">B 状态机</text>
+    <text x="720" y="709" text-anchor="middle" fill="#554d42" font-size="17">收到 LeaderCommit 后应用</text>
+    <rect x="1000" y="625" width="280" height="125" rx="17" fill="#fbf8f1" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="1140" y="672" text-anchor="middle" fill="#2b2620" font-size="21" font-weight="700">C 状态机</text>
+    <text x="1140" y="709" text-anchor="middle" fill="#554d42" font-size="17">恢复后追日志再应用</text>
+    <path d="M500 515 Q410 560 320 610" fill="none" stroke="#466b48" stroke-width="3" marker-end="url(#good)"/>
+    <path d="M575 515 Q650 565 700 610" fill="none" stroke="#466b48" stroke-width="3" marker-end="url(#good)"/>
+    <path d="M650 515 Q930 560 1120 610" fill="none" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+    <rect x="115" y="800" width="1210" height="45" rx="11" fill="#f5f0e4"/>
+    <text x="140" y="829" fill="#554d42" font-size="17">客户端成功响应发生在提交与本地应用之后；C 的短暂落后不会改变已经形成的多数派历史。</text>
+  </g>
+</svg>
