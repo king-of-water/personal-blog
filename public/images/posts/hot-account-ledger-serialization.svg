@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="690" viewBox="0 0 1200 690" role="img" aria-labelledby="title desc">
+  <title id="title">热点账户的账本、余额快照与串行执行边界</title>
+  <desc id="desc">账户命令按 account id 路由到单账户执行队列。执行器在短事务内完成幂等检查、余额条件更新和账本追加，随后异步构建查询视图与通知。只入账的聚合账户可以并行追加分录后结算汇总。</desc>
+  <rect width="1200" height="690" rx="24" fill="#fdfaf3"/>
+  <text x="65" y="68" fill="#2b2620" font-size="30" font-weight="700">串行范围只覆盖余额判定与账本提交</text>
+  <text x="65" y="106" fill="#6f6658" font-size="18">校验提前做，通知放到提交后，减少热门账户持锁时间</text>
+  <defs>
+    <marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#466b48"/></marker>
+    <marker id="b" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#295279"/></marker>
+  </defs>
+  <rect x="55" y="190" width="190" height="125" rx="17" fill="#f4eace" stroke="#8a6b12" stroke-width="2"/>
+  <text x="91" y="230" fill="#2b2620" font-size="21" font-weight="700">账户命令</text>
+  <text x="83" y="267" fill="#5f5548" font-size="16">requestId · accountId</text>
+  <text x="86" y="293" fill="#5f5548" font-size="16">金额 · 业务类型</text>
+  <rect x="300" y="170" width="210" height="165" rx="17" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+  <text x="338" y="211" fill="#2b2620" font-size="21" font-weight="700">按账户路由</text>
+  <rect x="330" y="235" width="150" height="31" rx="7" fill="#fffdf8"/><rect x="330" y="275" width="150" height="31" rx="7" fill="#fffdf8"/>
+  <text x="351" y="257" fill="#295279" font-size="14">account-42 队列</text><text x="351" y="297" fill="#295279" font-size="14">普通账户共享分区</text>
+  <rect x="570" y="145" width="300" height="215" rx="18" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+  <text x="621" y="186" fill="#2b2620" font-size="22" font-weight="700">短事务：串行边界</text>
+  <text x="610" y="226" fill="#5f5548" font-size="17">1. 检查 business_request_id</text>
+  <text x="610" y="260" fill="#5f5548" font-size="17">2. 条件更新 available balance</text>
+  <text x="610" y="294" fill="#5f5548" font-size="17">3. 追加不可变 ledger entry</text>
+  <text x="610" y="328" fill="#5f5548" font-size="17">4. 提交事务与 sequence</text>
+  <rect x="940" y="145" width="205" height="95" rx="16" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+  <text x="972" y="184" fill="#2b2620" font-size="20" font-weight="700">余额快照</text>
+  <text x="965" y="215" fill="#5f5548" font-size="15">实时可用余额与版本</text>
+  <rect x="940" y="265" width="205" height="95" rx="16" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+  <text x="985" y="304" fill="#2b2620" font-size="20" font-weight="700">账本</text>
+  <text x="965" y="335" fill="#5f5548" font-size="15">审计、对账与重建</text>
+  <path d="M245 252H300" stroke="#466b48" stroke-width="4" marker-end="url(#a)"/><path d="M510 252H570" stroke="#466b48" stroke-width="4" marker-end="url(#a)"/><path d="M870 195H940" stroke="#466b48" stroke-width="4" marker-end="url(#a)"/><path d="M870 310H940" stroke="#466b48" stroke-width="4" marker-end="url(#a)"/>
+  <rect x="300" y="445" width="250" height="130" rx="17" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+  <text x="349" y="486" fill="#2b2620" font-size="21" font-weight="700">并行追加贷方分录</text>
+  <text x="336" y="523" fill="#5f5548" font-size="16">仅适用于尚不可实时支出的入账</text>
+  <text x="340" y="551" fill="#5f5548" font-size="16">按 orderId 分桶，保留幂等键</text>
+  <rect x="650" y="445" width="225" height="130" rx="17" fill="#f4eace" stroke="#8a6b12" stroke-width="2"/>
+  <text x="696" y="486" fill="#2b2620" font-size="21" font-weight="700">结算聚合</text>
+  <text x="686" y="523" fill="#5f5548" font-size="16">checkpoint · 重放 · 对账</text>
+  <text x="689" y="551" fill="#5f5548" font-size="16">批次确认后转为可用余额</text>
+  <rect x="975" y="445" width="170" height="130" rx="17" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+  <text x="1009" y="486" fill="#2b2620" font-size="21" font-weight="700">查询视图</text>
+  <text x="997" y="523" fill="#5f5548" font-size="16">对账单与通知</text>
+  <text x="991" y="551" fill="#5f5548" font-size="16">允许明确延迟</text>
+  <path d="M550 510H650" stroke="#295279" stroke-width="4" marker-end="url(#b)"/><path d="M875 510H975" stroke="#295279" stroke-width="4" marker-end="url(#b)"/>
+  <text x="65" y="640" fill="#6f6658" font-size="16">上路：参与实时支出的余额必须在权威事务中判断。下路：只入账、后结算的资金可先并行写分录。</text>
+</svg>

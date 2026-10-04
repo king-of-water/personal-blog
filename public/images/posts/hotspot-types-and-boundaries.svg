@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="680" viewBox="0 0 1200 680" role="img" aria-labelledby="title desc">
+  <title id="title">热点类型与可拆分边界</title>
+  <desc id="desc">从热点请求出发，依次判断读写性质、操作能否交换、是否要求单对象顺序，以及是否存在跨对象强约束，得到复制、分桶、按 key 串行或事务配额协议四类方案。</desc>
+  <rect width="1200" height="680" rx="24" fill="#fdfaf3"/>
+  <text x="66" y="68" fill="#2b2620" font-size="30" font-weight="700">先判断操作语义，再决定怎样拆热点</text>
+  <text x="66" y="106" fill="#6f6658" font-size="18">读、可交换写、顺序写和强约束写需要不同的并发边界</text>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+  </defs>
+  <rect x="455" y="145" width="290" height="70" rx="16" fill="#f4eace" stroke="#8a6b12" stroke-width="2"/>
+  <text x="521" y="188" fill="#2b2620" font-size="22" font-weight="700">一个对象流量集中</text>
+  <path d="M600 215V265" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="455" y="270" width="290" height="70" rx="16" fill="#fffdf8" stroke="#8a7f6d" stroke-width="2"/>
+  <text x="527" y="313" fill="#2b2620" font-size="21" font-weight="700">操作是否修改状态？</text>
+  <path d="M455 305H245V390" fill="none" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="328" y="292" fill="#466b48" font-size="17" font-weight="700">只读</text>
+  <path d="M745 305H955V390" fill="none" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="825" y="292" fill="#943b37" font-size="17" font-weight="700">写入</text>
+  <rect x="85" y="395" width="320" height="170" rx="18" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+  <text x="121" y="435" fill="#2b2620" font-size="22" font-weight="700">复制读取</text>
+  <text x="121" y="475" fill="#5f5548" font-size="17">CDN / 本地缓存 / 读副本</text>
+  <text x="121" y="507" fill="#5f5548" font-size="17">代价：陈旧、失效与写放大</text>
+  <text x="121" y="539" fill="#5f5548" font-size="17">边界：权威判定仍回到主状态</text>
+  <rect x="795" y="395" width="320" height="70" rx="16" fill="#fffdf8" stroke="#8a7f6d" stroke-width="2"/>
+  <text x="849" y="438" fill="#2b2620" font-size="21" font-weight="700">操作能交换或合并？</text>
+  <path d="M955 465V505H710V560" fill="none" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="820" y="493" fill="#466b48" font-size="16" font-weight="700">能</text>
+  <path d="M955 465V560" fill="none" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="968" y="505" fill="#943b37" font-size="16" font-weight="700">不能</text>
+  <rect x="550" y="565" width="315" height="80" rx="16" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+  <text x="600" y="599" fill="#2b2620" font-size="21" font-weight="700">分桶、原子加、批量合并</text>
+  <text x="590" y="629" fill="#5f5548" font-size="16">读放大与汇总延迟换写并行</text>
+  <rect x="900" y="565" width="250" height="80" rx="16" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+  <text x="933" y="599" fill="#2b2620" font-size="21" font-weight="700">保留串行判定</text>
+  <text x="926" y="629" fill="#5f5548" font-size="16">按 key 排队或事务 / 配额</text>
+  <rect x="66" y="612" width="420" height="1" fill="#ded8cc"/>
+  <text x="66" y="645" fill="#6f6658" font-size="16">复制扩大读能力；分桶扩大可交换写能力；强约束的拆分必须得到业务模型授权。</text>
+</svg>
