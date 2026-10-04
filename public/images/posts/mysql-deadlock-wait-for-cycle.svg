@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
+  <title id="title">两个事务形成死锁等待环</title>
+  <desc id="desc">事务 A 持有账户 1 的锁并等待账户 2，事务 B 持有账户 2 的锁并等待账户 1，等待图形成环后 InnoDB 回滚一个受害事务。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#5b5245"/></marker><style>.h{font:700 28px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:600 21px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.l{stroke:#5b5245;stroke-width:3;fill:none;marker-end:url(#a)}</style></defs>
+  <rect width="1200" height="620" rx="24" fill="#fdfaf3"/>
+  <text x="55" y="55" class="h">相反的加锁顺序，把等待链闭合成环</text>
+  <rect x="90" y="135" width="300" height="140" rx="20" fill="#d8dee0" stroke="#295279" stroke-width="2"/><text x="240" y="180" text-anchor="middle" class="t">事务 A</text><text x="130" y="222" class="b">已持有：account(1)</text><text x="130" y="250" class="b">正在等：account(2)</text>
+  <rect x="810" y="135" width="300" height="140" rx="20" fill="#eed9d3" stroke="#943b37" stroke-width="2"/><text x="960" y="180" text-anchor="middle" class="t">事务 B</text><text x="850" y="222" class="b">已持有：account(2)</text><text x="850" y="250" class="b">正在等：account(1)</text>
+  <rect x="90" y="390" width="300" height="120" rx="20" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/><text x="240" y="438" text-anchor="middle" class="t">账户 1 的 X Lock</text><text x="240" y="474" text-anchor="middle" class="s">owner = A</text>
+  <rect x="810" y="390" width="300" height="120" rx="20" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/><text x="960" y="438" text-anchor="middle" class="t">账户 2 的 X Lock</text><text x="960" y="474" text-anchor="middle" class="s">owner = B</text>
+  <path d="M240 275 V390" class="l"/><text x="260" y="340" class="s">持有</text><path d="M960 275 V390" class="l"/><text x="980" y="340" class="s">持有</text>
+  <path d="M390 450 C560 560 650 560 810 450" class="l"/><text x="600" y="570" text-anchor="middle" class="b">B 等待 A 释放 account(1)</text>
+  <path d="M810 415 C655 310 545 310 390 415" class="l"/><text x="600" y="340" text-anchor="middle" class="b">A 等待 B 释放 account(2)</text>
+  <rect x="450" y="95" width="300" height="82" rx="16" fill="#dee3d6" stroke="#466b48" stroke-width="2"/><text x="600" y="128" text-anchor="middle" class="t">InnoDB 检测等待环</text><text x="600" y="154" text-anchor="middle" class="s">回滚一个较小事务，另一方继续</text>
+</svg>

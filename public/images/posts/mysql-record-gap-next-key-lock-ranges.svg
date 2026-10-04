@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
+  <title id="title">Record Lock、Gap Lock 与 Next-Key Lock 的索引覆盖范围</title>
+  <desc id="desc">索引值为 10、11、13、20。Record Lock 只覆盖值 13，Gap Lock 覆盖 11 到 13 之间，Next-Key Lock 覆盖左开右闭区间 11 到 13 并包含记录 13。</desc>
+  <defs>
+    <style>.h{font:700 28px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:600 20px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.axis{stroke:#5b5245;stroke-width:3}.tick{stroke:#8a7f6d;stroke-width:2}</style>
+  </defs>
+  <rect width="1200" height="620" rx="24" fill="#fdfaf3"/>
+  <text x="55" y="55" class="h">锁住的对象是一条索引记录，或索引记录之间的位置</text>
+  <text x="70" y="128" class="t">索引顺序</text>
+  <line x1="220" y1="122" x2="1100" y2="122" class="axis"/>
+  <g text-anchor="middle"><line x1="360" y1="102" x2="360" y2="142" class="tick"/><circle cx="360" cy="122" r="11" fill="#2f5d8a"/><text x="360" y="170" class="b">10</text><line x1="520" y1="102" x2="520" y2="142" class="tick"/><circle cx="520" cy="122" r="11" fill="#2f5d8a"/><text x="520" y="170" class="b">11</text><line x1="740" y1="102" x2="740" y2="142" class="tick"/><circle cx="740" cy="122" r="11" fill="#2f5d8a"/><text x="740" y="170" class="b">13</text><line x1="960" y1="102" x2="960" y2="142" class="tick"/><circle cx="960" cy="122" r="11" fill="#2f5d8a"/><text x="960" y="170" class="b">20</text></g>
+  <rect x="55" y="220" width="1090" height="105" rx="16" fill="#f5f0e4" stroke="#8a7f6d"/>
+  <text x="80" y="260" class="t">Record Lock</text><text x="80" y="292" class="s">保护已有索引记录 13</text>
+  <line x1="280" y1="273" x2="1080" y2="273" class="axis"/><circle cx="740" cy="273" r="18" fill="#a8433f"/><text x="740" y="280" text-anchor="middle" font-family="ui-sans-serif,system-ui,sans-serif" font-size="15" fill="#ffffff">13</text>
+  <rect x="55" y="350" width="1090" height="105" rx="16" fill="#f5f0e4" stroke="#8a7f6d"/>
+  <text x="80" y="390" class="t">Gap Lock</text><text x="80" y="422" class="s">禁止向 (11, 13) 插入</text>
+  <line x1="280" y1="403" x2="1080" y2="403" class="axis"/><rect x="520" y="384" width="220" height="38" rx="19" fill="#f4eace" stroke="#8a7f6d" stroke-width="2"/><circle cx="520" cy="403" r="8" fill="#fdfaf3" stroke="#5b5245" stroke-width="2"/><circle cx="740" cy="403" r="8" fill="#fdfaf3" stroke="#5b5245" stroke-width="2"/>
+  <rect x="55" y="480" width="1090" height="105" rx="16" fill="#f5f0e4" stroke="#8a7f6d"/>
+  <text x="80" y="520" class="t">Next-Key Lock</text><text x="80" y="552" class="s">Gap (11, 13) + Record 13 = (11, 13]</text>
+  <line x1="280" y1="533" x2="1080" y2="533" class="axis"/><rect x="520" y="514" width="220" height="38" rx="19" fill="#dee3d6" stroke="#466b48" stroke-width="2"/><circle cx="520" cy="533" r="8" fill="#fdfaf3" stroke="#5b5245" stroke-width="2"/><circle cx="740" cy="533" r="18" fill="#4f7a52"/><text x="740" y="540" text-anchor="middle" font-family="ui-sans-serif,system-ui,sans-serif" font-size="15" fill="#ffffff">13</text>
+</svg>
