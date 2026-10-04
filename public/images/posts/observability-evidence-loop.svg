@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="680" viewBox="0 0 1200 680" role="img" aria-labelledby="title desc">
+  <title id="title">从用户旅程到故障证据的可观测性闭环</title>
+  <desc id="desc">用户旅程生成服务等级指标和错误预算，预算燃烧触发告警，指标、链路和日志帮助定位，修复和复盘再校准服务目标。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#5b5245"/>
+    </marker>
+    <style>
+      .title{font:700 30px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#2b2620}.sub{font:400 16px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#6f6659}.h{font:700 21px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#2b2620}.p{font:400 16px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#2b2620}.small{font:400 14px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#6f6659}.line{stroke:#5b5245;stroke-width:2.5;fill:none;marker-end:url(#arrow)}
+    </style>
+  </defs>
+  <rect width="1200" height="680" rx="22" fill="#fdfaf3"/>
+  <text x="62" y="66" class="title">观测闭环从用户承诺开始</text>
+  <text x="62" y="96" class="sub">每一层都把问题缩小，并把结果反馈给下一轮设计</text>
+
+  <rect x="62" y="150" width="250" height="160" rx="18" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+  <text x="88" y="190" class="h">1  用户旅程</text>
+  <text x="88" y="226" class="p">创建支付在 800 ms 内</text>
+  <text x="88" y="254" class="p">返回可查询凭证</text>
+  <text x="88" y="282" class="p">两分钟内收敛到终态</text>
+
+  <rect x="475" y="132" width="250" height="196" rx="18" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+  <text x="501" y="172" class="h">2  SLI 与 SLO</text>
+  <text x="501" y="208" class="p">good / valid events</text>
+  <text x="501" y="238" class="p">目标、窗口、排除项</text>
+  <line x1="501" y1="261" x2="699" y2="261" stroke="#8a7f6d"/>
+  <text x="501" y="291" class="small">99.9% SLO → 0.1% 预算</text>
+
+  <rect x="888" y="150" width="250" height="160" rx="18" fill="#f4eace" stroke="#8a7f6d" stroke-width="2"/>
+  <text x="914" y="190" class="h">3  告警与响应</text>
+  <text x="914" y="226" class="p">燃烧率判断紧急程度</text>
+  <text x="914" y="254" class="p">Runbook 给出缓解动作</text>
+  <text x="914" y="282" class="p">明确主责与升级路径</text>
+
+  <rect x="770" y="430" width="368" height="160" rx="18" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+  <text x="796" y="470" class="h">4  证据链定位</text>
+  <text x="796" y="506" class="p">Metrics 定范围  ·  Trace 拆路径</text>
+  <text x="796" y="536" class="p">Logs 补事实  ·  Change 定候选</text>
+  <text x="796" y="566" class="small">从症状收敛到版本、依赖和代码</text>
+
+  <rect x="62" y="430" width="368" height="160" rx="18" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+  <text x="88" y="470" class="h">5  修复与校准</text>
+  <text x="88" y="506" class="p">用原 SLI 证明用户影响结束</text>
+  <text x="88" y="536" class="p">复盘设计、容量和埋点缺口</text>
+  <text x="88" y="566" class="small">结果进入发布与可靠性优先级</text>
+
+  <path d="M312 230 H460" class="line"/>
+  <path d="M725 230 H873" class="line"/>
+  <path d="M1013 310 V414" class="line"/>
+  <path d="M770 510 H445" class="line"/>
+  <path d="M246 430 V348 Q246 334 230 334 H187 V325" class="line"/>
+</svg>

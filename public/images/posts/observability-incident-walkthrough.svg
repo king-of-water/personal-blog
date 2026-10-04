@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">异步支付故障的定位时间线</title>
+  <desc id="desc">发布引入消息延迟单位错误后，服务等级目标先告警，指标定位到消息唤醒，链路和日志确认五千秒延迟参数，回滚与限速修复后由原服务等级指标验证恢复。</desc>
+  <defs>
+    <marker id="arrow4" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#5b5245"/></marker>
+    <style>
+      .title{font:700 30px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#2b2620}.sub{font:400 16px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#6f6659}.time{font:700 16px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2f5d8a}.h{font:700 19px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#2b2620}.p{font:400 15px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#2b2620}.small{font:400 13px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#6f6659}
+    </style>
+  </defs>
+  <rect width="1200" height="700" rx="22" fill="#fdfaf3"/>
+  <text x="60" y="64" class="title">同一条证据链完成发现、定位、缓解与验证</text>
+  <text x="60" y="94" class="sub">案例：延迟消息参数从 5000 ms 被解释成 5000 s</text>
+  <line x1="116" y1="152" x2="116" y2="626" stroke="#5b5245" stroke-width="3" marker-end="url(#arrow4)"/>
+
+  <circle cx="116" cy="172" r="16" fill="#2f5d8a"/>
+  <text x="158" y="168" class="time">01:20</text><text x="250" y="168" class="h">新版本发布</text>
+  <text x="158" y="196" class="p">创建接口仍快速返回 PROCESSING，传统 HTTP 错误率没有变化</text>
+  <rect x="870" y="148" width="250" height="54" rx="12" fill="#ebe4d4" stroke="#8a7f6d"/><text x="894" y="181" class="small">Change event · version=rc3</text>
+
+  <circle cx="116" cy="282" r="16" fill="#a8433f"/>
+  <text x="158" y="278" class="time">01:28</text><text x="250" y="278" class="h">SLO Page</text>
+  <text x="158" y="306" class="p">两分钟收敛率以 18.2× 燃烧，影响集中在新版本</text>
+  <rect x="870" y="258" width="250" height="54" rx="12" fill="#eed9d3" stroke="#943b37"/><text x="894" y="291" class="small">Symptoms · 用户承诺</text>
+
+  <circle cx="116" cy="392" r="16" fill="#c9a227" stroke="#8a7f6d"/>
+  <text x="158" y="388" class="time">01:31</text><text x="250" y="388" class="h">Metrics 缩小范围</text>
+  <text x="158" y="416" class="p">PAYING 年龄上升，MQ 生产正常、消费下降，Scanner 周期性兜底</text>
+  <rect x="870" y="368" width="250" height="54" rx="12" fill="#f4eace" stroke="#8a7f6d"/><text x="894" y="401" class="small">Scope · MQ 唤醒链路</text>
+
+  <circle cx="116" cy="502" r="16" fill="#6b5b95"/>
+  <text x="158" y="498" class="time">01:34</text><text x="250" y="498" class="h">Trace 与 Logs 确认参数</text>
+  <text x="158" y="526" class="p">messaging.delay=5000 s，与数据库中五秒后的 next_retry_time 矛盾</text>
+  <rect x="870" y="478" width="250" height="54" rx="12" fill="#e3dde2" stroke="#5e5083"/><text x="894" y="511" class="small">Cause · 单位转换</text>
+
+  <circle cx="116" cy="612" r="16" fill="#4f7a52"/>
+  <text x="158" y="608" class="time">01:39+</text><text x="250" y="608" class="h">回滚、限速修复、SLI 验证</text>
+  <text x="158" y="636" class="p">短窗口燃烧率恢复，PAYING 年龄下降，最终收敛率回到目标</text>
+  <rect x="870" y="588" width="250" height="54" rx="12" fill="#dee3d6" stroke="#466b48"/><text x="894" y="621" class="small">Recovery · 原承诺</text>
+</svg>

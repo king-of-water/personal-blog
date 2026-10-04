@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="660" viewBox="0 0 1200 660" role="img" aria-labelledby="title desc">
+  <title id="title">Metrics、Traces 与 Logs 的关联路径</title>
+  <desc id="desc">调查从服务等级目标告警开始，经指标按地域和版本缩小范围，通过示例链路进入单次请求，再用业务标识查询日志和审计事实。</desc>
+  <defs>
+    <marker id="arrow2" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#5b5245"/></marker>
+    <style>
+      .title{font:700 30px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#2b2620}.sub{font:400 16px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#6f6659}.h{font:700 20px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#2b2620}.p{font:400 15px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#2b2620}.tag{font:600 13px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}.n{font:700 18px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#ffffff}.line{stroke:#5b5245;stroke-width:2.5;fill:none;marker-end:url(#arrow2)}
+    </style>
+  </defs>
+  <rect width="1200" height="660" rx="22" fill="#fdfaf3"/>
+  <text x="60" y="64" class="title">从总体异常缩小到一条可验证事实</text>
+  <text x="60" y="94" class="sub">信号可以分库存储，但跳转维度必须一致</text>
+
+  <circle cx="105" cy="172" r="23" fill="#2f5d8a"/><text x="99" y="179" class="n">1</text>
+  <rect x="145" y="130" width="890" height="100" rx="16" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+  <text x="174" y="169" class="h">SLO 告警：两分钟收敛率正在快速消耗预算</text>
+  <text x="174" y="201" class="p">时间窗口 01:21–01:28　用户旅程 payment_converged　燃烧率 18.2×</text>
+
+  <path d="M590 230 V266" class="line"/>
+  <circle cx="105" cy="310" r="23" fill="#2f5d8a"/><text x="99" y="317" class="n">2</text>
+  <rect x="145" y="268" width="780" height="96" rx="16" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+  <text x="174" y="305" class="h">Metrics：按有限维度切分影响面</text>
+  <text x="174" y="337" class="tag">region=all　version=rc3　state=PAYING　trigger=MQ</text>
+  <rect x="950" y="284" width="188" height="64" rx="14" fill="#ebe4d4" stroke="#8a7f6d"/>
+  <text x="973" y="312" class="p">Exemplar</text><text x="973" y="336" class="tag">trace_id=4bf9…</text>
+
+  <path d="M590 364 V400" class="line"/>
+  <circle cx="105" cy="444" r="23" fill="#2f5d8a"/><text x="99" y="451" class="n">3</text>
+  <rect x="145" y="402" width="890" height="96" rx="16" fill="#e3dde2" stroke="#5e5083" stroke-width="2"/>
+  <text x="174" y="439" class="h">Trace：拆开一次请求与异步唤醒</text>
+  <text x="174" y="471" class="tag">POST /payments → wallet.query → mq.publish(delay=5000s)</text>
+
+  <path d="M590 498 V534" class="line"/>
+  <circle cx="105" cy="578" r="23" fill="#2f5d8a"/><text x="99" y="585" class="n">4</text>
+  <rect x="145" y="536" width="890" height="82" rx="16" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+  <text x="174" y="570" class="h">Logs 与审计事实：按业务身份确认持久状态</text>
+  <text x="174" y="600" class="tag">flow_id=901　next_retry_time=01:32:23　delay_unit=SECONDS</text>
+</svg>

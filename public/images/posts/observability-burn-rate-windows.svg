@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="680" viewBox="0 0 1200 680" role="img" aria-labelledby="title desc">
+  <title id="title">多窗口燃烧率告警</title>
+  <desc id="desc">快速故障同时超过一小时和五分钟窗口触发立即通知，慢性故障同时超过六小时和三十分钟窗口触发立即通知，三天和六小时窗口用于工单。</desc>
+  <defs>
+    <style>
+      .title{font:700 30px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#2b2620}.sub{font:400 16px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#6f6659}.h{font:700 20px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#2b2620}.big{font:700 32px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#2b2620}.p{font:400 15px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#2b2620}.muted{font:400 14px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#6f6659}.chip{font:700 14px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#ffffff}
+    </style>
+  </defs>
+  <rect width="1200" height="680" rx="22" fill="#fdfaf3"/>
+  <text x="60" y="64" class="title">长窗口确认预算损失，短窗口确认故障仍在继续</text>
+  <text x="60" y="94" class="sub">以下数值是 30 天 SLO 的常用起点，需要按流量与值班负荷校准</text>
+
+  <rect x="60" y="142" width="1080" height="140" rx="18" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+  <rect x="86" y="166" width="96" height="32" rx="16" fill="#a8433f"/><text x="110" y="188" class="chip">PAGE</text>
+  <text x="210" y="193" class="h">快速故障</text>
+  <text x="210" y="235" class="big">1 h  ≥ 14.4×</text>
+  <text x="527" y="235" class="big">AND</text>
+  <text x="650" y="235" class="big">5 min  ≥ 14.4×</text>
+  <text x="978" y="235" class="p">约 2% 预算</text>
+
+  <rect x="60" y="312" width="1080" height="140" rx="18" fill="#f4eace" stroke="#8a7f6d" stroke-width="2"/>
+  <rect x="86" y="336" width="96" height="32" rx="16" fill="#a8433f"/><text x="110" y="358" class="chip">PAGE</text>
+  <text x="210" y="363" class="h">慢性故障</text>
+  <text x="210" y="405" class="big">6 h  ≥ 6×</text>
+  <text x="527" y="405" class="big">AND</text>
+  <text x="650" y="405" class="big">30 min  ≥ 6×</text>
+  <text x="978" y="405" class="p">约 5% 预算</text>
+
+  <rect x="60" y="482" width="1080" height="140" rx="18" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+  <rect x="86" y="506" width="96" height="32" rx="16" fill="#2f5d8a"/><text x="104" y="528" class="chip">TICKET</text>
+  <text x="210" y="533" class="h">持续消耗</text>
+  <text x="210" y="575" class="big">3 d  ≥ 1×</text>
+  <text x="527" y="575" class="big">AND</text>
+  <text x="650" y="575" class="big">6 h  ≥ 1×</text>
+  <text x="978" y="575" class="p">约 10% 预算</text>
+
+  <text x="60" y="654" class="muted">同一行两个窗口同时满足才触发。长窗口控制精度，短窗口缩短恢复后的告警残留时间。</text>
+</svg>

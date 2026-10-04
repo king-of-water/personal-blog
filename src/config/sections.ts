@@ -60,9 +60,9 @@ export const backendSubcategories: Subcategory[] = [
 		slug: 'system-design',
 		description: '从容量、性能、并发与可用性出发，把数据库、缓存、消息队列和分布式机制组合成完整系统。',
 		plannedTopics: [
-			{ title: 'Feed 流系统设计：推拉模型、分页与热点用户', seriesOrder: 120 },
-			{ title: '消息推送系统设计：连接、路由、离线消息与重试', seriesOrder: 130 },
-			{ title: '文件服务设计：分片上传、断点续传、存储与分发', seriesOrder: 140 },
+			{ title: 'Feed 流系统设计：推拉模型、分页与热点用户', seriesOrder: 130 },
+			{ title: '消息推送系统设计：连接、路由、离线消息与重试', seriesOrder: 140 },
+			{ title: '文件服务设计：分片上传、断点续传、存储与分发', seriesOrder: 150 },
 		],
 	},
 	{ name: 'Java', slug: 'java', description: '语言、JVM、并发与常用框架。' },
