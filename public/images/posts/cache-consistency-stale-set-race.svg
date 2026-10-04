@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="710" viewBox="0 0 1200 710" role="img" aria-labelledby="title desc">
+  <title id="title">Cache Aside 的旧值回填竞态与版本栅栏</title>
+  <desc id="desc">读请求在数据库更新前读到版本四十一，写请求提交版本四十二并删除缓存后，旧读才回填四十一。版本栅栏记录最低可接受版本四十二，可以拒绝迟到旧值。</desc>
+  <rect width="1200" height="710" rx="32" fill="#fdfaf3"/>
+  <text x="70" y="68" font-family="system-ui, sans-serif" font-size="30" font-weight="700" fill="#2b2620">数据库提交后删缓存，仍可能发生旧值回填</text>
+  <text x="70" y="103" font-family="system-ui, sans-serif" font-size="17" fill="#8a7f6d">竞态窗口很短，但热点与长尾读取会放大它</text>
+
+  <g font-family="system-ui, sans-serif">
+    <text x="130" y="159" text-anchor="middle" font-size="18" font-weight="700" fill="#295279">读请求 R1</text>
+    <text x="410" y="159" text-anchor="middle" font-size="18" font-weight="700" fill="#8a6b12">写请求 W</text>
+    <text x="725" y="159" text-anchor="middle" font-size="18" font-weight="700" fill="#943b37">权威数据库</text>
+    <text x="1030" y="159" text-anchor="middle" font-size="18" font-weight="700" fill="#466b48">缓存与栅栏</text>
+
+    <line x1="130" y1="178" x2="130" y2="620" stroke="#295279" stroke-width="2" stroke-dasharray="8 8"/>
+    <line x1="410" y1="178" x2="410" y2="620" stroke="#8a6b12" stroke-width="2" stroke-dasharray="8 8"/>
+    <line x1="725" y1="178" x2="725" y2="620" stroke="#943b37" stroke-width="2" stroke-dasharray="8 8"/>
+    <line x1="1030" y1="178" x2="1030" y2="620" stroke="#466b48" stroke-width="2" stroke-dasharray="8 8"/>
+
+    <path d="M130 220h900" stroke="#295279" stroke-width="3"/>
+    <path d="M1020 212l11 8-11 8" fill="none" stroke="#295279" stroke-width="3"/>
+    <text x="580" y="210" text-anchor="middle" font-size="15" fill="#295279">1. GET miss</text>
+
+    <path d="M130 285h595" stroke="#295279" stroke-width="3"/>
+    <path d="M715 277l11 8-11 8" fill="none" stroke="#295279" stroke-width="3"/>
+    <text x="425" y="275" text-anchor="middle" font-size="15" fill="#295279">2. SELECT，读到 version 41</text>
+    <rect x="84" y="308" width="92" height="50" rx="12" fill="#d8dee0"/>
+    <text x="130" y="338" text-anchor="middle" font-size="14" fill="#295279">暂停 / 长尾</text>
+
+    <path d="M410 385h315" stroke="#8a6b12" stroke-width="3"/>
+    <path d="M715 377l11 8-11 8" fill="none" stroke="#8a6b12" stroke-width="3"/>
+    <text x="568" y="375" text-anchor="middle" font-size="15" fill="#8a6b12">3. COMMIT version 42</text>
+
+    <path d="M410 450h620" stroke="#466b48" stroke-width="3"/>
+    <path d="M1020 442l11 8-11 8" fill="none" stroke="#466b48" stroke-width="3"/>
+    <text x="720" y="440" text-anchor="middle" font-size="15" fill="#466b48">4. fence = 42，DEL cache</text>
+
+    <path d="M130 520h900" stroke="#943b37" stroke-width="3"/>
+    <path d="M1020 512l11 8-11 8" fill="none" stroke="#943b37" stroke-width="3"/>
+    <text x="580" y="510" text-anchor="middle" font-size="15" fill="#943b37">5. 迟到回填 candidate version 41</text>
+
+    <rect x="866" y="548" width="328" height="78" rx="16" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+    <text x="1030" y="579" text-anchor="middle" font-size="17" font-weight="700" fill="#943b37">拒绝写入</text>
+    <text x="1030" y="604" text-anchor="middle" font-size="14" fill="#2b2620">41 &lt; fence 42</text>
+  </g>
+  <text x="70" y="674" font-family="system-ui, sans-serif" font-size="16" fill="#8a7f6d">没有版本栅栏时，第 5 步会把已删除的缓存重新写成旧版本，直到下一次失效或 TTL 到期。</text>
+</svg>

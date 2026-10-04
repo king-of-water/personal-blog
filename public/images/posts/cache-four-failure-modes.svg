@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">缓存四类故障的触发链</title>
+  <desc id="desc">穿透来自不存在 key 反复回源，击穿来自单热点失效后的并发重建，雪崩来自大量失效的时间相关性，一致性问题来自权威数据变化后缓存副本未及时收敛。</desc>
+  <rect width="1200" height="720" rx="32" fill="#fdfaf3"/>
+  <text x="70" y="68" font-family="system-ui, sans-serif" font-size="30" font-weight="700" fill="#2b2620">四种问题，破坏的是四条不同假设</text>
+  <text x="70" y="103" font-family="system-ui, sans-serif" font-size="17" fill="#8a7f6d">从触发源沿箭头看，才能选到正确的控制点</text>
+
+  <g font-family="system-ui, sans-serif">
+    <rect x="70" y="140" width="505" height="240" rx="22" fill="#f4eace" stroke="#8a6b12" stroke-width="2"/>
+    <text x="102" y="181" font-size="23" font-weight="700" fill="#8a6b12">穿透</text>
+    <text x="102" y="211" font-size="15" fill="#8a7f6d">不存在的数据没有形成缓存命中</text>
+    <rect x="102" y="246" width="128" height="58" rx="13" fill="#ffffff"/>
+    <text x="166" y="281" text-anchor="middle" font-size="15" fill="#2b2620">随机无效 ID</text>
+    <path d="M230 275h68" stroke="#8a6b12" stroke-width="3"/>
+    <path d="M288 267l11 8-11 8" fill="none" stroke="#8a6b12" stroke-width="3"/>
+    <rect x="300" y="246" width="105" height="58" rx="13" fill="#ffffff"/>
+    <text x="352" y="281" text-anchor="middle" font-size="15" fill="#943b37">每次 miss</text>
+    <path d="M405 275h58" stroke="#943b37" stroke-width="3"/>
+    <path d="M453 267l11 8-11 8" fill="none" stroke="#943b37" stroke-width="3"/>
+    <rect x="465" y="246" width="78" height="58" rx="13" fill="#eed9d3"/>
+    <text x="504" y="281" text-anchor="middle" font-size="15" fill="#943b37">查库</text>
+    <text x="102" y="342" font-size="15" font-weight="700" fill="#466b48">控制：校验、负缓存、Bloom Filter、限流</text>
+
+    <rect x="625" y="140" width="505" height="240" rx="22" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+    <text x="657" y="181" font-size="23" font-weight="700" fill="#943b37">击穿</text>
+    <text x="657" y="211" font-size="15" fill="#8a7f6d">一个热点 key 失效，miss 被并发放大</text>
+    <rect x="657" y="246" width="128" height="58" rx="13" fill="#ffffff"/>
+    <text x="721" y="271" text-anchor="middle" font-size="15" fill="#2b2620">50,000 QPS</text>
+    <text x="721" y="291" text-anchor="middle" font-size="13" fill="#8a7f6d">同一个 key</text>
+    <path d="M785 275h68" stroke="#943b37" stroke-width="3"/>
+    <path d="M843 267l11 8-11 8" fill="none" stroke="#943b37" stroke-width="3"/>
+    <rect x="855" y="246" width="105" height="58" rx="13" fill="#ffffff"/>
+    <text x="907" y="281" text-anchor="middle" font-size="15" fill="#943b37">同时过期</text>
+    <path d="M960 275h58" stroke="#943b37" stroke-width="3"/>
+    <path d="M1008 267l11 8-11 8" fill="none" stroke="#943b37" stroke-width="3"/>
+    <rect x="1020" y="246" width="78" height="58" rx="13" fill="#eed9d3" stroke="#943b37"/>
+    <text x="1059" y="281" text-anchor="middle" font-size="15" fill="#943b37">并发查库</text>
+    <text x="657" y="342" font-size="15" font-weight="700" fill="#466b48">控制：请求合并、短租约、逻辑过期</text>
+
+    <rect x="70" y="412" width="505" height="240" rx="22" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="102" y="453" font-size="23" font-weight="700" fill="#295279">雪崩</text>
+    <text x="102" y="483" font-size="15" fill="#8a7f6d">大量失效在时间上相关，回源同时发生</text>
+    <rect x="102" y="518" width="128" height="58" rx="13" fill="#ffffff"/>
+    <text x="166" y="553" text-anchor="middle" font-size="15" fill="#2b2620">同 TTL / 故障</text>
+    <path d="M230 547h68" stroke="#295279" stroke-width="3"/>
+    <path d="M288 539l11 8-11 8" fill="none" stroke="#295279" stroke-width="3"/>
+    <rect x="300" y="518" width="105" height="58" rx="13" fill="#ffffff"/>
+    <text x="352" y="553" text-anchor="middle" font-size="15" fill="#295279">批量 miss</text>
+    <path d="M405 547h58" stroke="#295279" stroke-width="3"/>
+    <path d="M453 539l11 8-11 8" fill="none" stroke="#295279" stroke-width="3"/>
+    <rect x="465" y="518" width="78" height="58" rx="13" fill="#d8dee0" stroke="#295279"/>
+    <text x="504" y="553" text-anchor="middle" font-size="15" fill="#295279">源站过载</text>
+    <text x="102" y="614" font-size="15" font-weight="700" fill="#466b48">控制：TTL 抖动、分批预热、限流降级</text>
+
+    <rect x="625" y="412" width="505" height="240" rx="22" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="657" y="453" font-size="23" font-weight="700" fill="#466b48">一致性</text>
+    <text x="657" y="483" font-size="15" fill="#8a7f6d">权威数据改变，缓存副本未按约定收敛</text>
+    <rect x="657" y="518" width="128" height="58" rx="13" fill="#ffffff"/>
+    <text x="721" y="553" text-anchor="middle" font-size="15" fill="#2b2620">DB version 42</text>
+    <path d="M785 547h68" stroke="#466b48" stroke-width="3"/>
+    <path d="M843 539l11 8-11 8" fill="none" stroke="#466b48" stroke-width="3"/>
+    <rect x="855" y="518" width="105" height="58" rx="13" fill="#ffffff"/>
+    <text x="907" y="553" text-anchor="middle" font-size="15" fill="#943b37">失效遗漏</text>
+    <path d="M960 547h58" stroke="#943b37" stroke-width="3"/>
+    <path d="M1008 539l11 8-11 8" fill="none" stroke="#943b37" stroke-width="3"/>
+    <rect x="1020" y="518" width="78" height="58" rx="13" fill="#eed9d3"/>
+    <text x="1059" y="553" text-anchor="middle" font-size="15" fill="#943b37">读旧值</text>
+    <text x="657" y="614" font-size="15" font-weight="700" fill="#466b48">控制：可靠失效、版本、TTL 收敛后盾</text>
+  </g>
+  <text x="600" y="692" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" fill="#8a7f6d">一个事故可以叠加多种模式，应沿触发链分别治理</text>
+</svg>

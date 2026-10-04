@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="680" viewBox="0 0 1200 680" role="img" aria-labelledby="title desc">
+  <title id="title">Cache Aside 的权威数据边界与读写路径</title>
+  <desc id="desc">读取先查缓存，未命中后访问数据库并回填；写入先提交权威数据库，再删除缓存副本。缓存可丢失并重建，数据库保存权威事实。</desc>
+  <rect width="1200" height="680" rx="32" fill="#fdfaf3"/>
+  <text x="70" y="68" font-family="system-ui, sans-serif" font-size="30" font-weight="700" fill="#2b2620">Cache Aside：缓存是副本，数据库保存权威事实</text>
+  <text x="70" y="103" font-family="system-ui, sans-serif" font-size="17" fill="#8a7f6d">读路径按需填充；写路径提交后使副本失效</text>
+
+  <g font-family="system-ui, sans-serif">
+    <rect x="70" y="142" width="1060" height="220" rx="24" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="100" y="180" font-size="21" font-weight="700" fill="#295279">读路径</text>
+
+    <rect x="102" y="218" width="170" height="82" rx="16" fill="#ffffff" stroke="#295279" stroke-width="2"/>
+    <text x="187" y="253" text-anchor="middle" font-size="18" font-weight="700" fill="#2b2620">应用</text>
+    <text x="187" y="278" text-anchor="middle" font-size="14" fill="#8a7f6d">GET activity</text>
+
+    <path d="M272 250h130" stroke="#295279" stroke-width="4"/>
+    <path d="M392 241l12 9-12 9" fill="none" stroke="#295279" stroke-width="4"/>
+    <text x="337" y="236" text-anchor="middle" font-size="14" fill="#295279">1. 查缓存</text>
+
+    <rect x="404" y="208" width="190" height="102" rx="16" fill="#ffffff" stroke="#295279" stroke-width="2"/>
+    <text x="499" y="247" text-anchor="middle" font-size="18" font-weight="700" fill="#2b2620">Redis / L1</text>
+    <text x="499" y="273" text-anchor="middle" font-size="14" fill="#466b48">HIT：直接返回</text>
+    <text x="499" y="294" text-anchor="middle" font-size="14" fill="#943b37">MISS：继续回源</text>
+
+    <path d="M594 250h132" stroke="#943b37" stroke-width="4"/>
+    <path d="M716 241l12 9-12 9" fill="none" stroke="#943b37" stroke-width="4"/>
+    <text x="661" y="236" text-anchor="middle" font-size="14" fill="#943b37">2. 仅 miss 访问</text>
+
+    <rect x="728" y="208" width="190" height="102" rx="16" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+    <text x="823" y="247" text-anchor="middle" font-size="18" font-weight="700" fill="#943b37">权威数据库</text>
+    <text x="823" y="275" text-anchor="middle" font-size="14" fill="#2b2620">读取当前版本</text>
+
+    <path d="M823 310v28H499v-28" fill="none" stroke="#466b48" stroke-width="3" stroke-dasharray="8 7"/>
+    <text x="661" y="333" text-anchor="middle" font-size="14" fill="#466b48">3. 带 TTL 与版本回填</text>
+
+    <rect x="70" y="394" width="1060" height="220" rx="24" fill="#f4eace" stroke="#8a6b12" stroke-width="2"/>
+    <text x="100" y="432" font-size="21" font-weight="700" fill="#8a6b12">写路径</text>
+
+    <rect x="102" y="470" width="170" height="82" rx="16" fill="#ffffff" stroke="#8a6b12" stroke-width="2"/>
+    <text x="187" y="505" text-anchor="middle" font-size="18" font-weight="700" fill="#2b2620">应用</text>
+    <text x="187" y="530" text-anchor="middle" font-size="14" fill="#8a7f6d">UPDATE activity</text>
+
+    <path d="M272 511h178" stroke="#8a6b12" stroke-width="4"/>
+    <path d="M440 502l12 9-12 9" fill="none" stroke="#8a6b12" stroke-width="4"/>
+    <text x="361" y="496" text-anchor="middle" font-size="14" fill="#8a6b12">1. 提交事务</text>
+
+    <rect x="452" y="460" width="210" height="102" rx="16" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+    <text x="557" y="499" text-anchor="middle" font-size="18" font-weight="700" fill="#943b37">权威数据库</text>
+    <text x="557" y="527" text-anchor="middle" font-size="14" fill="#2b2620">version + 1</text>
+
+    <path d="M662 511h178" stroke="#8a6b12" stroke-width="4"/>
+    <path d="M830 502l12 9-12 9" fill="none" stroke="#8a6b12" stroke-width="4"/>
+    <text x="751" y="496" text-anchor="middle" font-size="14" fill="#8a6b12">2. 提交后失效</text>
+
+    <rect x="842" y="460" width="210" height="102" rx="16" fill="#ffffff" stroke="#8a6b12" stroke-width="2"/>
+    <text x="947" y="499" text-anchor="middle" font-size="18" font-weight="700" fill="#2b2620">删除缓存副本</text>
+    <text x="947" y="527" text-anchor="middle" font-size="14" fill="#8a7f6d">下次读取重新加载</text>
+  </g>
+  <text x="600" y="652" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" fill="#8a7f6d">删除失败、并发回填和外部写库仍需要可靠失效协议处理</text>
+</svg>
