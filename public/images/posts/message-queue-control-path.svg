@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="650" viewBox="0 0 1200 650" role="img" aria-labelledby="title desc">
+  <title id="title">消息队列削峰链路中的五个控制点</title>
+  <desc id="desc">请求依次经过入口准入、可靠发布、Broker 分区、消费调度和下游保护。拥塞信号沿反方向逐级传回入口。</desc>
+  <rect width="1200" height="650" rx="24" fill="#fdfaf3"/>
+  <text x="65" y="67" fill="#2b2620" font-size="30" font-weight="700">五个控制点共同决定队列是否可控</text>
+  <text x="65" y="104" fill="#6f6658" font-size="18">数据向右流动，拥塞必须向左传递</text>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#466b48"/></marker>
+    <marker id="back" markerWidth="10" markerHeight="10" refX="2" refY="5" orient="auto"><path d="M10 0L0 5L10 10Z" fill="#943b37"/></marker>
+  </defs>
+  <g font-family="sans-serif">
+    <rect x="55" y="190" width="190" height="210" rx="18" fill="#f4eace" stroke="#8a6b12" stroke-width="2"/>
+    <text x="82" y="230" fill="#2b2620" font-size="21" font-weight="700">1 入口准入</text>
+    <text x="82" y="270" fill="#5f5548" font-size="16">身份与参数</text><text x="82" y="300" fill="#5f5548" font-size="16">幂等键</text><text x="82" y="330" fill="#5f5548" font-size="16">容量水位</text><text x="82" y="360" fill="#5f5548" font-size="16">拒绝与降级</text>
+    <rect x="275" y="190" width="190" height="210" rx="18" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="302" y="230" fill="#2b2620" font-size="21" font-weight="700">2 可靠发布</text>
+    <text x="302" y="270" fill="#5f5548" font-size="16">稳定 requestId</text><text x="302" y="300" fill="#5f5548" font-size="16">批量与确认</text><text x="302" y="330" fill="#5f5548" font-size="16">发布超时</text><text x="302" y="360" fill="#5f5548" font-size="16">本地缓冲上限</text>
+    <rect x="495" y="165" width="210" height="260" rx="18" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="524" y="207" fill="#2b2620" font-size="21" font-weight="700">3 Broker</text>
+    <rect x="525" y="235" width="150" height="36" rx="8" fill="#fffdf8"/><rect x="525" y="281" width="150" height="36" rx="8" fill="#fffdf8"/><rect x="525" y="327" width="150" height="36" rx="8" fill="#fffdf8"/>
+    <text x="544" y="259" fill="#295279" font-size="15">Partition 0</text><text x="544" y="305" fill="#295279" font-size="15">Partition 1</text><text x="544" y="351" fill="#295279" font-size="15">Partition 2</text>
+    <text x="526" y="395" fill="#5f5548" font-size="15">磁盘 · 副本 · 保留</text>
+    <rect x="735" y="190" width="190" height="210" rx="18" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="762" y="230" fill="#2b2620" font-size="21" font-weight="700">4 消费调度</text>
+    <text x="762" y="270" fill="#5f5548" font-size="16">并行与批次</text><text x="762" y="300" fill="#5f5548" font-size="16">prefetch / poll</text><text x="762" y="330" fill="#5f5548" font-size="16">确认与幂等</text><text x="762" y="360" fill="#5f5548" font-size="16">重试隔离</text>
+    <rect x="955" y="190" width="190" height="210" rx="18" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+    <text x="982" y="230" fill="#2b2620" font-size="21" font-weight="700">5 下游保护</text>
+    <text x="982" y="270" fill="#5f5548" font-size="16">DB 安全 TPS</text><text x="982" y="300" fill="#5f5548" font-size="16">连接池与锁</text><text x="982" y="330" fill="#5f5548" font-size="16">外部配额</text><text x="982" y="360" fill="#5f5548" font-size="16">限流与熔断</text>
+  </g>
+  <path d="M245 295H275M465 295H495M705 295H735M925 295H955" stroke="#466b48" stroke-width="4" marker-end="url(#arrow)"/>
+  <path d="M1100 485H105C85 485 75 475 75 455" fill="none" stroke="#943b37" stroke-width="4" stroke-dasharray="9 7" marker-end="url(#back)"/>
+  <text x="400" y="525" fill="#943b37" font-size="19" font-weight="700">拥塞：限速、拒绝或降级，不能只留在 broker 内部</text>
+  <rect x="65" y="566" width="1070" height="1" fill="#ded8cc"/>
+  <text x="65" y="603" fill="#6f6658" font-size="16">消费越快不一定越好：最终速率必须服从最慢下游的安全容量。</text>
+</svg>

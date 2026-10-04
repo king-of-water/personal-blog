@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
+  <title id="title">生产峰值、平滑消费与积压面积</title>
+  <desc id="desc">生产速率在活动开始后短时升高到每秒四万，消费速率保持每秒八千。两条曲线之间的面积形成消息积压，高峰后消费速率高于正常生产速率，积压逐渐清空。</desc>
+  <rect width="1200" height="620" rx="24" fill="#fdfaf3"/>
+  <text x="70" y="70" fill="#2b2620" font-size="30" font-weight="700">削峰不是消灭流量，而是把差值暂存起来</text>
+  <text x="70" y="108" fill="#6f6658" font-size="18">积压面积 = ∫(生产速率 − 消费速率)dt</text>
+  <line x1="110" y1="500" x2="1110" y2="500" stroke="#8a7f6d" stroke-width="2"/>
+  <line x1="110" y1="500" x2="110" y2="155" stroke="#8a7f6d" stroke-width="2"/>
+  <text x="42" y="165" fill="#6f6658" font-size="17">速率</text>
+  <text x="1060" y="540" fill="#6f6658" font-size="17">时间</text>
+  <line x1="110" y1="410" x2="1110" y2="410" stroke="#ded8cc" stroke-width="1" stroke-dasharray="7 7"/>
+  <line x1="110" y1="240" x2="1110" y2="240" stroke="#ded8cc" stroke-width="1" stroke-dasharray="7 7"/>
+  <text x="24" y="416" fill="#8a7f6d" font-size="15">8k/s</text>
+  <text x="15" y="246" fill="#8a7f6d" font-size="15">40k/s</text>
+  <path d="M110 455 L260 455 L285 240 L610 240 L635 455 L1110 455" fill="none" stroke="#943b37" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M110 410 L1110 410" fill="none" stroke="#295279" stroke-width="6"/>
+  <path d="M285 410 L285 240 L610 240 L610 410 Z" fill="#eed9d3" opacity="0.8"/>
+  <path d="M610 410 L610 455 L1035 455 L1035 410 Z" fill="#d8dee0" opacity="0.75"/>
+  <text x="355" y="325" fill="#943b37" font-size="23" font-weight="700">新增积压</text>
+  <text x="331" y="358" fill="#6f443e" font-size="17">P &gt; C，队列水位上升</text>
+  <text x="720" y="440" fill="#295279" font-size="18" font-weight="700">用空闲能力清空积压</text>
+  <circle cx="760" cy="92" r="6" fill="#943b37"/>
+  <text x="776" y="99" fill="#2b2620" font-size="17">生产速率</text>
+  <circle cx="910" cy="92" r="6" fill="#295279"/>
+  <text x="926" y="99" fill="#2b2620" font-size="17">消费上限</text>
+  <text x="280" y="535" fill="#6f6658" font-size="15">峰值开始</text>
+  <text x="575" y="535" fill="#6f6658" font-size="15">峰值结束</text>
+  <text x="935" y="535" fill="#6f6658" font-size="15">积压清空</text>
+  <rect x="70" y="565" width="1060" height="1" fill="#ded8cc"/>
+  <text x="70" y="595" fill="#6f6658" font-size="16">若高峰后生产速率仍不低于消费速率，积压不会自行消失。</text>
+</svg>

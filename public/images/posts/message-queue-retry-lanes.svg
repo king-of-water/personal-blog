@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
+  <title id="title">主队列、延迟重试与死信隔离</title>
+  <desc id="desc">主队列消息经消费者处理后成功确认；短暂错误进入不同延迟等级后重新投递；永久错误或超过次数的消息进入死信隔离区，修复后以受控速率重放。</desc>
+  <rect width="1200" height="620" rx="24" fill="#fdfaf3"/>
+  <text x="65" y="68" fill="#2b2620" font-size="30" font-weight="700">失败消息不要占住主消费通道</text>
+  <text x="65" y="106" fill="#6f6658" font-size="18">按错误性质分流，重放也要受容量约束</text>
+  <defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#466b48"/></marker><marker id="r" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#943b37"/></marker></defs>
+  <rect x="65" y="200" width="210" height="100" rx="16" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+  <text x="112" y="242" fill="#2b2620" font-size="22" font-weight="700">主队列</text><text x="94" y="275" fill="#5f5548" font-size="16">实时消息优先通过</text>
+  <rect x="355" y="200" width="210" height="100" rx="16" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+  <text x="405" y="242" fill="#2b2620" font-size="22" font-weight="700">消费者</text><text x="388" y="275" fill="#5f5548" font-size="16">业务事务 + 幂等</text>
+  <rect x="650" y="145" width="205" height="84" rx="14" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+  <text x="703" y="181" fill="#2b2620" font-size="20" font-weight="700">处理成功</text><text x="718" y="208" fill="#5f5548" font-size="15">确认消息</text>
+  <rect x="650" y="270" width="205" height="110" rx="14" fill="#f4eace" stroke="#8a6b12" stroke-width="2"/>
+  <text x="686" y="307" fill="#2b2620" font-size="20" font-weight="700">短暂错误</text><text x="681" y="336" fill="#5f5548" font-size="15">延迟 5s / 30s / 5m</text><text x="699" y="361" fill="#5f5548" font-size="15">退避 + 抖动</text>
+  <rect x="650" y="425" width="205" height="110" rx="14" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+  <text x="681" y="462" fill="#2b2620" font-size="20" font-weight="700">永久 / 超限</text><text x="710" y="491" fill="#5f5548" font-size="15">死信隔离</text><text x="685" y="516" fill="#5f5548" font-size="15">报警、分析、修复</text>
+  <rect x="940" y="425" width="200" height="110" rx="14" fill="#f4eace" stroke="#8a6b12" stroke-width="2"/>
+  <text x="978" y="462" fill="#2b2620" font-size="20" font-weight="700">受控重放</text><text x="976" y="491" fill="#5f5548" font-size="15">小批、限速、可暂停</text><text x="991" y="516" fill="#5f5548" font-size="15">保留实时容量</text>
+  <path d="M275 250H355" stroke="#466b48" stroke-width="4" marker-end="url(#a)"/><path d="M565 230L650 190" stroke="#466b48" stroke-width="4" marker-end="url(#a)"/><path d="M565 270L650 320" stroke="#8a6b12" stroke-width="4" marker-end="url(#a)"/><path d="M752 380V425" stroke="#943b37" stroke-width="4" marker-end="url(#r)"/><path d="M855 480H940" stroke="#8a6b12" stroke-width="4" marker-end="url(#a)"/>
+  <path d="M650 325C590 325 600 410 530 410H180C120 410 120 320 170 300" fill="none" stroke="#8a6b12" stroke-width="3" stroke-dasharray="8 6" marker-end="url(#a)"/>
+  <path d="M1040 425C1040 350 980 330 855 330" fill="none" stroke="#943b37" stroke-width="3" stroke-dasharray="8 6" marker-end="url(#r)"/>
+  <text x="246" y="443" fill="#8a6b12" font-size="16">到期后回主队列，不在消费者里原地等待</text>
+  <text x="65" y="584" fill="#6f6658" font-size="16">DLQ 不是终点：没有责任人、修复与重放流程的死信队列，只是在隐藏失败。</text>
+</svg>
