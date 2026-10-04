@@ -45,17 +45,11 @@ export const agentSubcategories: Subcategory[] = [
 ];
 
 export const backendSubcategories: Subcategory[] = [
-	{ name: 'Java', slug: 'java', description: '语言、JVM、并发与常用框架。' },
-	{ name: 'Redis', slug: 'redis', description: '缓存、数据结构、集群与稳定性。' },
-	{ name: 'MySQL', slug: 'mysql', description: '索引、事务、执行计划与数据库工程。' },
-	{ name: '消息队列', slug: 'message-queue', description: '异步通信、削峰、顺序与消息可靠性。' },
 	{
 		name: '分布式',
 		slug: 'distributed-systems',
-		description: '一致性、容错、协调与系统设计。',
+		description: '理解多节点系统中的一致性、复制、协调、故障恢复与数据正确性。',
 		plannedTopics: [
-			'服务地址总在变化，调用方怎样找到它：服务发现、健康检查与故障摘除',
-			'下游故障时怎样避免拖垮整个系统：限流、熔断、隔离与降级',
 			'多台机器怎样确保定时任务只执行一次：任务调度、租约与幂等',
 			'用一个最小 Raft 实现理解选主、日志复制与成员变更',
 			'一个机房整体故障后怎样恢复：多机房、RPO 与 RTO',
@@ -67,18 +61,23 @@ export const backendSubcategories: Subcategory[] = [
 		slug: 'system-design',
 		description: '从容量、性能、并发与可用性出发，把数据库、缓存、消息队列和分布式机制组合成完整系统。',
 		plannedTopics: [
+			'怎样完成一次系统设计：从业务约束到架构方案',
 			'容量评估：QPS、并发数、响应时间与资源预算',
-			'性能优化应该从哪里开始：指标、压测与瓶颈定位',
+			'性能优化与压测：怎样找到系统的真实瓶颈',
 			'限流、熔断、隔离、降级与背压怎样配合',
-			'缓存怎样扛住高并发：穿透、击穿、雪崩与一致性',
-			'消息队列怎样削峰：积压、消费能力与流量整形',
 			'热点数据与热点账户怎样处理',
-			'高可用设计：冗余、故障转移与降级边界',
 			'短链接系统设计：发号、分片、缓存、热点与容灾',
 			'秒杀系统设计：库存、排队、限流与防超卖',
 			'支付链路设计：状态机、幂等、补偿与对账',
+			'Feed 流系统设计：推拉模型、分页与热点用户',
+			'消息推送系统设计：连接、路由、离线消息与重试',
+			'文件服务设计：分片上传、断点续传、存储与分发',
 		],
 	},
+	{ name: 'Java', slug: 'java', description: '语言、JVM、并发与常用框架。' },
+	{ name: 'Redis', slug: 'redis', description: '缓存、数据结构、集群与稳定性。' },
+	{ name: 'MySQL', slug: 'mysql', description: '索引、事务、执行计划与数据库工程。' },
+	{ name: '消息队列', slug: 'message-queue', description: '异步通信、削峰、顺序与消息可靠性。' },
 ];
 
 export const categoryPath = (category: MainCategory) => (
