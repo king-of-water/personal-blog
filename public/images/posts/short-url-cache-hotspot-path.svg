@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">短链接多级缓存与热点隔离</title>
+  <desc id="desc">十万每秒的跳转流量依次经过边缘缓存、应用本地缓存和 Redis，只有少量请求回源单个数据库分片。点击统计从响应路径分流到批处理与消息队列，热点链接不会同步更新单个计数器。</desc>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#5b5245"/></marker></defs>
+  <rect width="1200" height="700" rx="24" fill="#fdfaf3"/>
+  <text x="64" y="65" fill="#2b2620" font-size="30" font-weight="700">每层命中都在保护下一层</text>
+  <text x="64" y="102" fill="#6f6659" font-size="18">示例数字用于展示流量递减关系，容量还要覆盖缓存全冷与依赖故障</text>
+
+  <g text-anchor="middle">
+    <rect x="55" y="190" width="180" height="118" rx="18" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="145" y="230" fill="#2b2620" font-size="21" font-weight="700">入口流量</text>
+    <text x="145" y="265" fill="#2b2620" font-size="25" font-weight="700">100,000 QPS</text>
+    <text x="145" y="291" fill="#2b2620" font-size="14">含单个爆款 code</text>
+
+    <rect x="285" y="190" width="180" height="118" rx="18" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="375" y="230" fill="#2b2620" font-size="21" font-weight="700">CDN / Edge</text>
+    <text x="375" y="264" fill="#2b2620" font-size="18">90% 命中</text>
+    <text x="375" y="291" fill="#2b2620" font-size="14">就近缓存 302</text>
+
+    <rect x="515" y="190" width="180" height="118" rx="18" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="605" y="230" fill="#2b2620" font-size="21" font-weight="700">应用 L1</text>
+    <text x="605" y="264" fill="#2b2620" font-size="18">剩余流量 80% 命中</text>
+    <text x="605" y="291" fill="#2b2620" font-size="14">每实例复制热点</text>
+
+    <rect x="745" y="190" width="180" height="118" rx="18" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="835" y="230" fill="#2b2620" font-size="21" font-weight="700">Redis</text>
+    <text x="835" y="264" fill="#2b2620" font-size="18">约 2,000 QPS</text>
+    <text x="835" y="291" fill="#2b2620" font-size="14">99% 命中</text>
+
+    <rect x="975" y="190" width="170" height="118" rx="18" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="1060" y="230" fill="#2b2620" font-size="21" font-weight="700">MySQL 分片</text>
+    <text x="1060" y="264" fill="#2b2620" font-size="18">约 20 QPS</text>
+    <text x="1060" y="291" fill="#2b2620" font-size="14">权威映射</text>
+  </g>
+  <path d="M235 249H285M465 249H515M695 249H745M925 249H975" stroke="#5b5245" stroke-width="4" marker-end="url(#arrow)"/>
+
+  <rect x="55" y="390" width="1090" height="220" rx="18" fill="#fbf8f1" stroke="#8a7f6d"/>
+  <text x="82" y="430" fill="#2b2620" font-size="20" font-weight="700">统计旁路</text>
+  <text x="82" y="458" fill="#6f6659" font-size="15">跳转已经确定后再投递；队列积压只降低报表新鲜度</text>
+  <rect x="120" y="494" width="210" height="78" rx="14" fill="#e3dde2" stroke="#5e5083" stroke-width="2"/>
+  <text x="225" y="526" fill="#2b2620" font-size="18" text-anchor="middle" font-weight="700">本地批次 / Collector</text>
+  <text x="225" y="551" fill="#2b2620" font-size="14" text-anchor="middle">限时、限量、可采样</text>
+  <rect x="485" y="494" width="210" height="78" rx="14" fill="#e3dde2" stroke="#5e5083" stroke-width="2"/>
+  <text x="590" y="526" fill="#2b2620" font-size="18" text-anchor="middle" font-weight="700">消息分区</text>
+  <text x="590" y="551" fill="#2b2620" font-size="14" text-anchor="middle">link + producer bucket</text>
+  <rect x="850" y="494" width="210" height="78" rx="14" fill="#e3dde2" stroke="#5e5083" stroke-width="2"/>
+  <text x="955" y="526" fill="#2b2620" font-size="18" text-anchor="middle" font-weight="700">聚合与明细存储</text>
+  <text x="955" y="551" fill="#2b2620" font-size="14" text-anchor="middle">分钟 / 小时 / 天</text>
+  <path d="M330 533H485M695 533H850" stroke="#5b5245" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M605 308V365H225V494" fill="none" stroke="#5e5083" stroke-width="3" marker-end="url(#arrow)"/>
+</svg>

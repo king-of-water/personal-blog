@@ -60,7 +60,6 @@ export const backendSubcategories: Subcategory[] = [
 		slug: 'system-design',
 		description: '从容量、性能、并发与可用性出发，把数据库、缓存、消息队列和分布式机制组合成完整系统。',
 		plannedTopics: [
-			{ title: '短链接系统设计：发号、分片、缓存、热点与容灾', seriesOrder: 90 },
 			{ title: '秒杀系统设计：库存、排队、限流与防超卖', seriesOrder: 100 },
 			{ title: '支付链路设计：状态机、幂等、补偿与对账', seriesOrder: 110 },
 			{ title: 'Feed 流系统设计：推拉模型、分页与热点用户', seriesOrder: 120 },

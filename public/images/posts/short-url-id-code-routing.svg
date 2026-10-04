@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="650" viewBox="0 0 1200 650" role="img" aria-labelledby="title desc">
+  <title id="title">UID、短码、逻辑桶与物理分片的职责链</title>
+  <desc id="desc">Leaf 生成全局 link ID，经可逆编码得到公开短码。域名和短码通过稳定哈希映射到逻辑桶，版本化桶表再把逻辑桶放置到物理分片；用户 ID 走另一条索引路径。</desc>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#5b5245"/></marker></defs>
+  <rect width="1200" height="650" rx="24" fill="#fdfaf3"/>
+  <text x="64" y="66" fill="#2b2620" font-size="30" font-weight="700">稳定身份、公开寻址和物理放置分三层</text>
+  <text x="64" y="104" fill="#6f6659" font-size="18">扩容只改变 bucket owner，已经发布的短码保持不变</text>
+
+  <rect x="60" y="160" width="220" height="124" rx="18" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+  <text x="170" y="203" fill="#2b2620" font-size="22" font-weight="700" text-anchor="middle">全局 link_id</text>
+  <text x="170" y="235" fill="#2b2620" font-size="16" text-anchor="middle">Leaf / random 64 bit</text>
+  <text x="170" y="262" fill="#2b2620" font-size="15" text-anchor="middle">身份与主键</text>
+
+  <rect x="360" y="160" width="220" height="124" rx="18" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+  <text x="470" y="203" fill="#2b2620" font-size="22" font-weight="700" text-anchor="middle">公开 short_code</text>
+  <text x="470" y="235" fill="#2b2620" font-size="16" text-anchor="middle">置换 + Base62</text>
+  <text x="470" y="262" fill="#2b2620" font-size="15" text-anchor="middle">URL 中的查询键</text>
+
+  <rect x="660" y="160" width="220" height="124" rx="18" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+  <text x="770" y="203" fill="#2b2620" font-size="22" font-weight="700" text-anchor="middle">逻辑 bucket</text>
+  <text x="770" y="235" fill="#2b2620" font-size="16" text-anchor="middle">hash(host, code) % 4096</text>
+  <text x="770" y="262" fill="#2b2620" font-size="15" text-anchor="middle">稳定数据归属</text>
+
+  <rect x="960" y="160" width="180" height="124" rx="18" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+  <text x="1050" y="203" fill="#2b2620" font-size="22" font-weight="700" text-anchor="middle">物理 shard</text>
+  <text x="1050" y="235" fill="#2b2620" font-size="16" text-anchor="middle">bucket_map[v]</text>
+  <text x="1050" y="262" fill="#2b2620" font-size="15" text-anchor="middle">当前存储位置</text>
+
+  <path d="M280 222H360M580 222H660M880 222H960" stroke="#5b5245" stroke-width="4" marker-end="url(#arrow)"/>
+  <text x="320" y="204" fill="#6f6659" font-size="14" text-anchor="middle">一一编码</text>
+  <text x="620" y="204" fill="#6f6659" font-size="14" text-anchor="middle">稳定哈希</text>
+  <text x="920" y="204" fill="#6f6659" font-size="14" text-anchor="middle">版本化放置</text>
+
+  <rect x="60" y="370" width="1080" height="190" rx="18" fill="#fbf8f1" stroke="#8a7f6d"/>
+  <text x="88" y="410" fill="#2b2620" font-size="20" font-weight="700">另一条访问路径：用户后台列表</text>
+  <rect x="90" y="447" width="190" height="76" rx="14" fill="#e3dde2" stroke="#5e5083" stroke-width="2"/>
+  <text x="185" y="478" fill="#2b2620" font-size="18" text-anchor="middle" font-weight="700">owner_id</text>
+  <text x="185" y="503" fill="#2b2620" font-size="14" text-anchor="middle">权限与列表路由</text>
+  <rect x="405" y="447" width="250" height="76" rx="14" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+  <text x="530" y="478" fill="#2b2620" font-size="18" text-anchor="middle" font-weight="700">user_link_index</text>
+  <text x="530" y="503" fill="#2b2620" font-size="14" text-anchor="middle">异步摘要索引</text>
+  <rect x="780" y="447" width="300" height="76" rx="14" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+  <text x="930" y="478" fill="#2b2620" font-size="18" text-anchor="middle" font-weight="700">short_code → 主分片</text>
+  <text x="930" y="503" fill="#2b2620" font-size="14" text-anchor="middle">详情和修改回主记录确认</text>
+  <path d="M280 485H405M655 485H780" stroke="#5b5245" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="342" y="470" fill="#6f6659" font-size="14" text-anchor="middle">列表查询</text>
+  <text x="717" y="470" fill="#6f6659" font-size="14" text-anchor="middle">进入详情</text>
+</svg>

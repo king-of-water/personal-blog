@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">短链接系统的创建链路与跳转链路</title>
+  <desc id="desc">上方创建链路经过鉴权、幂等、发号、主数据写入和异步索引，下方跳转链路经过边缘缓存、本地缓存、Redis 与单分片查询后返回重定向，访问统计异步写入消息队列。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#5b5245"/></marker>
+  </defs>
+  <rect width="1200" height="720" rx="24" fill="#fdfaf3"/>
+  <text x="64" y="62" fill="#2b2620" font-size="30" font-weight="700">创建改变映射，跳转消费已确认映射</text>
+  <text x="64" y="98" fill="#6f6659" font-size="18">统计从响应路径旁路，不能成为重定向成功的前置条件</text>
+
+  <rect x="48" y="136" width="1104" height="224" rx="18" fill="#fbf8f1" stroke="#8a7f6d"/>
+  <rect x="70" y="158" width="112" height="34" rx="17" fill="#d8dee0" stroke="#295279"/>
+  <text x="93" y="181" fill="#2b2620" font-size="17" font-weight="700">创建链路</text>
+  <g fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2">
+    <rect x="82" y="230" width="142" height="78" rx="14"/>
+    <rect x="270" y="230" width="142" height="78" rx="14"/>
+    <rect x="458" y="230" width="142" height="78" rx="14"/>
+    <rect x="646" y="230" width="142" height="78" rx="14"/>
+    <rect x="834" y="230" width="142" height="78" rx="14"/>
+  </g>
+  <g fill="#2b2620" font-size="18" text-anchor="middle">
+    <text x="153" y="263" font-weight="700">鉴权与校验</text><text x="153" y="288" font-size="14">域名 · URL · 配额</text>
+    <text x="341" y="263" font-weight="700">幂等抢占</text><text x="341" y="288" font-size="14">request_key</text>
+    <text x="529" y="263" font-weight="700">Leaf 发号</text><text x="529" y="288" font-size="14">ID → short code</text>
+    <text x="717" y="263" font-weight="700">写主分片</text><text x="717" y="288" font-size="14">mapping + outbox</text>
+    <text x="905" y="263" font-weight="700">异步派生</text><text x="905" y="288" font-size="14">索引 · 缓存 · 审核</text>
+  </g>
+  <path d="M224 269H270M412 269H458M600 269H646M788 269H834" stroke="#5b5245" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="1008" y="230" width="108" height="78" rx="14" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+  <text x="1062" y="263" fill="#2b2620" font-size="18" font-weight="700" text-anchor="middle">返回短链</text>
+  <text x="1062" y="288" fill="#2b2620" font-size="14" text-anchor="middle">确定结果</text>
+  <path d="M976 269H1008" stroke="#466b48" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <rect x="48" y="390" width="1104" height="274" rx="18" fill="#fbf8f1" stroke="#8a7f6d"/>
+  <rect x="70" y="412" width="112" height="34" rx="17" fill="#dee3d6" stroke="#466b48"/>
+  <text x="93" y="435" fill="#2b2620" font-size="17" font-weight="700">跳转链路</text>
+  <g fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2">
+    <rect x="82" y="484" width="142" height="78" rx="14"/>
+    <rect x="270" y="484" width="142" height="78" rx="14"/>
+    <rect x="458" y="484" width="142" height="78" rx="14"/>
+    <rect x="646" y="484" width="142" height="78" rx="14"/>
+    <rect x="834" y="484" width="142" height="78" rx="14"/>
+  </g>
+  <g fill="#2b2620" font-size="18" text-anchor="middle">
+    <text x="153" y="517" font-weight="700">边缘节点</text><text x="153" y="542" font-size="14">封禁 + CDN</text>
+    <text x="341" y="517" font-weight="700">跳转服务</text><text x="341" y="542" font-size="14">解析 Host / code</text>
+    <text x="529" y="517" font-weight="700">L1 / Redis</text><text x="529" y="542" font-size="14">版本化映射</text>
+    <text x="717" y="517" font-weight="700">单分片回源</text><text x="717" y="542" font-size="14">bucket → owner</text>
+    <text x="905" y="517" font-weight="700">302 响应</text><text x="905" y="542" font-size="14">Location</text>
+  </g>
+  <path d="M224 523H270M412 523H458M600 523H646M788 523H834" stroke="#5b5245" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M905 562V618H1030" fill="none" stroke="#5b5245" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="1000" y="585" width="116" height="58" rx="14" fill="#e3dde2" stroke="#5e5083" stroke-width="2"/>
+  <text x="1058" y="611" fill="#2b2620" font-size="16" text-anchor="middle" font-weight="700">访问事件</text>
+  <text x="1058" y="632" fill="#2b2620" font-size="13" text-anchor="middle">异步统计</text>
+</svg>
