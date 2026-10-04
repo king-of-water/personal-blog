@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="860" viewBox="0 0 1440 860" role="img" aria-labelledby="title desc">
+  <title id="title">过载治理中各机制所在的位置</title>
+  <desc id="desc">请求依次经过入口限流、并发与隔离、熔断和下游调用；失败后由业务降级决定结果，流式任务通过背压把消费能力反馈给生产者。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#8a7f6d"/>
+    </marker>
+    <marker id="arrow-accent" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#466b48"/>
+    </marker>
+    <marker id="arrow-negative" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#943b37"/>
+    </marker>
+  </defs>
+  <rect width="1440" height="860" fill="#fdfaf3"/>
+  <g font-family="system-ui, sans-serif">
+    <text x="70" y="70" fill="#2b2620" font-size="34" font-weight="700">每个机制只负责调用链中的一段决策</text>
+    <text x="70" y="110" fill="#6f6659" font-size="20">入口控制到达量，调用边界控制资源，业务层决定失败时交付什么</text>
+
+    <rect x="55" y="150" width="1330" height="390" rx="24" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="85" y="192" fill="#6f6659" font-size="18" font-weight="700">同步请求主路径</text>
+
+    <rect x="90" y="250" width="190" height="145" rx="17" fill="#fbf8f1" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="185" y="298" text-anchor="middle" fill="#2b2620" font-size="23" font-weight="700">请求</text>
+    <text x="185" y="335" text-anchor="middle" fill="#6f6659" font-size="17">用户 · 租户 · 任务</text>
+
+    <rect x="355" y="230" width="220" height="185" rx="18" fill="#f4eace" stroke="#8a6b12" stroke-width="3"/>
+    <text x="465" y="280" text-anchor="middle" fill="#2b2620" font-size="23" font-weight="700">限流</text>
+    <text x="465" y="316" text-anchor="middle" fill="#554d42" font-size="17">单位时间放多少</text>
+    <text x="465" y="350" text-anchor="middle" fill="#8a6b12" font-size="16">超额：拒绝或短等待</text>
+
+    <rect x="650" y="230" width="245" height="185" rx="18" fill="#dee3d6" stroke="#466b48" stroke-width="3"/>
+    <text x="772" y="278" text-anchor="middle" fill="#2b2620" font-size="23" font-weight="700">并发控制 + 隔离</text>
+    <text x="772" y="316" text-anchor="middle" fill="#554d42" font-size="17">最多占多少资源</text>
+    <text x="772" y="350" text-anchor="middle" fill="#466b48" font-size="16">许可 · 线程池 · 连接池</text>
+
+    <rect x="970" y="230" width="210" height="185" rx="18" fill="#d8dee0" stroke="#295279" stroke-width="3"/>
+    <text x="1075" y="280" text-anchor="middle" fill="#2b2620" font-size="23" font-weight="700">熔断</text>
+    <text x="1075" y="316" text-anchor="middle" fill="#554d42" font-size="17">调用是否还值得尝试</text>
+    <text x="1075" y="350" text-anchor="middle" fill="#295279" font-size="16">失败率 · 慢调用率</text>
+
+    <rect x="1240" y="250" width="110" height="145" rx="17" fill="#fbf8f1" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="1295" y="307" text-anchor="middle" fill="#2b2620" font-size="20" font-weight="700">下游</text>
+    <text x="1295" y="340" text-anchor="middle" fill="#6f6659" font-size="15">DB / RPC</text>
+
+    <path d="M280 322 H340" fill="none" stroke="#8a7f6d" stroke-width="4" marker-end="url(#arrow)"/>
+    <path d="M575 322 H635" fill="none" stroke="#466b48" stroke-width="4" marker-end="url(#arrow-accent)"/>
+    <path d="M895 322 H955" fill="none" stroke="#295279" stroke-width="4" marker-end="url(#arrow)"/>
+    <path d="M1180 322 H1225" fill="none" stroke="#8a7f6d" stroke-width="4" marker-end="url(#arrow)"/>
+
+    <rect x="440" y="595" width="560" height="150" rx="20" fill="#eed9d3" stroke="#943b37" stroke-width="3"/>
+    <text x="720" y="643" text-anchor="middle" fill="#2b2620" font-size="24" font-weight="700">业务降级</text>
+    <text x="720" y="681" text-anchor="middle" fill="#554d42" font-size="18">明确失败 · 返回缓存 · 转异步 · 标记处理中</text>
+    <text x="720" y="714" text-anchor="middle" fill="#943b37" font-size="16">不能把未知结果伪装成成功</text>
+
+    <path d="M465 415 V525 Q465 565 505 580" fill="none" stroke="#943b37" stroke-width="3" marker-end="url(#arrow-negative)"/>
+    <path d="M772 415 V580" fill="none" stroke="#943b37" stroke-width="3" marker-end="url(#arrow-negative)"/>
+    <path d="M1075 415 V525 Q1075 565 935 590" fill="none" stroke="#943b37" stroke-width="3" marker-end="url(#arrow-negative)"/>
+    <text x="720" y="515" text-anchor="middle" fill="#943b37" font-size="17">任何一层拒绝或失败，都需要真实的业务结果</text>
+
+    <rect x="85" y="780" width="1270" height="48" rx="12" fill="#f5f0e4"/>
+    <text x="112" y="811" fill="#554d42" font-size="17">背压位于持续数据流中：消费者把可接收数量反馈给生产者，避免用无界队列隐藏过载。</text>
+  </g>
+</svg>

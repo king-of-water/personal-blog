@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900" role="img" aria-labelledby="title desc">
+  <title id="title">下游变慢形成的过载正反馈</title>
+  <desc id="desc">下游变慢导致在途请求和排队增加，进一步产生超时、重试和更高到达量；入口限流、并发控制、熔断与背压分别可以在环路的不同位置切断反馈。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#943b37"/>
+    </marker>
+    <marker id="arrow-good" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#466b48"/>
+    </marker>
+  </defs>
+  <rect width="1440" height="900" fill="#fdfaf3"/>
+  <g font-family="system-ui, sans-serif">
+    <text x="70" y="68" fill="#2b2620" font-size="34" font-weight="700">慢依赖会把一次故障变成自我放大的环</text>
+    <text x="70" y="108" fill="#6f6659" font-size="20">队列延后暴露问题，超时和无预算重试把更多流量重新送入系统</text>
+
+    <circle cx="710" cy="455" r="285" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2" stroke-dasharray="9 9"/>
+
+    <rect x="575" y="155" width="270" height="110" rx="18" fill="#eed9d3" stroke="#943b37" stroke-width="3"/>
+    <text x="710" y="202" text-anchor="middle" fill="#2b2620" font-size="22" font-weight="700">下游延迟上升</text>
+    <text x="710" y="237" text-anchor="middle" fill="#554d42" font-size="17">处理能力下降</text>
+
+    <rect x="930" y="335" width="300" height="120" rx="18" fill="#eed9d3" stroke="#943b37" stroke-width="3"/>
+    <text x="1080" y="383" text-anchor="middle" fill="#2b2620" font-size="22" font-weight="700">在途请求与队列增加</text>
+    <text x="1080" y="420" text-anchor="middle" fill="#554d42" font-size="17">线程 · 连接 · 内存被占用</text>
+
+    <rect x="850" y="655" width="285" height="115" rx="18" fill="#eed9d3" stroke="#943b37" stroke-width="3"/>
+    <text x="992" y="701" text-anchor="middle" fill="#2b2620" font-size="22" font-weight="700">deadline 超时</text>
+    <text x="992" y="737" text-anchor="middle" fill="#554d42" font-size="17">大量工作完成也无人接收</text>
+
+    <rect x="290" y="655" width="285" height="115" rx="18" fill="#eed9d3" stroke="#943b37" stroke-width="3"/>
+    <text x="432" y="701" text-anchor="middle" fill="#2b2620" font-size="22" font-weight="700">客户端与多层重试</text>
+    <text x="432" y="737" text-anchor="middle" fill="#554d42" font-size="17">额外请求放大</text>
+
+    <rect x="180" y="335" width="280" height="120" rx="18" fill="#eed9d3" stroke="#943b37" stroke-width="3"/>
+    <text x="320" y="383" text-anchor="middle" fill="#2b2620" font-size="22" font-weight="700">实际到达量更高</text>
+    <text x="320" y="420" text-anchor="middle" fill="#554d42" font-size="17">负载超过完成速率</text>
+
+    <path d="M845 215 Q1025 230 1065 320" fill="none" stroke="#943b37" stroke-width="4" marker-end="url(#arrow)"/>
+    <path d="M1130 455 Q1165 570 1055 642" fill="none" stroke="#943b37" stroke-width="4" marker-end="url(#arrow)"/>
+    <path d="M850 730 Q710 820 590 735" fill="none" stroke="#943b37" stroke-width="4" marker-end="url(#arrow)"/>
+    <path d="M290 690 Q190 570 270 470" fill="none" stroke="#943b37" stroke-width="4" marker-end="url(#arrow)"/>
+    <path d="M400 335 Q475 230 560 215" fill="none" stroke="#943b37" stroke-width="4" marker-end="url(#arrow)"/>
+
+    <rect x="520" y="375" width="380" height="165" rx="22" fill="#dee3d6" stroke="#466b48" stroke-width="3"/>
+    <text x="710" y="422" text-anchor="middle" fill="#2b2620" font-size="23" font-weight="700">切断正反馈</text>
+    <text x="710" y="460" text-anchor="middle" fill="#554d42" font-size="17">有界并发与队列 · 熔断 · 重试预算</text>
+    <text x="710" y="494" text-anchor="middle" fill="#554d42" font-size="17">入口限流 · 背压 · 可验证的降级</text>
+    <path d="M710 540 V615" fill="none" stroke="#466b48" stroke-width="4" marker-end="url(#arrow-good)"/>
+    <text x="730" y="590" fill="#466b48" font-size="16">让拒绝发生得早且有界</text>
+
+    <rect x="90" y="825" width="1260" height="46" rx="11" fill="#f5f0e4"/>
+    <text x="115" y="855" fill="#554d42" font-size="17">目标不是把等待转移到另一层，而是减少无效工作，让剩余容量优先完成仍有价值的请求。</text>
+  </g>
+</svg>
