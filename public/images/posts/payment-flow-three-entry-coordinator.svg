@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">同步入口、消息队列和扫描器收敛到同一推进器</title>
+  <desc id="desc">同步请求、消息消费者、渠道回调和数据库扫描器都只能唤醒协调器。协调器读取主库和外部权威事实，幂等调用下游，再通过 CAS 更新状态；消息失败时扫描器仍能从非终态恢复。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#5b5245"/></marker>
+    <marker id="green" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#466b48"/></marker>
+  </defs>
+  <rect width="1200" height="760" rx="24" fill="#fdfaf3"/>
+  <g font-family="system-ui, sans-serif">
+    <text x="64" y="66" fill="#2b2620" font-size="30" font-weight="700">入口可以重复，推进决策只有一份</text>
+    <text x="64" y="102" fill="#6f6659" font-size="18">MQ 决定收敛速度，Scanner 决定遗漏工作能否再次被发现</text>
+
+    <g text-anchor="middle">
+      <rect x="64" y="160" width="220" height="88" rx="16" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+      <text x="174" y="195" fill="#2b2620" font-size="20" font-weight="700">同步请求</text>
+      <text x="174" y="223" fill="#554d42" font-size="15">首次推进，有限 deadline</text>
+
+      <rect x="64" y="286" width="220" height="88" rx="16" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+      <text x="174" y="321" fill="#2b2620" font-size="20" font-weight="700">MQ Consumer</text>
+      <text x="174" y="349" fill="#554d42" font-size="15">秒级唤醒，可重复</text>
+
+      <rect x="64" y="412" width="220" height="88" rx="16" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+      <text x="174" y="447" fill="#2b2620" font-size="20" font-weight="700">渠道回调</text>
+      <text x="174" y="475" fill="#554d42" font-size="15">验签、去重、快速接收</text>
+
+      <rect x="64" y="538" width="220" height="88" rx="16" fill="#f4eace" stroke="#8a7f6d" stroke-width="2"/>
+      <text x="174" y="573" fill="#2b2620" font-size="20" font-weight="700">DB Scanner</text>
+      <text x="174" y="601" fill="#554d42" font-size="15">分钟级重新发现</text>
+
+      <rect x="420" y="266" width="340" height="236" rx="22" fill="#fbf8f1" stroke="#5b5245" stroke-width="3"/>
+      <text x="590" y="310" fill="#2b2620" font-size="23" font-weight="700">PayFlowCoordinator</text>
+      <text x="590" y="352" fill="#554d42" font-size="17">1. 从主库读取当前状态与 version</text>
+      <text x="590" y="388" fill="#554d42" font-size="17">2. 查询钱包或业务权威事实</text>
+      <text x="590" y="424" fill="#554d42" font-size="17">3. 使用稳定单号执行幂等动作</text>
+      <text x="590" y="460" fill="#554d42" font-size="17">4. CAS 合法迁移并安排下次唤醒</text>
+
+      <rect x="892" y="174" width="244" height="100" rx="16" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+      <text x="1014" y="213" fill="#2b2620" font-size="20" font-weight="700">主库流水</text>
+      <text x="1014" y="244" fill="#3d6340" font-size="15">事实 + 待办 + CAS</text>
+
+      <rect x="892" y="334" width="244" height="100" rx="16" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+      <text x="1014" y="373" fill="#2b2620" font-size="20" font-weight="700">钱包 / 退款单</text>
+      <text x="1014" y="404" fill="#554d42" font-size="15">资金权威事实</text>
+
+      <rect x="892" y="494" width="244" height="100" rx="16" fill="#f4eace" stroke="#8a7f6d" stroke-width="2"/>
+      <text x="1014" y="533" fill="#2b2620" font-size="20" font-weight="700">业务主库</text>
+      <text x="1014" y="564" fill="#554d42" font-size="15">结果与归因证据</text>
+    </g>
+
+    <path d="M284 204H354V326H420M284 330H420M284 456H354V420H420M284 582H354V462H420" fill="none" stroke="#5b5245" stroke-width="3" marker-end="url(#arrow)"/>
+    <path d="M760 324H830V224H892M760 384H892M760 444H830V544H892" fill="none" stroke="#466b48" stroke-width="3" marker-end="url(#green)"/>
+
+    <rect x="64" y="680" width="1072" height="1" fill="#8a7f6d"/>
+    <text x="64" y="715" fill="#6f6659" font-size="16">消息完全丢失时，只要非终态仍在主库，Scanner 就能再次调用相同推进逻辑。</text>
+  </g>
+</svg>

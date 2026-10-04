@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">支付链路中的身份、事实与触发器</title>
+  <desc id="desc">业务目标、支付尝试和退款单号构成稳定身份；钱包、业务主库和退款单提供三类权威事实；同步请求、消息、回调和扫描器只负责唤醒同一个推进器。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#5b5245"/></marker>
+  </defs>
+  <rect width="1200" height="760" rx="24" fill="#fdfaf3"/>
+  <g font-family="system-ui, sans-serif">
+    <text x="64" y="66" fill="#2b2620" font-size="30" font-weight="700">稳定身份连接三份事实，触发器只负责唤醒</text>
+    <text x="64" y="102" fill="#6f6659" font-size="18">重复触发没有关系；同一笔资金动作的身份和状态迁移必须保持不变</text>
+
+    <text x="64" y="158" fill="#6f6659" font-size="16" font-weight="700">身份层</text>
+    <g fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2">
+      <rect x="64" y="180" width="310" height="100" rx="16"/>
+      <rect x="445" y="180" width="310" height="100" rx="16"/>
+      <rect x="826" y="180" width="310" height="100" rx="16"/>
+    </g>
+    <g fill="#2b2620" text-anchor="middle">
+      <text x="219" y="221" font-size="21" font-weight="700">biz_key</text>
+      <text x="219" y="252" font-size="16">同一个业务目标，跨 attempt 不变</text>
+      <text x="600" y="221" font-size="21" font-weight="700">trade_order_no</text>
+      <text x="600" y="252" font-size="16">一次支付尝试的幂等身份</text>
+      <text x="981" y="221" font-size="21" font-weight="700">refund_order_no</text>
+      <text x="981" y="252" font-size="16">该 attempt 的固定补偿身份</text>
+    </g>
+
+    <text x="64" y="340" fill="#6f6659" font-size="16" font-weight="700">事实层</text>
+    <g stroke-width="2">
+      <rect x="64" y="362" width="310" height="116" rx="16" fill="#d8dee0" stroke="#295279"/>
+      <rect x="445" y="362" width="310" height="116" rx="16" fill="#dee3d6" stroke="#466b48"/>
+      <rect x="826" y="362" width="310" height="116" rx="16" fill="#f4eace" stroke="#8a7f6d"/>
+    </g>
+    <g fill="#2b2620" text-anchor="middle">
+      <text x="219" y="404" font-size="21" font-weight="700">钱包支付单</text>
+      <text x="219" y="436" font-size="16">SUCCESS / FAILED / PROCESSING</text>
+      <text x="219" y="460" font-size="15">回答钱是否已经扣除</text>
+      <text x="600" y="404" font-size="21" font-weight="700">业务主库</text>
+      <text x="600" y="436" font-size="16">任务状态 + 归因支付单</text>
+      <text x="600" y="460" font-size="15">回答权益由谁完成</text>
+      <text x="981" y="404" font-size="21" font-weight="700">钱包退款单</text>
+      <text x="981" y="436" font-size="16">SUCCESS / FAILED / PROCESSING</text>
+      <text x="981" y="460" font-size="15">回答补偿是否到账</text>
+    </g>
+
+    <path d="M219 280V342" stroke="#5b5245" stroke-width="3" marker-end="url(#arrow)"/>
+    <path d="M600 280V342" stroke="#5b5245" stroke-width="3" marker-end="url(#arrow)"/>
+    <path d="M981 280V342" stroke="#5b5245" stroke-width="3" marker-end="url(#arrow)"/>
+
+    <rect x="250" y="552" width="700" height="104" rx="18" fill="#fbf8f1" stroke="#5b5245" stroke-width="2"/>
+    <text x="600" y="591" fill="#2b2620" font-size="22" font-weight="700" text-anchor="middle">PayFlowCoordinator.advance(flowId)</text>
+    <text x="600" y="622" fill="#554d42" font-size="16" text-anchor="middle">重读主库 · 查询权威事实 · 执行幂等副作用 · CAS 合法迁移</text>
+    <text x="600" y="704" fill="#6f6659" font-size="16" text-anchor="middle">同步请求 · MQ Consumer · 渠道回调 · DB Scanner</text>
+    <path d="M600 684V664" stroke="#5b5245" stroke-width="3" marker-end="url(#arrow)"/>
+  </g>
+</svg>
