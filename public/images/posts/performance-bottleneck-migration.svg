@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="650" viewBox="0 0 1200 650" role="img" aria-labelledby="title desc">
+  <title id="title">优化后的瓶颈迁移</title>
+  <desc id="desc">优化前数据库热点锁让连接池和入口队列逐级积压；缩短事务后旧队列消失，容量拐点右移，在更高吞吐下应用 CPU 成为新的边界。</desc>
+  <rect width="1200" height="650" rx="32" fill="#fdfaf3"/>
+  <text x="70" y="68" font-family="system-ui, sans-serif" font-size="30" font-weight="700" fill="#2b2620">优化成功，不等于系统从此没有瓶颈</text>
+  <text x="70" y="103" font-family="system-ui, sans-serif" font-size="17" fill="#8a7f6d">旧排队点消失、容量拐点右移，再观察更高负载下的新边界</text>
+
+  <g font-family="system-ui, sans-serif">
+    <text x="72" y="164" font-size="21" font-weight="700" fill="#943b37">优化前 · 8,000 QPS 已越过延迟目标</text>
+    <rect x="72" y="190" width="210" height="90" rx="16" fill="#f4eace" stroke="#8a6b12" stroke-width="2"/>
+    <text x="177" y="225" text-anchor="middle" font-size="18" font-weight="700" fill="#2b2620">入口线程池</text>
+    <text x="177" y="252" text-anchor="middle" font-size="15" fill="#943b37">等待 90 ms</text>
+    <path d="M282 235h65" stroke="#943b37" stroke-width="4"/>
+    <path d="M337 226l12 9-12 9" fill="none" stroke="#943b37" stroke-width="4"/>
+    <rect x="349" y="190" width="210" height="90" rx="16" fill="#eed9d3" stroke="#943b37" stroke-width="3"/>
+    <text x="454" y="225" text-anchor="middle" font-size="18" font-weight="700" fill="#943b37">数据库连接池</text>
+    <text x="454" y="252" text-anchor="middle" font-size="15" fill="#943b37">等待 170 ms</text>
+    <path d="M559 235h65" stroke="#943b37" stroke-width="4"/>
+    <path d="M614 226l12 9-12 9" fill="none" stroke="#943b37" stroke-width="4"/>
+    <rect x="626" y="190" width="244" height="90" rx="16" fill="#eed9d3" stroke="#943b37" stroke-width="3"/>
+    <text x="748" y="225" text-anchor="middle" font-size="18" font-weight="700" fill="#943b37">热点库存行 + 审计</text>
+    <text x="748" y="252" text-anchor="middle" font-size="15" fill="#943b37">事务 p99 125 ms</text>
+    <rect x="914" y="190" width="214" height="90" rx="16" fill="#2b2620"/>
+    <text x="1021" y="225" text-anchor="middle" font-size="18" font-weight="700" fill="#ffffff">接口 p99</text>
+    <text x="1021" y="253" text-anchor="middle" font-size="24" font-weight="700" fill="#f4eace">410 ms</text>
+
+    <path d="M600 310v64" stroke="#466b48" stroke-width="4"/>
+    <path d="M590 364l10 13 10-13" fill="none" stroke="#466b48" stroke-width="4"/>
+    <rect x="378" y="314" width="444" height="52" rx="26" fill="#dee3d6"/>
+    <text x="600" y="347" text-anchor="middle" font-size="16" font-weight="700" fill="#466b48">缩短关键事务；审计由 Outbox 提交后异步展开</text>
+
+    <text x="72" y="420" font-size="21" font-weight="700" fill="#466b48">优化后 · 旧队列消失，拐点移动到 11,000 QPS</text>
+    <rect x="72" y="446" width="210" height="90" rx="16" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="177" y="481" text-anchor="middle" font-size="18" font-weight="700" fill="#2b2620">入口线程池</text>
+    <text x="177" y="508" text-anchor="middle" font-size="15" fill="#466b48">等待稳定</text>
+    <path d="M282 491h65" stroke="#466b48" stroke-width="4"/>
+    <path d="M337 482l12 9-12 9" fill="none" stroke="#466b48" stroke-width="4"/>
+    <rect x="349" y="446" width="210" height="90" rx="16" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="454" y="481" text-anchor="middle" font-size="18" font-weight="700" fill="#2b2620">数据库连接池</text>
+    <text x="454" y="508" text-anchor="middle" font-size="15" fill="#466b48">等待 18 ms</text>
+    <path d="M559 491h65" stroke="#466b48" stroke-width="4"/>
+    <path d="M614 482l12 9-12 9" fill="none" stroke="#466b48" stroke-width="4"/>
+    <rect x="626" y="446" width="244" height="90" rx="16" fill="#d8dee0" stroke="#295279" stroke-width="3"/>
+    <text x="748" y="481" text-anchor="middle" font-size="18" font-weight="700" fill="#295279">应用 CPU</text>
+    <text x="748" y="508" text-anchor="middle" font-size="15" fill="#295279">更高负载下饱和</text>
+    <rect x="914" y="446" width="214" height="90" rx="16" fill="#2b2620"/>
+    <text x="1021" y="481" text-anchor="middle" font-size="18" font-weight="700" fill="#ffffff">8,000 QPS p99</text>
+    <text x="1021" y="509" text-anchor="middle" font-size="24" font-weight="700" fill="#dee3d6">142 ms</text>
+  </g>
+  <text x="600" y="607" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" fill="#8a7f6d">到达目标且余量足够时可以停止；新瓶颈只说明系统的下一条边界</text>
+</svg>

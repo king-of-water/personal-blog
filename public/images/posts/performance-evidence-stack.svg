@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="680" viewBox="0 0 1200 680" role="img" aria-labelledby="title desc">
+  <title id="title">从用户症状到性能瓶颈的证据链</title>
+  <desc id="desc">性能分析从用户端服务目标出发，依次经过 RED 服务指标、分布式追踪、队列与等待、USE 资源指标，最后落到代码、查询计划和运行时证据。</desc>
+  <rect width="1200" height="680" rx="32" fill="#fdfaf3"/>
+  <text x="72" y="70" font-family="system-ui, sans-serif" font-size="30" font-weight="700" fill="#2b2620">从“用户觉得慢”到可验证的根因</text>
+  <text x="72" y="105" font-family="system-ui, sans-serif" font-size="17" fill="#8a7f6d">每一层都要与上一层时间对齐；跳层猜测容易把结果当成原因</text>
+
+  <g font-family="system-ui, sans-serif">
+    <rect x="72" y="142" width="1056" height="78" rx="18" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+    <text x="104" y="177" font-size="20" font-weight="700" fill="#943b37">用户与 SLO</text>
+    <text x="104" y="204" font-size="16" fill="#2b2620">哪个接口、哪类用户、哪个分位数先失败？吞吐、错误和正确性是否仍达标？</text>
+
+    <path d="M600 220v24" stroke="#8a7f6d" stroke-width="3"/>
+    <path d="M591 239l9 11 9-11" fill="none" stroke="#8a7f6d" stroke-width="3"/>
+
+    <rect x="72" y="250" width="1056" height="78" rx="18" fill="#f4eace" stroke="#8a6b12" stroke-width="2"/>
+    <text x="104" y="285" font-size="20" font-weight="700" fill="#8a6b12">RED 服务指标</text>
+    <text x="104" y="312" font-size="16" fill="#2b2620">Rate · Errors · Duration　按路由、实例、版本、分片和业务 key 拆分</text>
+
+    <path d="M600 328v24" stroke="#8a7f6d" stroke-width="3"/>
+    <path d="M591 347l9 11 9-11" fill="none" stroke="#8a7f6d" stroke-width="3"/>
+
+    <rect x="72" y="358" width="1056" height="78" rx="18" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="104" y="393" font-size="20" font-weight="700" fill="#295279">Trace 与等待分解</text>
+    <text x="104" y="420" font-size="16" fill="#2b2620">入口排队 → 线程 / 事件循环 → 连接池 → RPC / SQL → 锁与提交</text>
+
+    <path d="M600 436v24" stroke="#8a7f6d" stroke-width="3"/>
+    <path d="M591 455l9 11 9-11" fill="none" stroke="#8a7f6d" stroke-width="3"/>
+
+    <rect x="72" y="466" width="1056" height="78" rx="18" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="104" y="501" font-size="20" font-weight="700" fill="#466b48">USE 资源指标</text>
+    <text x="104" y="528" font-size="16" fill="#2b2620">Utilization · Saturation · Errors　检查 CPU、内存、I/O、网络、池、锁和队列</text>
+
+    <path d="M600 544v24" stroke="#8a7f6d" stroke-width="3"/>
+    <path d="M591 563l9 11 9-11" fill="none" stroke="#8a7f6d" stroke-width="3"/>
+
+    <rect x="72" y="574" width="1056" height="70" rx="18" fill="#2b2620"/>
+    <text x="104" y="608" font-size="20" font-weight="700" fill="#ffffff">定位工具</text>
+    <text x="104" y="632" font-size="16" fill="#fdfaf3">CPU / Wall / Allocation / Lock Profile · EXPLAIN ANALYZE · 慢日志 · 网络与运行时事件</text>
+  </g>
+</svg>
