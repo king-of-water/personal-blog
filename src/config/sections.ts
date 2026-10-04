@@ -67,7 +67,19 @@ export const backendSubcategories: Subcategory[] = [
 	},
 	{ name: 'Java', slug: 'java', description: '语言、JVM、并发与常用框架。' },
 	{ name: 'Redis', slug: 'redis', description: '缓存、数据结构、集群与稳定性。' },
-	{ name: 'MySQL', slug: 'mysql', description: '索引、事务、执行计划与数据库工程。' },
+	{
+		name: 'MySQL',
+		slug: 'mysql',
+		description: '索引、事务、执行计划与数据库工程。',
+		plannedTopics: [
+			{ title: 'MySQL 锁与死锁：Record Lock、Gap Lock 和 Next-Key Lock', seriesOrder: 40 },
+			{ title: '一条 SQL 是怎样执行的：优化器、执行计划与 EXPLAIN ANALYZE', seriesOrder: 50 },
+			{ title: 'MySQL 慢查询怎样排查：从发现 SQL 到验证优化效果', seriesOrder: 60 },
+			{ title: 'MySQL 主从复制与读写分离：延迟、数据一致性和故障切换', seriesOrder: 70 },
+			{ title: 'MySQL 表结构怎样设计：主键、数据类型、索引与大字段', seriesOrder: 80 },
+			{ title: 'MySQL 数据太大以后怎么办：分区、归档、分库分表与在线 DDL', seriesOrder: 90 },
+		],
+	},
 	{ name: '消息队列', slug: 'message-queue', description: '异步通信、削峰、顺序与消息可靠性。' },
 ];
 

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
+  <title id="title">InnoDB MVCC 版本链与 Read View 判断</title>
+  <desc id="desc">当前聚簇索引记录由事务 110 写入，Read View 判定它不可见后沿 DB_ROLL_PTR 依次查找 Undo 中由事务 100 和 90 产生的旧版本，直到找到可见版本。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#5b5245"/></marker><style>.h{font:700 28px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:600 19px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.l{stroke:#5b5245;stroke-width:2.5;fill:none;marker-end:url(#a)}</style></defs>
+  <rect width="1200" height="620" rx="24" fill="#fdfaf3"/>
+  <text x="55" y="55" class="h">Read View 选择版本，Undo 提供历史</text>
+  <rect x="55" y="105" width="330" height="445" rx="18" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+  <text x="90" y="150" class="t">Read View</text><text x="90" y="195" class="b">creator = 105</text><text x="90" y="228" class="b">active = [100, 103]</text><text x="90" y="261" class="b">up_limit = 100</text><text x="90" y="294" class="b">low_limit = 110</text>
+  <line x1="90" y1="325" x2="350" y2="325" stroke="#8a7f6d"/>
+  <text x="90" y="365" class="s">110 及之后：不可见</text><text x="90" y="397" class="s">活跃集合内：不可见</text><text x="90" y="429" class="s">100 之前：可见</text><text x="90" y="480" class="b">沿版本链找到</text><text x="90" y="510" class="b">第一个可见版本</text>
+  <path d="M385 330 H465" class="l"/>
+  <rect x="470" y="105" width="290" height="125" rx="18" fill="#eed9d3" stroke="#943b37" stroke-width="2"/><text x="615" y="145" text-anchor="middle" class="t">聚簇索引当前记录</text><text x="505" y="181" class="b">balance = 300</text><text x="505" y="207" class="b">DB_TRX_ID = 110</text><text x="790" y="170" class="s">不可见</text>
+  <path d="M615 230 V290" class="l"/><text x="635" y="266" class="s">DB_ROLL_PTR</text>
+  <rect x="470" y="295" width="290" height="110" rx="18" fill="#f4eace" stroke="#8a7f6d" stroke-width="2"/><text x="615" y="334" text-anchor="middle" class="t">Undo 旧版本</text><text x="505" y="372" class="b">balance = 400, trx = 100</text><text x="790" y="355" class="s">活跃，不可见</text>
+  <path d="M615 405 V465" class="l"/>
+  <rect x="470" y="470" width="290" height="110" rx="18" fill="#dee3d6" stroke="#466b48" stroke-width="2"/><text x="615" y="509" text-anchor="middle" class="t">Undo 旧版本</text><text x="505" y="547" class="b">balance = 500, trx = 90</text><text x="790" y="530" class="s">可见，返回</text>
+  <rect x="865" y="175" width="280" height="310" rx="18" fill="#d8dee0" stroke="#295279" stroke-width="2"/><text x="1005" y="218" text-anchor="middle" class="t">判断顺序</text><text x="900" y="270" class="b">1. 是否是自己的写入</text><text x="900" y="314" class="b">2. 是否早于低水位</text><text x="900" y="358" class="b">3. 是否晚于高水位</text><text x="900" y="402" class="b">4. 是否在活跃集合</text><text x="900" y="451" class="s">字段命名以源码为准</text>
+</svg>

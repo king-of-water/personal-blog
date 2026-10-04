@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">一次 UPDATE 的三日志提交顺序</title>
+  <desc id="desc">从读取记录、生成 Undo 与 Redo，到 InnoDB prepare、Binlog 持久化、InnoDB commit，最后异步刷出数据页和清理 Undo。</desc>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#5b5245"/></marker>
+    <style>.h{font:700 28px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:600 18px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.v{stroke:#8a7f6d;stroke-width:2;stroke-dasharray:7 8}.m{stroke:#5b5245;stroke-width:2.2;marker-end:url(#a)}</style>
+  </defs>
+  <rect width="1200" height="720" rx="24" fill="#fdfaf3"/>
+  <text x="60" y="55" class="h">UPDATE account SET balance = 400 WHERE id = 42</text>
+  <g text-anchor="middle"><text x="150" y="110" class="t">MySQL Server</text><text x="430" y="110" class="t">InnoDB / Buffer Pool</text><text x="740" y="110" class="t">Redo</text><text x="1030" y="110" class="t">Binlog</text></g>
+  <g><line x1="150" y1="130" x2="150" y2="655" class="v"/><line x1="430" y1="130" x2="430" y2="655" class="v"/><line x1="740" y1="130" x2="740" y2="655" class="v"/><line x1="1030" y1="130" x2="1030" y2="655" class="v"/></g>
+  <line x1="150" y1="170" x2="430" y2="170" class="m"/><text x="290" y="158" text-anchor="middle" class="b">1. 执行 UPDATE</text>
+  <rect x="350" y="194" width="160" height="66" rx="12" fill="#dee3d6" stroke="#466b48" stroke-width="2"/><text x="430" y="220" text-anchor="middle" class="b">2. 写 Undo</text><text x="430" y="244" text-anchor="middle" class="s">修改内存数据页</text>
+  <line x1="430" y1="290" x2="740" y2="290" class="m"/><text x="585" y="278" text-anchor="middle" class="b">3. 生成 Redo</text>
+  <line x1="150" y1="350" x2="1030" y2="350" class="m"/><text x="590" y="338" text-anchor="middle" class="b">4. 变更事件暂存在 Binlog Cache</text>
+  <rect x="650" y="382" width="180" height="58" rx="12" fill="#e3dde2" stroke="#5e5083" stroke-width="2"/><text x="740" y="418" text-anchor="middle" class="t">5. Redo prepare</text>
+  <line x1="150" y1="475" x2="1030" y2="475" class="m"/><text x="590" y="463" text-anchor="middle" class="b">6. 写完整事务并按策略 fsync</text>
+  <line x1="1030" y1="520" x2="430" y2="520" class="m"/><text x="730" y="508" text-anchor="middle" class="b">Binlog durable</text>
+  <rect x="350" y="545" width="160" height="58" rx="12" fill="#d8dee0" stroke="#295279" stroke-width="2"/><text x="430" y="581" text-anchor="middle" class="t">7. InnoDB commit</text>
+  <line x1="430" y1="625" x2="150" y2="625" class="m"/><text x="290" y="613" text-anchor="middle" class="b">8. 返回成功</text>
+  <rect x="645" y="625" width="455" height="58" rx="12" fill="#f5f0e4" stroke="#8a7f6d"/><text x="872" y="649" text-anchor="middle" class="s">之后：脏页异步刷盘、Checkpoint 前进</text><text x="872" y="670" text-anchor="middle" class="s">无人需要旧版本后，Purge 清理 Undo</text>
+</svg>

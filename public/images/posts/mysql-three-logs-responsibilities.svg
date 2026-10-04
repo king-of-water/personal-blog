@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="560" viewBox="0 0 1200 560" role="img" aria-labelledby="title desc">
+  <title id="title">Undo Log、Redo Log 与 Binlog 的职责边界</title>
+  <desc id="desc">一次事务修改分别产生旧版本信息、页面重做信息和数据变更事件，服务于回滚与一致性读、崩溃恢复、复制与时间点恢复。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5b5245"/></marker>
+    <style>
+      .h{font:700 28px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:600 21px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.b{font:400 17px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 15px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.line{stroke:#5b5245;stroke-width:2.5;fill:none;marker-end:url(#arrow)}
+    </style>
+  </defs>
+  <rect width="1200" height="560" rx="24" fill="#fdfaf3"/>
+  <text x="60" y="58" class="h">同一次 UPDATE，产生三类不同的恢复信息</text>
+  <rect x="60" y="105" width="240" height="350" rx="20" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+  <text x="180" y="150" text-anchor="middle" class="t">事务修改</text>
+  <rect x="100" y="185" width="160" height="70" rx="12" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+  <text x="180" y="215" text-anchor="middle" class="b">balance</text><text x="180" y="240" text-anchor="middle" class="t">500 → 400</text>
+  <text x="92" y="304" class="b">数据页先在</text><text x="92" y="330" class="b">Buffer Pool 中修改</text>
+  <text x="92" y="380" class="s">提交时无需立刻</text><text x="92" y="404" class="s">刷出整个数据页</text>
+  <path d="M300 220 H355" class="line"/><path d="M300 280 H355" class="line"/><path d="M300 340 H355" class="line"/>
+  <rect x="360" y="105" width="240" height="350" rx="20" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+  <text x="480" y="150" text-anchor="middle" class="t">Undo Log</text>
+  <text x="392" y="202" class="b">保存修改前信息</text><text x="392" y="234" class="b">串起历史版本</text>
+  <line x1="392" y1="265" x2="568" y2="265" stroke="#8a7f6d"/>
+  <text x="392" y="310" class="b">事务回滚</text><text x="392" y="344" class="b">MVCC 一致性读</text><text x="392" y="396" class="s">无人需要旧版本后</text><text x="392" y="420" class="s">才由 Purge 清理</text>
+  <rect x="660" y="105" width="220" height="350" rx="20" fill="#e3dde2" stroke="#5e5083" stroke-width="2"/>
+  <text x="770" y="150" text-anchor="middle" class="t">Redo Log</text>
+  <text x="692" y="202" class="b">记录可重做变化</text><text x="692" y="234" class="b">遵循 WAL</text>
+  <line x1="692" y1="265" x2="848" y2="265" stroke="#8a7f6d"/>
+  <text x="692" y="310" class="b">脏页延迟落盘</text><text x="692" y="344" class="b">实例崩溃恢复</text><text x="692" y="396" class="s">检查点推进后</text><text x="692" y="420" class="s">旧空间可以复用</text>
+  <rect x="940" y="105" width="200" height="350" rx="20" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+  <text x="1040" y="150" text-anchor="middle" class="t">Binlog</text>
+  <text x="968" y="202" class="b">记录变更事件</text><text x="968" y="234" class="b">位于 Server 层</text>
+  <line x1="968" y1="265" x2="1112" y2="265" stroke="#8a7f6d"/>
+  <text x="968" y="310" class="b">主从复制</text><text x="968" y="344" class="b">时间点恢复</text><text x="968" y="396" class="s">按保留策略</text><text x="968" y="420" class="s">轮转和清理</text>
+  <path d="M600 475 H940" stroke="#5b5245" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <text x="770" y="515" text-anchor="middle" class="b">两阶段提交对齐 InnoDB 结果与 Binlog 事件</text>
+</svg>

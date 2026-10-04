@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600" viewBox="0 0 1200 600" role="img" aria-labelledby="title desc">
+  <title id="title">READ COMMITTED 与 REPEATABLE READ 的 Read View 时间线</title>
+  <desc id="desc">READ COMMITTED 的两次查询分别建立快照，第二次看到事务 B 的提交；REPEATABLE READ 复用第一次查询建立的快照，第二次仍看到旧值。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#5b5245"/></marker><style>.h{font:700 28px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:600 20px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.l{stroke:#5b5245;stroke-width:2.4;marker-end:url(#a)}</style></defs>
+  <rect width="1200" height="600" rx="24" fill="#fdfaf3"/>
+  <text x="55" y="55" class="h">同样两次 SELECT，快照更新频率决定第二次看见什么</text>
+  <rect x="55" y="95" width="1090" height="205" rx="18" fill="#f5f0e4" stroke="#8a7f6d"/>
+  <text x="85" y="135" class="t">READ COMMITTED</text><line x1="95" y1="210" x2="1090" y2="210" class="l"/>
+  <circle cx="245" cy="210" r="14" fill="#2f5d8a"/><text x="245" y="175" text-anchor="middle" class="b">SELECT → 500</text><text x="245" y="245" text-anchor="middle" class="s">建立 View 1</text>
+  <circle cx="600" cy="210" r="14" fill="#a8433f"/><text x="600" y="175" text-anchor="middle" class="b">B 提交 400</text>
+  <circle cx="950" cy="210" r="14" fill="#2f5d8a"/><text x="950" y="175" text-anchor="middle" class="b">SELECT → 400</text><text x="950" y="245" text-anchor="middle" class="s">建立 View 2</text>
+  <rect x="55" y="335" width="1090" height="205" rx="18" fill="#f5f0e4" stroke="#8a7f6d"/>
+  <text x="85" y="375" class="t">REPEATABLE READ</text><line x1="95" y1="450" x2="1090" y2="450" class="l"/>
+  <circle cx="245" cy="450" r="14" fill="#4f7a52"/><text x="245" y="415" text-anchor="middle" class="b">SELECT → 500</text><text x="245" y="485" text-anchor="middle" class="s">建立并保留 View 1</text>
+  <circle cx="600" cy="450" r="14" fill="#a8433f"/><text x="600" y="415" text-anchor="middle" class="b">B 提交 400</text>
+  <circle cx="950" cy="450" r="14" fill="#4f7a52"/><text x="950" y="415" text-anchor="middle" class="b">SELECT → 500</text><text x="950" y="485" text-anchor="middle" class="s">继续使用 View 1</text>
+</svg>
