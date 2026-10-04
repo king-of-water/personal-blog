@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="860" viewBox="0 0 1440 860" role="img" aria-labelledby="title desc">
+  <title id="title">服务发现的控制面与请求数据面</title>
+  <desc id="desc">钱包服务实例向注册中心注册和续约，注册中心向支付服务推送实例视图；支付服务从本地视图选择实例后直接发送业务请求，注册中心不在请求主路径上。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#8a7f6d"/>
+    </marker>
+    <marker id="arrow-accent" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#466b48"/>
+    </marker>
+  </defs>
+  <rect width="1440" height="860" fill="#fdfaf3"/>
+  <g font-family="system-ui, sans-serif">
+    <text x="80" y="68" fill="#2b2620" font-size="34" font-weight="700">注册中心维护视图，业务请求不经过注册中心</text>
+    <text x="80" y="108" fill="#6f6659" font-size="20">控制面允许短暂失联，数据面仍可使用最近一次有效视图</text>
+
+    <rect x="60" y="145" width="1320" height="285" rx="22" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="92" y="186" fill="#6f6659" font-size="18" font-weight="700">控制面：成员、健康与版本传播</text>
+
+    <rect x="115" y="225" width="260" height="125" rx="16" fill="#fbf8f1" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="245" y="270" text-anchor="middle" fill="#2b2620" font-size="23" font-weight="700">钱包服务实例</text>
+    <text x="245" y="305" text-anchor="middle" fill="#6f6659" font-size="17">A · B · C</text>
+    <text x="245" y="330" text-anchor="middle" fill="#6f6659" font-size="16">地址、zone、version</text>
+
+    <rect x="590" y="215" width="270" height="145" rx="18" fill="#dee3d6" stroke="#466b48" stroke-width="3"/>
+    <text x="725" y="263" text-anchor="middle" fill="#2b2620" font-size="24" font-weight="700">注册中心</text>
+    <text x="725" y="298" text-anchor="middle" fill="#554d42" font-size="17">service → instances</text>
+    <text x="725" y="326" text-anchor="middle" fill="#554d42" font-size="17">health · revision</text>
+
+    <rect x="1060" y="225" width="260" height="125" rx="16" fill="#fbf8f1" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="1190" y="270" text-anchor="middle" fill="#2b2620" font-size="23" font-weight="700">支付服务</text>
+    <text x="1190" y="305" text-anchor="middle" fill="#6f6659" font-size="17">本地服务视图</text>
+    <text x="1190" y="330" text-anchor="middle" fill="#6f6659" font-size="16">revision 18421</text>
+
+    <path d="M375 270 H575" fill="none" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+    <text x="475" y="250" text-anchor="middle" fill="#6f6659" font-size="16">注册 / 续约 / 注销</text>
+    <path d="M860 270 H1045" fill="none" stroke="#466b48" stroke-width="3" marker-end="url(#arrow-accent)"/>
+    <text x="952" y="250" text-anchor="middle" fill="#466b48" font-size="16">快照 / 变更推送</text>
+
+    <rect x="60" y="475" width="1320" height="300" rx="22" fill="#fbf8f1" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="92" y="516" fill="#6f6659" font-size="18" font-weight="700">数据面：本地选择、连接与业务响应</text>
+
+    <rect x="120" y="575" width="270" height="120" rx="16" fill="#dee3d6" stroke="#466b48" stroke-width="3"/>
+    <text x="255" y="620" text-anchor="middle" fill="#2b2620" font-size="23" font-weight="700">支付服务 P1</text>
+    <text x="255" y="654" text-anchor="middle" fill="#554d42" font-size="17">filter → pick → connect</text>
+    <text x="255" y="680" text-anchor="middle" fill="#554d42" font-size="16">读取进程内快照</text>
+
+    <rect x="560" y="575" width="245" height="120" rx="16" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="682" y="620" text-anchor="middle" fill="#2b2620" font-size="22" font-weight="700">连接池 / 代理</text>
+    <text x="682" y="654" text-anchor="middle" fill="#6f6659" font-size="17">复用连接并排空旧地址</text>
+
+    <rect x="985" y="550" width="270" height="82" rx="14" fill="#fbf8f1" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="1120" y="600" text-anchor="middle" fill="#2b2620" font-size="20" font-weight="700">实例 A · READY</text>
+    <rect x="985" y="652" width="270" height="82" rx="14" fill="#fbf8f1" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="1120" y="702" text-anchor="middle" fill="#2b2620" font-size="20" font-weight="700">实例 B · READY</text>
+
+    <path d="M390 635 H545" fill="none" stroke="#466b48" stroke-width="4" marker-end="url(#arrow-accent)"/>
+    <path d="M805 635 H930 V591 H970" fill="none" stroke="#466b48" stroke-width="4" marker-end="url(#arrow-accent)"/>
+    <path d="M805 655 H930 V693 H970" fill="none" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+    <text x="885" y="615" text-anchor="middle" fill="#466b48" font-size="16">业务 RPC</text>
+
+    <rect x="80" y="800" width="1280" height="42" rx="10" fill="#f5f0e4"/>
+    <text x="102" y="827" fill="#554d42" font-size="17">注册中心失联时，本地视图仍能支撑短期调用；实例结果未知时，仍需幂等键与状态查询。</text>
+  </g>
+</svg>

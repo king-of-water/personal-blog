@@ -19,6 +19,7 @@ const posts = defineCollection({
 			'MySQL',
 			'消息队列',
 			'分布式',
+			'系统设计与高并发',
 		]).optional(),
 		articleClass: z.enum(['flagship', 'focused', 'field-note']).optional(),
 		seriesOrder: z.number().int().positive().optional(),

@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="830" viewBox="0 0 1440 830" role="img" aria-labelledby="title desc">
+  <title id="title">服务实例的上线、故障摘除与正常下线状态机</title>
+  <desc id="desc">实例从启动进入就绪，失败后经过怀疑、摘除和探测再恢复；正常发布时从就绪进入排空，最后移除。每条路径对应不同动作。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#8a7f6d"/>
+    </marker>
+    <marker id="arrow-accent" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#466b48"/>
+    </marker>
+    <marker id="arrow-fail" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#943b37"/>
+    </marker>
+  </defs>
+  <rect width="1440" height="830" fill="#fdfaf3"/>
+  <g font-family="system-ui, sans-serif">
+    <text x="80" y="70" fill="#2b2620" font-size="34" font-weight="700">存活、接流量和退出是三种状态</text>
+    <text x="80" y="110" fill="#6f6659" font-size="20">上线等待就绪，故障经过摘除和探测，正常下线先排空在途请求</text>
+
+    <text x="88" y="190" fill="#6f6659" font-size="17" font-weight="700">上线与正常下线</text>
+    <rect x="90" y="225" width="230" height="108" rx="18" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="205" y="267" text-anchor="middle" fill="#2b2620" font-size="22" font-weight="700">STARTING</text>
+    <text x="205" y="299" text-anchor="middle" fill="#6f6659" font-size="16">初始化，不接业务流量</text>
+
+    <rect x="450" y="225" width="230" height="108" rx="18" fill="#dee3d6" stroke="#466b48" stroke-width="3"/>
+    <text x="565" y="267" text-anchor="middle" fill="#2b2620" font-size="22" font-weight="700">READY</text>
+    <text x="565" y="299" text-anchor="middle" fill="#554d42" font-size="16">进入候选集合</text>
+
+    <rect x="810" y="225" width="230" height="108" rx="18" fill="#f4eace" stroke="#8a6b12" stroke-width="2"/>
+    <text x="925" y="267" text-anchor="middle" fill="#2b2620" font-size="22" font-weight="700">DRAINING</text>
+    <text x="925" y="299" text-anchor="middle" fill="#554d42" font-size="16">停止新请求，等待在途完成</text>
+
+    <rect x="1170" y="225" width="180" height="108" rx="18" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="1260" y="267" text-anchor="middle" fill="#2b2620" font-size="22" font-weight="700">REMOVED</text>
+    <text x="1260" y="299" text-anchor="middle" fill="#6f6659" font-size="16">关闭进程</text>
+
+    <path d="M320 279 H435" fill="none" stroke="#466b48" stroke-width="4" marker-end="url(#arrow-accent)"/>
+    <text x="378" y="258" text-anchor="middle" fill="#466b48" font-size="16">readiness 成功</text>
+    <path d="M680 279 H795" fill="none" stroke="#8a6b12" stroke-width="3" marker-end="url(#arrow)"/>
+    <text x="738" y="258" text-anchor="middle" fill="#8a6b12" font-size="16">发布 / 缩容</text>
+    <path d="M1040 279 H1155" fill="none" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+    <text x="1098" y="258" text-anchor="middle" fill="#6f6659" font-size="16">宽限期结束</text>
+
+    <line x1="80" y1="395" x2="1360" y2="395" stroke="#8a7f6d" stroke-width="2" stroke-opacity="0.38"/>
+    <text x="88" y="450" fill="#6f6659" font-size="17" font-weight="700">故障与恢复</text>
+
+    <rect x="310" y="500" width="230" height="108" rx="18" fill="#f4eace" stroke="#8a6b12" stroke-width="2"/>
+    <text x="425" y="542" text-anchor="middle" fill="#2b2620" font-size="22" font-weight="700">SUSPECT</text>
+    <text x="425" y="574" text-anchor="middle" fill="#554d42" font-size="16">积累失败证据</text>
+
+    <rect x="660" y="500" width="230" height="108" rx="18" fill="#eed9d3" stroke="#943b37" stroke-width="3"/>
+    <text x="775" y="542" text-anchor="middle" fill="#2b2620" font-size="22" font-weight="700">EJECTED</text>
+    <text x="775" y="574" text-anchor="middle" fill="#554d42" font-size="16">停止选择该实例</text>
+
+    <rect x="1010" y="500" width="230" height="108" rx="18" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="1125" y="542" text-anchor="middle" fill="#2b2620" font-size="22" font-weight="700">PROBING</text>
+    <text x="1125" y="574" text-anchor="middle" fill="#6f6659" font-size="16">少量半开流量</text>
+
+    <path d="M530 335 V440 H425 V485" fill="none" stroke="#8a6b12" stroke-width="3" marker-end="url(#arrow)"/>
+    <text x="485" y="430" fill="#8a6b12" font-size="16">超时 / 连接失败</text>
+    <path d="M540 554 H645" fill="none" stroke="#943b37" stroke-width="4" marker-end="url(#arrow-fail)"/>
+    <text x="592" y="532" text-anchor="middle" fill="#943b37" font-size="16">达到阈值</text>
+    <path d="M890 554 H995" fill="none" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+    <text x="942" y="532" text-anchor="middle" fill="#6f6659" font-size="16">等待窗口结束</text>
+    <path d="M1125 485 V420 H625 V348" fill="none" stroke="#466b48" stroke-width="4" marker-end="url(#arrow-accent)"/>
+    <text x="855" y="445" text-anchor="middle" fill="#466b48" font-size="16">连续探测成功，逐步恢复权重</text>
+    <path d="M1125 608 V690 H775 V623" fill="none" stroke="#943b37" stroke-width="3" marker-end="url(#arrow-fail)"/>
+    <text x="950" y="720" text-anchor="middle" fill="#943b37" font-size="16">探测再次失败</text>
+
+    <rect x="80" y="765" width="1280" height="42" rx="10" fill="#f5f0e4"/>
+    <text x="102" y="792" fill="#554d42" font-size="17">readiness 控制新流量，liveness 决定是否重启；两者不能共用一套故障动作。</text>
+  </g>
+</svg>
