@@ -4,7 +4,7 @@ description: 从一条支付调用链出发，讲清限流、并发控制、隔�
 category: 后端
 subcategory: 系统设计与高并发
 articleClass: flagship
-seriesOrder: 40
+seriesOrder: 70
 publishedAt: 2026-10-04
 tags: [系统设计, 高并发, 限流, 熔断, 隔离, 降级, 背压, 重试]
 ---
