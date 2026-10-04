@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">秒杀订单与库存预占状态机</title>
+  <desc id="desc">请求从获得准入开始，经过持久预占与待支付，最终进入支付成功或关闭释放。没有库存与资格失败进入拒绝，支付结果无法确认则进入未知状态等待查询和对账。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#5b5245"/></marker>
+    <marker id="green" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#466b48"/></marker>
+    <marker id="red" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#943b37"/></marker>
+  </defs>
+  <rect width="1200" height="760" rx="24" fill="#fdfaf3"/>
+  <text x="64" y="66" fill="#2b2620" font-size="30" font-weight="700">只有持久状态转换才能改变库存承诺</text>
+  <text x="64" y="103" fill="#6f6659" font-size="18">重复消息读取现状；支付与关单同时到达时，由条件更新决定唯一胜者</text>
+
+  <g font-family="sans-serif" text-anchor="middle">
+    <rect x="60" y="205" width="165" height="94" rx="16" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="142" y="243" fill="#2b2620" font-size="20" font-weight="700">ADMITTED</text>
+    <text x="142" y="273" fill="#2b2620" font-size="15">已准入，未承诺库存</text>
+
+    <rect x="285" y="205" width="165" height="94" rx="16" fill="#f4eace" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="367" y="243" fill="#2b2620" font-size="20" font-weight="700">RESERVED</text>
+    <text x="367" y="273" fill="#2b2620" font-size="15">持久库存已预占</text>
+
+    <rect x="510" y="205" width="190" height="94" rx="16" fill="#f4eace" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="605" y="243" fill="#2b2620" font-size="20" font-weight="700">PENDING_PAYMENT</text>
+    <text x="605" y="273" fill="#2b2620" font-size="15">订单存在，等待支付</text>
+
+    <rect x="790" y="155" width="165" height="94" rx="16" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="872" y="193" fill="#2b2620" font-size="20" font-weight="700">PAID</text>
+    <text x="872" y="223" fill="#2b2620" font-size="15">库存转为 confirmed</text>
+
+    <rect x="790" y="305" width="165" height="94" rx="16" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+    <text x="872" y="343" fill="#2b2620" font-size="20" font-weight="700">CLOSED</text>
+    <text x="872" y="373" fill="#2b2620" font-size="15">关闭并幂等释放</text>
+
+    <rect x="60" y="470" width="165" height="94" rx="16" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+    <text x="142" y="508" fill="#2b2620" font-size="20" font-weight="700">REJECTED</text>
+    <text x="142" y="538" fill="#2b2620" font-size="15">无库存或资格失败</text>
+
+    <rect x="510" y="470" width="190" height="94" rx="16" fill="#e3dde2" stroke="#5e5083" stroke-width="2"/>
+    <text x="605" y="508" fill="#2b2620" font-size="20" font-weight="700">UNKNOWN</text>
+    <text x="605" y="538" fill="#2b2620" font-size="15">查询渠道与对账</text>
+  </g>
+
+  <path d="M225 252H285M450 252H510" stroke="#5b5245" stroke-width="4" marker-end="url(#arrow)"/>
+  <path d="M700 234H745V202H790" fill="none" stroke="#466b48" stroke-width="4" marker-end="url(#green)"/>
+  <path d="M700 270H745V352H790" fill="none" stroke="#943b37" stroke-width="4" marker-end="url(#red)"/>
+  <path d="M142 299V470" stroke="#943b37" stroke-width="4" marker-end="url(#red)"/>
+  <path d="M605 299V470" stroke="#5e5083" stroke-width="4" marker-end="url(#arrow)"/>
+  <path d="M700 517H1010V202H955" fill="none" stroke="#466b48" stroke-width="3" stroke-dasharray="8 7" marker-end="url(#green)"/>
+  <path d="M700 535H1050V352H955" fill="none" stroke="#943b37" stroke-width="3" stroke-dasharray="8 7" marker-end="url(#red)"/>
+
+  <text x="255" y="234" fill="#6f6659" font-size="14" text-anchor="middle">DB 预占</text>
+  <text x="480" y="234" fill="#6f6659" font-size="14" text-anchor="middle">创建订单</text>
+  <text x="748" y="186" fill="#3d6340" font-size="14">支付确认</text>
+  <text x="748" y="335" fill="#943b37" font-size="14">到期 / 取消</text>
+  <text x="158" y="400" fill="#943b37" font-size="14">库存或资格失败</text>
+  <text x="620" y="400" fill="#5e5083" font-size="14">外部结果未知</text>
+  <text x="930" y="497" fill="#6f6659" font-size="14">对账后确认事实</text>
+
+  <rect x="60" y="652" width="1080" height="1" fill="#8a7f6d"/>
+  <text x="60" y="690" fill="#6f6659" font-size="16">Redis 的 ACCEPTED 只对应 ADMITTED；到达 RESERVED 以后才能声称库存已经被持久预占。</text>
+</svg>

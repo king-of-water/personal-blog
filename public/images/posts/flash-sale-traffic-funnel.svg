@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">百万秒杀请求怎样收敛为有限订单</title>
+  <desc id="desc">百万入口请求依次经过静态资源分流、资格与防刷、用户去重、容量许可、库存预占和订单确认，最终只有不超过一万份库存的请求进入待支付状态。</desc>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#5b5245"/></marker></defs>
+  <rect width="1200" height="720" rx="24" fill="#fdfaf3"/>
+  <text x="64" y="64" fill="#2b2620" font-size="30" font-weight="700">每一层只把有希望完成的请求交给下一层</text>
+  <text x="64" y="101" fill="#6f6659" font-size="18">示例：10,000 件库存，入口峰值 1,000,000 请求，消费者稳定处理 5,000 条/s</text>
+
+  <g text-anchor="middle">
+    <path d="M70 150H1130L1040 230H160Z" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="600" y="184" fill="#2b2620" font-size="21" font-weight="700">入口与 CDN</text>
+    <text x="600" y="212" fill="#2b2620" font-size="17">1,000,000 请求：静态资源不进入交易服务</text>
+
+    <path d="M160 252H1040L960 332H240Z" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="600" y="286" fill="#2b2620" font-size="21" font-weight="700">时间、签名、账号资格与防刷</text>
+    <text x="600" y="314" fill="#2b2620" font-size="17">拒绝提前请求、过期 permit 和明显自动化流量</text>
+
+    <path d="M240 354H960L885 434H315Z" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="600" y="388" fill="#2b2620" font-size="21" font-weight="700">用户去重与本地限流</text>
+    <text x="600" y="416" fill="#2b2620" font-size="17">重复点击只查询同一个 request_id</text>
+
+    <path d="M315 456H885L815 536H385Z" fill="#f4eace" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="600" y="490" fill="#2b2620" font-size="21" font-weight="700">Admission 容量许可</text>
+    <text x="600" y="518" fill="#2b2620" font-size="17">库存与 5,000 × 3 秒等待预算共同封顶</text>
+
+    <path d="M385 558H815L750 638H450Z" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="600" y="592" fill="#2b2620" font-size="21" font-weight="700">持久预占与订单</text>
+    <text x="600" y="620" fill="#2b2620" font-size="17">最多 10,000 份有效库存进入待支付</text>
+  </g>
+  <path d="M1138 190H1160V598H770" fill="none" stroke="#943b37" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="1143" y="382" fill="#943b37" font-size="16" text-anchor="middle" transform="rotate(90 1143 382)">拒绝和售罄必须在廉价层尽早返回</text>
+</svg>

@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Redis admission、消息与数据库库存怎样对账</title>
+  <desc id="desc">Redis 保存准入和预扣镜像，消息日志保存待处理命令，MySQL 保存库存预占与订单事实。对账器使用 request、reservation、event 和 order 标识定位四类差异，并以幂等补发、释放或人工处理修复。</desc>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#5b5245"/></marker></defs>
+  <rect width="1200" height="720" rx="24" fill="#fdfaf3"/>
+  <text x="64" y="64" fill="#2b2620" font-size="30" font-weight="700">总数相等还不够，每条请求都要能找到去向</text>
+  <text x="64" y="101" fill="#6f6659" font-size="18">request_id、reservation_id、event_id 与 order_id 组成跨系统证据链</text>
+
+  <rect x="65" y="165" width="310" height="180" rx="18" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+  <text x="95" y="207" fill="#2b2620" font-size="22" font-weight="700">Redis admission 账</text>
+  <text x="95" y="244" fill="#2b2620" font-size="16">剩余许可 / token</text>
+  <text x="95" y="274" fill="#2b2620" font-size="16">用户预占与 request 结果</text>
+  <text x="95" y="304" fill="#2b2620" font-size="16">待发布 Stream 记录</text>
+
+  <rect x="445" y="165" width="310" height="180" rx="18" fill="#e3dde2" stroke="#5e5083" stroke-width="2"/>
+  <text x="475" y="207" fill="#2b2620" font-size="22" font-weight="700">消息处理账</text>
+  <text x="475" y="244" fill="#2b2620" font-size="16">event_id 与 partition / offset</text>
+  <text x="475" y="274" fill="#2b2620" font-size="16">已投递、重试、死信状态</text>
+  <text x="475" y="304" fill="#2b2620" font-size="16">最老消息年龄</text>
+
+  <rect x="825" y="165" width="310" height="180" rx="18" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+  <text x="855" y="207" fill="#2b2620" font-size="22" font-weight="700">MySQL 事实账</text>
+  <text x="855" y="244" fill="#2b2620" font-size="16">available / reserved / confirmed</text>
+  <text x="855" y="274" fill="#2b2620" font-size="16">reservation 与 order 状态</text>
+  <text x="855" y="304" fill="#2b2620" font-size="16">Outbox 与版本</text>
+
+  <path d="M375 255H445M755 255H825" stroke="#5b5245" stroke-width="4" marker-end="url(#arrow)"/>
+  <text x="410" y="238" fill="#6f6659" font-size="14" text-anchor="middle">relay</text>
+  <text x="790" y="238" fill="#6f6659" font-size="14" text-anchor="middle">consumer</text>
+
+  <rect x="305" y="430" width="590" height="205" rx="20" fill="#fbf8f1" stroke="#8a7f6d" stroke-width="2"/>
+  <text x="600" y="470" fill="#2b2620" font-size="22" font-weight="700" text-anchor="middle">对账器按稳定 ID 连接三份记录</text>
+  <g fill="#2b2620" font-size="16">
+    <text x="350" y="515">1. Redis 已扣，消息缺失 → 幂等补发或安全释放</text>
+    <text x="350" y="548">2. 消息已到，DB 无记录 → 重试条件事务或明确拒绝</text>
+    <text x="350" y="581">3. DB 已关闭，token 未归还 → 按 reservation 补偿</text>
+    <text x="350" y="614">4. 支付与关单冲突 → 查询渠道事实并人工接管</text>
+  </g>
+  <path d="M220 345V532H305" fill="none" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M600 345V430" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M980 345V532H895" fill="none" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+</svg>
