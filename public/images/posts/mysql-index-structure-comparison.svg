@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="800" viewBox="0 0 1440 800" role="img" aria-labelledby="title desc">
+  <title id="title">红黑树、Hash 与 B+ 树面对数据库查询时的能力差异</title>
+  <desc id="desc">红黑树分支少且层级深，Hash 适合等值定位但没有顺序，B+ 树按页面组织并具有高扇出，适合数据库范围扫描。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#5b5245"/></marker>
+    <style>
+      .title{font:700 34px -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif;fill:#2b2620}.sub{font:18px -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif;fill:#6f6659}.head{font:700 24px -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif;fill:#2b2620}.body{font:18px -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif;fill:#2b2620}.small{font:16px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#554d42}.line{stroke:#8a7f6d;stroke-width:2;fill:none}.strong{stroke:#5b5245;stroke-width:3;fill:none}.node{fill:#f5f0e4;stroke:#8a7f6d;stroke-width:2}.accent{fill:#d8dee0;stroke:#295279;stroke-width:2}.good{fill:#dee3d6;stroke:#466b48;stroke-width:2}.warn{fill:#f4eace;stroke:#8a7f6d;stroke-width:2}
+    </style>
+  </defs>
+  <rect width="1440" height="800" fill="#fdfaf3"/>
+  <text x="76" y="72" class="title">数据库选索引结构，比较的不是一行 O(log n)</text>
+  <text x="76" y="108" class="sub">真正昂贵的单位是页面访问；范围与排序还要求键保持顺序</text>
+
+  <rect x="72" y="154" width="392" height="548" rx="20" class="node"/>
+  <text x="104" y="205" class="head">红黑树</text>
+  <text x="104" y="238" class="sub">二叉分支，内存结构优秀</text>
+  <circle cx="268" cy="292" r="30" class="accent"/><text x="258" y="300" class="body">8</text>
+  <path d="M250 316 L180 365 M286 316 L356 365" class="strong"/>
+  <circle cx="164" cy="389" r="27" class="node"/><circle cx="372" cy="389" r="27" class="node"/>
+  <path d="M150 413 L115 459 M178 413 L213 459 M358 413 L323 459 M386 413 L421 459" class="line"/>
+  <circle cx="101" cy="480" r="23" class="node"/><circle cx="227" cy="480" r="23" class="node"/><circle cx="309" cy="480" r="23" class="node"/><circle cx="435" cy="480" r="23" class="node"/>
+  <text x="104" y="556" class="body">每层最多分成 2 路</text>
+  <text x="104" y="590" class="body">相同数据量需要更多层</text>
+  <text x="104" y="640" class="small">风险：更多页面跳转</text>
+
+  <rect x="524" y="154" width="392" height="548" rx="20" class="node"/>
+  <text x="556" y="205" class="head">Hash</text>
+  <text x="556" y="238" class="sub">直接映射，适合完整键等值查找</text>
+  <rect x="565" y="280" width="310" height="74" rx="12" class="accent"/>
+  <text x="598" y="326" class="body">hash(key) → bucket</text>
+  <path d="M720 354 L720 408" class="strong" marker-end="url(#arrow)"/>
+  <rect x="570" y="430" width="88" height="62" rx="10" class="warn"/><rect x="676" y="430" width="88" height="62" rx="10" class="good"/><rect x="782" y="430" width="88" height="62" rx="10" class="warn"/>
+  <text x="593" y="469" class="body">B17</text><text x="699" y="469" class="body">B18</text><text x="805" y="469" class="body">B19</text>
+  <text x="556" y="556" class="body">没有全局大小顺序</text>
+  <text x="556" y="590" class="body">不擅长范围与顺序读取</text>
+  <text x="556" y="640" class="small">强项：key = constant</text>
+
+  <rect x="976" y="154" width="392" height="548" rx="20" class="node"/>
+  <text x="1008" y="205" class="head">B+ 树</text>
+  <text x="1008" y="238" class="sub">一个页面容纳大量路由键</text>
+  <rect x="1062" y="278" width="220" height="58" rx="10" class="accent"/>
+  <text x="1102" y="315" class="body">20 · 40 · 60</text>
+  <path d="M1100 336 L1040 393 M1148 336 L1140 393 M1196 336 L1240 393 M1244 336 L1324 393" class="line"/>
+  <rect x="997" y="405" width="88" height="64" rx="9" class="node"/><rect x="1097" y="405" width="88" height="64" rx="9" class="node"/><rect x="1197" y="405" width="88" height="64" rx="9" class="node"/><rect x="1297" y="405" width="48" height="64" rx="9" class="node"/>
+  <text x="1012" y="444" class="small">leaf</text><text x="1112" y="444" class="small">leaf</text><text x="1212" y="444" class="small">leaf</text><text x="1303" y="444" class="small">…</text>
+  <path d="M1085 437 L1097 437 M1185 437 L1197 437 M1285 437 L1297 437" class="strong" marker-end="url(#arrow)"/>
+  <text x="1008" y="556" class="body">高扇出带来更少层级</text>
+  <text x="1008" y="590" class="body">叶子顺序适合范围扫描</text>
+  <text x="1008" y="640" class="small">目标：少访问页 + 保持有序</text>
+
+  <rect x="72" y="730" width="1296" height="2" fill="#8a7f6d"/>
+  <text x="72" y="770" class="sub">同为对数复杂度，不代表 I/O 成本和查询能力相同</text>
+</svg>
+

@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900" role="img" aria-labelledby="title desc">
+  <title id="title">联合索引 (a,b,c) 先按 a、再按 b、最后按 c 排列</title>
+  <desc id="desc">八条索引记录按字典序排列，a 等于 1 构成连续大区间，其中 a 等于 1 且 b 等于 2 构成更小区间，而所有 b 等于 2 的记录跨越多个 a 分组并不连续。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#5b5245"/></marker>
+    <style>
+      .title{font:700 34px -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif;fill:#2b2620}.sub{font:18px -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif;fill:#6f6659}.head{font:700 23px -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif;fill:#2b2620}.body{font:18px -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif;fill:#2b2620}.mono{font:18px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}.line{stroke:#8a7f6d;stroke-width:2;fill:none}.strong{stroke:#5b5245;stroke-width:3;fill:none}.panel{fill:#fbf8f1;stroke:#8a7f6d;stroke-width:2}.node{fill:#f5f0e4;stroke:#8a7f6d;stroke-width:2}.a1{fill:#d8dee0;stroke:#295279;stroke-width:2}.b2{fill:#dee3d6;stroke:#466b48;stroke-width:3}.bad{fill:#eed9d3;stroke:#943b37;stroke-width:2}
+    </style>
+  </defs>
+  <rect width="1440" height="900" fill="#fdfaf3"/>
+  <text x="76" y="72" class="title">联合索引的“最左”，来自复合键的字典序</text>
+  <text x="76" y="108" class="sub">先比较 a；a 相同再比较 b；a、b 都相同才比较 c</text>
+
+  <rect x="72" y="154" width="880" height="650" rx="20" class="panel"/>
+  <text x="108" y="205" class="head">idx_abc 叶子记录的逻辑顺序</text>
+  <text x="116" y="254" class="sub">位置</text><text x="270" y="254" class="sub">复合键与主键</text><text x="610" y="254" class="sub">局部有序关系</text>
+  <path d="M122 286 L122 738" class="strong" marker-end="url(#arrow)"/>
+
+  <circle cx="122" cy="310" r="9" fill="#2f5d8a"/><rect x="174" y="282" width="334" height="54" rx="9" class="a1"/><text x="210" y="316" class="mono">(1, 1, 1, id=101)</text>
+  <circle cx="122" cy="370" r="9" fill="#2f5d8a"/><rect x="174" y="342" width="334" height="54" rx="9" class="a1"/><text x="210" y="376" class="mono">(1, 1, 2, id=108)</text>
+  <circle cx="122" cy="430" r="9" fill="#4f7a52"/><rect x="174" y="402" width="334" height="54" rx="9" class="b2"/><text x="210" y="436" class="mono">(1, 2, 1, id=103)</text>
+  <circle cx="122" cy="490" r="9" fill="#4f7a52"/><rect x="174" y="462" width="334" height="54" rx="9" class="b2"/><text x="210" y="496" class="mono">(1, 2, 3, id=106)</text>
+  <circle cx="122" cy="550" r="9" fill="#a8433f"/><rect x="174" y="522" width="334" height="54" rx="9" class="node"/><text x="210" y="556" class="mono">(2, 1, 1, id=102)</text>
+  <circle cx="122" cy="610" r="9" fill="#a8433f"/><rect x="174" y="582" width="334" height="54" rx="9" class="node"/><text x="210" y="616" class="mono">(2, 1, 2, id=105)</text>
+  <circle cx="122" cy="670" r="9" fill="#a8433f"/><rect x="174" y="642" width="334" height="54" rx="9" class="bad"/><text x="210" y="676" class="mono">(2, 2, 1, id=109)</text>
+  <circle cx="122" cy="730" r="9" fill="#6b5b95"/><rect x="174" y="702" width="334" height="54" rx="9" class="node"/><text x="210" y="736" class="mono">(3, 1, 3, id=104)</text>
+
+  <path d="M548 283 L574 283 L574 515 L548 515" class="strong"/>
+  <text x="610" y="352" class="body">a = 1 是连续区间</text>
+  <text x="610" y="384" class="mono">(1,-∞,-∞)</text>
+  <text x="610" y="416" class="mono">到 (1,+∞,+∞)</text>
+  <path d="M548 403 L590 403 L590 515 L548 515" stroke="#466b48" stroke-width="3" fill="none"/>
+  <text x="610" y="474" class="body">固定 a 后，b = 2</text>
+  <text x="610" y="506" class="body">还能形成更小连续区间</text>
+
+  <rect x="1000" y="154" width="368" height="650" rx="20" class="panel"/>
+  <text x="1036" y="205" class="head">为什么不能直接找 b = 2</text>
+  <text x="1036" y="252" class="body">命中位置分散在：</text>
+  <rect x="1036" y="282" width="292" height="62" rx="10" class="b2"/><text x="1070" y="320" class="mono">a=1 下的 b=2</text>
+  <path d="M1182 344 L1182 414" class="strong" marker-end="url(#arrow)"/>
+  <rect x="1036" y="432" width="292" height="62" rx="10" class="bad"/><text x="1070" y="470" class="mono">a=2 下的 b=2</text>
+  <text x="1036" y="554" class="body">中间夹着其他 b 值，</text>
+  <text x="1036" y="590" class="body">无法形成一个连续区间。</text>
+  <text x="1036" y="650" class="sub">缺少 a 时，常规 range scan</text>
+  <text x="1036" y="682" class="sub">没有唯一的起点与终点。</text>
+  <rect x="1036" y="724" width="292" height="44" rx="22" class="a1"/><text x="1090" y="752" class="body">这就是最左匹配</text>
+
+  <text x="76" y="856" class="sub">最左匹配不是口诀：它描述的是哪些条件能把目标记录压缩成连续的 key tuple interval</text>
+</svg>
