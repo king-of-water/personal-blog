@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="720" viewBox="0 0 1440 720" role="img" aria-labelledby="title desc">
+  <title id="title">从业务约束推导架构的决策链</title>
+  <desc id="desc">系统设计从用户动作和业务不变量开始，依次确定服务目标、容量预算、数据状态、读写路径和故障验证，技术组件位于推导结果的末端。</desc>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#8a7f6d"/></marker></defs>
+  <rect width="1440" height="720" fill="#fdfaf3"/>
+  <g font-family="system-ui, sans-serif">
+    <text x="70" y="72" fill="#2b2620" font-size="34" font-weight="700">架构中的每个组件都应当能追溯到一个约束</text>
+    <text x="70" y="112" fill="#6f6659" font-size="20">先确定系统承诺，再讨论怎样实现；从组件出发会丢失判断标准</text>
+    <g font-size="21" text-anchor="middle">
+      <rect x="60" y="205" width="190" height="130" rx="18" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+      <text x="155" y="255" fill="#2b2620" font-weight="700">业务范围</text><text x="155" y="292" fill="#554d42" font-size="16">用户动作 · 非目标</text>
+      <rect x="285" y="205" width="190" height="130" rx="18" fill="#f4eace" stroke="#8a6b12" stroke-width="3"/>
+      <text x="380" y="255" fill="#2b2620" font-weight="700">承诺</text><text x="380" y="292" fill="#554d42" font-size="16">SLO · 不变量</text>
+      <rect x="510" y="205" width="190" height="130" rx="18" fill="#d8dee0" stroke="#295279" stroke-width="3"/>
+      <text x="605" y="255" fill="#2b2620" font-weight="700">规模</text><text x="605" y="292" fill="#554d42" font-size="16">峰值 · 并发 · 热点</text>
+      <rect x="735" y="205" width="190" height="130" rx="18" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+      <text x="830" y="255" fill="#2b2620" font-weight="700">状态</text><text x="830" y="292" fill="#554d42" font-size="16">模型 · 约束 · 状态机</text>
+      <rect x="960" y="205" width="190" height="130" rx="18" fill="#dee3d6" stroke="#466b48" stroke-width="3"/>
+      <text x="1055" y="255" fill="#2b2620" font-weight="700">路径</text><text x="1055" y="292" fill="#554d42" font-size="16">读写 · 提交点 · 降级</text>
+      <rect x="1185" y="205" width="190" height="130" rx="18" fill="#eed9d3" stroke="#943b37" stroke-width="3"/>
+      <text x="1280" y="255" fill="#2b2620" font-weight="700">证明</text><text x="1280" y="292" fill="#554d42" font-size="16">指标 · 压测 · 故障</text>
+    </g>
+    <g stroke="#8a7f6d" stroke-width="4" fill="none" marker-end="url(#arrow)">
+      <path d="M250 270 H270"/><path d="M475 270 H495"/><path d="M700 270 H720"/><path d="M925 270 H945"/><path d="M1150 270 H1170"/>
+    </g>
+    <rect x="115" y="430" width="1210" height="160" rx="24" fill="#fbf8f1" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="150" y="477" fill="#6f6659" font-size="17" font-weight="700">实现层</text>
+    <g font-size="19" font-weight="700" text-anchor="middle" fill="#2b2620">
+      <rect x="175" y="505" width="175" height="54" rx="13" fill="#d8dee0"/><text x="262" y="540">负载均衡</text>
+      <rect x="390" y="505" width="175" height="54" rx="13" fill="#dee3d6"/><text x="477" y="540">缓存</text>
+      <rect x="605" y="505" width="175" height="54" rx="13" fill="#f4eace"/><text x="692" y="540">数据库</text>
+      <rect x="820" y="505" width="175" height="54" rx="13" fill="#f5f0e4"/><text x="907" y="540">消息队列</text>
+      <rect x="1035" y="505" width="175" height="54" rx="13" fill="#eed9d3"/><text x="1122" y="540">限流与降级</text>
+    </g>
+    <path d="M720 335 V414" fill="none" stroke="#466b48" stroke-width="4" marker-end="url(#arrow)"/>
+    <text x="742" y="386" fill="#466b48" font-size="17">约束推导实现</text>
+    <rect x="180" y="628" width="1080" height="42" rx="10" fill="#f5f0e4"/>
+    <text x="205" y="655" fill="#554d42" font-size="17">如果一个组件无法对应容量、正确性、可用性或运维约束，它暂时不应进入主架构。</text>
+  </g>
+</svg>

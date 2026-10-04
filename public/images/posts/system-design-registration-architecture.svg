@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900" role="img" aria-labelledby="title desc">
+  <title id="title">活动报名系统的读写路径与权威状态</title>
+  <desc id="desc">浏览请求经过网关和缓存读取活动信息；报名写入经过报名服务，在数据库事务中维护名额和唯一报名，Outbox 再异步投递通知与读模型更新。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#8a7f6d"/></marker>
+    <marker id="good" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#466b48"/></marker>
+  </defs>
+  <rect width="1440" height="900" fill="#fdfaf3"/>
+  <g font-family="system-ui, sans-serif">
+    <text x="70" y="68" fill="#2b2620" font-size="34" font-weight="700">读取可以使用缓存，报名承诺由权威事务给出</text>
+    <text x="70" y="108" fill="#6f6659" font-size="20">实线是用户同步路径，虚线是提交后异步动作</text>
+    <rect x="65" y="160" width="220" height="120" rx="18" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="175" y="208" text-anchor="middle" fill="#2b2620" font-size="22" font-weight="700">客户端</text><text x="175" y="245" text-anchor="middle" fill="#554d42" font-size="16">浏览 · 报名 · 查询</text>
+    <rect x="385" y="160" width="230" height="120" rx="18" fill="#d8dee0" stroke="#295279" stroke-width="3"/>
+    <text x="500" y="208" text-anchor="middle" fill="#2b2620" font-size="22" font-weight="700">网关</text><text x="500" y="245" text-anchor="middle" fill="#554d42" font-size="16">身份 · 限流 · 路由</text>
+    <path d="M285 220 H370" fill="none" stroke="#8a7f6d" stroke-width="4" marker-end="url(#arrow)"/>
+    <rect x="745" y="135" width="265" height="135" rx="18" fill="#dee3d6" stroke="#466b48" stroke-width="3"/>
+    <text x="877" y="183" text-anchor="middle" fill="#2b2620" font-size="22" font-weight="700">活动查询服务</text><text x="877" y="220" text-anchor="middle" fill="#554d42" font-size="16">允许有限陈旧</text>
+    <rect x="1115" y="135" width="250" height="135" rx="18" fill="#dee3d6" stroke="#466b48" stroke-width="3"/>
+    <text x="1240" y="183" text-anchor="middle" fill="#2b2620" font-size="22" font-weight="700">Redis / CDN</text><text x="1240" y="220" text-anchor="middle" fill="#554d42" font-size="16">详情 · 静态内容</text>
+    <path d="M615 195 H730" fill="none" stroke="#466b48" stroke-width="4" marker-end="url(#good)"/>
+    <path d="M1010 202 H1100" fill="none" stroke="#466b48" stroke-width="4" marker-end="url(#good)"/>
+    <text x="674" y="177" text-anchor="middle" fill="#466b48" font-size="15">GET</text>
+    <rect x="745" y="390" width="265" height="150" rx="18" fill="#f4eace" stroke="#8a6b12" stroke-width="3"/>
+    <text x="877" y="440" text-anchor="middle" fill="#2b2620" font-size="22" font-weight="700">报名服务</text><text x="877" y="476" text-anchor="middle" fill="#554d42" font-size="16">幂等 · 状态机 · deadline</text><text x="877" y="507" text-anchor="middle" fill="#8a6b12" font-size="16">返回终态或 PROCESSING</text>
+    <path d="M615 240 Q680 240 730 420" fill="none" stroke="#8a7f6d" stroke-width="4" marker-end="url(#arrow)"/>
+    <text x="674" y="324" fill="#6f6659" font-size="15">POST /registrations</text>
+    <rect x="1080" y="370" width="285" height="190" rx="20" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="3"/>
+    <text x="1222" y="414" text-anchor="middle" fill="#2b2620" font-size="22" font-weight="700">关系数据库事务</text>
+    <text x="1222" y="454" text-anchor="middle" fill="#554d42" font-size="16">event 条件更新</text><text x="1222" y="486" text-anchor="middle" fill="#554d42" font-size="16">registration 唯一约束</text><text x="1222" y="518" text-anchor="middle" fill="#8a6b12" font-size="16">outbox 同事务提交</text>
+    <path d="M1010 465 H1065" fill="none" stroke="#8a6b12" stroke-width="4" marker-end="url(#arrow)"/>
+    <text x="1038" y="445" text-anchor="middle" fill="#8a6b12" font-size="15">提交点</text>
+    <rect x="730" y="675" width="295" height="135" rx="18" fill="#d8dee0" stroke="#295279" stroke-width="3"/>
+    <text x="877" y="722" text-anchor="middle" fill="#2b2620" font-size="22" font-weight="700">消息队列</text><text x="877" y="758" text-anchor="middle" fill="#554d42" font-size="16">通知 · 读模型 · 报表</text>
+    <rect x="1100" y="675" width="265" height="135" rx="18" fill="#fbf8f1" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="1232" y="722" text-anchor="middle" fill="#2b2620" font-size="22" font-weight="700">异步消费者</text><text x="1232" y="758" text-anchor="middle" fill="#554d42" font-size="16">幂等消费 · 可补发</text>
+    <path d="M1222 560 Q1222 625 1025 720" fill="none" stroke="#295279" stroke-width="4" stroke-dasharray="10 7" marker-end="url(#arrow)"/>
+    <path d="M1025 742 H1085" fill="none" stroke="#295279" stroke-width="4" stroke-dasharray="10 7" marker-end="url(#arrow)"/>
+    <rect x="110" y="835" width="1220" height="42" rx="10" fill="#f5f0e4"/>
+    <text x="135" y="862" fill="#554d42" font-size="17">缓存丢失只影响读取性能；数据库事务失败则不能承诺报名成功；异步动作失败由 Outbox 继续恢复。</text>
+  </g>
+</svg>

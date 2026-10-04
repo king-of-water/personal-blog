@@ -1,10 +1,15 @@
 export type MainCategory = '后端' | 'Agent' | '项目';
 
+export interface PlannedTopic {
+	title: string;
+	seriesOrder: number;
+}
+
 export interface Subcategory {
 	name: string;
 	slug: string;
 	description: string;
-	plannedTopics?: string[];
+	plannedTopics?: Array<string | PlannedTopic>;
 }
 
 export const agentSubcategories: Subcategory[] = [
@@ -55,19 +60,18 @@ export const backendSubcategories: Subcategory[] = [
 		slug: 'system-design',
 		description: '从容量、性能、并发与可用性出发，把数据库、缓存、消息队列和分布式机制组合成完整系统。',
 		plannedTopics: [
-			'怎样完成一次系统设计：从业务约束到架构方案',
-			'容量评估：QPS、并发数、响应时间与资源预算',
-			'性能优化与压测：怎样找到系统的真实瓶颈',
-			'缓存怎样扛住高并发：穿透、击穿、雪崩与一致性',
-			'消息队列怎样削峰：积压、消费能力与流量整形',
-			'热点数据与热点账户怎样处理',
-			'高可用设计：冗余、故障转移与降级边界',
-			'短链接系统设计：发号、分片、缓存、热点与容灾',
-			'秒杀系统设计：库存、排队、限流与防超卖',
-			'支付链路设计：状态机、幂等、补偿与对账',
-			'Feed 流系统设计：推拉模型、分页与热点用户',
-			'消息推送系统设计：连接、路由、离线消息与重试',
-			'文件服务设计：分片上传、断点续传、存储与分发',
+			{ title: '容量评估：QPS、并发数、响应时间与资源预算', seriesOrder: 20 },
+			{ title: '性能优化与压测：怎样找到系统的真实瓶颈', seriesOrder: 30 },
+			{ title: '缓存怎样扛住高并发：穿透、击穿、雪崩与一致性', seriesOrder: 40 },
+			{ title: '消息队列怎样削峰：积压、消费能力与流量整形', seriesOrder: 50 },
+			{ title: '热点数据与热点账户怎样处理', seriesOrder: 60 },
+			{ title: '高可用设计：冗余、故障转移与降级边界', seriesOrder: 80 },
+			{ title: '短链接系统设计：发号、分片、缓存、热点与容灾', seriesOrder: 90 },
+			{ title: '秒杀系统设计：库存、排队、限流与防超卖', seriesOrder: 100 },
+			{ title: '支付链路设计：状态机、幂等、补偿与对账', seriesOrder: 110 },
+			{ title: 'Feed 流系统设计：推拉模型、分页与热点用户', seriesOrder: 120 },
+			{ title: '消息推送系统设计：连接、路由、离线消息与重试', seriesOrder: 130 },
+			{ title: '文件服务设计：分片上传、断点续传、存储与分发', seriesOrder: 140 },
 		],
 	},
 	{ name: 'Java', slug: 'java', description: '语言、JVM、并发与常用框架。' },

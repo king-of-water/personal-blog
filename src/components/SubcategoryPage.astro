@@ -2,14 +2,14 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from './PostCard.astro';
-import { categoryPath, type MainCategory } from '../config/sections';
-import { comparePostsBySeriesOrder, formatSeriesNumber } from '../utils/post-order';
+import { categoryPath, type MainCategory, type PlannedTopic } from '../config/sections';
+import { comparePostsBySeriesOrder } from '../utils/post-order';
 
 interface Props {
 	category: MainCategory;
 	name: string;
 	description: string;
-	plannedTopics?: string[];
+	plannedTopics?: Array<string | PlannedTopic>;
 }
 
 const { category, name, description, plannedTopics = [] } = Astro.props;
@@ -34,7 +34,9 @@ const posts = (await getCollection('posts', ({ data }) => (
 			<span>{posts.length > 0 ? `${posts.length} 篇` : '内容正在整理'}</span>
 		</div>
 		{posts.length > 0 ? (
-			<div class="post-list">{posts.map((post, index) => <PostCard post={post} sequence={index + 1} />)}</div>
+			<div class="post-list">{posts.map((post, index) => (
+				<PostCard post={post} sequence={post.data.seriesOrder ? Math.round(post.data.seriesOrder / 10) : index + 1} />
+			))}</div>
 		) : (
 			<div class="empty-state compact-empty-state">
 				<h2>这里还没有文章</h2>
@@ -49,7 +51,11 @@ const posts = (await getCollection('posts', ({ data }) => (
 				<span>{plannedTopics.length} 个选题</span>
 			</div>
 			<ol>
-				{plannedTopics.map((topic, index) => <li><b>{formatSeriesNumber(posts.length + index)}</b><span>{topic}</span><small>待深入</small></li>)}
+				{plannedTopics.map((topic, index) => {
+					const title = typeof topic === 'string' ? topic : topic.title;
+					const sequence = typeof topic === 'string' ? posts.length + index + 1 : Math.round(topic.seriesOrder / 10);
+					return <li><b>{String(sequence).padStart(2, '0')}</b><span>{title}</span><small>待深入</small></li>;
+				})}
 			</ol>
 		</section>
 	)}
