@@ -1,53 +1,73 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
-  <title id="title">ConcurrentHashMap 的多线程协同扩容</title>
-  <desc id="desc">扩容时把旧数组按 stride 切成一段段，线程用 CAS 在 transferIndex 上认领一段来迁移；迁移完的桶放 ForwardingNode 占位，get/put 遇到它就去新数组，put 线程还会 helpTransfer 帮忙迁移。</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">ConcurrentHashMap 扩容的多线程协同迁移流程</title>
+  <desc id="desc">扩容时旧数组按 stride 切成段，transferIndex 记录认领边界；每个线程用 CAS 把 transferIndex 往前挪、抢到一段就迁移，搬完一个桶放 ForwardingNode 占位；get/put 遇到 ForwardingNode 就去新数组，put 还会 helpTransfer 再抢一段帮忙。多个线程并行各搬一段。</desc>
   <defs>
     <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
     <marker id="arrowG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#466b48"/></marker>
-    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 15px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+    <marker id="arrowB" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#295279"/></marker>
+    <style>.h{font:700 28px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 15px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}.fn{font:700 12px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#943b37}</style>
   </defs>
-  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
-  <text x="56" y="54" class="h">扩容：多线程认领迁移任务，ForwardingNode 占位</text>
-  <text x="56" y="88" class="b">sizeCtl 计数参与线程，transferIndex 分配任务，搬完放 ForwardingNode。</text>
+  <rect width="1200" height="760" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="52" class="h">扩容时，多个线程各自抢一段、并行迁移</text>
+  <text x="56" y="84" class="b">transferIndex 用 CAS 从右往左「倒着」认领，搬完一个桶就放一个 ForwardingNode。</text>
 
-  <g transform="translate(70 150)">
-    <rect width="520" height="400" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
-    <text x="260" y="38" text-anchor="middle" class="t" fill="#8a6b31">旧数组 table（按 stride 分段）</text>
-    <rect x="40" y="60" width="140" height="70" rx="10" fill="#f4eace" stroke="#8a6b31"/>
-    <text x="110" y="90" text-anchor="middle" class="m">段 1</text>
-    <text x="110" y="116" text-anchor="middle" class="s">线程 A 认领</text>
-    <rect x="200" y="60" width="140" height="70" rx="10" fill="#f4eace" stroke="#8a6b31"/>
-    <text x="270" y="90" text-anchor="middle" class="m">段 2</text>
-    <text x="270" y="116" text-anchor="middle" class="s">线程 B 认领</text>
-    <rect x="360" y="60" width="140" height="70" rx="10" fill="#f4eace" stroke="#8a6b31"/>
-    <text x="430" y="90" text-anchor="middle" class="m">段 3</text>
-    <text x="430" y="116" text-anchor="middle" class="s">待认领</text>
-
-    <rect x="40" y="190" width="460" height="60" rx="10" fill="#dee3d6" stroke="#466b48"/>
-    <text x="270" y="215" text-anchor="middle" class="m">已迁移的桶放 ForwardingNode（hash=MOVED）</text>
-    <text x="270" y="240" text-anchor="middle" class="s">指向 nextTable</text>
-
-    <rect x="40" y="280" width="460" height="60" rx="10" fill="#ebe4d4" stroke="#8a7f6d"/>
-    <text x="270" y="305" text-anchor="middle" class="m">sizeCtl = -(1+n)</text>
-    <text x="270" y="330" text-anchor="middle" class="s">n 个线程在帮忙扩容</text>
+  <!-- 旧数组 -->
+  <text x="70" y="150" class="t" fill="#8a6b31">旧数组 table（16 桶，按 stride=4 切成 4 段）</text>
+  <g transform="translate(70 165)">
+    <rect x="0" y="0" width="960" height="70" rx="12" fill="#f5f0e4" stroke="#d7cebd"/>
+    <!-- 线程 C 认领的段（最左，已搬完） -->
+    <rect x="0" y="8" width="216" height="54" rx="8" fill="#e3dde2" stroke="#5e5083" stroke-width="2"/>
+    <text x="108" y="40" text-anchor="middle" class="m">段 0（线程 C）</text>
+    <!-- 线程 B 认领的段（中间，正在搬） -->
+    <rect x="224" y="8" width="216" height="54" rx="8" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="332" y="40" text-anchor="middle" class="m">段 1（线程 B）</text>
+    <!-- 线程 A 认领的段（右，正在搬） -->
+    <rect x="448" y="8" width="216" height="54" rx="8" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="556" y="40" text-anchor="middle" class="m">段 2（线程 A）</text>
+    <!-- 待认领的段（最右） -->
+    <rect x="672" y="8" width="280" height="54" rx="8" fill="#f4eace" stroke="#8a6b31" stroke-width="2" stroke-dasharray="6 6"/>
+    <text x="812" y="40" text-anchor="middle" class="m">段 3（还没人抢）</text>
   </g>
 
-  <line x1="590" y1="350" x2="680" y2="350" stroke="#466b48" stroke-width="3" marker-end="url(#arrowG)"/>
+  <!-- transferIndex 认领方向 -->
+  <line x1="672" y1="150" x2="672" y2="250" stroke="#943b37" stroke-width="3" stroke-dasharray="6 6"/>
+  <text x="672" y="142" text-anchor="middle" class="m" fill="#943b37">transferIndex</text>
+  <path d="M820 250 L690 250" stroke="#943b37" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="755" y="243" text-anchor="middle" class="b" fill="#943b37">CAS 倒着挪，抢到 [transferIndex-stride, transferIndex)</text>
 
-  <g transform="translate(680 150)">
-    <rect width="450" height="400" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
-    <text x="225" y="38" text-anchor="middle" class="t" fill="#466b48">新数组 nextTable（容量翻倍）</text>
-    <text x="225" y="90" text-anchor="middle" class="b">get / put 遇到 ForwardingNode</text>
-    <text x="225" y="120" text-anchor="middle" class="b">→ 转到 nextTable 找</text>
-    <text x="225" y="190" text-anchor="middle" class="b">put 线程发现正在扩容</text>
-    <text x="225" y="220" text-anchor="middle" class="b">→ helpTransfer 帮忙迁移一段</text>
-    <text x="225" y="290" text-anchor="middle" class="s">扩容 = 大家一起搬，</text>
-    <text x="225" y="318" text-anchor="middle" class="s">不是一个线程闷头扛。</text>
+  <!-- 迁移过程：桶里放 ForwardingNode -->
+  <g transform="translate(70 275)">
+    <rect x="0" y="0" width="960" height="150" rx="12" fill="#fdfaf3" stroke="#d7cebd"/>
+    <text x="30" y="28" class="t" fill="#5e5083">迁移动作：搬一个桶 → 放 ForwardingNode 占位</text>
+    <!-- 段0：已搬完，全是 FN -->
+    <text x="108" y="58" text-anchor="middle" class="fn">FN FN FN FN</text>
+    <text x="108" y="86" text-anchor="middle" class="s">已搬完</text>
+    <!-- 段1：正在搬，部分 FN -->
+    <text x="332" y="58" text-anchor="middle" class="fn">FN FN ● ●</text>
+    <text x="332" y="86" text-anchor="middle" class="s">正在搬</text>
+    <!-- 段2：正在搬 -->
+    <text x="556" y="58" text-anchor="middle" class="fn">FN ● ● ●</text>
+    <text x="556" y="86" text-anchor="middle" class="s">正在搬</text>
+    <!-- 段3：未认领 -->
+    <text x="812" y="58" text-anchor="middle" class="m">● ● ● ●</text>
+    <text x="812" y="86" text-anchor="middle" class="s">未认领（原始节点）</text>
+    <text x="480" y="128" text-anchor="middle" class="s">FN = ForwardingNode（hash=MOVED，指向 nextTable）；● = 还没搬的桶</text>
   </g>
 
-  <g transform="translate(70 590)">
-    <rect width="1060" height="70" rx="16" fill="#ebe4d4" stroke="#8a7f6d"/>
-    <text x="28" y="36" class="b">对比：HashMap 扩容是单线程扛，ConcurrentHashMap 扩容是 CAS 抢任务、多线程一起搬。</text>
-    <text x="28" y="60" class="s">这就是「CHM 扩容比 HashMap 快」的真正含义。</text>
+  <!-- 新数组 -->
+  <g transform="translate(70 480)">
+    <rect x="0" y="0" width="960" height="80" rx="12" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="480" y="34" text-anchor="middle" class="t" fill="#466b48">新数组 nextTable（容量翻倍，每个桶迁移后重新定位）</text>
+    <text x="480" y="62" text-anchor="middle" class="s">线程 A/B/C 把自己认领段里的桶，按新容量重新 hash 到 nextTable</text>
+  </g>
+  <line x1="140" y1="425" x2="250" y2="480" stroke="#466b48" stroke-width="3" marker-end="url(#arrowG)"/>
+  <line x1="480" y1="425" x2="480" y2="480" stroke="#466b48" stroke-width="3" marker-end="url(#arrowG)"/>
+
+  <!-- get/put 撞 FN 的转发 -->
+  <g transform="translate(70 600)">
+    <rect x="0" y="0" width="960" height="120" rx="12" fill="#ebe4d4" stroke="#8a7f6d"/>
+    <text x="30" y="30" class="t">别的线程撞到 ForwardingNode 时</text>
+    <text x="30" y="62" class="b">get(key)：发现桶是 FN → 去 nextTable 里找，拿到正确结果。</text>
+    <text x="30" y="92" class="b">put(key)：发现桶是 FN → helpTransfer 再抢一段，帮忙一起搬，而不是干等。</text>
   </g>
 </svg>
