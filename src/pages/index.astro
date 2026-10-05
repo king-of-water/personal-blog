@@ -3,25 +3,62 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
 
-const posts = (await getCollection('posts', ({ data }) => !data.draft))
-	.sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf())
-	.slice(0, 6);
+const allPosts = (await getCollection('posts', ({ data }) => !data.draft))
+	.sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
+const posts = allPosts.slice(0, 6);
+const featuredPost = posts[0];
+const recentPosts = posts.slice(1, 4);
+const tickerItems = [
+	...posts.slice(0, 3).map((post) => ({
+		label: '新文章',
+		text: post.data.title,
+		href: `/posts/${post.id}/`,
+	})),
+	...Array.from(new Set(posts.map((post) => post.data.subcategory).filter(Boolean)))
+		.slice(0, 3)
+		.map((topic) => ({ label: '专题', text: topic!, href: '/posts/' })),
+];
 ---
 
 <BaseLayout>
-	<section class="home-intro shell">
-		<div class="intro-main">
-			<p class="eyebrow">king-of-water · 个人博客</p>
-			<h1>你好，我是<br />king-of-water。</h1>
-			<p>这里记录后端、Agent 实践、项目，以及真正用过的工具。</p>
-		</div>
-		<aside class="intro-aside">
-			<img src="/images/avatar.jpg" alt="king-of-water 的头像" width="44" height="44" />
-			<div>
-				<span>ABOUT THIS SITE</span>
-				<strong>一个持续更新的个人空间</strong>
-				<p>从一篇文章、一个项目开始。</p>
+	<div class="home-feed" aria-label="近期文章与专题">
+		<div class="home-feed-track">
+			<div class="home-feed-group">
+				{tickerItems.map((item) => <a href={item.href}><span>{item.label}</span>{item.text}</a>)}
 			</div>
+			<div class="home-feed-group" aria-hidden="true">
+				{tickerItems.map((item) => <a href={item.href} tabindex="-1"><span>{item.label}</span>{item.text}</a>)}
+			</div>
+		</div>
+	</div>
+
+	<section class="home-intro home-stage shell">
+		<div class="intro-main">
+			<p class="eyebrow">持续拆解复杂技术</p>
+			<h1>把系统讲清楚，<br />把边界写明白。</h1>
+			<p>关于 Agent、后端工程与分布式系统的长期技术笔记。</p>
+			{featuredPost && (
+				<a class="home-feature" href={`/posts/${featuredPost.id}/`}>
+					<span class="home-feature-mark" aria-hidden="true"><i></i><i></i></span>
+					<span class="home-feature-copy">
+						<small>最新文章 · {featuredPost.data.subcategory ?? featuredPost.data.category}</small>
+						<strong>{featuredPost.data.title}</strong>
+						<span>{featuredPost.data.description}</span>
+					</span>
+				</a>
+			)}
+		</div>
+		<aside class="home-recent" aria-labelledby="home-recent-title">
+			<div class="home-recent-heading">
+				<h2 id="home-recent-title">最近更新</h2>
+				<a href="/posts/">全部文章</a>
+			</div>
+			{recentPosts.map((post) => (
+				<a class="home-recent-item" href={`/posts/${post.id}/`}>
+					<small>{post.data.subcategory ?? post.data.category}</small>
+					<strong>{post.data.title}</strong>
+				</a>
+			))}
 		</aside>
 	</section>
 
@@ -44,6 +81,6 @@ const posts = (await getCollection('posts', ({ data }) => !data.draft))
 			<h2>最近更新</h2>
 			<a href="/posts/">全部文章 →</a>
 		</div>
-		<div class="post-list">{posts.map((post) => <PostCard post={post} />)}</div>
+		<div class="post-list">{posts.slice(1).map((post) => <PostCard post={post} />)}</div>
 	</section>
 </BaseLayout>

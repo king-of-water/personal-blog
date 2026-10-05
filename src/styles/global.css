@@ -41,20 +41,40 @@ img { max-width: 100%; height: auto; }
 main { min-height: calc(100vh - 150px); }
 
 .eyebrow { margin: 0; color: var(--accent); font-size: 11px; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; }
-.home-intro { display: grid; grid-template-columns: 1fr 300px; gap: 70px; align-items: end; padding: 60px 0 52px; border-bottom: 1px solid var(--line); }
+.home-feed { overflow: hidden; border-bottom: 1px solid var(--line); background: var(--paper); color: var(--muted); }
+.home-feed-track { display: flex; width: max-content; animation: home-feed-scroll 38s linear infinite; }
+.home-feed:is(:hover, :focus-within) .home-feed-track { animation-play-state: paused; }
+.home-feed-group { display: flex; flex: none; align-items: center; }
+.home-feed-group a { display: inline-flex; align-items: center; gap: 8px; min-height: 34px; padding: 0 25px; border-right: 1px solid var(--line); font-size: 11px; white-space: nowrap; }
+.home-feed-group a:hover { color: var(--text); }
+.home-feed-group a span { color: var(--accent); font-weight: 700; }
+@keyframes home-feed-scroll { to { transform: translateX(-50%); } }
+
+.home-intro { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(260px, 0.75fr); gap: 72px; align-items: start; padding: 58px 0 54px; border-bottom: 1px solid var(--line); }
 .intro-main h1 { margin: 13px 0 16px; font-size: clamp(36px, 4.5vw, 56px); font-weight: 720; line-height: 1.08; letter-spacing: -0.06em; }
 .intro-main > p:last-child { max-width: 550px; margin: 0; color: var(--muted); font-size: 17px; }
-.intro-aside { display: flex; align-items: center; gap: 14px; padding: 18px 0; border-top: 2px solid var(--text); }
-.intro-aside img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; }
-.intro-aside span { display: block; margin-bottom: 3px; color: var(--accent); font: 10px ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0.08em; }
-.intro-aside strong { display: block; font-size: 14px; }
-.intro-aside p { margin: 2px 0 0; color: var(--muted); font-size: 13px; }
+.home-feature { display: grid; grid-template-columns: 116px minmax(0, 1fr); gap: 22px; margin-top: 34px; padding: 24px 0 0; border-top: 1px solid var(--text); transition: grid-template-columns 520ms var(--spring-soft), color 180ms ease; }
+.home-feature-mark { position: relative; display: block; height: 104px; overflow: hidden; background: #e5e9e2; }
+.home-feature-mark i { position: absolute; width: 82px; height: 82px; border: 1px solid #6f8378; border-radius: 50%; transition: transform 640ms var(--spring-soft); }
+.home-feature-mark i:first-child { top: 25px; left: 34px; border-width: 15px; border-color: #93a696; }
+.home-feature-mark i:last-child { top: 9px; left: 13px; }
+.home-feature-copy { display: grid; align-content: start; }
+.home-feature-copy small { color: var(--accent); font-size: 11px; }
+.home-feature-copy strong { margin: 4px 0 5px; font-size: 20px; line-height: 1.35; letter-spacing: -0.035em; }
+.home-feature-copy > span { display: -webkit-box; overflow: hidden; color: var(--muted); font-size: 13px; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+.home-feature:is(:hover, :focus-visible) { grid-template-columns: 132px minmax(0, 1fr); color: var(--accent); }
+.home-feature:is(:hover, :focus-visible) .home-feature-mark i:first-child { transform: translate(12px, -7px) scale(1.08); }
+.home-feature:is(:hover, :focus-visible) .home-feature-mark i:last-child { transform: translate(-4px, 4px) scale(0.92); }
 
-.featured { padding: 34px 0 0; }
-.featured-post { display: flex; justify-content: space-between; gap: 34px; padding: 24px 0 26px; border-top: 2px solid var(--text); border-bottom: 1px solid var(--line); }
-.featured-post h2 { margin: 5px 0 7px; font-size: 24px; letter-spacing: -0.04em; }
-.featured-post p { max-width: 650px; margin: 0; color: var(--muted); font-size: 14px; }
-.featured-post > span { flex: 0 0 auto; align-self: end; color: var(--accent); font-size: 13px; font-weight: 600; }
+.home-recent { padding-top: 8px; }
+.home-recent-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; padding-bottom: 13px; border-bottom: 2px solid var(--text); }
+.home-recent-heading h2 { margin: 0; font-size: 16px; letter-spacing: -0.025em; }
+.home-recent-heading a { color: var(--muted); font-size: 11px; }
+.home-recent-heading a:hover { color: var(--accent); }
+.home-recent-item { display: block; padding: 18px 0 19px; border-bottom: 1px solid var(--line); transition: padding-left 400ms var(--spring-soft), color 180ms ease; }
+.home-recent-item small { display: block; margin-bottom: 5px; color: var(--muted); font-size: 10px; }
+.home-recent-item strong { display: block; font-size: 14px; line-height: 1.45; letter-spacing: -0.015em; }
+.home-recent-item:is(:hover, :focus-visible) { padding-left: 8px; color: var(--accent); }
 
 .section { padding: 58px 0; }
 .section + .section { border-top: 1px solid var(--line); }
@@ -255,10 +275,11 @@ main { min-height: calc(100vh - 150px); }
 	.nav-links a:is(:hover, :focus-visible), .nav-links a:active { transform: none; }
 	.home-intro { grid-template-columns: 1fr; gap: 30px; padding: 48px 0 42px; }
 	.intro-main h1 { font-size: clamp(36px, 11vw, 52px); }
-	.intro-aside { max-width: 280px; }
-	.featured { padding-top: 24px; }
-	.featured-post { display: block; padding: 20px 0; }
-	.featured-post > span { display: block; margin-top: 14px; }
+	.home-feature { grid-template-columns: 88px minmax(0, 1fr); gap: 16px; }
+	.home-feature-mark { height: 88px; }
+	.home-feature:is(:hover, :focus-visible) { grid-template-columns: 88px minmax(0, 1fr); }
+	.home-feature-copy > span { display: none; }
+	.home-recent { padding-top: 2px; }
 	.section { padding: 42px 0; }
 	.topic-row { grid-template-columns: 36px 1fr 18px; gap: 10px; min-height: 70px; }
 	.topic-row p { display: none; }
@@ -308,5 +329,8 @@ main { min-height: calc(100vh - 150px); }
 	.library-projects a:is(:hover, :focus-visible),
 	.article-toc-sidebar a:is(:hover, :focus-visible),
 	.nav-links a:is(:hover, :focus-visible),
-	.nav-links a:active { transform: none !important; }
+	.nav-links a:active,
+	.home-feature:is(:hover, :focus-visible) .home-feature-mark i,
+	.home-recent-item:is(:hover, :focus-visible) { transform: none !important; }
+	.home-feed-track { animation: none; }
 }
