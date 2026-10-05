@@ -205,14 +205,16 @@ main { min-height: calc(100vh - 150px); }
 .library-sections summary:hover { color: var(--accent); }
 .library-section-empty { color: #9f9585; }
 .library-sections ul, .library-projects { padding-bottom: 5px; }
-.library-sections ul a, .library-projects a { display: flex; align-items: flex-start; gap: 7px; margin-left: 9px; padding: 6px 9px; border-left: 2px solid var(--line); color: var(--muted); font-size: 12px; line-height: 1.45; transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease, transform 360ms var(--spring-soft); }
-.library-order { flex: 0 0 18px; padding-top: 1px; color: #9f9585; font: italic 11px/1 var(--display); }
+.library-sections ul a, .library-projects a { display: flex; align-items: flex-start; gap: 7px; margin-left: 9px; padding: 6px 9px; border-radius: 3px; border-left: 2px solid transparent; color: var(--muted); font-size: 12px; line-height: 1.45; transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease, transform 360ms var(--spring-soft); }
+.library-order { flex: 0 0 18px; padding-top: 1px; color: #9f9585; font: italic 11px/1 var(--display); transition: color 180ms ease; }
 .library-sections a:hover, .library-projects a:hover { color: var(--accent); }
+.library-sections a:hover .library-order, .library-projects a:hover .library-order { color: var(--accent); }
 .library-sections ul a:is(:hover, :focus-visible), .library-projects a:is(:hover, :focus-visible) { transform: translateX(4px); }
 .library-sections ul a.is-active, .library-projects a.is-active { border-left-color: var(--accent); background: var(--accent-soft); color: var(--accent); font-weight: 650; }
+.library-sections ul a.is-active .library-order, .library-projects a.is-active .library-order { color: var(--accent); font-weight: 700; }
 .article-toc-sidebar li { color: var(--muted); font-size: 13px; line-height: 1.45; }
 .article-toc-sidebar li[data-depth="3"] { padding-left: 14px; font-size: 12px; }
-.article-toc-sidebar a { display: block; padding: 6px 9px; border-left: 2px solid transparent; transition: color 180ms ease, border-color 180ms ease, background-color 180ms ease, transform 360ms var(--spring-soft); }
+.article-toc-sidebar a { display: block; padding: 6px 9px; border-radius: 3px; border-left: 2px solid transparent; transition: color 180ms ease, border-color 180ms ease, background-color 180ms ease, transform 360ms var(--spring-soft); }
 .article-toc-sidebar a:is(:hover, :focus-visible) { color: var(--accent); transform: translateX(4px); }
 .article-toc-sidebar a.is-active { border-left-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
 .article-location { margin-bottom: 12px; }
