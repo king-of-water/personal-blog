@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="600" viewBox="0 0 1100 600" role="img" aria-labelledby="title desc">
+  <title id="title">从业务操作到 MySQL 表结构的评审顺序</title>
+  <desc id="desc">表结构设计先收集查询、写入和生命周期，再确定约束和键，随后选择字段类型与索引，最后检查行宽、写放大和迁移成本。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="11" markerHeight="11" refX="9" refY="5.5" orient="auto">
+      <path d="M0,0 L11,5.5 L0,11 Z" fill="#5b5245"/>
+    </marker>
+    <style>
+      .title{font:700 31px system-ui,-apple-system,"Segoe UI",sans-serif;fill:#2b2620}
+      .sub{font:400 19px system-ui,-apple-system,"Segoe UI",sans-serif;fill:#6f6659}
+      .head{font:700 24px system-ui,-apple-system,"Segoe UI",sans-serif;fill:#2b2620}
+      .body{font:400 20px system-ui,-apple-system,"Segoe UI",sans-serif;fill:#554d42}
+      .num{font:700 18px system-ui,-apple-system,"Segoe UI",sans-serif;fill:#ffffff}
+      .arrow{stroke:#5b5245;stroke-width:2.5;fill:none;marker-end:url(#arrow)}
+    </style>
+  </defs>
+  <rect width="1100" height="600" fill="#fdfaf3"/>
+  <text x="55" y="58" class="title">DDL 是最后一步，不是设计起点</text>
+  <text x="55" y="89" class="sub">每一层的结论都要能追溯到上一层的业务事实</text>
+
+  <rect x="55" y="130" width="290" height="150" rx="17" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+  <circle cx="88" cy="164" r="17" fill="#2f5d8a"/>
+  <text x="83" y="171" class="num">1</text>
+  <text x="116" y="171" class="head">业务操作</text>
+  <text x="82" y="211" class="body">查询条件与排序</text>
+  <text x="82" y="243" class="body">写入、状态迁移与删除</text>
+  <path d="M345 205 L405 205" class="arrow"/>
+
+  <rect x="405" y="130" width="290" height="150" rx="17" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+  <circle cx="438" cy="164" r="17" fill="#4f7a52"/>
+  <text x="433" y="171" class="num">2</text>
+  <text x="466" y="171" class="head">数据约束</text>
+  <text x="432" y="211" class="body">唯一、非空与合法值域</text>
+  <text x="432" y="243" class="body">一致性与生命周期</text>
+  <path d="M695 205 L755 205" class="arrow"/>
+
+  <rect x="755" y="130" width="290" height="150" rx="17" fill="#f4eace" stroke="#8a7f6d" stroke-width="2"/>
+  <circle cx="788" cy="164" r="17" fill="#2f5d8a"/>
+  <text x="783" y="171" class="num">3</text>
+  <text x="816" y="171" class="head">键与字段</text>
+  <text x="782" y="211" class="body">主键、业务 ID、幂等键</text>
+  <text x="782" y="243" class="body">类型、长度与 Collation</text>
+
+  <path d="M900 280 L900 330 L695 330 L695 360" class="arrow"/>
+  <rect x="555" y="360" width="290" height="150" rx="17" fill="#e3dde2" stroke="#5e5083" stroke-width="2"/>
+  <circle cx="588" cy="394" r="17" fill="#6b5b95"/>
+  <text x="583" y="401" class="num">4</text>
+  <text x="616" y="401" class="head">访问结构</text>
+  <text x="582" y="441" class="body">联合索引与覆盖范围</text>
+  <text x="582" y="473" class="body">热字段和大字段拆分</text>
+  <path d="M555 435 L495 435" class="arrow"/>
+
+  <rect x="205" y="360" width="290" height="150" rx="17" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+  <circle cx="238" cy="394" r="17" fill="#a8433f"/>
+  <text x="233" y="401" class="num">5</text>
+  <text x="266" y="401" class="head">成本校验</text>
+  <text x="232" y="441" class="body">行宽、写放大与缓存</text>
+  <text x="232" y="473" class="body">增长、DDL 与回滚路径</text>
+
+  <rect x="205" y="540" width="640" height="38" rx="10" fill="#ebe4d4" stroke="#8a7f6d"/>
+  <text x="254" y="566" class="body">完成条件：每个字段和索引都能指出它服务的业务路径</text>
+</svg>

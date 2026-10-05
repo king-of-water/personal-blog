@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="610" viewBox="0 0 1100 610" role="img" aria-labelledby="title desc">
+  <title id="title">InnoDB 主键宽度在二级索引中的放大</title>
+  <desc id="desc">聚簇索引以主键组织完整行，每一棵二级索引记录都附带主键。主键从 8 字节整数变成长字符串后，所有二级索引都会变宽。</desc>
+  <defs>
+    <marker id="arrow2" markerWidth="11" markerHeight="11" refX="9" refY="5.5" orient="auto">
+      <path d="M0,0 L11,5.5 L0,11 Z" fill="#5b5245"/>
+    </marker>
+    <style>
+      .title{font:700 31px system-ui,-apple-system,"Segoe UI",sans-serif;fill:#2b2620}
+      .sub{font:400 19px system-ui,-apple-system,"Segoe UI",sans-serif;fill:#6f6659}
+      .head{font:700 24px system-ui,-apple-system,"Segoe UI",sans-serif;fill:#2b2620}
+      .body{font:400 20px system-ui,-apple-system,"Segoe UI",sans-serif;fill:#554d42}
+      .mono{font:600 18px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}
+      .arrow{stroke:#5b5245;stroke-width:2.5;fill:none;marker-end:url(#arrow2)}
+    </style>
+  </defs>
+  <rect width="1100" height="610" fill="#fdfaf3"/>
+  <text x="55" y="58" class="title">主键只定义一次，却存进多棵树</text>
+  <text x="55" y="89" class="sub">二级索引用主键回到聚簇索引，因此主键宽度会被索引数量放大</text>
+
+  <rect x="55" y="135" width="310" height="340" rx="18" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+  <text x="85" y="178" class="head">聚簇索引 PRIMARY</text>
+  <rect x="85" y="215" width="250" height="78" rx="11" fill="#fbf8f1" stroke="#8a7f6d"/>
+  <text x="108" y="247" class="mono">PK = id</text>
+  <text x="108" y="275" class="body">+ 完整行数据</text>
+  <rect x="85" y="315" width="250" height="78" rx="11" fill="#fbf8f1" stroke="#8a7f6d"/>
+  <text x="108" y="347" class="mono">PK = id</text>
+  <text x="108" y="375" class="body">+ 完整行数据</text>
+  <text x="85" y="437" class="body">主键决定行的组织位置</text>
+
+  <path d="M365 305 L445 305" class="arrow"/>
+  <text x="380" y="280" class="sub">每棵都复制 PK</text>
+
+  <rect x="445" y="125" width="600" height="370" rx="18" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+  <text x="475" y="168" class="head">二级索引集合</text>
+  <rect x="475" y="200" width="540" height="70" rx="11" fill="#dee3d6" stroke="#466b48"/>
+  <text x="500" y="230" class="mono">idx_user_created</text>
+  <text x="500" y="256" class="body">user_id + created_at + PK</text>
+  <rect x="475" y="288" width="540" height="70" rx="11" fill="#f4eace" stroke="#8a7f6d"/>
+  <text x="500" y="318" class="mono">idx_status_created</text>
+  <text x="500" y="344" class="body">status + created_at + PK</text>
+  <rect x="475" y="376" width="540" height="70" rx="11" fill="#e3dde2" stroke="#5e5083"/>
+  <text x="500" y="406" class="mono">uk_order_no</text>
+  <text x="500" y="432" class="body">order_no + PK</text>
+
+  <rect x="55" y="525" width="455" height="58" rx="12" fill="#dee3d6" stroke="#466b48"/>
+  <text x="80" y="550" class="head">短主键：BIGINT</text>
+  <text x="313" y="550" class="body">固定 8 字节</text>
+  <rect x="535" y="525" width="510" height="58" rx="12" fill="#eed9d3" stroke="#943b37"/>
+  <text x="560" y="550" class="head">长主键：VARCHAR</text>
+  <text x="823" y="550" class="body">内容 + 长度 + 排序成本</text>
+  <text x="80" y="574" class="sub">影响所有二级索引的页密度、缓存与 I/O</text>
+</svg>
