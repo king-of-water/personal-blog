@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 430" role="img" aria-labelledby="title desc">
+  <title id="title">ZSet 的两条定位路径</title>
+  <desc id="desc">字典由成员 C 定位分数 30；跳表按分数和成员排序，高层跳过底层节点，跨度支持排名。两份索引共享成员字符串。</desc>
+  <rect width="800" height="430" fill="#fdfaf3"/>
+  <g fill="#2b2620" font-size="18">
+    <text x="30" y="38" font-size="24" font-weight="700">一个成员，两种查询条件</text>
+    <rect x="30" y="66" width="740" height="112" rx="8" fill="#f5f0e4" stroke="#8a7f6d"/>
+    <text x="50" y="98" font-weight="700">字典 · 按 member 定位</text>
+    <text x="50" y="138">查询 C</text><text x="180" y="138">→</text>
+    <rect x="218" y="113" width="220" height="44" rx="4" fill="#dee3d6" stroke="#466b48"/>
+    <text x="240" y="141">member C → score 30</text>
+    <text x="472" y="138">共享成员字符串</text>
+    <rect x="30" y="198" width="740" height="172" rx="8" fill="#f5f0e4" stroke="#8a7f6d"/>
+    <text x="50" y="232" font-weight="700">跳表 · 按 (score, member) 排序</text>
+    <text x="54" y="276">高层</text><text x="160" y="276">头</text><text x="234" y="276">→ 跨度 3 →</text><text x="460" y="276">C · 30</text>
+    <text x="54" y="330">底层</text>
+    <g fill="#dee3d6" stroke="#466b48">
+      <rect x="140" y="301" width="108" height="44" rx="4"/>
+      <rect x="282" y="301" width="108" height="44" rx="4"/>
+      <rect x="424" y="301" width="108" height="44" rx="4"/>
+      <rect x="566" y="301" width="108" height="44" rx="4"/>
+    </g>
+    <text x="158" y="330">A · 10</text><text x="252" y="330">→</text>
+    <text x="300" y="330">B · 20</text><text x="394" y="330">→</text>
+    <text x="442" y="330">C · 30</text><text x="536" y="330">→</text>
+    <text x="584" y="330">D · 40</text>
+    <text x="30" y="407" font-size="16">示意：高层用于跳过节点；底层用于范围遍历；span 用于累计位置。</text>
+  </g>
+</svg>

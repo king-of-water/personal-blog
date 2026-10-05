@@ -54,10 +54,6 @@ export const backendSubcategories: Subcategory[] = [
 		name: '数据结构与存储',
 		slug: 'data-structures-storage',
 		description: '从真实系统的访问路径出发，理解数据结构、索引与缓存策略背后的工程取舍。',
-		plannedTopics: [
-			{ title: '从 ZSet 到 InnoDB：跳表、B+ 树与红黑树的工程取舍', seriesOrder: 10 },
-			{ title: '缓存为什么会命中：从局部性、LRU/LFU 到 Caffeine', seriesOrder: 20 },
-		],
 	},
 	{
 		name: '分布式',

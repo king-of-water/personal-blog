@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 460" role="img" aria-labelledby="title desc">
+  <title id="title">页式 B+ 树与回表</title>
+  <desc id="desc">根页和内部页按分隔键导航到包含多条索引记录的叶页，叶页相互连接。二级索引叶记录提供主键，查询未覆盖字段时再访问聚簇索引。</desc>
+  <rect width="800" height="460" fill="#fdfaf3"/>
+  <g fill="#2b2620" font-size="18">
+    <text x="30" y="38" font-size="24" font-weight="700">一次导航按页，一次扫描沿叶层</text>
+    <rect x="240" y="66" width="320" height="52" rx="6" fill="#f5f0e4" stroke="#8a7f6d"/>
+    <text x="264" y="98">根 / 内部页：多个分隔键</text>
+    <path d="M400 118 V146 H156 V170 M400 146 V170 M400 146 H644 V170" fill="none" stroke="#8a7f6d" stroke-width="2"/>
+    <g fill="#dee3d6" stroke="#466b48">
+      <rect x="30" y="170" width="244" height="106" rx="6"/>
+      <rect x="278" y="170" width="244" height="106" rx="6"/>
+      <rect x="526" y="170" width="244" height="106" rx="6"/>
+    </g>
+    <text x="50" y="202" font-weight="700">叶页 1</text><text x="50" y="239">多条有序索引记录</text>
+    <text x="298" y="202" font-weight="700">叶页 2</text><text x="298" y="239">多条有序索引记录</text>
+    <text x="546" y="202" font-weight="700">叶页 3</text><text x="546" y="239">多条有序索引记录</text>
+    <text x="264" y="298">⇄</text><text x="514" y="298">⇄</text>
+    <text x="30" y="316" font-size="16">范围读取从起点继续前进；逻辑相邻不代表物理地址连续。</text>
+    <rect x="30" y="340" width="332" height="68" rx="6" fill="#f5f0e4" stroke="#8a7f6d"/>
+    <text x="50" y="369">二级索引叶记录</text><text x="50" y="393">索引列 + 主键</text>
+    <text x="382" y="380">→</text>
+    <rect x="426" y="340" width="344" height="68" rx="6" fill="#f5f0e4" stroke="#8a7f6d"/>
+    <text x="446" y="369">聚簇索引取行</text><text x="446" y="393">查询被覆盖时可避免这一步</text>
+    <text x="30" y="438" font-size="16">导航层数与记录数仅作示意；实际高度、页容量和缓存状态取决于数据。</text>
+  </g>
+</svg>

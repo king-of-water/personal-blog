@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 426" role="img" aria-labelledby="title desc">
+  <title id="title">缓存里的四类决策</title>
+  <desc id="desc">缓存未命中后加载对象并返回请求；容量侧的准入决定是否长期保留，淘汰决定让哪个驻留对象离开；时间侧的过期决定旧值是否可用，刷新尝试加载新版本。</desc>
+  <rect width="800" height="426" fill="#fdfaf3"/>
+  <g fill="#2b2620" font-size="18">
+    <text x="30" y="38" font-size="24" font-weight="700">容量不够和数据过旧，要分别处理</text>
+    <rect x="30" y="68" width="740" height="58" rx="6" fill="#dee3d6" stroke="#466b48"/>
+    <text x="52" y="104">请求 Miss → 加载对象 → 返回本次请求</text>
+    <text x="400" y="157" text-anchor="middle">↓ 后续保留与可读性受不同约束</text>
+    <rect x="30" y="183" width="360" height="174" rx="6" fill="#f5f0e4" stroke="#8a7f6d"/>
+    <rect x="410" y="183" width="360" height="174" rx="6" fill="#f5f0e4" stroke="#8a7f6d"/>
+    <text x="52" y="219" font-weight="700">容量侧</text>
+    <text x="52" y="260">准入：新对象值得留下吗？</text>
+    <text x="52" y="306">淘汰：为了它让谁离开？</text>
+    <text x="432" y="219" font-weight="700">有效期侧</text>
+    <text x="432" y="260">过期：旧值还能读取吗？</text>
+    <text x="432" y="306">刷新：尝试取得新版本</text>
+    <text x="30" y="398" font-size="16">拒绝长期保留 ≠ 请求失败；尚未过期 ≠ 保证驻留；刷新 ≠ 定时全量加载。</text>
+  </g>
+</svg>

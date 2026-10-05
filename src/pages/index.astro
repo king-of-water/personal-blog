@@ -2,7 +2,6 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
-import { backendSubcategories } from '../config/sections';
 
 const allPosts = (await getCollection('posts', ({ data }) => !data.draft))
 	.sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
@@ -11,6 +10,8 @@ const featuredPostIds = [
 	'agent-harness-engineering',
 	'distributed-id-uuid-snowflake-leaf',
 	'muse-personal-agent-super-app',
+	'data-structures-zset-innodb-hashmap-tradeoffs',
+	'cache-locality-lru-lfu-caffeine',
 ];
 const featuredPosts = featuredPostIds.flatMap((id) => {
 	const post = allPosts.find((item) => item.id === id);
@@ -20,12 +21,6 @@ const featuredPosts = featuredPostIds.flatMap((id) => {
 		href: `/posts/${post.id}/`,
 	}] : [];
 });
-const dataStructureSection = backendSubcategories.find((section) => section.slug === 'data-structures-storage');
-const plannedFeaturedPosts = (dataStructureSection?.plannedTopics ?? []).map((topic) => ({
-	title: typeof topic === 'string' ? topic : topic.title,
-	label: '数据结构与存储 · 筹备中',
-	}));
-const featuredPostsForHome = [...featuredPosts, ...plannedFeaturedPosts];
 ---
 
 <BaseLayout>
@@ -47,18 +42,11 @@ const featuredPostsForHome = [...featuredPosts, ...plannedFeaturedPosts];
 				<a href="/posts/">全部文章</a>
 			</div>
 			<div class="home-featured-grid">
-				{featuredPostsForHome.map((post) => (
-					post.href ? (
+				{featuredPosts.map((post) => (
 						<a class="home-featured-item" href={post.href}>
 							<small>{post.label}</small>
 							<strong>{post.title}</strong>
 						</a>
-					) : (
-						<div class="home-featured-item is-planned">
-							<small>{post.label}</small>
-							<strong>{post.title}</strong>
-						</div>
-					)
 				))}
 			</div>
 		</aside>

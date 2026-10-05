@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 512" role="img" aria-labelledby="title desc">
+  <title id="title">Window TinyLFU 的职责划分</title>
+  <desc id="desc">新对象先进入 LRU 窗口。窗口超额后的候选进入主缓存试用区，总容量超限时通过频率估计与牺牲者比较。试用区命中可提升到保护区，保护区超额则降级。</desc>
+  <rect width="800" height="512" fill="#fdfaf3"/>
+  <g fill="#2b2620" font-size="18">
+    <text x="30" y="38" font-size="24" font-weight="700">短期机会 + 频率准入 + 分段保护</text>
+    <rect x="30" y="68" width="740" height="66" rx="6" fill="#dee3d6" stroke="#466b48"/>
+    <text x="50" y="96" font-weight="700">Window · LRU</text><text x="50" y="120">新对象先获得近期窗口，承接短期复用</text>
+    <text x="400" y="168" text-anchor="middle">↓ 窗口超额：候选进入主区</text>
+    <rect x="30" y="189" width="740" height="145" rx="6" fill="#f5f0e4" stroke="#8a7f6d"/>
+    <text x="50" y="221" font-weight="700">Main · 分段 LRU</text>
+    <rect x="50" y="239" width="270" height="70" rx="4" fill="#dee3d6" stroke="#466b48"/>
+    <text x="70" y="267">Probation · 试用区</text><text x="70" y="291">优先产生牺牲者</text>
+    <text x="342" y="263">命中 →</text><text x="338" y="294">← 超额降级</text>
+    <rect x="480" y="239" width="270" height="70" rx="4" fill="#dee3d6" stroke="#466b48"/>
+    <text x="500" y="267">Protected · 保护区</text><text x="500" y="291">保留得到复用的对象</text>
+    <text x="400" y="370" text-anchor="middle">↓ 总容量超限时比较</text>
+    <rect x="30" y="392" width="740" height="66" rx="6" fill="#f5f0e4" stroke="#8a7f6d"/>
+    <text x="50" y="420" font-weight="700">TinyLFU · 有衰减的频率估计</text>
+    <text x="50" y="446">候选 vs 牺牲者：决定谁留下，谁移除</text>
+    <text x="30" y="490" font-size="16">逻辑示意：比例会调整；源码包含维护批处理与额外准入条件。</text>
+  </g>
+</svg>
