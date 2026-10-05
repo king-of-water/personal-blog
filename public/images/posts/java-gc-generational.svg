@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">分代收集：新生代复制、老年代整理</title>
+  <desc id="desc">新生代对象大多朝生夕死，存活少，用复制算法把少数存活对象搬到 Survivor 再清空 Eden；老年代对象大多长寿，存活多，用标记-整理避免碎片。分代让两种算法各得其所。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <marker id="arrowG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#466b48"/></marker>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 15px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="54" class="h">新生代复制，老年代整理</text>
+  <text x="56" y="88" class="b">分代不是目的，是让两种算法各得其所的手段。</text>
+
+  <g transform="translate(70 150)">
+    <rect width="620" height="380" rx="20" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="310" y="40" text-anchor="middle" class="t" fill="#295279">新生代（复制算法）</text>
+
+    <rect x="40" y="60" width="340" height="120" rx="14" fill="#d8dee0" stroke="#295279"/>
+    <text x="210" y="100" text-anchor="middle" class="t" fill="#295279">Eden</text>
+    <text x="210" y="132" text-anchor="middle" class="s">对象出生地，大多很快死</text>
+
+    <rect x="410" y="60" width="90" height="120" rx="14" fill="#d8dee0" stroke="#295279"/>
+    <text x="455" y="125" text-anchor="middle" class="t" fill="#295279">S0</text>
+    <rect x="520" y="60" width="90" height="120" rx="14" fill="#d8dee0" stroke="#295279"/>
+    <text x="565" y="125" text-anchor="middle" class="t" fill="#295279">S1</text>
+
+    <path d="M210 180 L210 240 L455 240" stroke="#466b48" stroke-width="2.5" fill="none" marker-end="url(#arrowG)"/>
+    <text x="300" y="260" class="s">Minor GC：把少数存活对象复制到 Survivor</text>
+    <text x="40" y="320" class="b">存活少 → 复制成本低，浪费一半空间也划算。</text>
+  </g>
+
+  <g transform="translate(730 150)">
+    <rect width="400" height="380" rx="20" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="200" y="40" text-anchor="middle" class="t" fill="#466b48">老年代（标记-整理）</text>
+    <rect x="40" y="60" width="320" height="120" rx="14" fill="#dee3d6" stroke="#466b48"/>
+    <text x="200" y="120" text-anchor="middle" class="t" fill="#466b48">Old</text>
+    <text x="200" y="152" text-anchor="middle" class="s">长寿对象，晋升到这里</text>
+    <text x="40" y="240" class="b">存活多 → 复制不划算，</text>
+    <text x="40" y="270" class="b">用标记-整理避免碎片。</text>
+    <text x="40" y="320" class="s">GC 频率低，移动成本可接受。</text>
+  </g>
+
+  <line x1="690" y1="340" x2="730" y2="340" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="710" y="328" text-anchor="middle" class="m">晋升</text>
+
+  <g transform="translate(70 570)">
+    <rect width="1060" height="80" rx="16" fill="#ebe4d4" stroke="#8a7f6d"/>
+    <text x="28" y="36" class="b">「复制浪费空间」和「整理移动成本高」看着矛盾，放到分代里就各得其所。</text>
+    <text x="28" y="62" class="s">这也是谈 GC 必须先谈分代的原因。</text>
+  </g>
+</svg>

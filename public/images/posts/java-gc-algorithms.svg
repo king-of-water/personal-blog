@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">三种 GC 基础算法</title>
+  <desc id="desc">标记-清除先标记存活对象再清除垃圾，产生内存碎片；复制把存活对象搬到另一块、整块清空，无碎片但浪费一半空间；标记-整理把存活对象向一端移动紧凑，无碎片但要移动对象、更新引用。</desc>
+  <defs>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 15px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="54" class="h">三种算法各有一个代价</text>
+  <text x="56" y="88" class="b">没有谁绝对更好，关键是套在什么场景上。</text>
+
+  <g transform="translate(70 150)">
+    <rect width="320" height="440" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="160" y="38" text-anchor="middle" class="t" fill="#8a6b31">标记-清除</text>
+    <rect x="30" y="60" width="260" height="50" rx="8" fill="#f4eace" stroke="#8a6b31"/>
+    <text x="160" y="90" text-anchor="middle" class="m">[活][垃圾][活][垃圾]</text>
+    <text x="160" y="135" text-anchor="middle" class="b">标记存活 → 清除垃圾</text>
+    <rect x="30" y="155" width="260" height="50" rx="8" fill="#f4eace" stroke="#8a6b31"/>
+    <text x="160" y="185" text-anchor="middle" class="m">[活][  ][活][  ]</text>
+    <text x="160" y="240" text-anchor="middle" class="b" fill="#943b37">留下碎片</text>
+    <text x="160" y="275" text-anchor="middle" class="s">大对象可能放不下</text>
+    <text x="160" y="330" text-anchor="middle" class="s">简单，但碎片化</text>
+  </g>
+
+  <g transform="translate(440 150)">
+    <rect width="320" height="440" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="160" y="38" text-anchor="middle" class="t" fill="#295279">复制</text>
+    <rect x="30" y="60" width="260" height="50" rx="8" fill="#d8dee0" stroke="#295279"/>
+    <text x="160" y="90" text-anchor="middle" class="m">[活][垃圾]  |  空</text>
+    <text x="160" y="135" text-anchor="middle" class="b">把存活复制到另一块</text>
+    <rect x="30" y="155" width="260" height="50" rx="8" fill="#d8dee0" stroke="#295279"/>
+    <text x="160" y="185" text-anchor="middle" class="m">空        |  [活]</text>
+    <text x="160" y="240" text-anchor="middle" class="b" fill="#466b48">无碎片、速度快</text>
+    <text x="160" y="275" text-anchor="middle" class="s">代价：浪费一半空间</text>
+    <text x="160" y="330" text-anchor="middle" class="s">适合「存活对象少」</text>
+  </g>
+
+  <g transform="translate(810 150)">
+    <rect width="320" height="440" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="160" y="38" text-anchor="middle" class="t" fill="#466b48">标记-整理</text>
+    <rect x="30" y="60" width="260" height="50" rx="8" fill="#dee3d6" stroke="#466b48"/>
+    <text x="160" y="90" text-anchor="middle" class="m">[活][垃圾][活][垃圾]</text>
+    <text x="160" y="135" text-anchor="middle" class="b">存活对象向一端移动</text>
+    <rect x="30" y="155" width="260" height="50" rx="8" fill="#dee3d6" stroke="#466b48"/>
+    <text x="160" y="185" text-anchor="middle" class="m">[活][活][  ][  ]</text>
+    <text x="160" y="240" text-anchor="middle" class="b" fill="#466b48">无碎片</text>
+    <text x="160" y="275" text-anchor="middle" class="s">代价：移动对象 + 更新引用</text>
+    <text x="160" y="330" text-anchor="middle" class="s">适合「存活对象多」</text>
+  </g>
+
+  <g transform="translate(70 620)">
+    <rect width="1060" height="48" rx="14" fill="#ebe4d4" stroke="#8a7f6d"/>
+    <text x="28" y="32" class="b">分代收集就是让「复制」给存活少的新生代、「整理」给存活多的老年代，各得其所。</text>
+  </g>
+</svg>

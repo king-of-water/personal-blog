@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">GC 收集器的演进路线</title>
+  <desc id="desc">收集器从 Serial（单线程）、Parallel（吞吐优先）、CMS（低停顿但已移除），演进到 G1（Region + 可预测停顿，JDK 9 默认）和 ZGC（着色指针 + 读屏障，亚毫秒停顿）。主线是「吞吐优先」走向「低停顿优先」。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 15px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="54" class="h">从吞吐优先，走向低停顿优先</text>
+  <text x="56" y="88" class="b">每进一步，停顿更短、能处理的堆更大，代价是实现更复杂。</text>
+
+  <line x1="70" y1="180" x2="1130" y2="180" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <g transform="translate(80 130)">
+    <rect width="150" height="110" rx="14" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="75" y="40" text-anchor="middle" class="t">Serial</text>
+    <text x="75" y="70" text-anchor="middle" class="s">单线程</text>
+    <text x="75" y="92" text-anchor="middle" class="s">小堆</text>
+  </g>
+  <g transform="translate(270 130)">
+    <rect width="150" height="110" rx="14" fill="#f4eace" stroke="#8a6b31"/>
+    <text x="75" y="40" text-anchor="middle" class="t">Parallel</text>
+    <text x="75" y="70" text-anchor="middle" class="s">吞吐优先</text>
+    <text x="75" y="92" text-anchor="middle" class="s">接受长停顿</text>
+  </g>
+  <g transform="translate(460 130)">
+    <rect width="150" height="110" rx="14" fill="#eed9d3" stroke="#943b37"/>
+    <text x="75" y="40" text-anchor="middle" class="t">CMS</text>
+    <text x="75" y="70" text-anchor="middle" class="s">低停顿</text>
+    <text x="75" y="92" text-anchor="middle" class="s">已移除</text>
+  </g>
+  <g transform="translate(650 130)">
+    <rect width="150" height="110" rx="14" fill="#dee3d6" stroke="#466b48"/>
+    <text x="75" y="40" text-anchor="middle" class="t" fill="#466b48">G1</text>
+    <text x="75" y="70" text-anchor="middle" class="s">Region 划分</text>
+    <text x="75" y="92" text-anchor="middle" class="s">JDK 9 默认</text>
+  </g>
+  <g transform="translate(840 130)">
+    <rect width="150" height="110" rx="14" fill="#dee3d6" stroke="#466b48"/>
+    <text x="75" y="40" text-anchor="middle" class="t" fill="#466b48">ZGC</text>
+    <text x="75" y="70" text-anchor="middle" class="s">着色指针</text>
+    <text x="75" y="92" text-anchor="middle" class="s">亚毫秒停顿</text>
+  </g>
+  <g transform="translate(1030 130)">
+    <rect width="100" height="110" rx="14" fill="#e3dde2" stroke="#5e5083"/>
+    <text x="50" y="40" text-anchor="middle" class="t">Shenandoah</text>
+    <text x="50" y="70" text-anchor="middle" class="s">同类</text>
+  </g>
+
+  <g transform="translate(70 300)">
+    <rect width="1060" height="260" rx="20" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="28" y="40" class="t">两条路线</text>
+    <text x="28" y="80" class="b">吞吐优先（Parallel）：GC 时全速并行尽快收完，单次停顿可几百毫秒；适合批处理、后台计算。</text>
+    <text x="28" y="116" class="b">低停顿优先（G1 / ZGC）：尽量与业务并发，单次停顿短（G1 可控、ZGC 亚毫秒）；适合在线服务。</text>
+    <text x="28" y="160" class="b" fill="#943b37">CMS 的教训：标记-清除会碎片化、并发阶段抢 CPU、可能「并发失败」退化，最终被 G1 取代。</text>
+    <text x="28" y="206" class="s">没有「更好」的收集器，只有「更匹配」的——先想清楚要吞吐还是要低停顿，再选。</text>
+  </g>
+</svg>
