@@ -35,7 +35,7 @@ const posts = (await getCollection('posts', ({ data }) => (
 		</div>
 		{posts.length > 0 ? (
 			<div class="post-list">{posts.map((post, index) => (
-				<PostCard post={post} sequence={post.data.seriesOrder ? Math.round(post.data.seriesOrder / 10) : index + 1} />
+				<PostCard post={post} sequence={post.data.seriesOrder ? Math.round(post.data.seriesOrder / 10) : index + 1} showCategory={false} />
 			))}</div>
 		) : (
 			<div class="empty-state compact-empty-state">

@@ -4,8 +4,9 @@ import type { CollectionEntry } from 'astro:content';
 interface Props {
 	post: CollectionEntry<'posts'>;
 	sequence?: number;
+	showCategory?: boolean;
 }
-const { post, sequence } = Astro.props;
+const { post, sequence, showCategory = true } = Astro.props;
 const date = new Intl.DateTimeFormat('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(post.data.publishedAt);
 ---
 
@@ -15,7 +16,7 @@ const date = new Intl.DateTimeFormat('zh-CN', { year: 'numeric', month: '2-digit
 		: <time class="post-date" datetime={post.data.publishedAt.toISOString()}>{date}</time>
 	}
 	<div class="post-main">
-		<span class="post-category">{post.data.category}{post.data.subcategory && ` · ${post.data.subcategory}`}</span>
+		{showCategory && <span class="post-category">{post.data.category}{post.data.subcategory && ` · ${post.data.subcategory}`}</span>}
 		<h3>{post.data.title}<span class="post-arrow" aria-hidden="true">↗</span></h3>
 		<p>{post.data.description}</p>
 		{post.data.tags.length > 0 && <div class="tag-row">{post.data.tags.map((tag) => <span class="tag">{tag}</span>)}</div>}
