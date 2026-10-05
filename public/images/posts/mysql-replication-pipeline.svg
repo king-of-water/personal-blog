@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="650" viewBox="0 0 1200 650" role="img" aria-labelledby="title desc">
+  <title id="title">MySQL 复制流水线与三个事务水位</title>
+  <desc id="desc">事务在主库提交并进入 Binlog，副本接收线程写入 Relay Log，协调线程和工作线程完成回放。图中区分主库已提交、副本已接收和副本已执行三个进度水位。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#5b5245"/>
+    </marker>
+    <style>
+      .title{font:700 30px system-ui,-apple-system,"Segoe UI",sans-serif;fill:#2b2620}
+      .sub{font:400 17px system-ui,-apple-system,"Segoe UI",sans-serif;fill:#6f6659}
+      .head{font:700 25px system-ui,-apple-system,"Segoe UI",sans-serif;fill:#2b2620}
+      .body{font:400 21px system-ui,-apple-system,"Segoe UI",sans-serif;fill:#554d42}
+      .small{font:400 18px system-ui,-apple-system,"Segoe UI",sans-serif;fill:#6f6659}
+      .mono{font:600 18px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}
+      .arrow{stroke:#5b5245;stroke-width:2.4;fill:none;marker-end:url(#arrow)}
+      .dash{stroke:#8a7f6d;stroke-width:2;stroke-dasharray:7 7;fill:none}
+    </style>
+  </defs>
+  <rect width="1200" height="650" fill="#fdfaf3"/>
+  <text x="60" y="58" class="title">一笔事务什么时候才在副本上可读？</text>
+  <text x="60" y="88" class="sub">收到日志和执行事务是两个进度，读请求只关心最后一个</text>
+
+  <rect x="55" y="125" width="345" height="355" rx="18" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+  <text x="85" y="165" class="head">Source</text>
+  <rect x="85" y="195" width="285" height="82" rx="12" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+  <text x="108" y="228" class="head">1. COMMIT</text>
+  <text x="108" y="255" class="body">事务对主库查询可见</text>
+  <path d="M227 277 L227 315" class="arrow"/>
+  <rect x="85" y="315" width="285" height="82" rx="12" fill="#ebe4d4" stroke="#8a7f6d" stroke-width="2"/>
+  <text x="108" y="348" class="head">2. Binary Log</text>
+  <text x="108" y="375" class="body">Dump Thread 发送</text>
+  <rect x="85" y="423" width="285" height="38" rx="10" fill="#dee3d6" stroke="#466b48"/>
+  <text x="105" y="448" class="mono">watermark: committed</text>
+
+  <path d="M400 315 L480 315" class="arrow"/>
+  <text x="416" y="292" class="small">网络传输</text>
+
+  <rect x="480" y="125" width="665" height="355" rx="18" fill="#fbf8f1" stroke="#8a7f6d" stroke-width="2"/>
+  <text x="510" y="165" class="head">Replica</text>
+  <rect x="510" y="195" width="260" height="82" rx="12" fill="#f4eace" stroke="#8a7f6d" stroke-width="2"/>
+  <text x="533" y="228" class="head">3. Receiver</text>
+  <text x="533" y="255" class="body">接收事件，写 Relay Log</text>
+  <path d="M770 236 L815 236" class="arrow"/>
+  <rect x="815" y="195" width="300" height="82" rx="12" fill="#e3dde2" stroke="#5e5083" stroke-width="2"/>
+  <text x="838" y="228" class="head">4. Relay Log</text>
+  <text x="838" y="255" class="body">等待回放的本地事件队列</text>
+  <rect x="510" y="301" width="260" height="38" rx="10" fill="#dee3d6" stroke="#466b48"/>
+  <text x="530" y="326" class="mono">watermark: received</text>
+
+  <path d="M965 277 L965 315 L730 315 L730 350" class="arrow"/>
+  <rect x="510" y="350" width="260" height="82" rx="12" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+  <text x="533" y="383" class="head">5. Coordinator</text>
+  <text x="533" y="410" class="body">按依赖关系分配事务</text>
+  <path d="M770 391 L815 391" class="arrow"/>
+  <rect x="815" y="350" width="300" height="82" rx="12" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+  <text x="838" y="383" class="head">6. Applier Workers</text>
+  <text x="838" y="410" class="body">提交到本机 InnoDB</text>
+
+  <rect x="815" y="443" width="300" height="38" rx="10" fill="#dee3d6" stroke="#466b48"/>
+  <text x="835" y="468" class="mono">watermark: executed</text>
+
+  <path d="M55 525 L1145 525" class="dash"/>
+  <rect x="55" y="552" width="338" height="62" rx="12" fill="#d8dee0" stroke="#295279"/>
+  <text x="77" y="577" class="head">传输积压</text>
+  <text x="77" y="601" class="small">committed − received 持续扩大</text>
+  <rect x="431" y="552" width="338" height="62" rx="12" fill="#f4eace" stroke="#8a7f6d"/>
+  <text x="453" y="577" class="head">回放积压</text>
+  <text x="453" y="601" class="small">received − executed 持续扩大</text>
+  <rect x="807" y="552" width="338" height="62" rx="12" fill="#eed9d3" stroke="#943b37"/>
+  <text x="829" y="577" class="head">旧读窗口</text>
+  <text x="829" y="601" class="small">读到 executed 之后才看见新事务</text>
+</svg>

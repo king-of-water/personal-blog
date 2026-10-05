@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="680" viewBox="0 0 1200 680" role="img" aria-labelledby="title desc">
+  <title id="title">MySQL 计划内主库切换顺序</title>
+  <desc id="desc">计划内切换分为停止新写、等待候选副本追平、隔离旧主、提升新主、切换路由和验证六步。隔离旧主是开放新主写入前的硬门槛。</desc>
+  <defs>
+    <marker id="arrow2" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#5b5245"/>
+    </marker>
+    <style>
+      .title{font:700 30px system-ui,-apple-system,"Segoe UI",sans-serif;fill:#2b2620}
+      .sub{font:400 17px system-ui,-apple-system,"Segoe UI",sans-serif;fill:#6f6659}
+      .head{font:700 23px system-ui,-apple-system,"Segoe UI",sans-serif;fill:#2b2620}
+      .body{font:400 19px system-ui,-apple-system,"Segoe UI",sans-serif;fill:#554d42}
+      .step{font:700 16px system-ui,-apple-system,"Segoe UI",sans-serif;fill:#ffffff}
+      .mono{font:600 17px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}
+      .arrow{stroke:#5b5245;stroke-width:2.5;fill:none;marker-end:url(#arrow2)}
+      .lane{stroke:#8a7f6d;stroke-width:1.5;stroke-dasharray:7 7}
+    </style>
+  </defs>
+  <rect width="1200" height="680" fill="#fdfaf3"/>
+  <text x="60" y="58" class="title">计划内切换：先追平，再隔离，最后开放新主</text>
+  <text x="60" y="88" class="sub">追平保证 RPO，隔离保证同一时刻只有一个写入口</text>
+
+  <text x="70" y="150" class="head">写入口</text>
+  <text x="70" y="292" class="head">旧 Source</text>
+  <text x="70" y="434" class="head">候选 Replica</text>
+  <text x="70" y="576" class="head">其他 Replica</text>
+  <line x1="190" y1="145" x2="1140" y2="145" class="lane"/>
+  <line x1="190" y1="287" x2="1140" y2="287" class="lane"/>
+  <line x1="190" y1="429" x2="1140" y2="429" class="lane"/>
+  <line x1="190" y1="571" x2="1140" y2="571" class="lane"/>
+
+  <rect x="205" y="115" width="145" height="62" rx="12" fill="#f4eace" stroke="#8a7f6d"/>
+  <circle cx="228" cy="135" r="13" fill="#2f5d8a"/>
+  <text x="224" y="140" class="step">1</text>
+  <text x="250" y="139" class="head">停写</text>
+  <text x="226" y="164" class="body">排空在途事务</text>
+  <path d="M278 177 L278 247" class="arrow"/>
+
+  <rect x="365" y="257" width="175" height="62" rx="12" fill="#f5f0e4" stroke="#8a7f6d"/>
+  <circle cx="388" cy="277" r="13" fill="#2f5d8a"/>
+  <text x="384" y="282" class="step">2</text>
+  <text x="410" y="281" class="head">最终 GTID</text>
+  <text x="387" y="306" class="body">固定旧主提交终点</text>
+  <path d="M452 319 L452 389" class="arrow"/>
+
+  <rect x="365" y="399" width="175" height="62" rx="12" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+  <text x="387" y="425" class="head">等待全部执行</text>
+  <text x="387" y="449" class="mono">executed ⊇ final GTID</text>
+  <path d="M540 430 L595 430 L595 319" class="arrow"/>
+
+  <rect x="565" y="257" width="190" height="62" rx="12" fill="#eed9d3" stroke="#943b37" stroke-width="3"/>
+  <circle cx="588" cy="277" r="13" fill="#a8433f"/>
+  <text x="584" y="282" class="step">3</text>
+  <text x="610" y="281" class="head">隔离旧主</text>
+  <text x="587" y="306" class="body">代理、网络与只读限制</text>
+  <rect x="575" y="335" width="170" height="34" rx="9" fill="#eed9d3" stroke="#943b37"/>
+  <text x="597" y="357" class="body">开放新写前的硬门槛</text>
+  <path d="M755 288 L790 288 L790 389" class="arrow"/>
+
+  <rect x="765" y="399" width="165" height="62" rx="12" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+  <circle cx="788" cy="419" r="13" fill="#4f7a52"/>
+  <text x="784" y="424" class="step">4</text>
+  <text x="810" y="423" class="head">提升新主</text>
+  <text x="788" y="448" class="body">关闭只读，接受写入</text>
+  <path d="M847 399 L847 177" class="arrow"/>
+
+  <rect x="775" y="115" width="145" height="62" rx="12" fill="#d8dee0" stroke="#295279"/>
+  <circle cx="798" cy="135" r="13" fill="#2f5d8a"/>
+  <text x="794" y="140" class="step">5</text>
+  <text x="820" y="139" class="head">切换路由</text>
+  <text x="797" y="164" class="body">刷新代理与连接池</text>
+  <path d="M920 146 L975 146" class="arrow"/>
+
+  <rect x="975" y="115" width="165" height="62" rx="12" fill="#dee3d6" stroke="#466b48"/>
+  <circle cx="998" cy="135" r="13" fill="#4f7a52"/>
+  <text x="994" y="140" class="step">6</text>
+  <text x="1020" y="139" class="head">验证写入</text>
+  <text x="998" y="164" class="body">再恢复全部流量</text>
+
+  <path d="M848 461 L848 531" class="arrow"/>
+  <rect x="765" y="541" width="330" height="62" rx="12" fill="#f5f0e4" stroke="#8a7f6d"/>
+  <text x="788" y="567" class="head">GTID Auto-Position 重新挂载</text>
+  <text x="788" y="591" class="body">其余副本计算缺少的事务并跟随新 Source</text>
+
+  <rect x="205" y="626" width="890" height="34" rx="10" fill="#ebe4d4" stroke="#8a7f6d"/>
+  <text x="229" y="649" class="body">若无法证明旧 Source 已被隔离，就不能同时让候选节点对外接受写入。</text>
+</svg>
