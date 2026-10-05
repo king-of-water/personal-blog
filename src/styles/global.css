@@ -57,10 +57,10 @@ main { min-height: calc(100vh - 150px); }
 .home-portrait { position: relative; display: grid; justify-items: center; gap: 14px; margin-right: 65px; flex: 0 0 200px; }
 .home-portrait img { width: 200px; height: 200px; object-fit: cover; border-radius: 50%; padding: 9px; border: 1px solid var(--line); background: var(--paper); box-shadow: 0 7px 22px rgba(83, 65, 42, 0.08); transition: transform 320ms var(--spring-soft), box-shadow 220ms ease; }
 .home-portrait > span { color: var(--muted); font-size: 12px; transition: color 220ms ease; }
-.home-portrait-bubble { position: absolute; right: calc(100% + 16px); top: 40px; width: max-content; max-width: 350px; padding: 12px 19px; border: 1px solid var(--line); border-radius: 16px; background: var(--paper); color: var(--muted); font-family: var(--display); font-size: 18px; font-style: italic; line-height: 1.45; text-align: left; box-shadow: 0 5px 18px rgba(83, 65, 42, 0.08); pointer-events: none; opacity: 0; transform-origin: right center; }
+.home-portrait-bubble { position: absolute; right: calc(100% + 16px); top: 50px; width: max-content; padding: 16px 25px; border: 1px solid var(--line); border-radius: 20px; background: var(--paper); color: var(--muted); font-family: var(--display); font-size: clamp(22px, 2.1vw, 30px); font-style: italic; line-height: 1.32; text-align: left; box-shadow: 0 7px 24px rgba(83, 65, 42, 0.09); pointer-events: none; opacity: 0; transform-origin: right center; }
 .home-portrait-bubble.is-playing { animation: bubble-in 800ms cubic-bezier(0.22, 0.9, 0.3, 1) forwards; }
 .home-portrait-bubble.is-playing.is-intro { animation-delay: 320ms; }
-.home-portrait-bubble::after { content: ""; position: absolute; top: 20px; right: -5px; width: 9px; height: 9px; background: var(--paper); border-top: 1px solid var(--line); border-right: 1px solid var(--line); transform: rotate(45deg); }
+.home-portrait-bubble::after { content: ""; position: absolute; top: 44px; right: -5px; width: 10px; height: 10px; background: var(--paper); border-top: 1px solid var(--line); border-right: 1px solid var(--line); transform: rotate(45deg); }
 @keyframes bubble-in {
 	0% { opacity: 0; transform: translateX(16px) scale(0.76); }
 	55% { opacity: 1; transform: translateX(-6px) scale(1.075); }
