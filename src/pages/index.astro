@@ -78,19 +78,7 @@ const featuredPosts = featuredPostIds.flatMap((id) => {
 </BaseLayout>
 
 <script>
-	const portrait = document.querySelector('.home-portrait');
-	const bubble = portrait?.querySelector<HTMLElement>('.home-portrait-bubble');
-	if (portrait && bubble) {
-		// 首屏延迟一点弹出
-		bubble.classList.add('is-intro', 'is-playing');
-
-		// 悬停头像时重播（去掉 is-intro → 无延迟立即播）
-		const replay = () => {
-			bubble.classList.remove('is-playing', 'is-intro');
-			void bubble.offsetWidth; // 强制回流，动画才会重新开始
-			bubble.classList.add('is-playing');
-		};
-		portrait.addEventListener('mouseenter', replay);
-		portrait.addEventListener('focusin', replay);
-	}
+	const bubble = document.querySelector<HTMLElement>('.home-portrait-bubble');
+	// 首屏延迟一点弹出；之后悬停气泡本身会 Q 弹放大（纯 CSS）
+	if (bubble) bubble.classList.add('is-intro', 'is-playing');
 </script>
