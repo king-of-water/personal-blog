@@ -8,9 +8,9 @@ const allPosts = (await getCollection('posts', ({ data }) => !data.draft))
 	.sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
 const posts = allPosts.slice(0, 6);
 const featuredPostIds = [
-	'hashmap-concurrenthashmap-hashing-concurrency',
-	'java-dynamic-proxy-jdk-cglib',
-	'java-gc-algorithms-collectors',
+	'agent-harness-engineering',
+	'distributed-id-uuid-snowflake-leaf',
+	'muse-personal-agent-super-app',
 ];
 const featuredPosts = featuredPostIds.flatMap((id) => {
 	const post = allPosts.find((item) => item.id === id);
