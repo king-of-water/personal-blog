@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">volatile 的可见性与内存屏障</title>
+  <desc id="desc">volatile 写把值立即刷回主内存、并插入 StoreStore 和 StoreLoad 屏障禁止重排；volatile 读从主内存取最新值、使本地缓存失效，并插入 LoadLoad 和 LoadStore 屏障。于是写之前的操作不会排到写之后，读之后的操作不会排到读之前。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <marker id="arrowG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#466b48"/></marker>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 15px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="54" class="h">volatile 写刷主内存，读取最新值，屏障挡重排</text>
+  <text x="56" y="88" class="b">可见性靠「刷回 + 失效」，有序性靠「内存屏障」。</text>
+
+  <g transform="translate(70 150)">
+    <rect width="460" height="400" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="230" y="38" text-anchor="middle" class="t" fill="#466b48">volatile 写</text>
+    <rect x="40" y="60" width="380" height="70" rx="12" fill="#dee3d6" stroke="#466b48"/>
+    <text x="230" y="90" text-anchor="middle" class="m">config = buildConfig()</text>
+    <text x="230" y="116" text-anchor="middle" class="s">普通写（写之前）</text>
+    <rect x="40" y="150" width="380" height="30" rx="8" fill="#f4eace" stroke="#8a6b31"/>
+    <text x="230" y="171" text-anchor="middle" class="m">StoreStore 屏障</text>
+    <rect x="40" y="200" width="380" height="70" rx="12" fill="#dee3d6" stroke="#466b48"/>
+    <text x="230" y="230" text-anchor="middle" class="m">ready = true</text>
+    <text x="230" y="256" text-anchor="middle" class="s">volatile 写，立即刷回主内存</text>
+    <rect x="40" y="290" width="380" height="30" rx="8" fill="#f4eace" stroke="#8a6b31"/>
+    <text x="230" y="311" text-anchor="middle" class="m">StoreLoad 屏障</text>
+    <text x="230" y="360" text-anchor="middle" class="b">写之前的操作，不会重排到写之后</text>
+  </g>
+
+  <g transform="translate(670 150)">
+    <rect width="460" height="400" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="230" y="38" text-anchor="middle" class="t" fill="#295279">volatile 读</text>
+    <rect x="40" y="60" width="380" height="30" rx="8" fill="#f4eace" stroke="#8a6b31"/>
+    <text x="230" y="81" text-anchor="middle" class="m">LoadLoad 屏障</text>
+    <rect x="40" y="110" width="380" height="70" rx="12" fill="#d8dee0" stroke="#295279"/>
+    <text x="230" y="140" text-anchor="middle" class="m">if (ready)</text>
+    <text x="230" y="166" text-anchor="middle" class="s">volatile 读，从主内存取最新值</text>
+    <rect x="40" y="200" width="380" height="30" rx="8" fill="#f4eace" stroke="#8a6b31"/>
+    <text x="230" y="221" text-anchor="middle" class="m">LoadStore 屏障</text>
+    <rect x="40" y="250" width="380" height="70" rx="12" fill="#d8dee0" stroke="#295279"/>
+    <text x="230" y="280" text-anchor="middle" class="m">use(config)</text>
+    <text x="230" y="306" text-anchor="middle" class="s">读之后的普通读</text>
+    <text x="230" y="360" text-anchor="middle" class="b">读之后的操作，不会重排到读之前</text>
+  </g>
+
+  <g transform="translate(70 590)">
+    <rect width="1060" height="50" rx="14" fill="#ebe4d4" stroke="#8a7f6d"/>
+    <text x="28" y="32" class="b">看到 ready == true，就能保证 config 已准备好——这是「用 volatile 标志位发布对象」的正确性来源。</text>
+  </g>
+</svg>

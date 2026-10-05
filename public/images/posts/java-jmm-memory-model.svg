@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">JMM 的主内存与工作内存模型</title>
+  <desc id="desc">JMM 抽象出主内存（所有线程共享）和每个线程的工作内存（本地缓存）。线程对变量先在工作内存操作，再同步回主内存；不同步时其他线程看不到修改，这就是可见性问题的来源。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <marker id="arrowR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#943b37"/></marker>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 15px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="54" class="h">JMM：线程改工作内存，不同步回主内存就看不见</text>
+  <text x="56" y="88" class="b">这是抽象模型，不是上一篇的堆/栈——两者不是一回事。</text>
+
+  <g transform="translate(470 160)">
+    <rect width="260" height="150" rx="16" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="130" y="40" text-anchor="middle" class="t" fill="#466b48">主内存（共享）</text>
+    <text x="130" y="78" text-anchor="middle" class="m">flag = false</text>
+    <text x="130" y="108" text-anchor="middle" class="m">config = null</text>
+    <text x="130" y="134" text-anchor="middle" class="s">所有线程共享的变量真值</text>
+  </g>
+
+  <g transform="translate(70 420)">
+    <rect width="300" height="150" rx="16" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="150" y="40" text-anchor="middle" class="t" fill="#5e5083">线程 A 工作内存</text>
+    <text x="150" y="78" text-anchor="middle" class="m">flag = true（本地）</text>
+    <text x="150" y="108" text-anchor="middle" class="s">改了，但还没刷回主内存</text>
+  </g>
+  <g transform="translate(830 420)">
+    <rect width="300" height="150" rx="16" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="150" y="40" text-anchor="middle" class="t" fill="#5e5083">线程 B 工作内存</text>
+    <text x="150" y="78" text-anchor="middle" class="m">flag = false（缓存）</text>
+    <text x="150" y="108" text-anchor="middle" class="s">读到旧值，看不到 A 的修改</text>
+  </g>
+
+  <line x1="220" y1="420" x2="500" y2="310" stroke="#943b37" stroke-width="2.5" marker-end="url(#arrowR)"/>
+  <text x="330" y="380" text-anchor="middle" class="s">未同步</text>
+  <line x1="980" y1="420" x2="700" y2="310" stroke="#8a7f6d" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="860" y="380" text-anchor="middle" class="s">读到旧值</text>
+
+  <g transform="translate(70 600)">
+    <rect width="1060" height="56" rx="14" fill="#ebe4d4" stroke="#8a7f6d"/>
+    <text x="28" y="36" class="b">volatile 的作用，就是让「写」立即刷回主内存、「读」立即从主内存取最新值。</text>
+  </g>
+</svg>

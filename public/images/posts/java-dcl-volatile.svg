@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">双重检查锁为什么必须 volatile</title>
+  <desc id="desc">new Singleton() 拆成三步：分配内存、初始化对象、把引用赋给变量。没有 volatile 时，后两步可能被指令重排，另一个线程看到引用非空却拿到还没初始化完的对象。volatile 禁止这个重排。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <marker id="arrowR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#943b37"/></marker>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 15px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="54" class="h">new Singleton() 的三步，重排后暴露半成品</text>
+  <text x="56" y="88" class="b">volatile 禁止「赋引用」和「初始化」重排，对象暴露时一定已初始化。</text>
+
+  <g transform="translate(70 150)">
+    <rect width="340" height="420" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="170" y="38" text-anchor="middle" class="t" fill="#466b48">正常顺序</text>
+    <rect x="40" y="60" width="260" height="80" rx="12" fill="#dee3d6" stroke="#466b48"/>
+    <text x="170" y="92" text-anchor="middle" class="m">① 分配内存</text>
+    <text x="170" y="118" text-anchor="middle" class="s">开辟对象空间</text>
+    <rect x="40" y="160" width="260" height="80" rx="12" fill="#dee3d6" stroke="#466b48"/>
+    <text x="170" y="192" text-anchor="middle" class="m">② 初始化对象</text>
+    <text x="170" y="218" text-anchor="middle" class="s">执行构造器</text>
+    <rect x="40" y="260" width="260" height="80" rx="12" fill="#dee3d6" stroke="#466b48"/>
+    <text x="170" y="292" text-anchor="middle" class="m">③ 赋引用给 instance</text>
+    <text x="170" y="318" text-anchor="middle" class="s">对外暴露对象</text>
+    <text x="170" y="390" text-anchor="middle" class="b">暴露时已初始化完</text>
+  </g>
+
+  <line x1="410" y1="360" x2="500" y2="360" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="455" y="350" text-anchor="middle" class="s">重排</text>
+
+  <g transform="translate(500 150)">
+    <rect width="340" height="420" rx="18" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+    <text x="170" y="38" text-anchor="middle" class="t" fill="#943b37">重排后（无 volatile）</text>
+    <rect x="40" y="60" width="260" height="80" rx="12" fill="#dee3d6" stroke="#466b48"/>
+    <text x="170" y="92" text-anchor="middle" class="m">① 分配内存</text>
+    <rect x="40" y="160" width="260" height="80" rx="12" fill="#f4eace" stroke="#8a6b31"/>
+    <text x="170" y="192" text-anchor="middle" class="m">③ 赋引用给 instance</text>
+    <text x="170" y="218" text-anchor="middle" class="s" fill="#943b37">提前暴露！</text>
+    <rect x="40" y="260" width="260" height="80" rx="12" fill="#dee3d6" stroke="#466b48"/>
+    <text x="170" y="292" text-anchor="middle" class="m">② 初始化对象</text>
+    <text x="170" y="318" text-anchor="middle" class="s">还没执行</text>
+    <text x="170" y="390" text-anchor="middle" class="b" fill="#943b37">别的线程拿到半成品</text>
+  </g>
+
+  <line x1="840" y1="360" x2="930" y2="360" stroke="#466b48" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <g transform="translate(930 150)">
+    <rect width="200" height="420" rx="18" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="100" y="38" text-anchor="middle" class="t" fill="#466b48">加 volatile</text>
+    <text x="100" y="110" text-anchor="middle" class="b">屏障禁止</text>
+    <text x="100" y="145" text-anchor="middle" class="b">② 和 ③</text>
+    <text x="100" y="180" text-anchor="middle" class="b">重排，</text>
+    <text x="100" y="215" text-anchor="middle" class="b">暴露时</text>
+    <text x="100" y="250" text-anchor="middle" class="b">一定已</text>
+    <text x="100" y="285" text-anchor="middle" class="b">初始化。</text>
+  </g>
+</svg>
