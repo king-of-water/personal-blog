@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">公平锁与非公平锁的抢锁差异</title>
+  <desc id="desc">非公平锁的新线程直接 CAS 抢 state，即使 CLH 队列里已有线程等待也可以插队，省掉唤醒排队线程的往返开销，吞吐更高但可能让老线程饥饿。公平锁在 CAS 前先调用 hasQueuedPredecessors 检查队列里是否有人排队，有人就放弃本次抢锁老实入队。两份 tryAcquire 源码只差这一个判断。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <marker id="arrowG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#466b48"/></marker>
+    <marker id="arrowR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#943b37"/></marker>
+    <style>.h{font:700 28px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 14px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="52" class="h">两份 tryAcquire 只差一个 hasQueuedPredecessors()</text>
+  <text x="56" y="84" class="b">非公平允许插队（吞吐高），公平先看队列（不饥饿）。</text>
+
+  <!-- 非公平 -->
+  <g transform="translate(70 120)">
+    <rect width="520" height="420" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="260" y="36" text-anchor="middle" class="t" fill="#8a6b31">非公平锁（默认）</text>
+
+    <rect x="30" y="60" width="200" height="60" rx="12" fill="#f4eace" stroke="#8a6b31"/>
+    <text x="130" y="86" text-anchor="middle" class="b">新线程到达</text>
+    <text x="130" y="108" text-anchor="middle" class="s">不管队列，直接 CAS 抢</text>
+
+    <rect x="280" y="60" width="210" height="60" rx="12" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="385" y="86" text-anchor="middle" class="b" fill="#466b48">抢到了！</text>
+    <text x="385" y="108" text-anchor="middle" class="s">省掉唤醒往返</text>
+    <line x1="230" y1="90" x2="280" y2="90" stroke="#466b48" stroke-width="3" marker-end="url(#arrowG)"/>
+
+    <rect x="30" y="160" width="460" height="80" rx="12" fill="#ebe4d4" stroke="#8a7f6d"/>
+    <text x="50" y="188" class="b">CLH 队列：head → T1 → T2（已等很久）</text>
+    <text x="50" y="216" class="s">T1、T2 还在睡，锁却被新来的抢走了</text>
+
+    <text x="30" y="286" class="b" fill="#466b48">✓ 吞吐更高：不需要「唤醒 → 调度 → 再抢」</text>
+    <text x="30" y="318" class="b" fill="#943b37">✗ 代价：队列里的线程可能被反复插队（饥饿）</text>
+    <text x="30" y="360" class="s">lock() 里还有一次更激进的插队：</text>
+    <text x="30" y="386" class="m">if (compareAndSetState(0, 1)) 直接抢</text>
+  </g>
+
+  <!-- 公平 -->
+  <g transform="translate(610 120)">
+    <rect width="520" height="420" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="260" y="36" text-anchor="middle" class="t" fill="#295279">公平锁</text>
+
+    <rect x="30" y="60" width="200" height="60" rx="12" fill="#d8dee0" stroke="#295279"/>
+    <text x="130" y="86" text-anchor="middle" class="b">新线程到达</text>
+    <text x="130" y="108" text-anchor="middle" class="s">先检查队列</text>
+
+    <rect x="280" y="60" width="210" height="60" rx="12" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="385" y="80" text-anchor="middle" class="m">hasQueuedPredecessors()</text>
+    <text x="385" y="104" text-anchor="middle" class="s">队列里有人 → 放弃抢</text>
+    <line x1="230" y1="90" x2="280" y2="90" stroke="#295279" stroke-width="3" marker-end="url(#arrow)"/>
+
+    <rect x="30" y="160" width="460" height="80" rx="12" fill="#dee3d6" stroke="#466b48"/>
+    <text x="50" y="188" class="b" fill="#466b48">老实地排到队尾：head → T1 → T2 → 我</text>
+    <text x="50" y="216" class="s">严格先来后到，不会有线程被饿死</text>
+
+    <text x="30" y="286" class="b" fill="#466b48">✓ 不饥饿：谁先等谁先拿</text>
+    <text x="30" y="318" class="b" fill="#943b37">✗ 吞吐更低：每次都要多一次队列检查</text>
+    <text x="30" y="360" class="s">只有确实需要「公平」语义时才用：</text>
+    <text x="30" y="386" class="m">new ReentrantLock(true)</text>
+  </g>
+
+  <g transform="translate(70 570)">
+    <rect width="1060" height="90" rx="16" fill="#ebe4d4" stroke="#8a7f6d"/>
+    <text x="28" y="34" class="b">源码差异只有一行：公平锁的 if 里多了 !hasQueuedPredecessors() &amp;&amp;，其余（可重入逻辑）完全相同。</text>
+    <text x="28" y="64" class="s">可重入分支用的是 setState 而非 CAS —— 锁已属于自己，不存在竞争。</text>
+  </g>
+</svg>

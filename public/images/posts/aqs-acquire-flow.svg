@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">AQS acquire 的完整流程</title>
+  <desc id="desc">acquire 先调用 tryAcquire 尝试获取锁，成功即返回；失败则用 addWaiter 以 CAS 把线程包装成节点加入 CLH 队列尾部，再进入 acquireQueued 的循环：前驱是 head 时再次 tryAcquire，成功就成为新 head 并返回；不成功则通过 shouldParkAfterFailedAcquire 把前驱置为 SIGNAL 后 park 挂起，被 unpark 唤醒后回到循环重试。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <marker id="arrowG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#466b48"/></marker>
+    <marker id="arrowR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#943b37"/></marker>
+    <style>.h{font:700 28px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 18px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 14px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="760" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="52" class="h">acquire：先抢一次，抢不到才排队</text>
+  <text x="56" y="84" class="b">无竞争时只走 tryAcquire 一行；有竞争才入队、挂起、被唤醒后重试。</text>
+
+  <!-- 起点 -->
+  <g transform="translate(80 130)">
+    <rect width="300" height="60" rx="12" fill="#e3dde2" stroke="#5e5083" stroke-width="2"/>
+    <text x="150" y="26" text-anchor="middle" class="t" fill="#5e5083">acquire(1)</text>
+    <text x="150" y="48" text-anchor="middle" class="s">ReentrantLock.lock() 的入口</text>
+  </g>
+  <line x1="230" y1="190" x2="230" y2="222" stroke="#8a7f6d" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <!-- tryAcquire -->
+  <g transform="translate(60 222)">
+    <rect width="340" height="70" rx="14" fill="#f4eace" stroke="#8a6b31" stroke-width="2"/>
+    <text x="170" y="30" text-anchor="middle" class="b">① tryAcquire(1) 抢一次</text>
+    <text x="170" y="54" text-anchor="middle" class="s">子类实现：CAS state 0→1</text>
+  </g>
+  <line x1="400" y1="257" x2="470" y2="257" stroke="#466b48" stroke-width="3" marker-end="url(#arrowG)"/>
+  <text x="435" y="248" text-anchor="middle" class="s" fill="#466b48">成功</text>
+  <g transform="translate(470 222)">
+    <rect width="270" height="70" rx="14" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="135" y="30" text-anchor="middle" class="t" fill="#466b48">拿到锁，返回</text>
+    <text x="135" y="54" text-anchor="middle" class="s">快路径：不进队列、不挂起</text>
+  </g>
+  <line x1="230" y1="292" x2="230" y2="324" stroke="#943b37" stroke-width="2.5" marker-end="url(#arrowR)"/>
+  <text x="248" y="313" class="s" fill="#943b37">失败</text>
+
+  <!-- addWaiter -->
+  <g transform="translate(60 324)">
+    <rect width="340" height="80" rx="14" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+    <text x="170" y="30" text-anchor="middle" class="b">② addWaiter 入队</text>
+    <text x="170" y="54" text-anchor="middle" class="s">包装成 Node，CAS 挂到 tail</text>
+    <text x="170" y="74" text-anchor="middle" class="s">CAS 失败或队列空 → enq() 循环重试</text>
+  </g>
+  <line x1="230" y1="404" x2="230" y2="436" stroke="#8a7f6d" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <!-- acquireQueued 循环 -->
+  <g transform="translate(60 436)">
+    <rect width="660" height="250" rx="16" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="20" y="30" class="t" fill="#5e5083">③ acquireQueued：for(;;) 循环</text>
+
+    <rect x="20" y="48" width="290" height="66" rx="12" fill="#f4eace" stroke="#8a6b31"/>
+    <text x="165" y="74" text-anchor="middle" class="m">前驱 == head ?</text>
+    <text x="165" y="98" text-anchor="middle" class="s">是 → 轮到我了，再 tryAcquire</text>
+
+    <line x1="310" y1="81" x2="380" y2="81" stroke="#466b48" stroke-width="3" marker-end="url(#arrowG)"/>
+    <rect x="380" y="48" width="250" height="66" rx="12" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="505" y="74" text-anchor="middle" class="b" fill="#466b48">抢到 → setHead 返回</text>
+    <text x="505" y="98" text-anchor="middle" class="s">自己成为新 head</text>
+
+    <line x1="165" y1="114" x2="165" y2="146" stroke="#943b37" stroke-width="2.5" marker-end="url(#arrowR)"/>
+    <text x="183" y="136" class="s" fill="#943b37">否 / 抢失败</text>
+
+    <rect x="20" y="146" width="290" height="86" rx="12" fill="#eed9d3" stroke="#943b37"/>
+    <text x="165" y="172" text-anchor="middle" class="m">shouldParkAfterFailedAcquire</text>
+    <text x="165" y="196" text-anchor="middle" class="s">把前驱 waitStatus 置为 SIGNAL</text>
+    <text x="165" y="218" text-anchor="middle" class="s">（前驱承诺释放时唤醒我）</text>
+
+    <line x1="165" y1="232" x2="165" y2="256" stroke="#943b37" stroke-width="2.5" marker-end="url(#arrowR)"/>
+    <text x="200" y="252" text-anchor="middle" class="s">park 挂起</text>
+  </g>
+
+  <!-- 唤醒闭环 -->
+  <line x1="390" y1="686" x2="390" y2="410" stroke="#466b48" stroke-width="2.5" stroke-dasharray="7 5" marker-end="url(#arrowG)"/>
+  <text x="410" y="560" class="s" fill="#466b48">被 unpark 唤醒 → 回到循环顶部重试</text>
+
+  <!-- 右侧说明 -->
+  <g transform="translate(760 324)">
+    <rect width="370" height="362" rx="16" fill="#ebe4d4" stroke="#8a7f6d"/>
+    <text x="24" y="34" class="t">为什么这样设计</text>
+    <text x="24" y="72" class="b">① 快路径只走一次 CAS：</text>
+    <text x="24" y="98" class="b">   无竞争时加锁几乎零开销。</text>
+    <text x="24" y="140" class="b">② 只让「前驱是 head」的线程去抢：</text>
+    <text x="24" y="166" class="b">   队列里其他人前面还有人，</text>
+    <text x="24" y="192" class="b">   抢也白抢，避免无谓争抢。</text>
+    <text x="24" y="234" class="b">③ 先让前驱置 SIGNAL 再挂起：</text>
+    <text x="24" y="260" class="b">   保证「挂起」不会漏掉唤醒，</text>
+    <text x="24" y="286" class="b">   否则线程可能永远睡着。</text>
+    <text x="24" y="328" class="s">acquire 不响应中断；想响应中断用</text>
+    <text x="24" y="350" class="s">lockInterruptibly → acquireInterruptibly</text>
+  </g>
+</svg>
