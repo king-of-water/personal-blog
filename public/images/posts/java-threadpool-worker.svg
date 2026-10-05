@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">Worker 的线程复用循环</title>
+  <desc id="desc">Worker 把线程和任务包在一起，线程启动后跑 runWorker 循环：先执行 firstTask，然后不断 getTask 从队列取任务、执行、再取。核心线程 take 阻塞等待，非核心线程 poll 超时退出，getTask 返回 null 时线程销毁。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <marker id="arrowG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#466b48"/></marker>
+    <marker id="arrowR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#943b37"/></marker>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 15px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="54" class="h">一个线程 = 一个不断取任务的循环</text>
+  <text x="56" y="88" class="b">runWorker 循环 getTask；核心线程 take 阻塞，非核心 poll 超时退出。</text>
+
+  <g transform="translate(70 150)">
+    <rect width="300" height="360" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="150" y="36" text-anchor="middle" class="t" fill="#5e5083">Worker（一个线程）</text>
+    <rect x="40" y="60" width="220" height="60" rx="10" fill="#e3dde2" stroke="#5e5083"/>
+    <text x="150" y="86" text-anchor="middle" class="m">runWorker</text>
+    <text x="150" y="110" text-anchor="middle" class="s">while (task != null || getTask())</text>
+    <rect x="40" y="150" width="220" height="60" rx="10" fill="#dee3d6" stroke="#466b48"/>
+    <text x="150" y="176" text-anchor="middle" class="m">getTask()</text>
+    <text x="150" y="200" text-anchor="middle" class="s">从队列取任务</text>
+    <rect x="40" y="240" width="220" height="60" rx="10" fill="#f4eace" stroke="#8a6b31"/>
+    <text x="150" y="266" text-anchor="middle" class="m">task.run()</text>
+    <text x="150" y="290" text-anchor="middle" class="s">执行任务</text>
+    <path d="M150 300 L150 330 L260 330 L260 180 L260 180" stroke="#466b48" stroke-width="2.5" fill="none" marker-end="url(#arrowG)"/>
+    <text x="230" y="260" text-anchor="middle" class="s">循环</text>
+  </g>
+
+  <g transform="translate(450 150)">
+    <rect width="680" height="360" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="340" y="36" text-anchor="middle" class="t" fill="#466b48">getTask 的两种结局</text>
+    <rect x="40" y="70" width="600" height="90" rx="12" fill="#dee3d6" stroke="#466b48"/>
+    <text x="340" y="100" text-anchor="middle" class="b">核心线程：take() 无限阻塞</text>
+    <text x="340" y="130" text-anchor="middle" class="s">队列空就等着，不超时、不退出 —— 这就是「常驻」</text>
+    <rect x="40" y="190" width="600" height="90" rx="12" fill="#f4eace" stroke="#8a6b31"/>
+    <text x="340" y="220" text-anchor="middle" class="b">非核心线程：poll(keepAliveTime) 超时</text>
+    <text x="340" y="250" text-anchor="middle" class="s">超过 keepAliveTime 取不到任务 → 返回 null → 线程退出、被回收</text>
+    <text x="340" y="320" text-anchor="middle" class="b" fill="#943b37">getTask 返回 null → processWorkerExit 线程销毁</text>
+  </g>
+
+  <g transform="translate(70 560)">
+    <rect width="1060" height="80" rx="16" fill="#ebe4d4" stroke="#8a7f6d"/>
+    <text x="28" y="36" class="b">allowCoreThreadTimeOut(true) 把核心线程也切到 poll 分支 —— 核心线程也能超时回收。</text>
+    <text x="28" y="62" class="s">线程复用 = 线程不死、循环取任务；线程回收 = getTask 返回 null、循环退出。</text>
+  </g>
+</svg>

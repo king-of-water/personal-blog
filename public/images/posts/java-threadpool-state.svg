@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">线程池五种状态及转换</title>
+  <desc id="desc">线程池有 RUNNING、SHUTDOWN、STOP、TIDYING、TERMINATED 五态。shutdown() 从 RUNNING 到 SHUTDOWN（停止收新任务、处理完队列），shutdownNow() 到 STOP（不处理队列、中断正在执行的任务），最终都经 TIDYING 到 TERMINATED。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 15px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="54" class="h">五态单向转换，shutdown 和 shutdownNow 分道</text>
+  <text x="56" y="88" class="b">shutdown 收尾队列，shutdownNow 丢队列、中断执行中的任务。</text>
+
+  <g transform="translate(70 150)">
+    <rect width="220" height="90" rx="14" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="110" y="42" text-anchor="middle" class="t" fill="#466b48">RUNNING</text>
+    <text x="110" y="72" text-anchor="middle" class="s">收新任务 + 处理队列</text>
+  </g>
+
+  <g transform="translate(70 340)">
+    <rect width="220" height="90" rx="14" fill="#f4eace" stroke="#8a6b31" stroke-width="2"/>
+    <text x="110" y="42" text-anchor="middle" class="t" fill="#725923">SHUTDOWN</text>
+    <text x="110" y="72" text-anchor="middle" class="s">不收新任务，处理完队列</text>
+  </g>
+
+  <g transform="translate(490 340)">
+    <rect width="220" height="90" rx="14" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+    <text x="110" y="42" text-anchor="middle" class="t" fill="#943b37">STOP</text>
+    <text x="110" y="72" text-anchor="middle" class="s">不收、不处理队列、中断执行</text>
+  </g>
+
+  <g transform="translate(490 540)">
+    <rect width="220" height="90" rx="14" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="110" y="42" text-anchor="middle" class="t">TIDYING</text>
+    <text x="110" y="72" text-anchor="middle" class="s">任务终止，workerCount=0</text>
+  </g>
+
+  <g transform="translate(870 540)">
+    <rect width="220" height="90" rx="14" fill="#e3dde2" stroke="#5e5083" stroke-width="2"/>
+    <text x="110" y="42" text-anchor="middle" class="t" fill="#5e5083">TERMINATED</text>
+    <text x="110" y="72" text-anchor="middle" class="s">terminated() 钩子执行完</text>
+  </g>
+
+  <line x1="180" y1="240" x2="180" y2="340" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="230" y="295" class="m">shutdown()</text>
+
+  <line x1="290" y1="195" x2="600" y2="340" stroke="#943b37" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="470" y="240" class="m" fill="#943b37">shutdownNow()</text>
+
+  <line x1="180" y1="430" x2="180" y2="540" stroke="#8a7f6d" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="230" y="490" class="s">队列空且线程空</text>
+
+  <line x1="600" y1="430" x2="600" y2="540" stroke="#8a7f6d" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="650" y="490" class="s">线程空</text>
+
+  <line x1="710" y1="585" x2="870" y2="585" stroke="#8a7f6d" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <g transform="translate(70 590)">
+    <rect width="360" height="60" rx="12" fill="#ebe4d4" stroke="#8a7f6d"/>
+    <text x="250" y="36" text-anchor="middle" class="b">优雅停机：shutdown + awaitTermination</text>
+  </g>
+</svg>
