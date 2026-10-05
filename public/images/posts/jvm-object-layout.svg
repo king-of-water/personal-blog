@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">一个 HotSpot 对象的内存布局</title>
+  <desc id="desc">HotSpot 对象由三部分组成：对象头（Mark Word 存哈希码、GC 分代年龄、锁状态，类型指针指向方法区的类元数据）、实例数据（对象字段）、对齐填充（保证 8 字节对齐）。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 15px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="54" class="h">对象 = 对象头 + 实例数据 + 对齐填充</text>
+  <text x="56" y="88" class="b">对象头的 Mark Word 里，锁状态、分代年龄、哈希码挤在同一个机器字里。</text>
+
+  <g transform="translate(70 150)">
+    <rect width="480" height="430" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="240" y="36" text-anchor="middle" class="t">对象内存布局</text>
+
+    <rect x="40" y="60" width="400" height="130" rx="14" fill="#f4eace" stroke="#8a6b31"/>
+    <text x="240" y="92" text-anchor="middle" class="t" fill="#725923">对象头</text>
+    <text x="240" y="126" text-anchor="middle" class="m">Mark Word</text>
+    <text x="240" y="152" text-anchor="middle" class="s">哈希码 / GC 年龄 / 锁状态 / 偏向线程</text>
+    <text x="240" y="178" text-anchor="middle" class="m">Klass Pointer</text>
+
+    <rect x="40" y="210" width="400" height="100" rx="14" fill="#d8dee0" stroke="#295279"/>
+    <text x="240" y="250" text-anchor="middle" class="t" fill="#295279">实例数据</text>
+    <text x="240" y="278" text-anchor="middle" class="s">对象的字段</text>
+
+    <rect x="40" y="330" width="400" height="60" rx="14" fill="#e3dde2" stroke="#5e5083"/>
+    <text x="240" y="366" text-anchor="middle" class="t" fill="#5e5083">对齐填充</text>
+  </g>
+
+  <g transform="translate(610 150)">
+    <rect width="520" height="430" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="260" y="36" text-anchor="middle" class="t">Mark Word 里挤着什么</text>
+    <text x="260" y="72" text-anchor="middle" class="b">同一个机器字，按对象状态复用位</text>
+    <text x="40" y="110" class="s">· 哈希码（identity hash）</text>
+    <text x="40" y="144" class="s">· GC 分代年龄（4 bit，默认上限 15）</text>
+    <text x="40" y="178" class="s">· 锁状态标志（无锁 / 偏向 / 轻量 / 重量）</text>
+    <text x="40" y="212" class="s">· 偏向锁的线程 ID / 锁记录指针</text>
+    <text x="40" y="260" class="b">锁状态和分代年龄共用 Mark Word，</text>
+    <text x="40" y="288" class="b">所以「对象被锁过」和「对象被 GC 过」</text>
+    <text x="40" y="316" class="b">会在这个机器字上互相踩位。</text>
+    <text x="40" y="356" class="s">后面讲 synchronized 锁升级时，</text>
+    <text x="40" y="380" class="s">会再回到这张图。</text>
+  </g>
+</svg>

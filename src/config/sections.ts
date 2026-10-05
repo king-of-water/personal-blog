@@ -75,7 +75,21 @@ export const backendSubcategories: Subcategory[] = [
 		slug: 'redis',
 		description: '缓存、数据结构、集群与稳定性。',
 	},
-	{ name: 'Java', slug: 'java', description: '语言、JVM、并发与常用框架。' },
+	{
+		name: 'Java',
+		slug: 'java',
+		description: '语言、JVM、并发与常用框架。',
+		plannedTopics: [
+			{ title: 'HashMap 与 ConcurrentHashMap：从哈希到并发安全', seriesOrder: 20 },
+			{ title: '动态代理：JDK 代理与 CGLIB', seriesOrder: 30 },
+			{ title: 'volatile 与 JMM：可见性、有序性与 happens-before', seriesOrder: 40 },
+			{ title: 'synchronized 与 ReentrantLock：锁升级与 AQS', seriesOrder: 50 },
+			{ title: 'ThreadLocal：线程私有变量与内存泄漏', seriesOrder: 60 },
+			{ title: '线程池：七个参数、拒绝策略与大小', seriesOrder: 70 },
+			{ title: '垃圾回收算法与收集器：从 Serial 到 ZGC', seriesOrder: 80 },
+			{ title: '三色标记：CMS 与 G1 的并发标记', seriesOrder: 90 },
+		],
+	},
 	{
 		name: '消息队列',
 		slug: 'message-queue',

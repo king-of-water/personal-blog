@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">堆的分代结构与对象晋升路径</title>
+  <desc id="desc">堆分成新生代（Eden 加两个 Survivor）和老年代。对象先分配在 Eden，Minor GC 后存活对象复制到 Survivor，年龄增长超过阈值晋升老年代；大对象直接进老年代。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <marker id="arrowG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#466b48"/></marker>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 15px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="54" class="h">对象先住新生代，活得久再晋升老年代</text>
+  <text x="56" y="88" class="b">分代假设：大部分对象朝生夕死，新生代承接短命对象，老年代放长寿对象。</text>
+
+  <g transform="translate(70 150)">
+    <rect width="700" height="260" rx="20" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="350" y="36" text-anchor="middle" class="t" fill="#295279">新生代（默认 Eden:S0:S1 = 8:1:1）</text>
+
+    <rect x="30" y="55" width="430" height="120" rx="14" fill="#d8dee0" stroke="#295279"/>
+    <text x="245" y="100" text-anchor="middle" class="t" fill="#295279">Eden</text>
+    <text x="245" y="128" text-anchor="middle" class="s">对象优先分配在这里</text>
+    <text x="245" y="152" text-anchor="middle" class="s">满了触发 Minor GC</text>
+
+    <rect x="480" y="55" width="100" height="120" rx="14" fill="#d8dee0" stroke="#295279"/>
+    <text x="530" y="120" text-anchor="middle" class="t" fill="#295279">S0</text>
+
+    <rect x="600" y="55" width="100" height="120" rx="14" fill="#d8dee0" stroke="#295279"/>
+    <text x="650" y="120" text-anchor="middle" class="t" fill="#295279">S1</text>
+
+    <path d="M245 175 L245 210 L530 210" stroke="#466b48" stroke-width="2.5" fill="none" marker-end="url(#arrowG)"/>
+    <text x="320" y="228" class="s">Minor GC 后存活 → Survivor 复制，年龄 +1</text>
+  </g>
+
+  <line x1="770" y1="280" x2="920" y2="280" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="845" y="268" text-anchor="middle" class="m">晋升</text>
+
+  <g transform="translate(920 150)">
+    <rect width="210" height="260" rx="20" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="105" y="36" text-anchor="middle" class="t" fill="#466b48">老年代</text>
+    <rect x="25" y="55" width="160" height="120" rx="14" fill="#dee3d6" stroke="#466b48"/>
+    <text x="105" y="120" text-anchor="middle" class="t" fill="#466b48">Old</text>
+    <text x="105" y="150" text-anchor="middle" class="s">年龄 ≥ 15 晋升</text>
+    <text x="105" y="174" text-anchor="middle" class="s">大对象直接进</text>
+  </g>
+
+  <g transform="translate(70 460)">
+    <rect width="1060" height="150" rx="20" fill="#ebe4d4" stroke="#8a7f6d"/>
+    <text x="28" y="38" class="t">两条晋升路径</text>
+    <text x="28" y="72" class="b">① Eden → Survivor 反复倒腾，每活过一次 GC 年龄 +1，达到阈值（默认 15）晋升老年代。</text>
+    <text x="28" y="102" class="b">② 大对象（超过 -XX:PretenureSizeThreshold）直接进老年代，避免在新生代里反复复制。</text>
+    <text x="28" y="132" class="s">不同代用不同 GC 策略，这正是「新生代复制、老年代标记-清除/整理」的由来。</text>
+  </g>
+</svg>

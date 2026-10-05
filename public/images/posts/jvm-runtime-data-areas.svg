@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">JVM 运行时数据区的五个区域</title>
+  <desc id="desc">程序计数器、虚拟机栈、本地方法栈是线程私有的，每个线程各有一份；堆和方法区是线程共享的，所有线程共用。这条分界线决定了局部变量天然线程安全、堆上的对象需要同步。</desc>
+  <defs>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 15px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="54" class="h">线程私有 vs 线程共享：五块区域各归各</text>
+  <text x="56" y="88" class="b">栈里的数据线程私有、天然安全；堆里的对象线程共享、需要同步。</text>
+
+  <g transform="translate(70 140)">
+    <rect width="520" height="430" rx="20" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="260" y="38" text-anchor="middle" class="t" fill="#5e5083">线程私有（每线程一份）</text>
+
+    <rect x="40" y="60" width="440" height="60" rx="12" fill="#e3dde2" stroke="#5e5083"/>
+    <text x="260" y="85" text-anchor="middle" class="t" fill="#5e5083">程序计数器 PC</text>
+    <text x="260" y="108" text-anchor="middle" class="s">记录当前字节码指令位置</text>
+
+    <rect x="40" y="135" width="440" height="90" rx="12" fill="#e3dde2" stroke="#5e5083"/>
+    <text x="260" y="160" text-anchor="middle" class="t" fill="#5e5083">虚拟机栈 JVM Stack</text>
+    <text x="260" y="188" text-anchor="middle" class="s">方法调用，栈帧装局部变量表、操作数栈</text>
+    <text x="260" y="210" text-anchor="middle" class="s">太深 → StackOverflowError</text>
+
+    <rect x="40" y="240" width="440" height="60" rx="12" fill="#e3dde2" stroke="#5e5083"/>
+    <text x="260" y="265" text-anchor="middle" class="t" fill="#5e5083">本地方法栈 Native Stack</text>
+    <text x="260" y="288" text-anchor="middle" class="s">native 方法</text>
+
+    <rect x="40" y="340" width="440" height="60" rx="12" fill="#ebe4d4" stroke="#8a7f6d"/>
+    <text x="260" y="375" text-anchor="middle" class="b">线程 A、B、C 各有一份，互不干扰</text>
+  </g>
+
+  <g transform="translate(610 140)">
+    <rect width="520" height="430" rx="20" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="260" y="38" text-anchor="middle" class="t" fill="#466b48">线程共享（所有线程共用）</text>
+
+    <rect x="40" y="60" width="440" height="150" rx="12" fill="#dee3d6" stroke="#466b48"/>
+    <text x="260" y="88" text-anchor="middle" class="t" fill="#466b48">堆 Heap</text>
+    <text x="260" y="116" text-anchor="middle" class="s">对象实例，GC 主战场</text>
+    <text x="260" y="142" text-anchor="middle" class="s">分新生代（Eden + S0 + S1）与老年代</text>
+    <text x="260" y="168" text-anchor="middle" class="s">满 → OOM: Java heap space</text>
+
+    <rect x="40" y="225" width="440" height="150" rx="12" fill="#dee3d6" stroke="#466b48"/>
+    <text x="260" y="253" text-anchor="middle" class="t" fill="#466b48">方法区 Method Area</text>
+    <text x="260" y="281" text-anchor="middle" class="s">类元数据、运行时常量池、静态变量</text>
+    <text x="260" y="307" text-anchor="middle" class="s">JDK 8 起由元空间 Metaspace 实现</text>
+    <text x="260" y="333" text-anchor="middle" class="s">满 → OOM: Metaspace</text>
+
+    <rect x="40" y="390" width="440" height="20" rx="6" fill="#ebe4d4"/>
+    <text x="260" y="405" text-anchor="middle" class="s">对象字段在这里 → 需要同步保证可见性与互斥</text>
+  </g>
+
+  <g transform="translate(70 600)">
+    <rect width="1060" height="50" rx="14" fill="#ebe4d4" stroke="#8a7f6d"/>
+    <text x="28" y="32" class="b">「局部变量不用加锁、堆上的对象要加锁」的根因，就藏在这张图里。</text>
+  </g>
+</svg>
