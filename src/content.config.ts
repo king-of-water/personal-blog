@@ -20,6 +20,7 @@ const posts = defineCollection({
 			'消息队列',
 			'分布式',
 			'系统设计与高并发',
+			'数据结构与存储',
 		]).optional(),
 		articleClass: z.enum(['flagship', 'focused', 'field-note']).optional(),
 		seriesOrder: z.number().int().positive().optional(),

@@ -2,11 +2,30 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
+import { backendSubcategories } from '../config/sections';
 
 const allPosts = (await getCollection('posts', ({ data }) => !data.draft))
 	.sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
 const posts = allPosts.slice(0, 6);
-const recentPosts = posts.slice(0, 3);
+const featuredPostIds = [
+	'hashmap-concurrenthashmap-hashing-concurrency',
+	'java-dynamic-proxy-jdk-cglib',
+	'java-gc-algorithms-collectors',
+];
+const featuredPosts = featuredPostIds.flatMap((id) => {
+	const post = allPosts.find((item) => item.id === id);
+	return post ? [{
+		title: post.data.title,
+		label: post.data.subcategory ?? post.data.category,
+		href: `/posts/${post.id}/`,
+	}] : [];
+});
+const dataStructureSection = backendSubcategories.find((section) => section.slug === 'data-structures-storage');
+const plannedFeaturedPosts = (dataStructureSection?.plannedTopics ?? []).map((topic) => ({
+	title: typeof topic === 'string' ? topic : topic.title,
+	label: '数据结构与存储 · 筹备中',
+	}));
+const featuredPostsForHome = [...featuredPosts, ...plannedFeaturedPosts];
 ---
 
 <BaseLayout>
@@ -16,16 +35,23 @@ const recentPosts = posts.slice(0, 3);
 			<h1>Hello, I am<br />king-of-water.</h1>
 			<p>从代码出发，理解系统与行业。</p>
 		</div>
-		<aside class="home-recent" aria-labelledby="home-recent-title">
-			<div class="home-recent-heading">
-				<h2 id="home-recent-title">最近更新</h2>
+		<aside class="home-featured" aria-labelledby="home-featured-title">
+			<div class="home-featured-heading">
+				<h2 id="home-featured-title">精选文章</h2>
 				<a href="/posts/">全部文章</a>
 			</div>
-			{recentPosts.map((post) => (
-				<a class="home-recent-item" href={`/posts/${post.id}/`}>
-					<small>{post.data.subcategory ?? post.data.category}</small>
-					<strong>{post.data.title}</strong>
-				</a>
+			{featuredPostsForHome.map((post) => (
+				post.href ? (
+					<a class="home-featured-item" href={post.href}>
+						<small>{post.label}</small>
+						<strong>{post.title}</strong>
+					</a>
+				) : (
+					<div class="home-featured-item is-planned">
+						<small>{post.label}</small>
+						<strong>{post.title}</strong>
+					</div>
+				)
 			))}
 		</aside>
 	</section>
@@ -50,6 +76,6 @@ const recentPosts = posts.slice(0, 3);
 			<h2>最近更新</h2>
 			<a href="/posts/">全部文章 →</a>
 		</div>
-		<div class="post-list">{posts.slice(1).map((post) => <PostCard post={post} />)}</div>
+		<div class="post-list">{posts.slice(0, 5).map((post) => <PostCard post={post} />)}</div>
 	</section>
 </BaseLayout>
