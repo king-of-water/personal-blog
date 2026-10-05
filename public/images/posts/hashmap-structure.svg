@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">HashMap 的数组、链表与红黑树结构</title>
+  <desc id="desc">HashMap 底层是数组，每个位置是一个桶。哈希冲突时 Key 挂成链表；链表长度达到 8 且数组长度达到 64 时转红黑树，把查找从 O(n) 降到 O(log n)。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 15px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="54" class="h">哈希定位到桶，冲突挂链表，太长转红黑树</text>
+  <text x="56" y="88" class="b">index = (n - 1) &amp; hash；链表长度 ≥ 8 且数组 ≥ 64 时树化。</text>
+
+  <g transform="translate(70 140)">
+    <rect width="420" height="430" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="210" y="36" text-anchor="middle" class="t" fill="#466b48">数组（桶）</text>
+    <rect x="40" y="55" width="120" height="54" rx="10" fill="#dee3d6" stroke="#466b48"/>
+    <text x="100" y="82" text-anchor="middle" class="m">bucket 0</text>
+    <text x="100" y="100" text-anchor="middle" class="s">空</text>
+    <rect x="40" y="130" width="120" height="54" rx="10" fill="#dee3d6" stroke="#466b48"/>
+    <text x="100" y="157" text-anchor="middle" class="m">bucket 1</text>
+    <text x="100" y="175" text-anchor="middle" class="s">链表</text>
+    <rect x="40" y="205" width="120" height="54" rx="10" fill="#dee3d6" stroke="#466b48"/>
+    <text x="100" y="232" text-anchor="middle" class="m">bucket 2</text>
+    <text x="100" y="250" text-anchor="middle" class="s">红黑树</text>
+    <text x="210" y="310" text-anchor="middle" class="m">(n - 1) &amp; hash</text>
+    <text x="210" y="340" text-anchor="middle" class="s">n 是 2 的幂，位运算代替取模</text>
+    <text x="210" y="380" text-anchor="middle" class="s">扩容：容量翻倍，元素重新定位</text>
+  </g>
+
+  <line x1="490" y1="365" x2="580" y2="365" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <g transform="translate(580 140)">
+    <rect width="550" height="430" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="275" y="36" text-anchor="middle" class="t" fill="#295279">冲突的两种形态</text>
+
+    <text x="40" y="80" class="b">链表（冲突少）：</text>
+    <rect x="40" y="100" width="70" height="44" rx="8" fill="#d8dee0" stroke="#295279"/>
+    <text x="75" y="127" text-anchor="middle" class="m">k1</text>
+    <line x1="110" y1="122" x2="150" y2="122" stroke="#8a7f6d" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <rect x="150" y="100" width="70" height="44" rx="8" fill="#d8dee0" stroke="#295279"/>
+    <text x="185" y="127" text-anchor="middle" class="m">k2</text>
+    <line x1="220" y1="122" x2="260" y2="122" stroke="#8a7f6d" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <rect x="260" y="100" width="70" height="44" rx="8" fill="#d8dee0" stroke="#295279"/>
+    <text x="295" y="127" text-anchor="middle" class="m">k3</text>
+    <text x="40" y="180" class="s">查找 O(n)，冲突越多越慢</text>
+
+    <text x="40" y="240" class="b">红黑树（链表 ≥ 8 且数组 ≥ 64）：</text>
+    <circle cx="110" cy="300" r="26" fill="#dee3d6" stroke="#466b48"/>
+    <text x="110" y="306" text-anchor="middle" class="m">root</text>
+    <line x1="136" y1="290" x2="200" y2="250" stroke="#466b48" stroke-width="2.5"/>
+    <line x1="136" y1="310" x2="200" y2="350" stroke="#466b48" stroke-width="2.5"/>
+    <circle cx="212" cy="240" r="24" fill="#dee3d6" stroke="#466b48"/>
+    <circle cx="212" cy="360" r="24" fill="#dee3d6" stroke="#466b48"/>
+    <text x="212" y="246" text-anchor="middle" class="m">L</text>
+    <text x="212" y="366" text-anchor="middle" class="m">R</text>
+    <text x="40" y="415" class="s">查找 O(log n)，树节点 ≤ 6 时退回链表</text>
+  </g>
+</svg>

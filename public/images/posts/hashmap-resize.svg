@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">HashMap 扩容时的高低位拆分</title>
+  <desc id="desc">数组长度翻倍后，旧桶的链表按 (oldCap &amp; hash) 拆成两段：结果为 0 的留在原下标，结果为 1 的挪到原下标加旧长度。每个桶最多拆两段，不用逐个重算下标。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <marker id="arrowG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#466b48"/></marker>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 15px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="54" class="h">扩容翻倍，每个桶按一位拆成两段</text>
+  <text x="56" y="88" class="b">oldCap 是 2 的幂，(oldCap &amp; hash) 只可能是 0 或 1。</text>
+
+  <g transform="translate(70 150)">
+    <rect width="300" height="320" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="150" y="36" text-anchor="middle" class="t" fill="#8a6b31">旧数组（cap = 16）</text>
+    <rect x="40" y="60" width="220" height="140" rx="12" fill="#f4eace" stroke="#8a6b31"/>
+    <text x="150" y="95" text-anchor="middle" class="m">bucket 3 的链表</text>
+    <text x="150" y="125" text-anchor="middle" class="s">k1, k2, k3, k4</text>
+    <text x="150" y="150" text-anchor="middle" class="s">它们 hash 的某一位不同</text>
+    <text x="150" y="235" text-anchor="middle" class="m">oldCap = 16 = 10000₂</text>
+    <text x="150" y="262" text-anchor="middle" class="m">(oldCap &amp; hash)</text>
+  </g>
+
+  <line x1="370" y1="310" x2="450" y2="310" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <g transform="translate(450 150)">
+    <rect width="300" height="320" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="150" y="36" text-anchor="middle" class="t" fill="#466b48">新数组（cap = 32）</text>
+    <rect x="40" y="60" width="220" height="90" rx="12" fill="#dee3d6" stroke="#466b48"/>
+    <text x="150" y="92" text-anchor="middle" class="m">bucket 3（原位）</text>
+    <text x="150" y="118" text-anchor="middle" class="s">hash 该位 = 0 的 Key</text>
+    <rect x="40" y="175" width="220" height="90" rx="12" fill="#dee3d6" stroke="#466b48"/>
+    <text x="150" y="207" text-anchor="middle" class="m">bucket 19（3+16）</text>
+    <text x="150" y="233" text-anchor="middle" class="s">hash 该位 = 1 的 Key</text>
+    <text x="150" y="300" text-anchor="middle" class="s">每个旧桶最多拆成两段</text>
+  </g>
+
+  <g transform="translate(790 150)">
+    <rect width="340" height="320" rx="18" fill="#ebe4d4" stroke="#8a7f6d"/>
+    <text x="170" y="36" text-anchor="middle" class="t">为什么省事</text>
+    <text x="40" y="80" class="b">JDK 7：每个元素重新算 index</text>
+    <text x="40" y="116" class="b">JDK 8：只按一位拆两段，</text>
+    <text x="40" y="150" class="b">一段留原位、一段加 oldCap，</text>
+    <text x="40" y="184" class="b">不用逐个重算下标。</text>
+    <text x="40" y="240" class="s">JDK 7 头插会倒置链表，</text>
+    <text x="40" y="270" class="s">并发扩容可能成环；</text>
+    <text x="40" y="300" class="s">JDK 8 尾插 + 拆分不再倒置。</text>
+  </g>
+</svg>
