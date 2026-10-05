@@ -16,6 +16,7 @@ const box = (x, y, w, h, labels, kind = '') => {
 const arrow = d => `<path d="${d}" fill="none" stroke="${line}" stroke-width="1.5" marker-end="url(#arrow)"/>`;
 const diamond = (cx, cy, w, h, label) => `<path d="M${cx},${cy - h / 2} L${cx + w / 2},${cy} L${cx},${cy + h / 2} L${cx - w / 2},${cy} Z" fill="#ebe4d4" stroke="${line}"/>${text(cx, cy + 7, label)}`;
 function save(name, title, desc, height, content) {
+  if (content.includes('undefined')) throw new Error(`Missing diagram label: ${name}`);
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="780" height="${height}" viewBox="0 0 780 ${height}" role="img" aria-labelledby="title desc"><title id="title">${escape(title)}</title><desc id="desc">${escape(desc)}</desc><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="${line}"/></marker></defs><rect width="780" height="${height}" fill="${ground}"/>${text(26, 35, title, 22, 'start')}${content}</svg>\n`;
   writeFileSync(fileURLToPath(new URL(`../../public/images/posts/cache-consistency-${name}.svg`, import.meta.url)), svg);
   console.log(`${name}: 780 × ${height}`);
@@ -69,3 +70,34 @@ save('version-gate', '回填资格：空缓存也要记住版本水位', 'floor=
   box(35, 200, 225, 65, ['拒绝回填', '需要新值则重查'], 'bad') + arrow('M315,230 H260') + text(285, 211, '否', 18) +
   box(580, 240, 170, 65, ['写入候选', '并设置 TTL'], 'good') + arrow('M530,230 H552 V272 H580') + text(557, 219, '是', 18) +
   text(35, 330, '前提：水位可靠存在；缺失水位不能直接当成版本零', 18, 'start'));
+
+save('double-delete', '延迟双删：第二次删除能否赶上旧回填', '两条路径都先删除缓存并提交 v42；旧回填在第二次删除之前完成则被清除，在第二次删除之后完成则仍留下旧值。', 370,
+  text(30, 68, '共同前提：DEL① → COMMIT v42；旧读已经拿到 v41', 18, 'start') +
+  text(30, 102, '路径 A：旧回填先完成', 18, 'start') +
+  box(30, 117, 200, 65, ['旧读回填 v41']) + box(290, 117, 200, 65, ['延迟 DEL②']) +
+  box(550, 117, 200, 65, ['缓存为空', '下次读回源'], 'good') + arrow('M230,149 H290') + arrow('M490,149 H550') +
+  text(30, 228, '路径 B：旧读暂停得更久', 18, 'start') +
+  box(30, 243, 200, 65, ['延迟 DEL②']) + box(290, 243, 200, 65, ['旧读回填 v41']) +
+  box(550, 243, 200, 65, ['缓存 v41', '旧值仍然存在'], 'bad') + arrow('M230,275 H290') + arrow('M490,275 H550') +
+  text(30, 346, '固定延迟不能证明所有旧读都已结束', 18, 'start'));
+
+save('binlog-invalidate', 'binlog 同步：删除确认之后才能确认消费', '提交后的有效变更被订阅、可靠投递，消费者映射缓存键并删除；失败或超时保留事件重试，删除确认后才确认消费位置。', 435,
+  box(30, 80, 210, 60, ['事务提交 v42', 'binlog 有效变更']) +
+  box(285, 80, 210, 60, ['订阅并解析', '可靠投递事件']) +
+  box(540, 80, 210, 60, ['消费者映射 key', '执行 DEL']) +
+  arrow('M240,110 H285') + arrow('M495,110 H540') +
+  diamond(645, 230, 160, 90, '删除确认？') + arrow('M645,140 V185') +
+  box(285, 197, 210, 65, ['保留未确认事件', '退避重试'], 'bad') +
+  arrow('M565,230 H495') + text(530, 211, '否 / 超时', 18) +
+  arrow('M390,197 V170 H520 V110 H540') +
+  box(540, 325, 210, 65, ['确认消费位置', '后续读 miss 回源'], 'good') +
+  arrow('M645,275 V325') + text(674, 309, '是', 18) +
+  text(30, 416, '订阅投递位点 ≠ 缓存消费完成位点', 18, 'start'));
+
+save('version-invalidate', '版本失效：推进门槛，但不误删更高版本', '事件 v42 到达后原子推进 floor 到至少 42，仅删除低于门槛的已有值，保留空缓存或更高版本值。', 355,
+  box(30, 75, 225, 65, ['收到事件 v42', '当前 floor = 41']) +
+  box(310, 75, 225, 65, ['floor = max(41, 42)', '门槛推进到 42']) + arrow('M255,107 H310') +
+  diamond(423, 230, 210, 100, '存在低版本值？') + arrow('M423,140 V180') +
+  box(35, 200, 220, 65, ['删除旧值 v41'], 'bad') + arrow('M318,230 H255') + text(285, 211, '是', 18) +
+  box(580, 200, 170, 65, ['保留空缓存', '或 v42 / v43'], 'good') + arrow('M528,230 H580') + text(554, 211, '否', 18) +
+  text(35, 329, '推进门槛与清理低版本值：同一个不可交错的操作', 18, 'start'));

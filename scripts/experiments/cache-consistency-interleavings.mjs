@@ -52,9 +52,10 @@ const writerResults = writers.map(trace => {
 assert(writerResults.some(r => r.db === 43 && r.cache === 42));
 
 function fill(state, version) {
-  if (version < state.floor || (state.value !== null && version < state.value)) return false;
+  if (state.floor === null) return 'unknown-floor';
+  if (version < state.floor || (state.value !== null && version < state.value)) return 'stale';
   state.value = version;
-  return true;
+  return 'stored';
 }
 function invalidate(state, version) {
   state.floor = Math.max(state.floor, version);
@@ -62,17 +63,46 @@ function invalidate(state, version) {
 }
 const guarded = { floor: 41, value: 41 };
 invalidate(guarded, 42);
-assert.equal(fill(guarded, 41), false);
-assert.equal(fill(guarded, 42), true);
+assert.equal(fill(guarded, 41), 'stale');
+assert.equal(fill(guarded, 42), 'stored');
 invalidate(guarded, 43);
-assert.equal(fill(guarded, 43), true);
+assert.equal(fill(guarded, 43), 'stored');
 invalidate(guarded, 42); // A duplicate, older event cannot lower the floor.
 assert.equal(guarded.value, 43);
-assert.equal(fill(guarded, 42), false);
+assert.equal(fill(guarded, 42), 'stale');
 
 const lostFloor = { floor: 42, value: null };
 lostFloor.floor = 0; // Eviction/restart: missing floor treated as zero is unsafe.
-assert.equal(fill(lostFloor, 41), true);
+assert.equal(fill(lostFloor, 41), 'stored');
+const unknownFloor = { floor: null, value: null };
+assert.equal(fill(unknownFloor, 41), 'unknown-floor');
+assert.equal(unknownFloor.value, null);
+
+assert.equal(readWrite(['DEL1', 'MISS', 'LOAD', 'COMMIT', 'SET', 'DEL2'], 41).cache, null);
+assert.equal(readWrite(['DEL1', 'MISS', 'LOAD', 'COMMIT', 'DEL2', 'SET'], 41).cache, 41);
+
+// A durable confirmation flag survives this model's consumer restart.
+// Redis/MQ persistence and transport failures are deliberately not simulated.
+function consumeEvent(state, { confirmFirst = false, failAfter } = {}) {
+  if (state.confirmed) return 'skipped';
+  for (const action of confirmFirst ? ['ACK', 'DEL'] : ['DEL', 'ACK']) {
+    if (action === 'ACK') state.confirmed = true;
+    if (action === 'DEL') state.value = null;
+    if (action === failAfter) return 'crashed';
+  }
+  return 'done';
+}
+const acknowledgedTooEarly = { value: 41, confirmed: false };
+assert.equal(consumeEvent(acknowledgedTooEarly, { confirmFirst: true, failAfter: 'ACK' }), 'crashed');
+assert.equal(consumeEvent(acknowledgedTooEarly), 'skipped');
+assert.equal(acknowledgedTooEarly.value, 41);
+const safelyReplayable = { value: 41, confirmed: false };
+assert.equal(consumeEvent(safelyReplayable, { failAfter: 'DEL' }), 'crashed');
+assert.equal(safelyReplayable.confirmed, false);
+safelyReplayable.value = 42; // A fresh read fills the cache before replay.
+assert.equal(consumeEvent(safelyReplayable), 'done');
+assert.equal(safelyReplayable.value, null); // Duplicate DEL costs a miss, not an old SET.
+assert.equal(safelyReplayable.confirmed, true);
 
 const commitAt = 20;
 const fillAt = 200;
@@ -83,9 +113,11 @@ console.log(JSON.stringify({
   deleteBeforeCommit: summarize(first, 41),
   deleteAfterCommitWithColdCache: summarize(after, null),
   twoWriters: { schedules: writers.length, stale: writerResults.filter(r => r.cache < r.db).length },
-  delayedDoubleDelete: 'late fill after both deletes remains stale',
+  delayedDoubleDelete: 'clears a fill before DEL2; a later fill remains stale',
   versionGate: 'rejects old fill and preserves monotonic floor',
   lostFloor: 'counterexample: treating missing floor as zero admits old data',
+  unknownFloor: 'rejects fills until the missing floor is safely recovered',
+  consumerRecovery: 'ACK-before-DEL can lose work; DEL-before-ACK permits replay',
   ttl: { commitAt, fillAt, ttl, expiresAt: fillAt + ttl },
   limitation: 'Finite schedules and atomic in-memory models; no provider, durability, latency or concurrency guarantee.',
 }, null, 2));

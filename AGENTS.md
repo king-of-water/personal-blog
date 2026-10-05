@@ -27,3 +27,10 @@ For new technical articles or substantial article rewrites, read and follow
 `.agents/skills/king-of-water-tech-writing/SKILL.md`. Treat
 `src/content/posts/agent-harness-engineering.md` as the local quality reference.
 Run the skill's article audit before building and committing.
+
+Explain mechanisms before introducing shorthand. On first use, give the term's
+plain Chinese meaning, a concrete initial state, and the actions each participant
+performs. Describe failure and recovery paths, acknowledgment boundaries, and
+remaining limitations; mentioning a mechanism's name alone is not sufficient.
+Use compact flowcharts showing operations, branches, and retries rather than
+large diagrams consisting only of conceptual labels.
