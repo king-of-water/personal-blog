@@ -1,95 +1,233 @@
 ---
 title: HashMap 与 ConcurrentHashMap：从哈希到并发安全
-description: 拆解 HashMap 的哈希定位、链表与红黑树冲突处理、扩容时的 rehash 与高低位拆分，说明它为什么线程不安全（JDK 7 死循环到 JDK 8 的改进），再讲 ConcurrentHashMap 从分段锁到 CAS+synchronized 的演进。
+description: 深入 HashMap 源码：hash 扰动与 2 的幂、put 完整流程、扩容 resize 的高低位拆分、树化与退化的阈值、JDK 7 头插死循环；再深入 ConcurrentHashMap：JDK 7 分段锁到 JDK 8 的 CAS+synchronized、sizeCtl 与 ForwardingNode 与 transfer 的多线程协同扩容、get 无锁与 baseCount+CounterCell 计数。
 category: 后端
 subcategory: Java
-articleClass: focused
+articleClass: flagship
 seriesOrder: 20
 featured: true
 publishedAt: 2026-10-05
 updatedAt: 2026-10-05
-tags: [Java, HashMap, ConcurrentHashMap, 哈希, 红黑树, 扩容, 分段锁, CAS, 线程安全]
+tags: [Java, HashMap, ConcurrentHashMap, 哈希, 红黑树, 扩容, resize, 分段锁, CAS, ForwardingNode, sizeCtl]
 ---
 
-`HashMap` 是 Java 里用得最多的数据结构之一，但它有个众所周知的坑：多线程下会出问题，轻则丢数据、重则死循环。于是又有了 `ConcurrentHashMap`。要真正理解"为什么 `HashMap` 不安全、`ConcurrentHashMap` 怎么做到安全"，得先看懂 `HashMap` 内部怎么组织数据——哈希、桶、链表、红黑树、扩容，这些机制是并发问题生长出来的土壤。
+`HashMap` 和 `ConcurrentHashMap` 是 Java 里被问到最多的两个类，但大多数人对它们的理解停在"数组加链表、链表太长转红黑树、CHM 用 CAS 不用锁"这三句话。这三句话没错，却远远不够——真正决定它们行为的是几个具体的源码机制：`resize` 里那段"高低位拆分"、树化的精确阈值、JDK 7 头插法怎么把链表接成环、CHM 的 `sizeCtl` 怎么协调多个线程一起扩容。
 
-本文回答一个问题：`HashMap` 怎样用哈希把 Key 定位到桶、冲突和扩容怎么处理、为什么线程不安全；`ConcurrentHashMap` 又怎样在不锁全表的前提下做到并发安全。主要依据是 JDK 源码，版本差异会在关键处标注（默认 JDK 8+，它和 JDK 7 的差异正是理解演进的重点）。
+这篇文章把这些机制摊开讲。目标是：读完你能自己复述出 `put` 的每一步、`resize` 的每一段拆分、以及 CHM 扩容时多个线程是怎么"认领"迁移任务的。主要依据是 JDK 8 的源码，JDK 7 的差异会单独标出来——它们之间的变化，正是理解"为什么要这样写"的钥匙。
 
-## 一、HashMap 的核心：哈希定位到桶
+## 一、数据结构：数组、链表、红黑树
 
-`HashMap` 底层是一个数组，每个数组位置叫一个桶（bucket）。`put(key, value)` 时，先用 `key.hashCode()` 算哈希，再定位到某个桶；`get(key)` 走同样的定位。定位的公式是关键：
+`HashMap` 底层是一个 `Node<K,V>[] table` 数组，每个数组位置叫一个桶。`Node` 有 `hash`、`key`、`value`、`next` 四个字段——`next` 说明同一个桶里的冲突 Key 会串成一条单向链表。
 
-```java
-// JDK 8 的 put 里，定位桶下标
-int h = key.hashCode() ^ (key.hashCode() >>> 16); // 扰动：高 16 位和低 16 位异或
-int index = (n - 1) & h;                          // n 是数组长度，且 n 是 2 的幂
-```
+当链表太长，查找退化成 O(n)，JDK 8 把长链表转成红黑树。树节点是 `TreeNode`（继承 `Node`），它有 `parent`、`left`、`right`、`prev` 等字段，构成一棵自平衡的二叉搜索树，查找降到 O(log n)。
 
-两个细节值得记。第一，`(n - 1) & h` 能替代 `h % n`，前提是 `n` 是 2 的幂——这就是"为什么 `HashMap` 容量必须是 2 的幂"：位运算比取模快，而且容量翻倍时正好只有一位参与变化。第二，那个 `h >>> 16` 的扰动，是为了把 hashCode 的高位信息混进低位——因为 `(n - 1) & h` 只用到 h 的低几位（数组长度是 2 的幂，`n-1` 只有低位是 1），而很多对象的 hashCode 是高位差异大、低位差异小（比如按固定步长递增的整数，或内存地址的低位常常相同），直接取低位会让大量 Key 挤进同一个桶。扰动一下，高位的信息也参与了定位，分布才更均匀。
-
-`put` 的完整流程可以串成五步：① 算 `hash`（含扰动）；② 用 `(n-1) & hash` 定位桶；③ 桶空，直接放进去；④ 桶不空，沿链表或红黑树找有没有 `equals` 相等的 Key，有就覆盖 value、没有就追加；⑤ 插入后检查是否要树化或扩容。`get` 是同样的前两步定位，然后沿链表或树找 Key。这条流程是理解后面所有行为——冲突、树化、扩容、并发——的骨架。
-
-## 二、冲突怎么处理：链表，满了转红黑树
-
-不同的 Key 可能定位到同一个桶，这就是哈希冲突。JDK 7 及以前，冲突的 Key 串成一条链表挂在桶上；JDK 8 起，链表太长了就转成红黑树，把查找从 O(n) 降到 O(log n)。
-
-转换有阈值，而且两个条件要同时满足：**链表长度达到 8，且数组长度达到 64**，才树化；树节点数量降到 6，再退回链表。数组长度不够 64 时先扩容而不是树化——因为树化是有代价的，桶太少说明问题在"数组太小"，扩容更划算。
+所以 `HashMap` 的完整结构是"数组 + 链表 + 红黑树"三段式：数组负责快速定位，链表解决冲突，红黑树解决"链表太长查得慢"。三种结构在同一个桶里只会出现一种——要么空、要么链表、要么红黑树，树和链表不会同时挂在一个桶上。
 
 ![HashMap 的数组、链表与红黑树结构](/images/posts/hashmap-structure.svg)
 
-这张图要记的是"为什么不是纯数组"：哈希冲突不可避免，纯数组存不下两个同桶的 Key。链表解决冲突、红黑树解决"链表太长查得慢"，这是 `HashMap` 在"空间"和"查找速度"之间做的两段式权衡。
+## 二、hash 扰动和 2 的幂：定位的两个前提
 
-## 三、扩容：翻倍，然后把每个 Key 重新放一遍
+`put` 的第一步是算 Key 在哪个桶，公式是 `(n - 1) & hash`，其中 `n` 是数组长度。这里有两个前提，缺一个公式就不成立。
 
-当元素数量超过 `容量 × 负载因子`（默认 0.75），`HashMap` 触发扩容：数组长度翻倍，然后所有 Key 重新定位到新数组。扩容是 `HashMap` 最重的操作，也是并发问题的高发区。
+**前提一：数组长度必须是 2 的幂。** 只有当 `n` 是 2 的幂时，`n - 1` 的二进制才是"低 k 位全是 1"（比如 `n=16`，`n-1=15=1111₂`），此时 `(n-1) & hash` 恰好等于 `hash % n`，而且位运算比取模快得多。这也是为什么 `HashMap` 的默认容量是 16、扩容永远是翻倍——保证容量一直是 2 的幂。
 
-扩容的完整动作是：① 新建一个两倍大的数组；② 遍历旧数组的每个桶；③ 对每个桶里的链表，按 `(oldCap & hash)` 拆成两段——结果为 0 的留在原下标，结果为 1 的挪到"原下标 + oldCap"；④ 把拆好的两段分别挂到新数组对应位置。整个过程不改变 Key 之间的相对顺序（尾插），这是和 JDK 7 头插的关键区别。
+**前提二：hash 要先扰动。** 直接用 `key.hashCode()` 的低几位，分布往往很差——很多 hashCode 的高位差异大、低位差异小。JDK 8 的扰动函数是：
 
-JDK 8 这个优化叫高低位拆分。因为数组长度是 2 的幂，翻倍后新下标只取决于哈希的某一位：`(旧长度) & hash` 为 0 的 Key 留在原桶，为 1 的 Key 挪到"原桶 + 旧长度"的位置。于是每个桶的链表在扩容时最多拆成两段，各走各的，不用逐个重新算下标。
+```java
+static final int hash(Object key) {
+    int h;
+    return (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16);
+}
+```
 
-![扩容时的高低位移拆分](/images/posts/hashmap-resize.svg)
+它把 hashCode 的高 16 位和低 16 位做一次异或，让高位的信息"混进"低位。因为 `(n-1) & hash` 只用到 hash 的低几位（数组长度通常远小于 2^16），不扰动的话，高位差异根本参与不了定位，大量 Key 会挤进同一个桶。扰动一次，高位的随机性就传导到了定位里。
 
-这个优化把"全量 rehash"变成了"按一位拆分"，JDK 7 里每个元素都要重新算 `index` 的活儿省掉了大半。但它也引入了并发场景下的新行为——下一节说。
+## 三、put 的完整流程
 
-## 四、为什么线程不安全：从 JDK 7 死循环到 JDK 8 的改进
+`put` 的每一步都有明确的判断，串起来是这样：
 
-`HashMap` 没有任何同步，多线程同时 `put` 会怎样？两个线程同时扩容、同时操作同一个桶的链表，就可能出问题。
+```java
+final V putVal(int hash, K key, V value, ...) {
+    Node<K,V>[] tab; Node<K,V> p; int n, i;
+    // ① 表为空 → 先初始化（resize 里分配）
+    if ((tab = table) == null || (n = tab.length) == 0)
+        n = (tab = resize()).length;
+    // ② 定位桶，桶为空 → 直接放新节点
+    if ((p = tab[i = (n - 1) & hash]) == null)
+        tab[i] = newNode(hash, key, value, null);
+    else {
+        Node<K,V> e; K k;
+        // ③ 桶头就是目标 Key（hash 相等且 equals 相等）→ 覆盖
+        if (p.hash == hash && ((k = p.key) == key || (key != null && key.equals(k))))
+            e = p;
+        // ④ 桶是红黑树 → 走树插入
+        else if (p instanceof TreeNode)
+            e = ((TreeNode<K,V>)p).putTreeVal(this, tab, hash, key, value);
+        // ⑤ 桶是链表 → 遍历找 Key，找不到就尾插
+        else {
+            for (int binCount = 0; ; ++binCount) {
+                if ((e = p.next) == null) {
+                    p.next = newNode(hash, key, value, null);
+                    if (binCount >= TREEIFY_THRESHOLD - 1)  // 链表长度达到 8
+                        treeifyBin(tab, hash);              // 尝试树化
+                    break;
+                }
+                if (e.hash == hash && ((k = e.key) == key || (key != null && key.equals(k))))
+                    break;   // 找到目标 Key
+                p = e;
+            }
+        }
+        // 覆盖旧值
+        if (e != null) { V oldValue = e.value; e.value = value; return oldValue; }
+    }
+    // ⑥ 新插入，计数 +1，超过阈值就扩容
+    if (++size > threshold)
+        resize();
+    return null;
+}
+```
 
-JDK 7 的问题是致命的：链表用**头插法**，并发扩容时可能把链表接成环。具体怎么成的环？JDK 7 扩容时，遍历旧链表、把每个节点用头插法插进新数组。两个线程同时扩容同一个桶：线程 A 把节点 x 摘下来、正要插进新位置，还没插完，线程 B 也来遍历同一个链表——它看到的链表已经被 A 改了一半，x 的 `next` 指向新位置，而新位置里的节点 `next` 又指回 x，环就形成了。之后 `get` 一个不在表里的 Key 时，会沿着环永远转下去，CPU 打满。JDK 8 改成尾插法、且按高低位一次性拆两段，不再逐个摘插，环的问题就没了。
+注意几个点。第一，判断 Key 相等是"`hash` 相等**且** `equals` 相等"——两个条件都要满足，所以重写 `equals` 必须同时重写 `hashCode`，否则"相等的 Key 定位到不同桶"，查不到。第二，链表插入是**尾插**（JDK 8），`binCount >= 7`（即链表长度到 8）才触发树化，这是下一节要展开的。第三，`size > threshold` 就扩容，`threshold = 容量 × 负载因子`，默认负载因子 0.75。
 
-JDK 8 把链表改成**尾插法**，扩容时也按高低位拆分，不再倒置链表，环的问题基本消除。但 `HashMap` 仍然线程不安全——只是从"可能死循环"降级成"可能丢数据、可能读到不一致的中间状态"。比如两个线程同时 `put` 不同的 Key，`size` 的 `++` 会丢更新；一个线程扩容时另一个线程 `get`，可能读到还没搬完的数据。所以"JDK 8 的 `HashMap` 多线程就不会死循环了"这句话对，但"所以可以用了"这句话错。
+`get` 是 `put` 的"只读版"，同样先定位、再查找：算 hash → `(n-1) & hash` 定位桶 → 桶头 hash 和 equals 都匹配就返回 → 否则沿链表或树查找。它没有写路径的树化、扩容判断，所以逻辑简单得多。理解了 `put`，`get` 只是一次没有副作用的定位 + 遍历。
 
-## 五、ConcurrentHashMap：从分段锁到 CAS + synchronized
+## 四、扩容 resize：高低位拆分
 
-`ConcurrentHashMap` 是线程安全版，但它的"安全"不是简单地在 `HashMap` 外面套一把大锁——那会退化成 `HashTable`，并发写全串行。它的演进有两条路线。
+当 `size > threshold`，触发 `resize()`：数组容量翻倍，所有 Key 重新定位。这是 `HashMap` 最重、也最容易出并发问题的操作。
 
-JDK 7 用**分段锁（Segment）**：把整个数组分成 16 段，每段一把锁，写操作只锁自己那段，不同段之间可以并行写。它把"锁全表"降成了"锁一段"，但锁的粒度还是粗——同一段里的两个不同桶，写的时候还是互相阻塞。默认 16 段，是在"并发度"和"内存开销"之间取的折中：段数越多、锁粒度越细、并发越高，但每段都要维护自己的锁和计数，成本也越高。
+JDK 8 的关键优化是**高低位拆分**——不用逐个重新算下标，而是按 hash 的某一位，把每个桶的链表一次拆成两段：
 
-JDK 8 彻底重写了：放弃分段锁，改用 **CAS + synchronized**。`put` 时，如果桶是空的，用 CAS 把新节点直接放进去——成功即完成，全程无锁；如果桶不空（有链表或树），对这个桶的头节点加 `synchronized`，只锁这一个桶，锁内做和 `HashMap` 一样的"找 Key / 覆盖 / 追加 / 树化 / 扩容"。锁的粒度从"一段"细化到"一个桶"，并发度大幅提升。`get` 则完全不加锁，因为 `Node` 的 `val` 和 `next` 都是 `volatile`，读到的总是可见的最新值——这正是上一篇讲 JMM 时说的"堆上共享字段靠 `volatile` 保证可见性"的落地。
+```java
+// resize 里遍历旧桶的核心逻辑（简化）
+for (int j = 0; j < oldCap; ++j) {
+    Node<K,V> e = oldTab[j];
+    if (e == null) continue;
+    Node<K,V> loHead = null, loTail = null;   // 低位链
+    Node<K,V> hiHead = null, hiTail = null;   // 高位链
+    do {
+        Node<K,V> next = e.next;
+        if ((e.hash & oldCap) == 0) {          // 关键判断
+            // 追加到低位链（留在原下标 j）
+        } else {
+            // 追加到高位链（挪到 j + oldCap）
+        }
+    } while ((e = next) != null);
+    newTab[j] = loHead;         // 低位链挂回原下标
+    newTab[j + oldCap] = hiHead; // 高位链挂到 j + oldCap
+}
+```
+
+为什么 `(e.hash & oldCap)` 这一位就能决定新位置？因为 `oldCap` 是 2 的幂（比如 16 = `10000₂`），扩容前定位用 `(oldCap-1) & hash`（只取低 4 位），扩容后定位用 `(newCap-1) & hash`（取低 5 位）。新旧下标只差"第 5 位"这一位——`oldCap & hash` 正是取这一位。这一位是 0，新下标 = 旧下标；这一位是 1，新下标 = 旧下标 + oldCap。
+
+于是每个桶的链表在扩容时**最多拆成两段**，两段各自保持原有顺序（尾插），不用像 JDK 7 那样逐个重新算 `index`。这也是 JDK 8 相对 JDK 7 在扩容上的核心改进——下一节说 JDK 7 为什么没这个改进会出事。
+
+![扩容时的高低位拆分](/images/posts/hashmap-resize.svg)
+
+## 五、树化与退化：8、6、64 三个阈值
+
+链表转红黑树有三个阈值，很多人只记得"8"这一个，其实有两个条件和一个退路。
+
+**树化的两个条件**：链表长度达到 8（`binCount >= TREEIFY_THRESHOLD - 1`），**且**数组长度达到 64（`MIN_TREEIFY_CAPACITY`）。链表到 8 但数组不够 64 时，`treeifyBin` 不会真的树化，而是先 `resize` 扩容——因为数组太小，问题在于"桶太少、冲突太集中"，扩容把 Key 摊开比树化更划算。
+
+**退化**：树节点减少到 6（`UNTREEIFY_THRESHOLD`），红黑树转回链表。
+
+为什么是 8？JDK 源码注释里给了一个概率解释：如果 hashCode 分布良好，冲突近似泊松分布，一个桶里挂 8 个节点的概率约为千万分之一（`0.00000006`）。也就是说，正常情况下链表根本到不了 8，真到了 8，多半是 hashCode 写得烂或有人恶意构造，此时转红黑树是"防退化的兜底"。8 和 6 之间留了 2 的差值，是为了避免"树和链表在 7 附近反复横跳"的抖动。
+
+## 六、JDK 7 的头插死循环：为什么改了
+
+JDK 7 的 `HashMap` 在并发扩容时会死循环，这是它最著名的坑。根源是 JDK 7 的两个设计：链表用**头插法**，且扩容时**逐个节点重新插入**新数组。
+
+死循环的成环过程：扩容时，线程 A 遍历旧链表的节点 `x`，用头插法把它插到新桶（`x.next = newHead`）；在 A 还没完成整个链表迁移时，线程 B 也来扩容同一个桶，它看到的旧链表已经被 A 改了一半——`x.next` 指向了新位置，而新位置里的节点 `next` 又指回 `x`。两个线程反复头插、反复倒置，链表最终接成一个环。之后 `get` 一个不在表里的 Key，会沿着环永远转下去，CPU 打满。
+
+JDK 8 的两个改动恰好拆掉了这个炸弹：一是**尾插法**（不再倒置链表顺序），二是**高低位拆分**（每个桶一次拆成两段、不再逐个摘插）。尾插保证链表顺序不变，拆分保证迁移过程更"原子"，环就形成不了了。但要记住：JDK 8 只是消除了死循环，`HashMap` 依然线程不安全——多线程同时 `put` 还是会丢数据、读到不一致的中间态。
+
+## 七、ConcurrentHashMap：从分段锁到 CAS + synchronized
+
+`ConcurrentHashMap` 的线程安全，不是"给 `HashMap` 套把大锁"（那是 `Hashtable`，并发写全串行），它的演进有两条路线。
+
+JDK 7 用**分段锁（Segment）**：把整个数组分成 16 段，每段一把 `ReentrantLock`，写操作只锁自己那段，不同段可以并行写。它把"锁全表"降成"锁一段"，但粒度仍粗——同一段里的两个不同桶，写时还互相阻塞。
+
+JDK 8 彻底重写，放弃分段锁，改用 **CAS + synchronized**，锁的粒度细化到**单个桶**。`put` 的完整流程，一个循环里装着四条分支：
+
+```java
+for (Node<K,V>[] tab = table;;) {
+    Node<K,V> f; int n, i, fh;
+    if (tab == null || (n = tab.length) == 0)
+        tab = initTable();                       // ① 表未初始化
+    else if ((f = tabAt(tab, i = (n-1) & hash)) == null) {
+        if (casTabAt(tab, i, null, new Node(hash, key, value)))
+            break;                               // ② 空桶：CAS 插入，无锁
+    }
+    else if ((fh = f.hash) == MOVED)
+        tab = helpTransfer(tab, f);              // ③ 正在扩容：帮忙迁移
+    else {
+        synchronized (f) {                       // ④ 非空桶：锁桶头节点
+            // 在锁内：链表/树里找 Key、尾插或覆盖、检查树化
+        }
+    }
+}
+```
+
+这四条分支把 CHM 的并发设计暴露得很清楚：空桶用 CAS 无锁插入，非空桶锁桶头节点，正在扩容就去帮忙——每一条都是为了"把锁做小、把等待做短"。
+
+锁的粒度从"一段"缩到"一个桶"，并发度大幅提升。之所以敢用 `synchronized`，是因为 JDK 6 之后 `synchronized` 有了锁升级（偏向锁、轻量级锁），在"锁竞争不激烈"时性能已经很好，配合"锁单个桶头节点"这种短临界区，绰绰有余。
 
 ![ConcurrentHashMap 从分段锁到 CAS+synchronized 的演进](/images/posts/concurrenthashmap-evolution.svg)
 
-这张图的核心是"锁的粒度在缩小"：`HashTable` 锁全表 → JDK 7 锁分段 → JDK 8 锁单个桶。粒度越细，写并发度越高，实现的复杂度也越高——`ConcurrentHashMap` 的演进史，就是一部"把锁做小"的历史。
+## 八、ConcurrentHashMap 的扩容：多线程协同迁移
 
-`ConcurrentHashMap` 的扩容还有一个 `HashMap` 没有的设计：**多线程协同迁移**。一个线程触发扩容后，开始把旧数组的桶搬到新数组；其他线程在这期间来 `put`，发现正在扩容，不会傻等，而是领一段迁移任务、帮忙一起搬（`helpTransfer`）。于是扩容的活儿被多个线程分摊，不会因为一个触发扩容的线程慢而卡住整张表。这也是它高并发下仍能保持可用性的关键——`HashMap` 扩容是单线程扛，`ConcurrentHashMap` 扩容是大家一起扛。
+CHM 的扩容是它和 `HashMap` 最大的区别，也是最该看源码的部分。核心围绕一个字段 `sizeCtl` 和一个节点 `ForwardingNode`。
 
-## 六、两个容易被问倒的细节
+**`sizeCtl`** 是一个"一字段多用"的控制量，不同取值含义不同：
 
-`ConcurrentHashMap` 的 `size()` 怎么做到并发下相对准确？它不维护一个会被并发写坏的 `int size`，而是用 `baseCount` 加一个 `CounterCell[]` 数组：竞争低时直接 CAS 累加 `baseCount`，竞争高时不同线程往不同的 `CounterCell` 里累加，`size()` 时把两者加起来。这是"分散计数"的思路——把一个热点计数器拆成多个，避免所有线程抢同一个变量。
+```text
+sizeCtl = 0       : 默认，初始化表时用
+sizeCtl = -1      : 某个线程正在初始化表
+sizeCtl = -(1+n)  : 有 n 个线程正在帮忙扩容
+sizeCtl = 正数    : 下一个扩容阈值（0.75 × 表大小）
+```
 
-`ConcurrentHashMap` 为什么不允许 `null` 的 Key 和 Value？官方说法是：在并发场景下，`get(key)` 返回 `null` 会带来二义性——是"这个 Key 不存在"，还是"存了但值是 null"？`HashMap` 允许 null 是因为单线程下可以先用 `containsKey` 区分，但 `ConcurrentHashMap` 里这个区分是竞态的、不可靠的，所以干脆从根上禁止 null，消灭这个歧义。
+**扩容触发后**，CHM 不是让一个线程闷头搬，而是**多线程协同迁移**。迁移的核心方法 `transfer` 里，把旧数组按 `stride`（最小 16 个桶）切成一段段任务，每个线程用 CAS 在 `transferIndex` 上"认领"一段，认领到就搬自己那段：
 
-## 七、怎么选
+```java
+// transfer 里认领迁移任务的简化逻辑
+while (advance) {
+    if (transferIndex <= 0) break;            // 没有可领的段了
+    int nextIndex = transferIndex;
+    int nextBound = (nextIndex > stride) ? nextIndex - stride : 0;
+    // CAS 抢这一段 [nextBound, nextIndex)
+    if (U.compareAndSwapInt(this, TRANSFERINDEX, nextIndex, nextBound)) {
+        // 认领成功，迁移这一段桶
+        advance = false;
+    }
+}
+```
+
+**`ForwardingNode`** 是迁移完成的标记：一个桶迁移完后，原位置放一个 `ForwardingNode`（它的 `hash` 是特殊值 `MOVED`），里面保存新数组的引用。别的线程 `put`/`get` 遇到 `ForwardingNode`，就知道"这个桶搬走了，去新数组找"。更重要的是 `helpTransfer`：线程 `put` 时发现当前桶是 `ForwardingNode`（说明正在扩容），就顺手**帮忙迁移一段**，而不是傻等——这就是"多线程一起扩容"的实现。
+
+这套机制的效果是：扩容的活儿被多个线程分摊，一个线程触发扩容后不会卡住整张表，其他线程来访问时顺手搭把手。这是 CHM 在高并发下保持可用的关键，也是"CHM 扩容比 HashMap 快"这句话的真正含义——不是单线程快，是"大家一起搬"。
+
+![ConcurrentHashMap 的多线程协同扩容](/images/posts/concurrenthashmap-transfer.svg)
+
+## 九、get 无锁和 size 计数
+
+**`get` 全程无锁**。CHM 的 `get` 不阻塞、不加锁，靠的是 `Node` 的 `val` 和 `next` 字段都声明为 `volatile`，读到的总是最新可见值。`get` 的流程：定位桶 → 桶是 `ForwardingNode` 就去新数组 → 桶头是目标就返回 → 否则沿链表/树找。整条路径没有一个 `synchronized` 或 CAS 写入，这也是上一篇 volatile 里"堆上共享字段靠 volatile 保证可见性"的直接应用。
+
+**`size()` 的计数**则用"分散计数"解决热点：不维护一个会被并发写坏的 `int size`，而是用 `baseCount` 加一个 `CounterCell[]` 数组。竞争低时，直接 CAS 累加 `baseCount`；竞争高时（CAS 失败），线程去不同的 `CounterCell` 里累加；`size()` 时把 `baseCount` 和所有 `CounterCell` 加起来。这样"统计总大小"这个高频写，被摊到了多个计数器上，避免了所有线程抢同一个变量的瓶颈。`size()` 返回的是弱一致的快照，不是精确瞬时值——这是它"无锁、高性能"的代价。
+
+## 十、怎么选
 
 | 场景 | 选择 | 理由 |
 | --- | --- | --- |
-| 单线程、或局部变量临时用 | `HashMap` | 无同步开销，最快 |
-| 多线程读多写少 | `ConcurrentHashMap` | `get` 无锁，读性能接近 `HashMap` |
-| 多线程写也频繁 | `ConcurrentHashMap` | 桶级锁，并发度远高于 `HashTable` |
-| 想要强一致的 `size` 或需要锁语义 | 看具体需求 | `ConcurrentHashMap` 的 `size` 是弱一致快照 |
-| 想用 `HashMap` + 自己加锁 | 不建议 | 锁的粒度、读写互斥都要自己拿捏，易错 |
+| 单线程、局部临时用 | `HashMap` | 无同步开销，最快 |
+| 多线程读多写少 | `ConcurrentHashMap` | `get` 无锁，读接近 `HashMap` |
+| 多线程写也频繁 | `ConcurrentHashMap` | 桶级锁 + 协同扩容，并发度远高于 `Hashtable` |
+| 想要精确的 `size` | 看需求 | CHM 的 `size` 是弱一致快照 |
+| 想用 `HashMap` + 自己加锁 | 不建议 | 锁粒度、读写互斥要自己拿捏，易错 |
 
-一条朴素的判断：只要涉及多线程，默认用 `ConcurrentHashMap`，别给 `HashMap` 手工套锁——套锁容易，套对粒度难。`ConcurrentHashMap` 的 `get` 无锁、写锁粒度细到桶，已经替你把最难的部分做完了。
+一条朴素的判断：只要涉及多线程，默认 `ConcurrentHashMap`，别给 `HashMap` 手工套锁。套锁容易，套对粒度难——CHM 的 `get` 无锁、写锁细到桶、扩容还多线程协同，已经把最难的部分做完了。
+
+把这两张图记牢，`HashMap` 和 `ConcurrentHashMap` 就不再是"背几个概念"：HashMap 靠"2 的幂 + 扰动 + 高低位拆分"把哈希和扩容做快，代价是线程不安全；CHM 靠"CAS + 桶级锁 + sizeCtl 协同扩容 + volatile 无锁读"把安全做到细粒度，代价是实现复杂度。理解了机制，那些"为什么容量是 2 的幂""为什么树化阈值是 8""CHM 扩容为什么快"的问题，就都有了答案。
 
 ## 参考资料
 

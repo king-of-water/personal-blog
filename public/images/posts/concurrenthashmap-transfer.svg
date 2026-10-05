@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">ConcurrentHashMap 的多线程协同扩容</title>
+  <desc id="desc">扩容时把旧数组按 stride 切成一段段，线程用 CAS 在 transferIndex 上认领一段来迁移；迁移完的桶放 ForwardingNode 占位，get/put 遇到它就去新数组，put 线程还会 helpTransfer 帮忙迁移。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <marker id="arrowG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#466b48"/></marker>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 15px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="54" class="h">扩容：多线程认领迁移任务，ForwardingNode 占位</text>
+  <text x="56" y="88" class="b">sizeCtl 计数参与线程，transferIndex 分配任务，搬完放 ForwardingNode。</text>
+
+  <g transform="translate(70 150)">
+    <rect width="520" height="400" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="260" y="38" text-anchor="middle" class="t" fill="#8a6b31">旧数组 table（按 stride 分段）</text>
+    <rect x="40" y="60" width="140" height="70" rx="10" fill="#f4eace" stroke="#8a6b31"/>
+    <text x="110" y="90" text-anchor="middle" class="m">段 1</text>
+    <text x="110" y="116" text-anchor="middle" class="s">线程 A 认领</text>
+    <rect x="200" y="60" width="140" height="70" rx="10" fill="#f4eace" stroke="#8a6b31"/>
+    <text x="270" y="90" text-anchor="middle" class="m">段 2</text>
+    <text x="270" y="116" text-anchor="middle" class="s">线程 B 认领</text>
+    <rect x="360" y="60" width="140" height="70" rx="10" fill="#f4eace" stroke="#8a6b31"/>
+    <text x="430" y="90" text-anchor="middle" class="m">段 3</text>
+    <text x="430" y="116" text-anchor="middle" class="s">待认领</text>
+
+    <rect x="40" y="190" width="460" height="60" rx="10" fill="#dee3d6" stroke="#466b48"/>
+    <text x="270" y="215" text-anchor="middle" class="m">已迁移的桶放 ForwardingNode（hash=MOVED）</text>
+    <text x="270" y="240" text-anchor="middle" class="s">指向 nextTable</text>
+
+    <rect x="40" y="280" width="460" height="60" rx="10" fill="#ebe4d4" stroke="#8a7f6d"/>
+    <text x="270" y="305" text-anchor="middle" class="m">sizeCtl = -(1+n)</text>
+    <text x="270" y="330" text-anchor="middle" class="s">n 个线程在帮忙扩容</text>
+  </g>
+
+  <line x1="590" y1="350" x2="680" y2="350" stroke="#466b48" stroke-width="3" marker-end="url(#arrowG)"/>
+
+  <g transform="translate(680 150)">
+    <rect width="450" height="400" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="225" y="38" text-anchor="middle" class="t" fill="#466b48">新数组 nextTable（容量翻倍）</text>
+    <text x="225" y="90" text-anchor="middle" class="b">get / put 遇到 ForwardingNode</text>
+    <text x="225" y="120" text-anchor="middle" class="b">→ 转到 nextTable 找</text>
+    <text x="225" y="190" text-anchor="middle" class="b">put 线程发现正在扩容</text>
+    <text x="225" y="220" text-anchor="middle" class="b">→ helpTransfer 帮忙迁移一段</text>
+    <text x="225" y="290" text-anchor="middle" class="s">扩容 = 大家一起搬，</text>
+    <text x="225" y="318" text-anchor="middle" class="s">不是一个线程闷头扛。</text>
+  </g>
+
+  <g transform="translate(70 590)">
+    <rect width="1060" height="70" rx="16" fill="#ebe4d4" stroke="#8a7f6d"/>
+    <text x="28" y="36" class="b">对比：HashMap 扩容是单线程扛，ConcurrentHashMap 扩容是 CAS 抢任务、多线程一起搬。</text>
+    <text x="28" y="60" class="s">这就是「CHM 扩容比 HashMap 快」的真正含义。</text>
+  </g>
+</svg>
