@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="860" viewBox="0 0 1440 860" role="img" aria-labelledby="title desc">
+  <title id="title">Personal Agent 在模块化服务与超级 App 生态中的不同路径</title>
+  <desc id="desc">左侧的 Personal Agent 通过多个授权连接器和网页访问独立服务，能形成跨应用任务链；右侧各超级 App 在内部拥有身份、支付、数据与服务，小程序对宿主开放，但跨宿主行动需要分别协商。</desc>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#8a7f6d"/></marker></defs>
+  <rect width="1440" height="860" fill="#fdfaf3"/>
+  <g font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">
+    <text x="70" y="66" fill="#2b2620" font-size="34" font-weight="700">同样是很多 App，Agent 面对的接口结构并不相同</text>
+    <text x="70" y="104" fill="#6f6659" font-size="19">差异不在应用数量，而在跨应用授权、数据可携带性与行动接口</text>
+
+    <rect x="60" y="150" width="635" height="625" rx="26" fill="#fbf8f1" stroke="#295279" stroke-width="3"/>
+    <rect x="745" y="150" width="635" height="625" rx="26" fill="#fbf8f1" stroke="#466b48" stroke-width="3"/>
+    <text x="100" y="201" fill="#2f5d8a" font-size="24" font-weight="700">模块化服务：跨应用编排</text>
+    <text x="785" y="201" fill="#3d6340" font-size="24" font-weight="700">超级 App：平台内能力完整</text>
+
+    <rect x="252" y="244" width="250" height="105" rx="22" fill="#d8dee0" stroke="#295279" stroke-width="3"/>
+    <text x="377" y="286" text-anchor="middle" fill="#2b2620" font-size="22" font-weight="700">Personal Agent</text>
+    <text x="377" y="319" text-anchor="middle" fill="#554d42" font-size="16">统一意图 · 记忆 · 审批</text>
+    <g fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2">
+      <rect x="100" y="455" width="150" height="88" rx="15"/><rect x="275" y="455" width="150" height="88" rx="15"/><rect x="450" y="455" width="150" height="88" rx="15"/>
+      <rect x="188" y="590" width="150" height="88" rx="15"/><rect x="363" y="590" width="150" height="88" rx="15"/>
+    </g>
+    <g fill="#2b2620" font-size="18" font-weight="700" text-anchor="middle">
+      <text x="175" y="507">邮箱</text><text x="350" y="507">日历</text><text x="525" y="507">电商</text><text x="263" y="642">支付</text><text x="438" y="642">工作软件</text>
+    </g>
+    <g stroke="#8a7f6d" stroke-width="3" fill="none" marker-end="url(#arrow)">
+      <path d="M330 349 C270 390 205 405 180 440"/><path d="M360 349 L350 440"/><path d="M424 349 C485 390 515 405 522 440"/>
+      <path d="M345 349 C315 470 278 510 265 575"/><path d="M400 349 C430 470 440 510 440 575"/>
+    </g>
+    <text x="100" y="723" fill="#6f6659" font-size="16">OAuth、API、连接器与网页共同组成可编排的接缝。</text>
+
+    <g>
+      <rect x="800" y="244" width="240" height="205" rx="24" fill="#dee3d6" stroke="#466b48" stroke-width="3"/>
+      <rect x="1085" y="244" width="240" height="205" rx="24" fill="#dee3d6" stroke="#466b48" stroke-width="3"/>
+      <rect x="943" y="515" width="240" height="205" rx="24" fill="#dee3d6" stroke="#466b48" stroke-width="3"/>
+      <text x="920" y="286" text-anchor="middle" fill="#2b2620" font-size="21" font-weight="700">平台 A</text>
+      <text x="1205" y="286" text-anchor="middle" fill="#2b2620" font-size="21" font-weight="700">平台 B</text>
+      <text x="1063" y="557" text-anchor="middle" fill="#2b2620" font-size="21" font-weight="700">平台 C</text>
+      <g fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2">
+        <rect x="835" y="316" width="150" height="49" rx="11"/><rect x="835" y="382" width="150" height="49" rx="11"/>
+        <rect x="1120" y="316" width="150" height="49" rx="11"/><rect x="1120" y="382" width="150" height="49" rx="11"/>
+        <rect x="978" y="587" width="150" height="49" rx="11"/><rect x="978" y="653" width="150" height="49" rx="11"/>
+      </g>
+      <g fill="#554d42" font-size="16" text-anchor="middle">
+        <text x="910" y="347">身份 · 支付</text><text x="910" y="413">小程序 · 数据</text>
+        <text x="1195" y="347">身份 · 支付</text><text x="1195" y="413">小程序 · 数据</text>
+        <text x="1053" y="618">身份 · 支付</text><text x="1053" y="684">小程序 · 数据</text>
+      </g>
+    </g>
+    <g stroke="#a8433f" stroke-width="3" stroke-dasharray="10 8" fill="none">
+      <path d="M1048 347 H1077"/><path d="M970 456 L1016 508"/><path d="M1155 456 L1110 508"/>
+    </g>
+    <g fill="#eed9d3" stroke="#943b37" stroke-width="2">
+      <rect x="992" y="462" width="140" height="44" rx="10"/>
+    </g>
+    <text x="1062" y="490" text-anchor="middle" fill="#2b2620" font-size="15">跨平台边界</text>
+    <text x="785" y="753" fill="#6f6659" font-size="16">内部接口丰富，不等于第三方 Agent 可以横跨多个宿主执行。</text>
+
+    <rect x="225" y="800" width="990" height="42" rx="10" fill="#ebe4d4"/>
+    <text x="720" y="827" text-anchor="middle" fill="#2b2620" font-size="17">Personal Agent 能力上限，取决于它获得多少经过授权、可撤销、可审计的行动接口。</text>
+  </g>
+</svg>

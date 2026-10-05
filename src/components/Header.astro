@@ -9,6 +9,7 @@ const resolvedActivePath = activePath ?? (
 	pathname === '/' ? '/' :
 	pathname.startsWith('/backend/') ? '/backend/' :
 	pathname.startsWith('/agent/') ? '/agent/' :
+	pathname.startsWith('/industry/') ? '/industry/' :
 	pathname.startsWith('/projects/') ? '/projects/' :
 	pathname.startsWith('/toolbox/') ? '/toolbox/' :
 	pathname.startsWith('/about/') ? '/about/' :
@@ -19,6 +20,7 @@ const navItems = [
 	{ href: '/', label: '首页' },
 	{ href: '/backend/', label: '后端' },
 	{ href: '/agent/', label: 'Agent' },
+	{ href: '/industry/', label: '行业' },
 	{ href: '/projects/', label: '项目' },
 	{ href: '/toolbox/', label: '工具箱' },
 	{ href: '/about/', label: '关于作者' },

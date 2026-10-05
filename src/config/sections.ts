@@ -1,4 +1,4 @@
-export type MainCategory = '后端' | 'Agent' | '项目';
+export type MainCategory = '后端' | 'Agent' | '行业' | '项目';
 
 export interface PlannedTopic {
 	title: string;
@@ -93,12 +93,15 @@ export const backendSubcategories: Subcategory[] = [
 	},
 ];
 
-export const categoryPath = (category: MainCategory) => (
-	category === '后端' ? '/backend/' : category === 'Agent' ? '/agent/' : '/projects/'
-);
+export const categoryPath = (category: MainCategory) => {
+	if (category === '后端') return '/backend/';
+	if (category === 'Agent') return '/agent/';
+	if (category === '行业') return '/industry/';
+	return '/projects/';
+};
 
 export const subcategoryPath = (category: MainCategory, subcategory?: string) => {
-	if (!subcategory || category === '项目') return categoryPath(category);
+	if (!subcategory || category === '项目' || category === '行业') return categoryPath(category);
 	const sections = category === 'Agent' ? agentSubcategories : backendSubcategories;
 	const section = sections.find((item) => item.name === subcategory);
 	return section ? `${categoryPath(category)}${section.slug}/` : categoryPath(category);

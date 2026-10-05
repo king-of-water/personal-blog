@@ -2,10 +2,11 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostCard from '../../components/PostCard.astro';
+import { categoryPath, type MainCategory } from '../../config/sections';
 
 const posts = (await getCollection('posts', ({ data }) => !data.draft))
 	.sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
-const categories = ['后端', 'Agent', '项目'] as const;
+const categories: MainCategory[] = ['后端', 'Agent', '行业', '项目'];
 const tags = [...new Set(posts.flatMap((post) => post.data.tags))].sort((a, b) => a.localeCompare(b, 'zh-CN'));
 ---
 
@@ -17,7 +18,7 @@ const tags = [...new Set(posts.flatMap((post) => post.data.tags))].sort((a, b) =
 	</header>
 	<section class="archive-tools shell">
 		<div class="archive-categories">
-			{categories.map((category) => <a href={category === '后端' ? '/backend/' : category === 'Agent' ? '/agent/' : '/projects/'}>{category} <span>{posts.filter((post) => post.data.category === category).length}</span></a>)}
+			{categories.map((category) => <a href={categoryPath(category)}>{category} <span>{posts.filter((post) => post.data.category === category).length}</span></a>)}
 		</div>
 		{tags.length > 0 && <div class="archive-tags">{tags.map((tag) => <span>#{tag}</span>)}</div>}
 	</section>
