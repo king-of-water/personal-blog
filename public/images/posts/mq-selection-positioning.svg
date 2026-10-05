@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">三种定位：消息代理、分布式日志、业务消息平台</title>
+  <desc id="desc">RabbitMQ 是消息代理，核心是 exchange 到 queue 的灵活路由、消费即删；Kafka 是分布式日志，核心是 append-only 分区和可回放的 offset；RocketMQ 是业务消息平台，在日志模型上补了事务消息、延迟消息和重试死信。</desc>
+  <defs>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 20px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 16px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="54" class="h">三个系统是三种定位，不是三档性能</text>
+  <text x="56" y="88" class="b">先看清「你在选一个什么东西」，再比参数。</text>
+
+  <g transform="translate(70 140)">
+    <rect width="320" height="430" rx="20" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="160" y="48" text-anchor="middle" class="t" fill="#8a6b31">RabbitMQ</text>
+    <text x="160" y="80" text-anchor="middle" class="b">消息代理 broker</text>
+    <rect x="40" y="105" width="240" height="70" rx="12" fill="#f4eace" stroke="#8a6b31"/>
+    <text x="160" y="135" text-anchor="middle" class="m">exchange → queue</text>
+    <text x="160" y="162" text-anchor="middle" class="s">灵活路由 + 消费即删</text>
+    <text x="160" y="215" text-anchor="middle" class="b">适合：任务分发</text>
+    <text x="40" y="250" class="s">· direct/topic/fanout 路由</text>
+    <text x="40" y="282" class="s">· 优先级、TTL、死信</text>
+    <text x="40" y="314" class="s">· AMQP 标准、多语言</text>
+    <text x="40" y="346" class="s">· 一条消息一件工作</text>
+    <rect x="40" y="372" width="240" height="34" rx="9" fill="#ebe4d4"/>
+    <text x="160" y="394" text-anchor="middle" class="s">消费 ack 后消息使命结束</text>
+  </g>
+
+  <g transform="translate(440 140)">
+    <rect width="320" height="430" rx="20" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="160" y="48" text-anchor="middle" class="t" fill="#295279">Kafka</text>
+    <text x="160" y="80" text-anchor="middle" class="b">分布式日志 log</text>
+    <rect x="40" y="105" width="240" height="70" rx="12" fill="#d8dee0" stroke="#295279"/>
+    <text x="160" y="135" text-anchor="middle" class="m">topic → partition</text>
+    <text x="160" y="162" text-anchor="middle" class="s">append-only + offset 回放</text>
+    <text x="160" y="215" text-anchor="middle" class="b">适合：事件流</text>
+    <text x="40" y="250" class="s">· 高吞吐、可回放</text>
+    <text x="40" y="282" class="s">· 多订阅者独立位点</text>
+    <text x="40" y="314" class="s">· 分区内有序</text>
+    <text x="40" y="346" class="s">· 消息按时间保留不删</text>
+    <rect x="40" y="372" width="240" height="34" rx="9" fill="#ebe4d4"/>
+    <text x="160" y="394" text-anchor="middle" class="s">事件溯源、重算、数据管道</text>
+  </g>
+
+  <g transform="translate(810 140)">
+    <rect width="320" height="430" rx="20" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="160" y="48" text-anchor="middle" class="t" fill="#466b48">RocketMQ</text>
+    <text x="160" y="80" text-anchor="middle" class="b">业务消息平台</text>
+    <rect x="40" y="105" width="240" height="70" rx="12" fill="#dee3d6" stroke="#466b48"/>
+    <text x="160" y="135" text-anchor="middle" class="m">topic → queue</text>
+    <text x="160" y="162" text-anchor="middle" class="s">日志模型 + 业务语义</text>
+    <text x="160" y="215" text-anchor="middle" class="b">适合：业务消息</text>
+    <text x="40" y="250" class="s">· 原生事务消息（半消息+回查）</text>
+    <text x="40" y="282" class="s">· 延迟 / 定时消息</text>
+    <text x="40" y="314" class="s">· 重试队列 + 死信队列</text>
+    <text x="40" y="346" class="s">· 队列内顺序消息</text>
+    <rect x="40" y="372" width="240" height="34" rx="9" fill="#ebe4d4"/>
+    <text x="160" y="394" text-anchor="middle" class="s">订单、支付、库存等可靠投递</text>
+  </g>
+
+  <g transform="translate(70 600)">
+    <rect width="1060" height="60" rx="16" fill="#ebe4d4" stroke="#8a7f6d"/>
+    <text x="28" y="38" class="b">定位错了，后面所有调参都是补丁：用 Kafka 模拟「取走即删」，或用 RabbitMQ 硬做「事件回放」，都别扭。</text>
+  </g>
+</svg>

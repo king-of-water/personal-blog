@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">消息队列选型的四步决策</title>
+  <desc id="desc">按顺序回答四个问题：消息是任务还是事件流、吞吐到什么量级、有没有硬性的业务语义、生态与团队是否匹配。前两步定方向，第三步定产品，第四步修正落地。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 16px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="54" class="h">四个问题，按顺序问</text>
+  <text x="56" y="88" class="b">比拉一张几十行的对比表有用。</text>
+
+  <g transform="translate(70 140)">
+    <rect width="1060" height="92" rx="16" fill="#f4eace" stroke="#8a6b31" stroke-width="2"/>
+    <text x="28" y="38" class="t" fill="#725923">① 消息是任务，还是事件流？</text>
+    <text x="28" y="70" class="b">任务（处理完即结束）→ RabbitMQ / RocketMQ；事件流（要回放、多方读）→ Kafka。</text>
+  </g>
+  <line x1="600" y1="232" x2="600" y2="262" stroke="#8a7f6d" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <g transform="translate(70 262)">
+    <rect width="1060" height="92" rx="16" fill="#f4eace" stroke="#8a6b31" stroke-width="2"/>
+    <text x="28" y="38" class="t" fill="#725923">② 吞吐到什么量级？</text>
+    <text x="28" y="70" class="b">万级：都行；十万级：排除 RabbitMQ；百万级：只有 Kafka 舒服。</text>
+  </g>
+  <line x1="600" y1="354" x2="600" y2="384" stroke="#8a7f6d" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <g transform="translate(70 384)">
+    <rect width="1060" height="92" rx="16" fill="#f4eace" stroke="#8a6b31" stroke-width="2"/>
+    <text x="28" y="38" class="t" fill="#725923">③ 有没有硬性的业务语义？</text>
+    <text x="28" y="70" class="b">事务/延迟消息 → RocketMQ；复杂路由/优先级 → RabbitMQ；回溯/重算 → Kafka。</text>
+  </g>
+  <line x1="600" y1="476" x2="600" y2="506" stroke="#8a7f6d" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <g transform="translate(70 506)">
+    <rect width="1060" height="92" rx="16" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="28" y="38" class="t" fill="#466b48">④ 生态、团队、云够不够？</text>
+    <text x="28" y="70" class="b">团队熟不熟、客户端齐不齐、云上有没有托管——技术正确的答案，常被运维现实修正。</text>
+  </g>
+</svg>
