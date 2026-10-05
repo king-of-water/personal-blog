@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">短轮询、长轮询与纯 push 三条路径对比</title>
+  <desc id="desc">短轮询每秒问一次、大多空手而归；纯 push 由 Broker 主动推；RocketMQ 实际用的是长轮询——消费者拉一次、Broker 没消息就把请求挂起，新消息落盘后再唤醒返回，既不空转又接近推的实时性。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <marker id="arrowG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#466b48"/></marker>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 16px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="54" class="h">长轮询让「拉」既不空转，又接近推的实时性</text>
+  <text x="56" y="88" class="b">三种可能：短轮询、长轮询、纯 push。RocketMQ 走的是长轮询这一条。</text>
+
+  <g transform="translate(70 150)">
+    <rect width="1060" height="130" rx="18" fill="#f4eace" stroke="#8a6b31" stroke-width="2"/>
+    <text x="24" y="36" class="t" fill="#725923">短轮询</text>
+    <text x="150" y="48" class="b">消费者每秒问一次，大多空手而归</text>
+    <line x1="150" y1="80" x2="380" y2="80" stroke="#8a7f6d" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <text x="265" y="70" text-anchor="middle" class="m">PULL → 空</text>
+    <line x1="420" y1="80" x2="650" y2="80" stroke="#8a7f6d" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <text x="535" y="70" text-anchor="middle" class="m">PULL → 空</text>
+    <line x1="690" y1="80" x2="920" y2="80" stroke="#8a7f6d" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <text x="805" y="70" text-anchor="middle" class="m">PULL → 空</text>
+    <text x="24" y="112" class="s">白烧 CPU 和网络，消息到达的延迟取决于轮询间隔。</text>
+  </g>
+
+  <g transform="translate(70 300)">
+    <rect width="1060" height="150" rx="18" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="24" y="36" class="t" fill="#466b48">长轮询（RocketMQ 实际）</text>
+    <text x="240" y="48" class="b">消费者拉一次，Broker 没消息就挂起请求</text>
+    <line x1="150" y1="88" x2="360" y2="88" stroke="#466b48" stroke-width="3" marker-end="url(#arrowG)"/>
+    <text x="255" y="78" text-anchor="middle" class="m">PULL</text>
+    <rect x="370" y="64" width="230" height="48" rx="10" fill="#f5f0e4" stroke="#d7cebd" stroke-dasharray="7 7"/>
+    <text x="485" y="94" text-anchor="middle" class="b">挂起请求（等待）</text>
+    <line x1="600" y1="88" x2="810" y2="88" stroke="#466b48" stroke-width="3" marker-end="url(#arrowG)"/>
+    <text x="705" y="78" text-anchor="middle" class="m">新消息落盘 → 唤醒返回</text>
+    <text x="24" y="132" class="s">不空转（省资源），消息一到就回（低延迟），一次动作买到两样东西。</text>
+  </g>
+
+  <g transform="translate(70 470)">
+    <rect width="1060" height="130" rx="18" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+    <text x="24" y="36" class="t" fill="#943b37">纯 push</text>
+    <text x="150" y="48" class="b">Broker 主动把消息推给消费者</text>
+    <line x1="150" y1="80" x2="380" y2="80" stroke="#8a7f6d" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <text x="265" y="70" text-anchor="middle" class="m">PUSH（Broker 主动）</text>
+    <text x="24" y="112" class="s">慢消费者会被打爆，需要 Broker 端流控；RocketMQ 不走这条。</text>
+  </g>
+</svg>
