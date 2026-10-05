@@ -10,7 +10,7 @@ const { post, sequence, showCategory = true } = Astro.props;
 const date = new Intl.DateTimeFormat('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(post.data.publishedAt);
 ---
 
-<a class="post-card" href={`/posts/${post.id}/`}>
+<a class="post-card" href={`/posts/${post.id}/`} data-category={post.data.category}>
 	{sequence !== undefined
 		? <span class="post-sequence" aria-label={`第 ${sequence} 章`}>{String(sequence).padStart(2, '0')}</span>
 		: <time class="post-date" datetime={post.data.publishedAt.toISOString()}>{date}</time>

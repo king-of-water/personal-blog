@@ -2,12 +2,13 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostCard from '../../components/PostCard.astro';
-import { categoryPath, type MainCategory } from '../../config/sections';
+import type { MainCategory } from '../../config/sections';
 
 const posts = (await getCollection('posts', ({ data }) => !data.draft))
 	.sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
 const categories: MainCategory[] = ['后端', 'Agent', '行业', '项目'];
 const tags = [...new Set(posts.flatMap((post) => post.data.tags))].sort((a, b) => a.localeCompare(b, 'zh-CN'));
+const countOf = (category: MainCategory) => posts.filter((post) => post.data.category === category).length;
 ---
 
 <BaseLayout title="文章">
@@ -17,8 +18,11 @@ const tags = [...new Set(posts.flatMap((post) => post.data.tags))].sort((a, b) =
 		<p>把踩过的坑、学到的方法和正在形成的观点留在这里。</p>
 	</header>
 	<section class="archive-tools shell">
-		<div class="archive-categories">
-			{categories.map((category) => <a href={categoryPath(category)}>{category} <span>{posts.filter((post) => post.data.category === category).length}</span></a>)}
+		<div class="archive-categories" role="group" aria-label="按分类筛选">
+			<button type="button" data-filter="all" aria-pressed="true">全部 <span>{posts.length}</span></button>
+			{categories.map((category) => (
+				<button type="button" data-filter={category} aria-pressed="false">{category} <span>{countOf(category)}</span></button>
+			))}
 		</div>
 		{tags.length > 0 && <div class="archive-tags">{tags.map((tag) => <span>#{tag}</span>)}</div>}
 	</section>
@@ -26,3 +30,34 @@ const tags = [...new Set(posts.flatMap((post) => post.data.tags))].sort((a, b) =
 		<div class="post-list">{posts.map((post) => <PostCard post={post} />)}</div>
 	</section>
 </BaseLayout>
+
+<script>
+	const buttons = document.querySelectorAll('.archive-categories [data-filter]');
+	const cards = document.querySelectorAll('.post-list .post-card[data-category]');
+
+	const apply = (value) => {
+		cards.forEach((card) => {
+			card.hidden = value !== 'all' && card.dataset.category !== value;
+		});
+		buttons.forEach((button) => {
+			const active = button.dataset.filter === value;
+			button.setAttribute('aria-pressed', String(active));
+			button.classList.toggle('is-active', active);
+		});
+	};
+
+	const known = [...buttons].map((button) => button.dataset.filter);
+	const requested = new URLSearchParams(window.location.search).get('category');
+	apply(requested && known.includes(requested) ? requested : 'all');
+
+	buttons.forEach((button) => {
+		button.addEventListener('click', () => {
+			const value = button.dataset.filter ?? 'all';
+			apply(value);
+			const url = new URL(window.location.href);
+			if (value === 'all') url.searchParams.delete('category');
+			else url.searchParams.set('category', value);
+			window.history.replaceState(null, '', url);
+		});
+	});
+</script>
