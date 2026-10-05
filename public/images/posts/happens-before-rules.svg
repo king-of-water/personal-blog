@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="740" viewBox="0 0 1200 740" role="img" aria-labelledby="title desc">
+  <title id="title">happens-before 的规则体系与推导</title>
+  <desc id="desc">happens-before 的八条规则：程序顺序、volatile、监视器锁、线程启动、线程终止、中断、终结器、传递性。它是可见性保证而非墙上时钟的先后。用 ready/config 例子可以推导出 config 的准备对消费方可见：程序顺序给出 ①→②，volatile 规则给出 ②→③，程序顺序给出 ③→④，传递性得到 ①→④。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <marker id="arrowG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#466b48"/></marker>
+    <style>.h{font:700 28px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 14px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="740" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="52" class="h">happens-before：把「可见性」变成可推导的规则</text>
+  <text x="56" y="84" class="b">它是可见性保证，不是墙上时钟的先后顺序。</text>
+
+  <!-- 规则列表 -->
+  <g transform="translate(70 115)">
+    <rect width="520" height="450" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="260" y="36" text-anchor="middle" class="t" fill="#466b48">八条规则</text>
+    <text x="30" y="76" class="b">① 程序顺序：同线程内，前面 → 后面</text>
+    <text x="30" y="112" class="b">② volatile：volatile 写 → 后续 volatile 读</text>
+    <text x="30" y="148" class="b">③ 监视器锁：解锁 → 后续加锁</text>
+    <text x="30" y="184" class="b">④ 线程启动：start() → 新线程所有操作</text>
+    <text x="30" y="220" class="b">⑤ 线程终止：线程所有操作 → join() 返回</text>
+    <text x="30" y="256" class="b">⑥ 中断：interrupt() → 检测到中断</text>
+    <text x="30" y="292" class="b">⑦ 终结器：构造完成 → finalize() 开始</text>
+    <text x="30" y="328" class="b">⑧ 传递性：A→B 且 B→C，则 A→C</text>
+
+    <rect x="30" y="352" width="460" height="80" rx="12" fill="#dee3d6" stroke="#466b48"/>
+    <text x="46" y="380" class="b" fill="#466b48">④⑤ 常被忽略：start() 前的操作对新线程可见，</text>
+    <text x="46" y="406" class="b" fill="#466b48">join() 返回后能看到该线程的所有操作。</text>
+  </g>
+
+  <!-- 推导 -->
+  <g transform="translate(630 115)">
+    <rect width="500" height="450" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="250" y="36" text-anchor="middle" class="t" fill="#5e5083">用 ready / config 推导</text>
+
+    <rect x="30" y="56" width="440" height="46" rx="10" fill="#dee3d6" stroke="#466b48"/>
+    <text x="250" y="85" text-anchor="middle" class="m">① config = buildConfig()</text>
+
+    <line x1="250" y1="102" x2="250" y2="122" stroke="#466b48" stroke-width="2.5" marker-end="url(#arrowG)"/>
+    <text x="262" y="118" class="s" fill="#466b48">程序顺序</text>
+
+    <rect x="30" y="122" width="440" height="46" rx="10" fill="#e3dde2" stroke="#5e5083" stroke-width="2"/>
+    <text x="250" y="151" text-anchor="middle" class="m" fill="#5e5083">② ready = true（volatile 写）</text>
+
+    <line x1="250" y1="168" x2="250" y2="188" stroke="#466b48" stroke-width="2.5" marker-end="url(#arrowG)"/>
+    <text x="262" y="184" class="s" fill="#466b48">volatile 规则</text>
+
+    <rect x="30" y="188" width="440" height="46" rx="10" fill="#e3dde2" stroke="#5e5083" stroke-width="2"/>
+    <text x="250" y="217" text-anchor="middle" class="m" fill="#5e5083">③ if (ready)（volatile 读）</text>
+
+    <line x1="250" y1="234" x2="250" y2="254" stroke="#466b48" stroke-width="2.5" marker-end="url(#arrowG)"/>
+    <text x="262" y="250" class="s" fill="#466b48">程序顺序</text>
+
+    <rect x="30" y="254" width="440" height="46" rx="10" fill="#dee3d6" stroke="#466b48"/>
+    <text x="250" y="283" text-anchor="middle" class="m">④ use(config)</text>
+
+    <rect x="30" y="322" width="440" height="106" rx="12" fill="#f4eace" stroke="#8a6b31" stroke-width="2"/>
+    <text x="46" y="352" class="b" fill="#725923">传递性 ⇒ ① happens-before ④</text>
+    <text x="46" y="382" class="s">config 的准备动作对消费方完整可见</text>
+    <text x="46" y="410" class="s">去掉 volatile，这条链就断了</text>
+  </g>
+
+  <!-- 澄清 -->
+  <g transform="translate(70 590)">
+    <rect width="1060" height="130" rx="16" fill="#ebe4d4" stroke="#8a7f6d"/>
+    <text x="28" y="34" class="t" fill="#943b37">关键澄清：happens-before ≠ 时间先后</text>
+    <text x="28" y="66" class="b">它是「可见性保证」：A hb B 表示 A 的结果对 B 可见、在 B 看来 A 已完成；不要求 A 在物理时间上先执行完。</text>
+    <text x="28" y="96" class="b">更重要的是反面：两个操作若没有 hb 关系，即使看起来一前一后，JMM 也不保证可见性 —— 链断了就是 bug。</text>
+  </g>
+</svg>
