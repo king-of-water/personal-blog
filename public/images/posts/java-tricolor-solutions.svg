@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">CMS 增量更新与 G1 原始快照</title>
+  <desc id="desc">CMS 用增量更新破坏条件 1：黑色对象新增指向白色对象的引用时，通过写屏障把黑色对象重新标灰、重新处理。G1 用原始快照 SATB 破坏条件 2：删除灰色到白色的引用时，记录被删引用、当作白色对象仍存活。两者都宁可多标、不可漏标。</desc>
+  <defs>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 15px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="54" class="h">各破坏一个条件：CMS 拆新边，G1 保旧边</text>
+  <text x="56" y="88" class="b">都靠写屏障实现，都遵循「宁可多标、不可漏标」。</text>
+
+  <g transform="translate(70 150)">
+    <rect width="510" height="430" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="255" y="38" text-anchor="middle" class="t" fill="#466b48">CMS：增量更新（破坏条件 1）</text>
+    <circle cx="140" cy="150" r="30" fill="#2b2620" stroke="#2b2620" stroke-width="3"/>
+    <text x="140" y="156" text-anchor="middle" class="m" fill="#ffffff">黑</text>
+    <circle cx="350" cy="150" r="30" fill="#ffffff" stroke="#8a7f6d" stroke-width="3"/>
+    <text x="350" y="156" text-anchor="middle" class="m">白</text>
+    <line x1="170" y1="150" x2="320" y2="150" stroke="#943b37" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <text x="245" y="135" text-anchor="middle" class="s">新增黑→白</text>
+    <text x="255" y="230" text-anchor="middle" class="b">写屏障拦截赋值，把黑色对象重新标灰</text>
+    <text x="255" y="262" text-anchor="middle" class="b">→ 重新处理它的引用，白对象被标记</text>
+    <text x="255" y="320" text-anchor="middle" class="s">「黑不指白」的不变式恢复了</text>
+  </g>
+
+  <g transform="translate(620 150)">
+    <rect width="510" height="430" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="255" y="38" text-anchor="middle" class="t" fill="#295279">G1：原始快照 SATB（破坏条件 2）</text>
+    <circle cx="140" cy="150" r="30" fill="#c8c8c8" stroke="#6f6659" stroke-width="3"/>
+    <text x="140" y="156" text-anchor="middle" class="m">灰</text>
+    <circle cx="350" cy="150" r="30" fill="#ffffff" stroke="#8a7f6d" stroke-width="3"/>
+    <text x="350" y="156" text-anchor="middle" class="m">白</text>
+    <line x1="170" y1="150" x2="320" y2="150" stroke="#8a7f6d" stroke-width="2.5" stroke-dasharray="7 7"/>
+    <text x="245" y="135" text-anchor="middle" class="s">删除灰→白</text>
+    <text x="255" y="230" text-anchor="middle" class="b">写屏障记录被删的引用，当作白对象还活着</text>
+    <text x="255" y="262" text-anchor="middle" class="b">→ 「标记开始时活的对象，最后一定活」</text>
+    <text x="255" y="320" text-anchor="middle" class="s">宁可多标几个死对象，等下一轮再收</text>
+  </g>
+
+  <g transform="translate(70 620)">
+    <rect width="1060" height="48" rx="14" fill="#ebe4d4" stroke="#8a7f6d"/>
+    <text x="28" y="32" class="b">多标只是浪费一点内存，漏标是程序崩溃——所以并发 GC 一律「宁可多标、不可漏标」。</text>
+  </g>
+</svg>

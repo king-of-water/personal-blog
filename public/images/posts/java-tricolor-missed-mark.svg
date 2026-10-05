@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">漏标的两个条件</title>
+  <desc id="desc">漏标要两个条件同时成立：一是业务线程新增一条黑色对象到白色对象的引用；二是业务线程删掉从灰色对象到该白色对象的可达路径。两个条件同时满足，白色对象就失去被标记的机会，被误判为垃圾。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <marker id="arrowR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#943b37"/></marker>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 15px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="54" class="h">两个条件同时成立，活对象就被漏标</text>
+  <text x="56" y="88" class="b">缺一个都不漏：只黑指白、灰仍看得见；只断灰线、本来就不可达。</text>
+
+  <g transform="translate(70 150)">
+    <rect width="520" height="430" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="260" y="36" text-anchor="middle" class="t">标记过程中，业务线程在改引用</text>
+
+    <circle cx="140" cy="140" r="30" fill="#2b2620" stroke="#2b2620" stroke-width="3"/>
+    <text x="140" y="146" text-anchor="middle" class="m" fill="#ffffff">黑</text>
+    <circle cx="330" cy="140" r="30" fill="#c8c8c8" stroke="#6f6659" stroke-width="3"/>
+    <text x="330" y="146" text-anchor="middle" class="m">灰</text>
+    <circle cx="235" cy="300" r="30" fill="#ffffff" stroke="#8a7f6d" stroke-width="3"/>
+    <text x="235" y="306" text-anchor="middle" class="m">白</text>
+
+    <line x1="170" y1="140" x2="210" y2="295" stroke="#943b37" stroke-width="3" stroke-dasharray="7 7" marker-end="url(#arrowR)"/>
+    <text x="120" y="230" text-anchor="middle" class="b" fill="#943b37">条件 1：新增黑 → 白</text>
+
+    <line x1="300" y1="170" x2="250" y2="280" stroke="#8a7f6d" stroke-width="3"/>
+    <text x="360" y="230" text-anchor="middle" class="b">条件 2：删掉灰 → 白</text>
+
+    <text x="260" y="380" text-anchor="middle" class="b" fill="#943b37">白色对象：没有灰对象能标记它，</text>
+    <text x="260" y="408" text-anchor="middle" class="b" fill="#943b37">只有黑对象指向它 → 漏标</text>
+  </g>
+
+  <g transform="translate(630 150)">
+    <rect width="500" height="430" rx="18" fill="#ebe4d4" stroke="#8a7f6d"/>
+    <text x="250" y="36" text-anchor="middle" class="t">为什么两个缺一不可</text>
+    <text x="40" y="90" class="b">只有条件 1：白对象还被灰对象</text>
+    <text x="40" y="120" class="b">引用，灰对象后续会处理到它。</text>
+    <text x="40" y="180" class="b">只有条件 2：灰 → 白断了，</text>
+    <text x="40" y="210" class="b">它本来就不可达，回收是对的。</text>
+    <text x="40" y="280" class="b" fill="#943b37">两个同时成立：既没人标记它、</text>
+    <text x="40" y="310" class="b" fill="#943b37">又搭上了黑对象这条线 → 活对象被误回收。</text>
+    <text x="40" y="370" class="s">漏标的后果：程序访问已回收的内存，</text>
+    <text x="40" y="396" class="s">数据错乱甚至崩溃，所以必须防。</text>
+  </g>
+</svg>

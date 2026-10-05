@@ -79,9 +79,6 @@ export const backendSubcategories: Subcategory[] = [
 		name: 'Java',
 		slug: 'java',
 		description: '语言、JVM、并发与常用框架。',
-		plannedTopics: [
-			{ title: '三色标记：CMS 与 G1 的并发标记', seriesOrder: 90 },
-		],
 	},
 	{
 		name: '消息队列',

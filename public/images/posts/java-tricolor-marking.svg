@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">三色标记的三种状态</title>
+  <desc id="desc">三色标记把对象分成白（未访问）、灰（已访问、引用未处理完）、黑（已访问、引用处理完）。标记从 GC Roots 出发，把白色对象变灰、灰对象处理完变黑，最后剩下的白色对象就是垃圾。不变式是黑色不能直接指向白色。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 15px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="54" class="h">三种颜色标记对象，灰色是「处理中」的边界</text>
+  <text x="56" y="88" class="b">不变式：标记过程中，黑色对象不能直接指向白色对象。</text>
+
+  <g transform="translate(70 140)">
+    <rect width="300" height="420" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="150" y="36" text-anchor="middle" class="t">三种状态</text>
+
+    <circle cx="120" cy="90" r="30" fill="#ffffff" stroke="#8a7f6d" stroke-width="3"/>
+    <text x="120" y="96" text-anchor="middle" class="m">白</text>
+    <text x="210" y="96" class="b">未访问，可能是垃圾</text>
+
+    <circle cx="120" cy="200" r="30" fill="#c8c8c8" stroke="#6f6659" stroke-width="3"/>
+    <text x="120" y="206" text-anchor="middle" class="m">灰</text>
+    <text x="210" y="206" class="b">已访问，引用没处理完</text>
+
+    <circle cx="120" cy="310" r="30" fill="#2b2620" stroke="#2b2620" stroke-width="3"/>
+    <text x="120" y="316" text-anchor="middle" class="m" fill="#ffffff">黑</text>
+    <text x="210" y="316" class="b">已访问，引用也处理完</text>
+
+    <text x="150" y="390" text-anchor="middle" class="s">标记结束仍白色 = 垃圾</text>
+  </g>
+
+  <g transform="translate(430 140)">
+    <rect width="700" height="420" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="350" y="36" text-anchor="middle" class="t">标记过程</text>
+
+    <rect x="40" y="70" width="120" height="46" rx="10" fill="#e3dde2" stroke="#5e5083"/>
+    <text x="100" y="99" text-anchor="middle" class="m">GC Roots</text>
+
+    <circle cx="100" cy="180" r="30" fill="#c8c8c8" stroke="#6f6659" stroke-width="3"/>
+    <text x="100" y="186" text-anchor="middle" class="m">灰</text>
+    <line x1="100" y1="116" x2="100" y2="150" stroke="#8a7f6d" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+    <circle cx="250" cy="180" r="30" fill="#ffffff" stroke="#8a7f6d" stroke-width="3"/>
+    <text x="250" y="186" text-anchor="middle" class="m">白</text>
+    <line x1="130" y1="180" x2="220" y2="180" stroke="#8a7f6d" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+    <circle cx="400" cy="180" r="30" fill="#ffffff" stroke="#8a7f6d" stroke-width="3"/>
+    <text x="400" y="186" text-anchor="middle" class="m">白</text>
+    <line x1="280" y1="180" x2="370" y2="180" stroke="#8a7f6d" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+    <circle cx="250" cy="300" r="30" fill="#2b2620" stroke="#2b2620" stroke-width="3"/>
+    <text x="250" y="306" text-anchor="middle" class="m" fill="#ffffff">黑</text>
+
+    <text x="350" y="260" text-anchor="middle" class="b">处理灰对象：引用标灰，自己变黑</text>
+    <text x="350" y="360" text-anchor="middle" class="s">灰色清空时，剩下的白色就是垃圾</text>
+    <text x="350" y="390" text-anchor="middle" class="s">并发标记的坑：业务线程会改引用，破坏不变式</text>
+  </g>
+</svg>
