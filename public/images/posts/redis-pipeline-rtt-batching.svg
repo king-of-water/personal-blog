@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="660" viewBox="0 0 1100 660" role="img" aria-labelledby="title desc">
+  <title id="title">普通请求与 Redis Pipeline 的往返和缓冲差异</title>
+  <desc id="desc">上半部分展示三条同步命令产生三次网络往返，下半部分展示 Pipeline 连续发送三条命令后批量读取回复，并标出服务端输出缓冲区。</desc>
+  <rect width="1100" height="660" fill="#fdfaf3"/>
+  <text x="52" y="54" fill="#2b2620" font-family="system-ui, sans-serif" font-size="30" font-weight="700">Pipeline 减少等待次数，不减少命令数量</text>
+  <text x="52" y="88" fill="#6f6659" font-family="system-ui, sans-serif" font-size="19">三条命令仍按顺序执行，变化发生在客户端何时等待回复</text>
+
+  <rect x="52" y="118" width="996" height="214" rx="18" fill="#fbf8f1" stroke="#8a7f6d" stroke-width="2"/>
+  <text x="78" y="154" fill="#943b37" font-family="system-ui, sans-serif" font-size="22" font-weight="700">逐条同步：3 条命令，3 次 RTT</text>
+  <text x="112" y="202" fill="#2b2620" font-family="system-ui, sans-serif" font-size="20" font-weight="700">客户端</text>
+  <text x="905" y="202" fill="#2b2620" font-family="system-ui, sans-serif" font-size="20" font-weight="700">Redis</text>
+  <line x1="164" y1="220" x2="900" y2="220" stroke="#d5ccba" stroke-width="2" stroke-dasharray="7 7"/>
+  <path d="M180 238 H880" stroke="#295279" stroke-width="3"/>
+  <path d="M880 238 l-14 -8 v16 z" fill="#295279"/>
+  <text x="530" y="232" text-anchor="middle" fill="#295279" font-family="system-ui, sans-serif" font-size="17">GET key:1</text>
+  <path d="M880 262 H180" stroke="#466b48" stroke-width="3"/>
+  <path d="M180 262 l14 -8 v16 z" fill="#466b48"/>
+  <text x="530" y="285" text-anchor="middle" fill="#466b48" font-family="system-ui, sans-serif" font-size="17">reply 1，然后才能发下一条</text>
+  <text x="930" y="240" fill="#943b37" font-family="system-ui, sans-serif" font-size="18">× 3</text>
+
+  <rect x="52" y="360" width="996" height="238" rx="18" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+  <text x="78" y="397" fill="#466b48" font-family="system-ui, sans-serif" font-size="22" font-weight="700">Pipeline：3 条命令，约 1 次批次 RTT</text>
+  <text x="112" y="443" fill="#2b2620" font-family="system-ui, sans-serif" font-size="20" font-weight="700">客户端</text>
+  <text x="905" y="443" fill="#2b2620" font-family="system-ui, sans-serif" font-size="20" font-weight="700">Redis</text>
+  <path d="M180 462 H880 M180 484 H880 M180 506 H880" stroke="#295279" stroke-width="3"/>
+  <path d="M880 462 l-14 -8 v16 z M880 484 l-14 -8 v16 z M880 506 l-14 -8 v16 z" fill="#295279"/>
+  <text x="470" y="456" fill="#295279" font-family="system-ui, sans-serif" font-size="16">GET key:1</text>
+  <text x="470" y="478" fill="#295279" font-family="system-ui, sans-serif" font-size="16">GET key:2</text>
+  <text x="470" y="500" fill="#295279" font-family="system-ui, sans-serif" font-size="16">GET key:3</text>
+  <rect x="786" y="520" width="174" height="48" rx="10" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+  <text x="873" y="550" text-anchor="middle" fill="#943b37" font-family="system-ui, sans-serif" font-size="17" font-weight="700">待发送回复缓冲区</text>
+  <path d="M880 580 H180" stroke="#466b48" stroke-width="4"/>
+  <path d="M180 580 l14 -9 v18 z" fill="#466b48"/>
+  <text x="530" y="574" text-anchor="middle" fill="#466b48" font-family="system-ui, sans-serif" font-size="17">reply 1 · reply 2 · reply 3</text>
+
+  <text x="550" y="637" text-anchor="middle" fill="#6f6659" font-family="system-ui, sans-serif" font-size="18">批次越大，RTT 占比越低；待发送回复、批次延迟和失败范围也越大</text>
+</svg>
