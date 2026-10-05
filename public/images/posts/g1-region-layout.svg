@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">G1 的 Region 布局与回收选择</title>
+  <desc id="desc">G1 把堆切成大小相等的 Region，每个 Region 动态扮演 Eden、Survivor、Old 或 Humongous 角色。回收时 G1 按 MaxGCPauseMillis 的预算，挑选回收收益最高的一组 Region 回收，这就是 Garbage First 的含义。大对象放入 Humongous Region 并可能横跨多个连续 Region。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <style>.h{font:700 28px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 18px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:700 15px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="52" class="h">G1：整堆切成等大的 Region，角色动态</text>
+  <text x="56" y="84" class="b">E = Eden · S = Survivor · O = Old · H = Humongous（大对象，可能跨多个连续 Region）</text>
+
+  <!-- Region 网格 -->
+  <g transform="translate(70 120)">
+    <rect width="700" height="440" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="350" y="34" text-anchor="middle" class="t">堆 = 一组大小相等的 Region</text>
+
+    <!-- 第 1 行 -->
+    <rect x="30" y="56" width="90" height="74" rx="10" fill="#dee3d6" stroke="#466b48"/><text x="75" y="100" text-anchor="middle" class="m">E</text>
+    <rect x="130" y="56" width="90" height="74" rx="10" fill="#dee3d6" stroke="#466b48"/><text x="175" y="100" text-anchor="middle" class="m">E</text>
+    <rect x="230" y="56" width="90" height="74" rx="10" fill="#d8dee0" stroke="#295279"/><text x="275" y="100" text-anchor="middle" class="m">S</text>
+    <rect x="330" y="56" width="90" height="74" rx="10" fill="#f4eace" stroke="#8a6b31"/><text x="375" y="100" text-anchor="middle" class="m">O</text>
+    <rect x="430" y="56" width="90" height="74" rx="10" fill="#f4eace" stroke="#8a6b31"/><text x="475" y="100" text-anchor="middle" class="m">O</text>
+    <rect x="530" y="56" width="140" height="74" rx="10" fill="#eed9d3" stroke="#943b37" stroke-width="2"/><text x="600" y="100" text-anchor="middle" class="m" fill="#943b37">H H</text>
+
+    <!-- 第 2 行 -->
+    <rect x="30" y="140" width="90" height="74" rx="10" fill="#dee3d6" stroke="#466b48"/><text x="75" y="184" text-anchor="middle" class="m">E</text>
+    <rect x="130" y="140" width="90" height="74" rx="10" fill="#f4eace" stroke="#8a6b31"/><text x="175" y="184" text-anchor="middle" class="m">O</text>
+    <rect x="230" y="140" width="90" height="74" rx="10" fill="#f4eace" stroke="#8a6b31"/><text x="275" y="184" text-anchor="middle" class="m">O</text>
+    <rect x="330" y="140" width="90" height="74" rx="10" fill="#f5f0e4" stroke="#8a7f6d" stroke-dasharray="6 5"/><text x="375" y="184" text-anchor="middle" class="s">空闲</text>
+    <rect x="430" y="140" width="90" height="74" rx="10" fill="#f4eace" stroke="#8a6b31"/><text x="475" y="184" text-anchor="middle" class="m">O</text>
+    <rect x="530" y="140" width="140" height="74" rx="10" fill="#f4eace" stroke="#8a6b31"/><text x="600" y="184" text-anchor="middle" class="m">O O</text>
+
+    <!-- 第 3 行 -->
+    <rect x="30" y="224" width="90" height="74" rx="10" fill="#dee3d6" stroke="#466b48"/><text x="75" y="268" text-anchor="middle" class="m">E</text>
+    <rect x="130" y="224" width="90" height="74" rx="10" fill="#d8dee0" stroke="#295279"/><text x="175" y="268" text-anchor="middle" class="m">S</text>
+    <rect x="230" y="224" width="90" height="74" rx="10" fill="#f4eace" stroke="#8a6b31"/><text x="275" y="268" text-anchor="middle" class="m">O</text>
+    <rect x="330" y="224" width="90" height="74" rx="10" fill="#f4eace" stroke="#8a6b31"/><text x="375" y="268" text-anchor="middle" class="m">O</text>
+    <rect x="430" y="224" width="90" height="74" rx="10" fill="#f5f0e4" stroke="#8a7f6d" stroke-dasharray="6 5"/><text x="475" y="268" text-anchor="middle" class="s">空闲</text>
+    <rect x="530" y="224" width="140" height="74" rx="10" fill="#f4eace" stroke="#8a6b31"/><text x="600" y="268" text-anchor="middle" class="m">O O</text>
+
+    <text x="350" y="340" text-anchor="middle" class="b" fill="#466b48">角色是动态的：这轮是 Eden 的 Region，回收后可以变成 Old 或再次当 Eden</text>
+    <text x="350" y="372" text-anchor="middle" class="s">所以 G1 里没有「一整块连续的新生代 / 老年代」，只有「扮演某个角色的 Region」</text>
+    <text x="350" y="410" text-anchor="middle" class="b" fill="#943b37">H：单个对象超过 Region 一半大小 → 直接进 Humongous，回收代价高</text>
+  </g>
+
+  <!-- 右侧：回收选择 -->
+  <g transform="translate(800 120)">
+    <rect width="330" height="440" rx="18" fill="#ebe4d4" stroke="#8a7f6d"/>
+    <text x="165" y="34" text-anchor="middle" class="t" fill="#466b48">Garbage First 的含义</text>
+
+    <text x="24" y="76" class="b">G1 维护每个 Region 的：</text>
+    <text x="24" y="106" class="b">· 回收成本（大概要多久）</text>
+    <text x="24" y="134" class="b">· 回收收益（能收多少垃圾）</text>
+
+    <rect x="24" y="158" width="282" height="120" rx="12" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="40" y="188" class="b" fill="#466b48">按 MaxGCPauseMillis 预算，</text>
+    <text x="40" y="216" class="b" fill="#466b48">挑一组「收益最大且在预算内」</text>
+    <text x="40" y="244" class="b" fill="#466b48">的 Region 回收 —— 这就是</text>
+    <text x="40" y="268" class="m" fill="#466b48">Garbage First</text>
+
+    <text x="24" y="312" class="b">停顿目标是「软目标」：</text>
+    <text x="24" y="340" class="s">G1 尽力控制，但不保证绝对不超。</text>
+
+    <rect x="24" y="360" width="282" height="60" rx="12" fill="#f4eace" stroke="#8a6b31"/>
+    <text x="40" y="386" class="s">Young GC / Mixed GC / Full GC</text>
+    <text x="40" y="408" class="s">调优重点：Mixed 频率 + 是否退化 Full</text>
+  </g>
+
+  <g transform="translate(70 590)">
+    <rect width="1060" height="70" rx="16" fill="#ebe4d4" stroke="#8a7f6d"/>
+    <text x="28" y="34" class="b">对比传统收集器：新生代与老年代是两块「固定的连续内存」，回收单位是「整代」。</text>
+    <text x="28" y="60" class="s">G1 把回收单位细化到「部分 Region」，才有可能按预算挑着收 —— 这是可预测停顿的前提。</text>
+  </g>
+</svg>
