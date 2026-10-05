@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="620" viewBox="0 0 1100 620" role="img" aria-labelledby="title desc">
+  <title id="title">Online DDL 的执行阶段与线上风险</title>
+  <desc id="desc">展示在线结构变更从准备、构建到切换的阶段，以及元数据锁、资源消耗和复制延迟等风险。</desc>
+  <rect width="1100" height="620" fill="#fdfaf3"/>
+  <text x="54" y="58" fill="#2b2620" font-family="system-ui, sans-serif" font-size="30" font-weight="700">Online DDL 仍然是一场受控的线上变更</text>
+  <text x="54" y="91" fill="#6f6659" font-family="system-ui, sans-serif" font-size="19">允许并发 DML 只解决“能否同时写”，不消除锁等待和资源竞争</text>
+
+  <line x1="102" y1="210" x2="998" y2="210" stroke="#8a7f6d" stroke-width="5"/>
+  <circle cx="180" cy="210" r="15" fill="#295279"/>
+  <circle cx="550" cy="210" r="15" fill="#8a6b31"/>
+  <circle cx="920" cy="210" r="15" fill="#943b37"/>
+
+  <rect x="54" y="122" width="252" height="64" rx="14" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+  <text x="180" y="163" text-anchor="middle" fill="#295279" font-family="system-ui, sans-serif" font-size="23" font-weight="700">1. 准备与获得 MDL</text>
+  <text x="180" y="251" text-anchor="middle" fill="#554d42" font-family="system-ui, sans-serif" font-size="19">长事务可能让 ALTER 排队</text>
+
+  <rect x="404" y="122" width="292" height="64" rx="14" fill="#f4eace" stroke="#8a6b31" stroke-width="2"/>
+  <text x="550" y="163" text-anchor="middle" fill="#725923" font-family="system-ui, sans-serif" font-size="23" font-weight="700">2. 构建 / 复制 / 追增量</text>
+  <text x="550" y="251" text-anchor="middle" fill="#554d42" font-family="system-ui, sans-serif" font-size="19">业务可能仍可读写</text>
+
+  <rect x="794" y="122" width="252" height="64" rx="14" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+  <text x="920" y="163" text-anchor="middle" fill="#943b37" font-family="system-ui, sans-serif" font-size="23" font-weight="700">3. 收尾与切换</text>
+  <text x="920" y="251" text-anchor="middle" fill="#554d42" font-family="system-ui, sans-serif" font-size="19">短暂 MDL 也会放大排队</text>
+
+  <rect x="54" y="300" width="992" height="196" rx="18" fill="#fbf8f1" stroke="#8a7f6d" stroke-width="2"/>
+  <text x="82" y="342" fill="#2b2620" font-family="system-ui, sans-serif" font-size="23" font-weight="700">构建阶段持续消耗实例资源</text>
+
+  <rect x="82" y="370" width="205" height="80" rx="12" fill="#f5f0e4"/>
+  <text x="184" y="404" text-anchor="middle" fill="#2b2620" font-family="system-ui, sans-serif" font-size="20" font-weight="700">I/O 与 CPU</text>
+  <text x="184" y="432" text-anchor="middle" fill="#6f6659" font-family="system-ui, sans-serif" font-size="17">可能抬高业务 P99</text>
+
+  <rect x="326" y="370" width="205" height="80" rx="12" fill="#f5f0e4"/>
+  <text x="428" y="404" text-anchor="middle" fill="#2b2620" font-family="system-ui, sans-serif" font-size="20" font-weight="700">临时磁盘</text>
+  <text x="428" y="432" text-anchor="middle" fill="#6f6659" font-family="system-ui, sans-serif" font-size="17">空间不足会失败</text>
+
+  <rect x="570" y="370" width="205" height="80" rx="12" fill="#f5f0e4"/>
+  <text x="672" y="404" text-anchor="middle" fill="#2b2620" font-family="system-ui, sans-serif" font-size="20" font-weight="700">redo 与增量日志</text>
+  <text x="672" y="432" text-anchor="middle" fill="#6f6659" font-family="system-ui, sans-serif" font-size="17">高写入增加追平压力</text>
+
+  <rect x="814" y="370" width="204" height="80" rx="12" fill="#f5f0e4"/>
+  <text x="916" y="404" text-anchor="middle" fill="#2b2620" font-family="system-ui, sans-serif" font-size="20" font-weight="700">副本延迟</text>
+  <text x="916" y="432" text-anchor="middle" fill="#6f6659" font-family="system-ui, sans-serif" font-size="17">需同步监控拓扑</text>
+
+  <rect x="54" y="522" width="992" height="58" rx="14" fill="#e3dde2" stroke="#5e5083" stroke-width="2"/>
+  <text x="550" y="559" text-anchor="middle" fill="#5e5083" font-family="system-ui, sans-serif" font-size="21" font-weight="700">显式 ALGORITHM + LOCK · 演练 · 灰度 · 阈值止损 · 完成后验证</text>
+</svg>

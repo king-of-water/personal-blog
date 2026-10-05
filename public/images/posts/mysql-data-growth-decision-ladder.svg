@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="650" viewBox="0 0 1100 650" role="img" aria-labelledby="title desc">
+  <title id="title">MySQL 数据增长后的治理决策图</title>
+  <desc id="desc">从可观测瓶颈出发，把查询慢、冷数据、读压力、单实例上限和结构变更分别映射到不同治理措施。</desc>
+  <rect width="1100" height="650" fill="#fdfaf3"/>
+  <text x="56" y="58" fill="#2b2620" font-family="system-ui, sans-serif" font-size="30" font-weight="700">数据量只是现象，先找出哪项预算被打破</text>
+  <text x="56" y="91" fill="#6f6659" font-family="system-ui, sans-serif" font-size="19">不同瓶颈需要不同工具，越往右并不代表方案越高级</text>
+
+  <rect x="56" y="126" width="988" height="94" rx="18" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+  <text x="86" y="163" fill="#2b2620" font-family="system-ui, sans-serif" font-size="22" font-weight="700">第一问：究竟慢在哪里？</text>
+  <text x="86" y="198" fill="#554d42" font-family="system-ui, sans-serif" font-size="20">执行计划 · Buffer Pool · I/O · redo · 复制延迟 · 备份恢复 · DDL 窗口</text>
+
+  <path d="M550 220 V257" stroke="#8a7f6d" stroke-width="3"/>
+  <path d="M550 257 L538 242 M550 257 L562 242" stroke="#8a7f6d" stroke-width="3" fill="none"/>
+
+  <rect x="56" y="276" width="224" height="132" rx="16" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+  <text x="82" y="313" fill="#295279" font-family="system-ui, sans-serif" font-size="23" font-weight="700">查询路径错误</text>
+  <text x="82" y="349" fill="#2b2620" font-family="system-ui, sans-serif" font-size="19">索引 / SQL / 行宽</text>
+  <text x="82" y="379" fill="#554d42" font-family="system-ui, sans-serif" font-size="18">先减少扫描与回表</text>
+
+  <rect x="310" y="276" width="224" height="132" rx="16" fill="#f4eace" stroke="#8a6b31" stroke-width="2"/>
+  <text x="336" y="313" fill="#725923" font-family="system-ui, sans-serif" font-size="23" font-weight="700">历史数据拖累</text>
+  <text x="336" y="349" fill="#2b2620" font-family="system-ui, sans-serif" font-size="19">归档 / 到期删除</text>
+  <text x="336" y="379" fill="#554d42" font-family="system-ui, sans-serif" font-size="18">分区需满足硬约束</text>
+
+  <rect x="564" y="276" width="224" height="132" rx="16" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+  <text x="590" y="313" fill="#466b48" font-family="system-ui, sans-serif" font-size="23" font-weight="700">只读压力过高</text>
+  <text x="590" y="349" fill="#2b2620" font-family="system-ui, sans-serif" font-size="19">缓存 / 只读副本</text>
+  <text x="590" y="379" fill="#554d42" font-family="system-ui, sans-serif" font-size="18">同时定义一致性边界</text>
+
+  <rect x="818" y="276" width="226" height="132" rx="16" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+  <text x="844" y="313" fill="#943b37" font-family="system-ui, sans-serif" font-size="23" font-weight="700">单实例到上限</text>
+  <text x="844" y="349" fill="#2b2620" font-family="system-ui, sans-serif" font-size="19">分库分表</text>
+  <text x="844" y="379" fill="#554d42" font-family="system-ui, sans-serif" font-size="18">承担完整分片成本</text>
+
+  <path d="M168 408 V455 M422 408 V455 M676 408 V455 M931 408 V455" stroke="#8a7f6d" stroke-width="2.5"/>
+  <rect x="56" y="455" width="988" height="116" rx="18" fill="#fbf8f1" stroke="#8a7f6d" stroke-width="2"/>
+  <text x="84" y="493" fill="#2b2620" font-family="system-ui, sans-serif" font-size="22" font-weight="700">所有路线都要单独处理结构演进</text>
+  <text x="84" y="529" fill="#554d42" font-family="system-ui, sans-serif" font-size="20">确认 DDL 算法和锁级别 → 检查 MDL 与临时空间 → 灰度、监控、验证</text>
+  <text x="84" y="558" fill="#943b37" font-family="system-ui, sans-serif" font-size="18">Online 代表可并发，不代表零阻塞、零 I/O 或零风险</text>
+
+  <text x="550" y="620" text-anchor="middle" fill="#6f6659" font-family="system-ui, sans-serif" font-size="18">先用指标证明瓶颈，再付出与瓶颈匹配的复杂度</text>
+</svg>
