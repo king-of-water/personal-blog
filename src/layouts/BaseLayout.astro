@@ -25,5 +25,8 @@ const pageTitle = title ? `${title} · ${SITE.title}` : SITE.title;
 		<Header activePath={activeNav} />
 		<main id="main-content"><slot /></main>
 		<Footer />
+		<script>
+			import '../scripts/site-stats';
+		</script>
 	</body>
 </html>
