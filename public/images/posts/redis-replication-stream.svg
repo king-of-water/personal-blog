@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Redis 复制流与 replication ID、offset 水位</title>
+  <desc id="desc">主节点用 replication ID 和 offset 标定复制流，副本带自己的旧 replid 和 offset 用 PSYNC 请求同步；缺失段仍在 backlog 内则部分重同步，否则全量重同步。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <marker id="arrowG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#466b48"/></marker>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 16px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="720" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="58" class="h">副本差主节点多少？复制流用 replid 与 offset 标定水位</text>
+  <text x="56" y="92" class="b">客户端收到 OK 只代表写已进入主节点复制流；副本 offset 是否追上，是另一回事。</text>
+
+  <g transform="translate(55 150)">
+    <rect width="250" height="150" rx="20" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="125" y="42" text-anchor="middle" class="t" fill="#466b48">主节点 master</text>
+    <text x="125" y="78" text-anchor="middle" class="m">replid: 7f3a…9c2e</text>
+    <text x="125" y="108" text-anchor="middle" class="b">master_repl_offset</text>
+    <text x="125" y="134" text-anchor="middle" class="m">4096</text>
+  </g>
+
+  <line x1="305" y1="225" x2="895" y2="225" stroke="#8a7f6d" stroke-width="4" marker-end="url(#arrow)"/>
+  <text x="600" y="200" text-anchor="middle" class="t">复制流（写命令 + 合成的 DEL）</text>
+  <rect x="690" y="240" width="200" height="34" rx="9" fill="#f4eace" stroke="#8a6b31"/>
+  <text x="790" y="262" text-anchor="middle" class="b">副本落后 176 字节</text>
+
+  <g transform="translate(895 150)">
+    <rect width="250" height="150" rx="20" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="125" y="42" text-anchor="middle" class="t" fill="#295279">副本 replica</text>
+    <text x="125" y="78" text-anchor="middle" class="m">slave_repl_offset</text>
+    <text x="125" y="108" text-anchor="middle" class="m">3920</text>
+    <text x="125" y="134" text-anchor="middle" class="b">master_link_status: up</text>
+  </g>
+
+  <g transform="translate(55 355)">
+    <rect width="1090" height="140" rx="22" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="28" y="40" class="t">replication backlog（主节点内存环形缓冲）</text>
+    <rect x="28" y="58" width="1034" height="30" rx="10" fill="#dee3d6" stroke="#466b48"/>
+    <text x="60" y="79" class="m">offset 1024</text>
+    <text x="540" y="79" text-anchor="middle" class="s">断线期间产生的字节仍在此范围内</text>
+    <text x="1000" y="79" text-anchor="middle" class="m">4096</text>
+    <text x="28" y="118" class="s">repl-backlog-size 1mb（默认）、repl-backlog-ttl 3600s（默认）；断线期间产生的字节若滚出 backlog，副本只能全量重同步。</text>
+  </g>
+
+  <g transform="translate(55 535)">
+    <rect width="530" height="130" rx="20" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="265" y="40" text-anchor="middle" class="t" fill="#466b48">部分重同步：+CONTINUE</text>
+    <text x="265" y="72" text-anchor="middle" class="b">断线期间产生的字节仍在 backlog</text>
+    <text x="265" y="100" text-anchor="middle" class="s">只补缺失段，不重传整个数据集</text>
+  </g>
+  <g transform="translate(615 535)">
+    <rect width="530" height="130" rx="20" fill="#f4eace" stroke="#8a6b31" stroke-width="2"/>
+    <text x="265" y="40" text-anchor="middle" class="t" fill="#725923">全量重同步：+FULLRESYNC</text>
+    <text x="265" y="72" text-anchor="middle" class="b">backlog 已覆盖或 replid 不匹配</text>
+    <text x="265" y="100" text-anchor="middle" class="s">重发 RDB 快照 + 缓冲的新写命令</text>
+  </g>
+</svg>

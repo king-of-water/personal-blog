@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">从失联判定到新主对外服务的一次故障切换</title>
+  <desc id="desc">故障切换依次经过主观下线判定、客观下线判定、多数派授权选主、副本选择、提升新主和配置广播收敛。其中 quorum 决定判定失败，majority 决定授权执行切换。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 18px ui-sans-serif,system-ui,sans-serif}.b{font:400 15px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 13px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 15px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="54" class="h">一次故障切换：判失败、拿授权、挑副本、切路由</text>
+  <text x="56" y="86" class="b">quorum 决定「判定失败」，majority 决定「授权执行」——两者是两件事。</text>
+
+  <g transform="translate(55 140)">
+    <rect width="150" height="150" rx="18" fill="#f4eace" stroke="#8a6b31" stroke-width="2"/>
+    <text x="75" y="60" text-anchor="middle" class="t" fill="#725923">主节点失联</text>
+    <text x="75" y="92" text-anchor="middle" class="s">崩溃或分区</text>
+    <text x="75" y="116" text-anchor="middle" class="s">复制流停止</text>
+  </g>
+  <line x1="205" y1="215" x2="245" y2="215" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <g transform="translate(245 140)">
+    <rect width="170" height="150" rx="18" fill="#f4eace" stroke="#8a6b31" stroke-width="2"/>
+    <text x="85" y="44" text-anchor="middle" class="t" fill="#725923">SDOWN</text>
+    <text x="85" y="76" text-anchor="middle" class="b">单个 Sentinel</text>
+    <text x="85" y="100" text-anchor="middle" class="s">down-after-milliseconds</text>
+    <text x="85" y="124" text-anchor="middle" class="s">内无合法回复</text>
+  </g>
+  <line x1="415" y1="215" x2="455" y2="215" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <g transform="translate(455 140)">
+    <rect width="170" height="150" rx="18" fill="#f4eace" stroke="#8a6b31" stroke-width="2"/>
+    <text x="85" y="44" text-anchor="middle" class="t" fill="#725923">ODOWN</text>
+    <text x="85" y="76" text-anchor="middle" class="b">quorum 个 Sentinel</text>
+    <text x="85" y="100" text-anchor="middle" class="s">is-master-down-by-addr</text>
+    <text x="85" y="124" text-anchor="middle" class="s">gossip，非共识</text>
+  </g>
+  <line x1="625" y1="215" x2="665" y2="215" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <g transform="translate(665 140)">
+    <rect width="180" height="150" rx="18" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="90" y="44" text-anchor="middle" class="t" fill="#295279">多数授权</text>
+    <text x="90" y="76" text-anchor="middle" class="b">majority 投票选 leader</text>
+    <text x="90" y="100" text-anchor="middle" class="s">唯一 configuration</text>
+    <text x="90" y="124" text-anchor="middle" class="s">epoch 版本化配置</text>
+  </g>
+  <line x1="845" y1="215" x2="885" y2="215" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <g transform="translate(885 140)">
+    <rect width="250" height="150" rx="18" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="125" y="40" text-anchor="middle" class="t" fill="#295279">选副本并提升</text>
+    <text x="125" y="68" text-anchor="middle" class="m">replica-priority</text>
+    <text x="125" y="90" text-anchor="middle" class="m">→ offset → runid</text>
+    <text x="125" y="116" text-anchor="middle" class="s">REPLICAOF NO ONE</text>
+    <text x="125" y="138" text-anchor="middle" class="s">INFO 观察变主</text>
+  </g>
+
+  <g transform="translate(55 330)">
+    <rect width="1080" height="150" rx="22" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="28" y="40" class="t">两个门槛分属两条线</text>
+    <text x="28" y="76" class="b">quorum（检测）：</text>
+    <text x="180" y="76" class="s">多少个 Sentinel 同意主挂了才 ODOWN，写进 sentinel monitor 第 4 个参数。</text>
+    <text x="28" y="106" class="b">majority（授权）：</text>
+    <text x="180" y="106" class="s">执行切换要 Sentinel 总数多数派投票；少数派分区里永远凑不齐，因此不会切换。</text>
+    <text x="28" y="134" class="s">5 个 Sentinel、quorum=2：2 个判失败即触发，但需 3 个授权才执行；quorum=5：全部同意才判失败且需全部授权。</text>
+  </g>
+
+  <g transform="translate(55 520)">
+    <rect width="1080" height="140" rx="22" fill="#ebe4d4" stroke="#8a7f6d"/>
+    <text x="28" y="38" class="t">切换后：配置广播收敛</text>
+    <text x="28" y="72" class="b">新配置经 __sentinel__:hello 频道广播，epoch 大的覆盖小的，最终一致，合并规则是 last-failover-wins。</text>
+    <text x="28" y="102" class="b">其余副本按 parallel-syncs 分批重同步；被提升副本不一定包含旧主全部已确认写入。</text>
+  </g>
+</svg>

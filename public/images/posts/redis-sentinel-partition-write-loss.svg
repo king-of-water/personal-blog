@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">机房分区下旧主继续收写与 min-replicas-to-write 的边界</title>
+  <desc id="desc">网络分区把旧主与多数 Sentinel 隔开，多数派提升副本为新主；旧主仍连着少数客户端继续收写。没有 min-replicas-to-write 时丢失窗口无上界，配置后旧主在失去所有副本 ack 的 max-lag 秒后拒绝写入，把丢失窗口压到约 max-lag 秒。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 16px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="54" class="h">分区里旧主继续收的写，最终都会丢</text>
+  <text x="56" y="88" class="b">min-replicas-to-write 把「旧主最多还能多收多少写」压到约 max-lag 秒。</text>
+
+  <text x="70" y="170" class="t" fill="#466b48">多数派侧（机房 A）</text>
+  <rect x="70" y="190" width="1060" height="70" rx="16" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+  <text x="95" y="220" class="b">判定 ODOWN → 多数授权 → 提升 R1 为新主 → 恢复写入</text>
+  <text x="95" y="246" class="s">新主从 R1 的 offset 继续，旧主分区期间的写不进入新历史</text>
+
+  <text x="70" y="320" class="t" fill="#943b37">少数派侧（机房 B）</text>
+  <rect x="70" y="340" width="1060" height="70" rx="16" fill="#f5f0e4" stroke="#d7cebd"/>
+  <text x="95" y="380" class="b">旧主：继续收写</text>
+
+  <line x1="250" y1="150" x2="250" y2="470" stroke="#c5baa7" stroke-width="2" stroke-dasharray="7 7"/>
+  <text x="250" y="135" text-anchor="middle" class="s">t0 分区开始</text>
+  <line x1="640" y1="150" x2="640" y2="470" stroke="#c5baa7" stroke-width="2" stroke-dasharray="7 7"/>
+  <text x="640" y="135" text-anchor="middle" class="s">t0+max-lag 旧主拒写</text>
+  <line x1="1030" y1="150" x2="1030" y2="470" stroke="#c5baa7" stroke-width="2" stroke-dasharray="7 7"/>
+  <text x="1030" y="135" text-anchor="middle" class="s">t_heal 分区愈合</text>
+
+  <rect x="250" y="340" width="390" height="70" rx="0" fill="#eed9d3" opacity="0.85"/>
+  <text x="445" y="375" text-anchor="middle" class="b" fill="#943b37">有界丢失窗口 ≈ max-lag 秒</text>
+  <text x="445" y="398" text-anchor="middle" class="s">失去所有副本 ack 后仍在收写</text>
+  <rect x="640" y="340" width="390" height="70" rx="0" fill="#f4eace" opacity="0.75"/>
+  <text x="835" y="375" text-anchor="middle" class="b" fill="#725923">旧主拒绝写入</text>
+  <text x="835" y="398" text-anchor="middle" class="s">宁可失败也不扩大丢失量</text>
+
+  <g transform="translate(70 540)">
+    <rect width="1060" height="120" rx="20" fill="#ebe4d4" stroke="#8a7f6d"/>
+    <text x="28" y="38" class="t">没有 min-replicas-to-write 时</text>
+    <text x="28" y="70" class="b">旧主从 t0 一路收到 t_heal，整个分区期间的写入全部进入红色丢失区，窗口无上界。</text>
+    <text x="28" y="100" class="b">配置 min-replicas-to-write 1 + min-replicas-max-lag 10 后，旧主在失去副本 ack 的 10 秒后开始拒写。</text>
+  </g>
+</svg>

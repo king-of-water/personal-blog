@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">Redis 主从与 Sentinel 的三层关系</title>
+  <desc id="desc">数据层是主节点向副本发复制流；Sentinel 控制层独立监控 Redis、通过 __sentinel__:hello 频道互相发现并交换配置；客户端通过 Sentinel 查询新主地址，读写数据时直连主节点、不经过 Sentinel。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <marker id="arrowG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#466b48"/></marker>
+    <marker id="arrowB" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#295279"/></marker>
+    <marker id="arrowP" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#5e5083"/></marker>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 16px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="54" class="h">数据层、控制层、客户端各走各的线</text>
+  <text x="56" y="86" class="b">复制走实线，监控走紫色，发现与配置传播走虚线；数据路径不经过 Sentinel。</text>
+
+  <text x="70" y="140" class="t" fill="#466b48">Redis 数据层</text>
+  <g transform="translate(70 160)">
+    <rect width="260" height="90" rx="16" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="130" y="40" text-anchor="middle" class="t" fill="#466b48">主节点 M1</text>
+    <text x="130" y="68" text-anchor="middle" class="s">10.0.0.1:6379</text>
+  </g>
+  <g transform="translate(470 160)">
+    <rect width="260" height="90" rx="16" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="130" y="40" text-anchor="middle" class="t" fill="#295279">副本 R1</text>
+    <text x="130" y="68" text-anchor="middle" class="s">10.0.0.2:6379</text>
+  </g>
+  <g transform="translate(870 160)">
+    <rect width="260" height="90" rx="16" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="130" y="40" text-anchor="middle" class="t" fill="#295279">副本 R2</text>
+    <text x="130" y="68" text-anchor="middle" class="s">10.0.0.3:6379</text>
+  </g>
+  <line x1="330" y1="205" x2="470" y2="205" stroke="#466b48" stroke-width="3" marker-end="url(#arrowG)"/>
+  <line x1="330" y1="205" x2="870" y2="205" stroke="#466b48" stroke-width="3" marker-end="url(#arrowG)"/>
+  <text x="600" y="190" text-anchor="middle" class="s">复制流（异步）</text>
+
+  <text x="70" y="310" class="t" fill="#5e5083">Sentinel 控制层</text>
+  <g transform="translate(70 330)">
+    <rect width="260" height="80" rx="16" fill="#e3dde2" stroke="#5e5083" stroke-width="2"/>
+    <text x="130" y="36" text-anchor="middle" class="t" fill="#5e5083">Sentinel S1</text>
+    <text x="130" y="62" text-anchor="middle" class="s">:26379</text>
+  </g>
+  <g transform="translate(470 330)">
+    <rect width="260" height="80" rx="16" fill="#e3dde2" stroke="#5e5083" stroke-width="2"/>
+    <text x="130" y="36" text-anchor="middle" class="t" fill="#5e5083">Sentinel S2</text>
+    <text x="130" y="62" text-anchor="middle" class="s">:26379</text>
+  </g>
+  <g transform="translate(870 330)">
+    <rect width="260" height="80" rx="16" fill="#e3dde2" stroke="#5e5083" stroke-width="2"/>
+    <text x="130" y="36" text-anchor="middle" class="t" fill="#5e5083">Sentinel S3</text>
+    <text x="130" y="62" text-anchor="middle" class="s">:26379</text>
+  </g>
+  <line x1="330" y1="370" x2="470" y2="370" stroke="#8a7f6d" stroke-width="2.5" stroke-dasharray="7 7" marker-end="url(#arrow)"/>
+  <line x1="730" y1="370" x2="870" y2="370" stroke="#8a7f6d" stroke-width="2.5" stroke-dasharray="7 7" marker-end="url(#arrow)"/>
+  <text x="600" y="355" text-anchor="middle" class="s">__sentinel__:hello 频道互相发现、交换配置版本（虚线）</text>
+  <line x1="600" y1="330" x2="600" y2="250" stroke="#5e5083" stroke-width="2.5" marker-end="url(#arrowP)"/>
+  <text x="620" y="300" class="s">PING 监控</text>
+
+  <g transform="translate(470 500)">
+    <rect width="260" height="80" rx="16" fill="#e3dde2" stroke="#5e5083" stroke-width="2"/>
+    <text x="130" y="36" text-anchor="middle" class="t" fill="#5e5083">客户端 Client</text>
+    <text x="130" y="62" text-anchor="middle" class="s">支持 Sentinel 的客户端库</text>
+  </g>
+  <path d="M470 540 C 400 560, 200 540, 200 410" stroke="#8a7f6d" stroke-width="2.5" fill="none" stroke-dasharray="7 7" marker-end="url(#arrow)"/>
+  <text x="240" y="500" text-anchor="middle" class="s">get-master-addr-by-name（虚线）</text>
+  <path d="M600 500 C 600 470, 200 440, 200 250" stroke="#466b48" stroke-width="3" fill="none" marker-end="url(#arrowG)"/>
+  <text x="430" y="470" text-anchor="middle" class="s">读写主节点（实线，不经 Sentinel）</text>
+
+  <g transform="translate(70 610)">
+    <rect width="1060" height="60" rx="16" fill="#ebe4d4" stroke="#8a7f6d"/>
+    <text x="28" y="38" class="b">实线 = 复制或数据路径；紫色 = Sentinel 监控；虚线 = 发现与配置传播。</text>
+  </g>
+</svg>
