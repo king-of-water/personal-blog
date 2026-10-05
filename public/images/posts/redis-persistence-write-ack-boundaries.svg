@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Redis 写入从内存到持久介质的确认边界</title>
+  <desc id="desc">一条 Redis 写命令依次经过内存数据集、AOF 缓冲区、操作系统页缓存和持久介质，不同配置下客户端确认点不同。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.line{stroke:#8a7f6d;stroke-width:3;marker-end:url(#arrow)}</style>
+  </defs>
+  <rect width="1200" height="720" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="58" class="h">客户端收到 OK 时，写入究竟走到了哪一层？</text>
+  <text x="56" y="92" class="b">确认点越靠右，本机突然故障时的可恢复证据越强；复制与异地备份仍是另一条链。</text>
+  <g transform="translate(55 155)">
+    <rect width="230" height="138" rx="20" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="115" y="45" text-anchor="middle" class="t" fill="#466b48">Redis 内存数据集</text>
+    <text x="115" y="80" text-anchor="middle" class="b">命令已经执行</text>
+    <text x="115" y="107" text-anchor="middle" class="s">进程仍存活时可见</text>
+  </g>
+  <line x1="285" y1="224" x2="355" y2="224" class="line"/>
+  <g transform="translate(355 155)">
+    <rect width="230" height="138" rx="20" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="115" y="45" text-anchor="middle" class="t" fill="#295279">AOF Buffer</text>
+    <text x="115" y="80" text-anchor="middle" class="b">命令等待 write</text>
+    <text x="115" y="107" text-anchor="middle" class="s">仍属于进程状态</text>
+  </g>
+  <line x1="585" y1="224" x2="655" y2="224" class="line"/>
+  <g transform="translate(655 155)">
+    <rect width="230" height="138" rx="20" fill="#f4eace" stroke="#8a6b31" stroke-width="2"/>
+    <text x="115" y="45" text-anchor="middle" class="t" fill="#725923">OS Page Cache</text>
+    <text x="115" y="80" text-anchor="middle" class="b">write 已返回</text>
+    <text x="115" y="107" text-anchor="middle" class="s">整机断电仍可能丢失</text>
+  </g>
+  <line x1="885" y1="224" x2="955" y2="224" class="line"/>
+  <g transform="translate(955 155)">
+    <rect width="190" height="138" rx="20" fill="#e3dde2" stroke="#5e5083" stroke-width="2"/>
+    <text x="95" y="45" text-anchor="middle" class="t" fill="#5e5083">持久介质</text>
+    <text x="95" y="80" text-anchor="middle" class="b">fsync 已完成</text>
+    <text x="95" y="107" text-anchor="middle" class="s">本地恢复证据</text>
+  </g>
+  <g transform="translate(55 355)">
+    <rect width="1090" height="250" rx="22" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="28" y="42" class="t" fill="#2b2620">不同策略的客户端确认位置</text>
+    <line x1="120" y1="84" x2="1020" y2="84" stroke="#c5baa7" stroke-width="2"/>
+    <circle cx="230" cy="84" r="8" fill="#466b48"/><circle cx="520" cy="84" r="8" fill="#295279"/><circle cx="815" cy="84" r="8" fill="#8a6b31"/><circle cx="1005" cy="84" r="8" fill="#5e5083"/>
+    <text x="28" y="126" class="b">只开启 RDB</text><text x="220" y="126" class="s">OK 与下一次快照完成没有逐请求关系</text>
+    <text x="28" y="164" class="b">AOF no / everysec</text><text x="220" y="164" class="s">通常先回复，后续由 OS 或后台线程推进同步</text>
+    <text x="28" y="202" class="b">AOF always</text><text x="220" y="202" class="s">本批写入完成本地同步后再回复，延迟直接受存储影响</text>
+    <text x="28" y="231" class="s">即使本地已 fsync，也没有证明副本、异地存储或历史备份已经保存这条写入。</text>
+  </g>
+</svg>

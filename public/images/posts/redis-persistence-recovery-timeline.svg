@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Redis 断电后确认恢复边界的证据时间线</title>
+  <desc id="desc">从最后一次 RDB、AOF fsync、客户端确认、机器断电到重启加载，利用日志和业务序号定位候选丢失区间。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 17px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}</style>
+  </defs>
+  <rect width="1200" height="720" rx="28" fill="#fdfaf3"/>
+  <text x="55" y="58" class="h">断电后，不要只用“一秒丢失”概括事故</text>
+  <text x="55" y="93" class="b">先找出实际加载文件与最后可恢复 Offset，再用请求 ID 和事实源确定受影响对象。</text>
+  <line x1="85" y1="290" x2="1110" y2="290" stroke="#8a7f6d" stroke-width="4" marker-end="url(#arrow)"/>
+  <g text-anchor="middle">
+    <circle cx="155" cy="290" r="12" fill="#295279"/><text x="155" y="240" class="t" fill="#295279">15:15</text><text x="155" y="328" class="b">RDB 完成</text><text x="155" y="352" class="s">较旧恢复点</text>
+    <circle cx="405" cy="290" r="12" fill="#466b48"/><text x="405" y="240" class="t" fill="#466b48">15:20:08.x</text><text x="405" y="328" class="b">最后完成 fsync</text><text x="405" y="352" class="s">从日志与 AOF 验证</text>
+    <circle cx="650" cy="290" r="12" fill="#8a6b31"/><text x="650" y="240" class="t" fill="#725923">15:20:09.x</text><text x="650" y="328" class="b">客户端收到 OK</text><text x="650" y="352" class="s">部分写尚未同步</text>
+    <circle cx="820" cy="290" r="16" fill="#943b37"/><text x="820" y="240" class="t" fill="#943b37">15:20:10</text><text x="820" y="328" class="b">机器断电</text><text x="820" y="352" class="s">AOF 尾部可能截断</text>
+    <circle cx="1035" cy="290" r="12" fill="#5e5083"/><text x="1035" y="240" class="t" fill="#5e5083">15:24</text><text x="1035" y="328" class="b">加载 MP-AOF</text><text x="1035" y="352" class="s">确认 Base / Incr / Manifest</text>
+  </g>
+  <rect x="405" y="392" width="415" height="74" rx="16" fill="#f4eace" stroke="#8a6b31" stroke-width="2"/>
+  <text x="612" y="422" text-anchor="middle" class="t" fill="#725923">候选丢失窗口</text>
+  <text x="612" y="449" text-anchor="middle" class="b">最后可恢复 Offset之后，到断电之前</text>
+  <g transform="translate(55 520)">
+    <rect width="1090" height="130" rx="20" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="24" y="36" class="t" fill="#2b2620">定案需要四类证据对齐</text>
+    <text x="24" y="72" class="b">启动日志与生效配置　·　AOF Manifest / Offset / 截断位置　·　带序号的请求日志　·　数据库事实版本</text>
+    <text x="24" y="106" class="s">`WAITAOF` 只有在保存并检查返回计数时，才能把特定请求移出普通 everysec 的候选窗口。</text>
+  </g>
+</svg>

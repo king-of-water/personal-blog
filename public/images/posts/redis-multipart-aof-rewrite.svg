@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Redis 7 Multi-Part AOF 重写与切换过程</title>
+  <desc id="desc">重写开始后子进程生成新的 Base，父进程将新命令写入 Incremental AOF，完成后通过 Manifest 原子切换恢复链并清理旧文件。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 18px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.a{stroke:#8a7f6d;stroke-width:2.5;fill:none;marker-end:url(#arrow)}</style>
+  </defs>
+  <rect width="1200" height="760" rx="28" fill="#fdfaf3"/>
+  <text x="54" y="58" class="h">MP-AOF 重写：新旧恢复链怎样安全切换</text>
+  <text x="54" y="93" class="b">Base 表达某个时点的全量状态，Incremental 保存此后的新写，Manifest 决定启动加载顺序。</text>
+  <g transform="translate(54 135)">
+    <rect width="300" height="170" rx="20" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="24" y="38" class="t" fill="#2b2620">1. 重写前</text>
+    <rect x="24" y="62" width="112" height="54" rx="10" fill="#d8dee0" stroke="#295279"/><text x="80" y="95" text-anchor="middle" class="b">Base 1</text>
+    <rect x="158" y="62" width="118" height="54" rx="10" fill="#dee3d6" stroke="#466b48"/><text x="217" y="95" text-anchor="middle" class="b">Incr 1</text>
+    <text x="24" y="145" class="s">Manifest → Base 1 + Incr 1</text>
+  </g>
+  <path d="M354 220H432" class="a"/>
+  <g transform="translate(432 135)">
+    <rect width="330" height="300" rx="20" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="24" y="38" class="t" fill="#2b2620">2. 后台重写进行中</text>
+    <rect x="24" y="64" width="282" height="76" rx="12" fill="#e3dde2" stroke="#5e5083"/>
+    <text x="165" y="94" text-anchor="middle" class="b">子进程扫描 Fork 时刻的数据</text>
+    <text x="165" y="119" text-anchor="middle" class="s">生成临时 Base 2</text>
+    <rect x="24" y="164" width="282" height="76" rx="12" fill="#dee3d6" stroke="#466b48"/>
+    <text x="165" y="194" text-anchor="middle" class="b">父进程继续服务写请求</text>
+    <text x="165" y="219" text-anchor="middle" class="s">新命令追加到 Incr 2</text>
+    <text x="24" y="270" class="s">旧恢复链仍然有效</text>
+  </g>
+  <path d="M762 285H840" class="a"/>
+  <g transform="translate(840 135)">
+    <rect width="306" height="300" rx="20" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="24" y="38" class="t" fill="#2b2620">3. 原子切换</text>
+    <rect x="24" y="64" width="112" height="54" rx="10" fill="#d8dee0" stroke="#295279"/><text x="80" y="97" text-anchor="middle" class="b">Base 2</text>
+    <rect x="158" y="64" width="124" height="54" rx="10" fill="#dee3d6" stroke="#466b48"/><text x="220" y="97" text-anchor="middle" class="b">Incr 2</text>
+    <rect x="24" y="146" width="258" height="62" rx="12" fill="#f4eace" stroke="#8a6b31"/>
+    <text x="153" y="173" text-anchor="middle" class="b">Manifest 更新并持久化</text>
+    <text x="153" y="196" text-anchor="middle" class="s">恢复链切到 Base 2 + Incr 2</text>
+    <text x="24" y="246" class="s">旧文件不再被引用后清理</text>
+  </g>
+  <g transform="translate(54 492)">
+    <rect width="1092" height="196" rx="20" fill="#eed9d3" stroke="#943b37" stroke-width="1.5"/>
+    <text x="26" y="39" class="t" fill="#943b37">重写期间必须预留的资源</text>
+    <text x="26" y="78" class="b">内存：Fork 页表 + 写时复制产生的 COW 峰值</text>
+    <text x="26" y="111" class="b">磁盘：旧文件 + 新 Base + 增长中的 Incremental + 临时空间</text>
+    <text x="26" y="144" class="b">I/O：子进程全量写盘与在线 AOF write / fsync 互相竞争</text>
+    <text x="26" y="174" class="s">备份和清理必须理解 Manifest，不能只按文件修改时间选择“最新几个文件”。</text>
+  </g>
+</svg>
