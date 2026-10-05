@@ -6,8 +6,8 @@ subcategory: Redis
 articleClass: flagship
 seriesOrder: 110
 featured: true
-publishedAt: 2026-07-24T22:34:00+08:00
-updatedAt: 2026-07-24T22:34:00+08:00
+publishedAt: 2026-07-23T20:20:00+08:00
+updatedAt: 2026-07-23T20:20:00+08:00
 tags: [Redis, Big Key, Hot Key, 热点, 大 Key, 治理, redis-cli, LFU, UNLINK, 内存优化]
 ---
 

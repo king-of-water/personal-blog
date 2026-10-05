@@ -6,7 +6,7 @@ subcategory: 工程原理与选型
 articleClass: flagship
 seriesOrder: 20
 featured: true
-publishedAt: 2026-10-05T16:10:00+08:00
+publishedAt: 2026-07-25T20:45:00+08:00
 tags: [数据结构, 缓存, 局部性, LRU, LFU, Caffeine, TinyLFU, W-TinyLFU, Java]
 ---
 
