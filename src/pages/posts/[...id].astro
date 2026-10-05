@@ -262,6 +262,17 @@ const librarySections = categorySections.map((section) => ({
 			};
 			scroller.addEventListener('scroll', syncScroller, { passive: true });
 			window.addEventListener('resize', syncScroller);
+
+			// 左侧专栏列表：把当前这篇滚到可见区中部，上下各留一段上下文
+			if (scroller.classList.contains('article-library-inner')) {
+				const active = scroller.querySelector<HTMLElement>('a.is-active');
+				if (active) {
+					const scrollerRect = scroller.getBoundingClientRect();
+					const activeRect = active.getBoundingClientRect();
+					scroller.scrollTop += activeRect.top - scrollerRect.top - (scroller.clientHeight - activeRect.height) / 2;
+				}
+			}
+
 			syncScroller();
 		}
 
