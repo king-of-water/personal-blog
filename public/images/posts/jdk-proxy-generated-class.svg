@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">JDK 动态代理生成的 $Proxy0 类与调用链</title>
+  <desc id="desc">Proxy.newProxyInstance 在运行时生成 $Proxy0 类，它 extends Proxy 并 implements 目标接口；每个接口方法体只有一行，把调用转发给父类持有的 InvocationHandler；handler 里再用 method.invoke 反射调用真实对象。因为类已经继承了 Proxy，Java 单继承使它无法再继承具体类，所以只能代理接口。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <marker id="arrowG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#466b48"/></marker>
+    <style>.h{font:700 28px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 14px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="720" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="52" class="h">代理对象的真实类型：$Proxy0</text>
+  <text x="56" y="84" class="b">每个接口方法的方法体只有一行 —— 转发给 InvocationHandler。</text>
+
+  <!-- 调用方 -->
+  <g transform="translate(70 130)">
+    <rect width="240" height="90" rx="14" fill="#e3dde2" stroke="#5e5083" stroke-width="2"/>
+    <text x="120" y="42" text-anchor="middle" class="t" fill="#5e5083">调用方</text>
+    <text x="120" y="70" text-anchor="middle" class="m">proxy.save(user)</text>
+  </g>
+  <line x1="310" y1="175" x2="390" y2="175" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <!-- $Proxy0 -->
+  <g transform="translate(390 130)">
+    <rect width="470" height="330" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="235" y="34" text-anchor="middle" class="t" fill="#295279">生成的代理类</text>
+    <text x="30" y="66" class="m">public final class $Proxy0</text>
+    <text x="46" y="90" class="m" fill="#943b37">extends Proxy</text>
+    <text x="46" y="114" class="m" fill="#466b48">implements UserService</text>
+
+    <rect x="30" y="132" width="410" height="80" rx="10" fill="#d8dee0" stroke="#295279"/>
+    <text x="46" y="158" class="m">private InvocationHandler h;  // 继承自 Proxy</text>
+    <text x="46" y="184" class="m">public void save(User u) {</text>
+    <text x="62" y="204" class="m">h.invoke(this, m3, new Object[]{u});  // 只有这一行</text>
+    <text x="46" y="228" class="m">}</text>
+
+    <text x="30" y="252" class="s">h 是把外部 handler 存进来的字段（父类里）</text>
+    <text x="30" y="278" class="s">m3 是静态初始化时缓存的 Method 对象</text>
+    <text x="30" y="304" class="s">this 就是代理对象自己 = invoke 的第一个参数</text>
+  </g>
+
+  <line x1="860" y1="300" x2="940" y2="300" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <!-- handler -->
+  <g transform="translate(940 130)">
+    <rect width="200" height="330" rx="18" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="100" y="34" text-anchor="middle" class="t" fill="#466b48">你的拦截逻辑</text>
+    <text x="20" y="80" class="m">Invocation</text>
+    <text x="20" y="102" class="m">Handler</text>
+    <text x="20" y="140" class="b">before 日志</text>
+    <text x="20" y="178" class="m">method.invoke(</text>
+    <text x="34" y="200" class="m">target, args)</text>
+    <text x="20" y="238" class="b">after 日志</text>
+    <text x="20" y="280" class="s">反射调用</text>
+    <text x="20" y="304" class="s">真实对象</text>
+  </g>
+
+  <!-- 底部说明 -->
+  <g transform="translate(70 500)">
+    <rect width="1060" height="170" rx="18" fill="#ebe4d4" stroke="#8a7f6d"/>
+    <text x="28" y="36" class="t" fill="#943b37">为什么只能代理接口</text>
+    <text x="28" y="72" class="b">$Proxy0 已经 extends Proxy 占了唯一的继承位；Java 单继承使它无法再 extends 你的具体类。</text>
+    <text x="28" y="104" class="b">所以它只能 implements 接口 —— 目标必须实现至少一个接口，否则 JDK 动态代理用不了。</text>
+    <text x="28" y="140" class="s">补充：proxy.getClass() 返回的是 $Proxy0，不是 UserServiceImpl；instanceof 只能按接口判断。</text>
+  </g>
+</svg>

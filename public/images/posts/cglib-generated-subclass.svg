@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">CGLIB 生成的子类结构与 invokeSuper / invoke 的分叉</title>
+  <desc id="desc">CGLIB 用 Enhancer 生成目标类的子类，重写方法里把调用转发给 MethodInterceptor。转发真实逻辑必须用 methodProxy.invokeSuper 调父类实现；若误用 methodProxy.invoke，由于 obj 就是代理对象，会再次进入 intercept 形成无限递归直到栈溢出。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <marker id="arrowG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#466b48"/></marker>
+    <marker id="arrowR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#943b37"/></marker>
+    <style>.h{font:700 28px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 14px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="720" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="52" class="h">CGLIB 生成的是目标类的「子类」</text>
+  <text x="56" y="84" class="b">不用持有目标对象，super 调用即可；但转发方法选错就会无限递归。</text>
+
+  <!-- 生成的子类 -->
+  <g transform="translate(70 125)">
+    <rect width="480" height="250" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="240" y="34" text-anchor="middle" class="t" fill="#295279">生成的子类</text>
+    <text x="30" y="66" class="m">class UserServiceImpl$$</text>
+    <text x="30" y="88" class="m">      EnhancerByCGLIB</text>
+    <text x="46" y="112" class="m" fill="#466b48">extends UserServiceImpl</text>
+    <rect x="30" y="128" width="420" height="106" rx="10" fill="#d8dee0" stroke="#295279"/>
+    <text x="46" y="154" class="m">public void save(User u) {</text>
+    <text x="62" y="176" class="m">if (interceptor != null)</text>
+    <text x="78" y="198" class="m">interceptor.intercept(</text>
+    <text x="94" y="220" class="m">this, m_save, args, mp_save);</text>
+  </g>
+
+  <!-- 父类 -->
+  <g transform="translate(70 400)">
+    <rect width="480" height="90" rx="14" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="240" y="36" text-anchor="middle" class="t" fill="#466b48">UserServiceImpl（真实类 = 父类）</text>
+    <text x="240" y="66" text-anchor="middle" class="s">子类用 super 就能调到它的真实逻辑</text>
+  </g>
+  <line x1="310" y1="375" x2="310" y2="400" stroke="#466b48" stroke-width="3" marker-end="url(#arrowG)"/>
+  <text x="330" y="394" class="s">继承</text>
+
+  <!-- 分叉 -->
+  <g transform="translate(620 125)">
+    <rect width="520" height="365" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="260" y="34" text-anchor="middle" class="t">MethodInterceptor 里的两个选择</text>
+
+    <rect x="30" y="56" width="460" height="130" rx="12" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="50" y="84" class="m" fill="#466b48">✓ invokeSuper(obj, args)</text>
+    <text x="50" y="112" class="b">调用 obj 的父类（真实类）实现</text>
+    <text x="50" y="140" class="s">走 FastClass 索引直接跳转，绕开反射</text>
+    <text x="50" y="166" class="s">→ 正确的转发方式</text>
+
+    <rect x="30" y="200" width="460" height="145" rx="12" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+    <text x="50" y="228" class="m" fill="#943b37">✗ invoke(obj, args)</text>
+    <text x="50" y="256" class="b">调用 obj 自己的方法，而 obj 就是代理对象</text>
+    <text x="50" y="284" class="s">→ 再次进入 intercept</text>
+    <text x="50" y="310" class="s">→ 无限递归，StackOverflowError</text>
+    <path d="M470 250 L500 250 L500 130 L470 130" stroke="#943b37" stroke-width="2.5" fill="none" stroke-dasharray="6 5" marker-end="url(#arrowR)"/>
+    <text x="508" y="196" class="s" fill="#943b37">循环</text>
+  </g>
+
+  <!-- 底部 -->
+  <g transform="translate(70 520)">
+    <rect width="1070" height="150" rx="18" fill="#ebe4d4" stroke="#8a7f6d"/>
+    <text x="28" y="36" class="t">CGLIB 代理不了的东西（都源于「继承 + 重写」做不到）</text>
+    <text x="28" y="70" class="b">final 类（不能继承）· final 方法（不能重写）· private 方法（子类看不见）</text>
+    <text x="28" y="98" class="b">static 方法（属于类不参与多态）· 构造器（构造过程无法拦截）</text>
+    <text x="28" y="130" class="s">一句话：凡是「继承 + 重写」做不到的，CGLIB 都代理不了。</text>
+  </g>
+</svg>
