@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">Big Key 与 Hot Key 是两个正交的维度</title>
+  <desc id="desc">横轴是 Key 大小（小到大），纵轴是访问热度（冷到热）。四个象限分别是：小且冷、大而不热、小但热、又大又热。大说的是容量，热说的是频率，各有各的治理手段。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}</style>
+  </defs>
+  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="54" class="h">大是容量，热是频率：两个正交的问题</text>
+  <text x="56" y="88" class="b">先定位问题 Key 落在哪个象限，再选手段；用错象限，手段再勤快也白搭。</text>
+
+  <line x1="250" y1="150" x2="250" y2="560" stroke="#8a7f6d" stroke-width="3"/>
+  <line x1="250" y1="355" x2="1050" y2="355" stroke="#8a7f6d" stroke-width="3"/>
+  <path d="M1050 355 L1038 347 M1050 355 L1038 363" stroke="#8a7f6d" stroke-width="3" fill="none"/>
+  <path d="M250 150 L242 162 M250 150 L258 162" stroke="#8a7f6d" stroke-width="3" fill="none"/>
+  <text x="650" y="590" text-anchor="middle" class="t">Key 大小（小 → 大）</text>
+  <text x="120" y="360" text-anchor="middle" class="t" transform="rotate(-90 120 360)">访问热度（冷 → 热）</text>
+
+  <g transform="translate(270 175)">
+    <rect width="360" height="160" rx="16" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="180" y="58" text-anchor="middle" class="t" fill="#466b48">小且冷</text>
+    <text x="180" y="92" text-anchor="middle" class="b">健康，无需处理</text>
+  </g>
+  <g transform="translate(670 175)">
+    <rect width="360" height="160" rx="16" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="180" y="58" text-anchor="middle" class="t" fill="#295279">小但热</text>
+    <text x="180" y="92" text-anchor="middle" class="b">治热度：缓存、读副本、加盐</text>
+  </g>
+  <g transform="translate(270 375)">
+    <rect width="360" height="160" rx="16" fill="#f4eace" stroke="#8a6b31" stroke-width="2"/>
+    <text x="180" y="58" text-anchor="middle" class="t" fill="#725923">大而不热</text>
+    <text x="180" y="92" text-anchor="middle" class="b">治大小：拆 Key、HSCAN、UNLINK</text>
+  </g>
+  <g transform="translate(670 375)">
+    <rect width="360" height="160" rx="16" fill="#eed9d3" stroke="#943b37" stroke-width="3"/>
+    <text x="180" y="58" text-anchor="middle" class="t" fill="#943b37">又大又热</text>
+    <text x="180" y="92" text-anchor="middle" class="b">最糟：先拆大小，再拆热度</text>
+  </g>
+</svg>

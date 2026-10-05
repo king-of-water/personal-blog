@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">问题 Key 的发现、分类与治理决策</title>
+  <desc id="desc">先用 --bigkeys/--memkeys 找大 Key、--hotkeys 和节点 CPU/QPS 差异找热 Key，再按大、热、又大又热分类，分别用拆 Key 与 UNLINK、缓存与读副本与加盐等手段治理。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 16px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="54" class="h">先发现，再分类，最后治理</text>
+  <text x="56" y="88" class="b">大和热是两条独立的线索，各自对应一套工具和手段。</text>
+
+  <g transform="translate(70 150)">
+    <rect width="300" height="200" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="150" y="38" text-anchor="middle" class="t">发现</text>
+    <text x="150" y="78" text-anchor="middle" class="m">--bigkeys / --memkeys</text>
+    <text x="150" y="104" text-anchor="middle" class="s">找大 Key（元素数 / 内存）</text>
+    <text x="150" y="138" text-anchor="middle" class="m">--hotkeys（需 LFU）</text>
+    <text x="150" y="164" text-anchor="middle" class="s">找热 Key（访问计数）</text>
+  </g>
+  <line x1="370" y1="250" x2="420" y2="250" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <g transform="translate(420 150)">
+    <rect width="300" height="200" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="150" y="38" text-anchor="middle" class="t">分类</text>
+    <text x="150" y="82" text-anchor="middle" class="b" fill="#943b37">大（容量）</text>
+    <text x="150" y="112" text-anchor="middle" class="b" fill="#295279">热（频率）</text>
+    <text x="150" y="146" text-anchor="middle" class="b">又大又热</text>
+    <text x="150" y="178" text-anchor="middle" class="s">先定位到象限再动手</text>
+  </g>
+  <line x1="720" y1="250" x2="770" y2="250" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <g transform="translate(770 150)">
+    <rect width="360" height="200" rx="18" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="180" y="38" text-anchor="middle" class="t" fill="#466b48">治理</text>
+    <text x="180" y="78" text-anchor="middle" class="b">大：拆 Key、HSCAN、UNLINK</text>
+    <text x="180" y="108" text-anchor="middle" class="b">热：本地缓存、读副本、加盐</text>
+    <text x="180" y="138" text-anchor="middle" class="b">大热：先拆大小，再拆热度</text>
+    <text x="180" y="168" text-anchor="middle" class="s">改完要回看指标是否变好</text>
+  </g>
+
+  <g transform="translate(70 400)">
+    <rect width="1060" height="180" rx="20" fill="#ebe4d4" stroke="#8a7f6d"/>
+    <text x="28" y="40" class="t">最常见的误判</text>
+    <text x="28" y="76" class="b">给「大但不热」的 Key 做加盐拆分——白费力气，它的问题是每次读取的大回复。</text>
+    <text x="28" y="106" class="b">给「小但热」的 Key 拆 Key——热度没散，只是把一个热点换成了多个热点。</text>
+    <text x="28" y="136" class="b">给「又大又热」只做缓存——热度压下去了，缓存失效时的 HGETALL 大回复还在。</text>
+  </g>
+</svg>

@@ -75,7 +75,6 @@ export const backendSubcategories: Subcategory[] = [
 		slug: 'redis',
 		description: '缓存、数据结构、集群与稳定性。',
 		plannedTopics: [
-			{ title: 'Redis Big Key 与 Hot Key：发现、影响与治理', seriesOrder: 110 },
 			{ title: 'Redis 线上排障与可观测性', seriesOrder: 120 },
 		],
 	},
