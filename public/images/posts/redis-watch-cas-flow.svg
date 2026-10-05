@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">WATCH 乐观锁的 check-and-set 重试循环</title>
+  <desc id="desc">WATCH 监视 Key 后读取并判断，事务里写回；EXEC 时若 Key 被其他客户端改过则返回 nil、放弃并重试，否则提交成功。WATCH 不阻止别人写，只在提交时发现冲突。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <marker id="arrowG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#466b48"/></marker>
+    <marker id="arrowR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#943b37"/></marker>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 16px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="54" class="h">WATCH 乐观锁：不阻止别人写，冲突就放弃重试</text>
+  <text x="56" y="88" class="b">EXEC 返回 nil 不是出错，而是「期间别人改过 Key」，发起方重读重试。</text>
+
+  <g transform="translate(80 150)">
+    <rect width="200" height="70" rx="14" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="100" y="42" text-anchor="middle" class="t" fill="#295279">WATCH key</text>
+  </g>
+  <line x1="280" y1="185" x2="330" y2="185" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+  <g transform="translate(330 150)">
+    <rect width="200" height="70" rx="14" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="100" y="42" text-anchor="middle" class="t" fill="#295279">GET 读值并判断</text>
+  </g>
+  <line x1="530" y1="185" x2="580" y2="185" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+  <g transform="translate(580 150)">
+    <rect width="200" height="70" rx="14" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="100" y="42" text-anchor="middle" class="t" fill="#295279">MULTI + 写回</text>
+  </g>
+  <line x1="780" y1="185" x2="830" y2="185" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+  <g transform="translate(830 150)">
+    <rect width="200" height="70" rx="14" fill="#f4eace" stroke="#8a6b31" stroke-width="2"/>
+    <text x="100" y="42" text-anchor="middle" class="t" fill="#725923">EXEC</text>
+  </g>
+
+  <path d="M930 220 L930 280 L180 280 L180 220" stroke="#943b37" stroke-width="2.5" fill="none" stroke-dasharray="7 7" marker-end="url(#arrowR)"/>
+  <text x="555" y="272" text-anchor="middle" class="m" fill="#943b37">EXEC 返回 nil → 回 WATCH 重试</text>
+
+  <line x1="930" y1="150" x2="930" y2="300" stroke="#c5baa7" stroke-width="0"/>
+  <path d="M930 150 L930 300" stroke="#466b48" stroke-width="3" marker-end="url(#arrowG)"/>
+  <g transform="translate(80 360)">
+    <rect width="850" height="60" rx="14" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="425" y="38" text-anchor="middle" class="t" fill="#466b48">EXEC 返回非 nil → 提交成功</text>
+  </g>
+  <text x="505" y="330" text-anchor="middle" class="s">成功分支（绿色）</text>
+
+  <g transform="translate(80 480)">
+    <rect width="1040" height="150" rx="20" fill="#ebe4d4" stroke="#8a7f6d"/>
+    <text x="28" y="40" class="t">WATCH 的边界</text>
+    <text x="28" y="76" class="b">它监视的是「Key 是否被改过」，不是「值是否变了」；别人把 100 改回 100 也会触发冲突。</text>
+    <text x="28" y="106" class="b">冲突少时乐观锁高效；冲突一高，大量请求反复重试，反而不如排队。</text>
+    <text x="28" y="134" class="s">EXEC 与 DISCARD 都会自动解除所有 WATCH；UNWATCH 用于主动解除。</text>
+  </g>
+</svg>

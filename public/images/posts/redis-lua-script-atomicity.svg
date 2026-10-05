@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">Lua 脚本的原子执行与效果复制</title>
+  <desc id="desc">Lua 脚本在主节点上作为一个原子单元执行，期间其他请求排队等待；脚本产生的写命令以效果复制方式传到副本，而不是复制整段脚本。脚本报错不回滚，前面已执行的写仍然生效。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <marker id="arrowG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#466b48"/></marker>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 16px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="54" class="h">Lua 脚本：原子执行，效果复制到副本</text>
+  <text x="56" y="88" class="b">脚本独占主执行路径，期间其他请求排队；复制的是写命令，不是脚本本身。</text>
+
+  <g transform="translate(70 150)">
+    <rect width="420" height="250" rx="20" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="210" y="40" text-anchor="middle" class="t" fill="#466b48">主节点：脚本原子执行</text>
+    <rect x="40" y="60" width="340" height="90" rx="14" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="210" y="88" text-anchor="middle" class="m">GET → 判断 → DECRBY</text>
+    <text x="210" y="116" text-anchor="middle" class="s">读、条件、写都在一段脚本里，无窗口</text>
+    <text x="210" y="184" text-anchor="middle" class="b" fill="#943b37">脚本报错不回滚：前面的写已生效</text>
+    <text x="210" y="216" text-anchor="middle" class="s">其他请求在脚本期间排队等待</text>
+  </g>
+
+  <line x1="490" y1="275" x2="580" y2="275" stroke="#466b48" stroke-width="3" marker-end="url(#arrowG)"/>
+  <text x="535" y="255" text-anchor="middle" class="s">效果复制</text>
+
+  <g transform="translate(580 150)">
+    <rect width="420" height="250" rx="20" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="210" y="40" text-anchor="middle" class="t" fill="#295279">副本：重放写命令</text>
+    <rect x="40" y="60" width="340" height="90" rx="14" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="210" y="88" text-anchor="middle" class="m">DECRBY key 50</text>
+    <text x="210" y="116" text-anchor="middle" class="s">只复制脚本产生的写命令，不复制脚本</text>
+    <text x="210" y="184" text-anchor="middle" class="b">非确定性命令不再造成主从分叉</text>
+    <text x="210" y="216" text-anchor="middle" class="s">Redis 7 起默认，Redis 8 移除逐字复制</text>
+  </g>
+
+  <g transform="translate(70 450)">
+    <rect width="930" height="150" rx="20" fill="#ebe4d4" stroke="#8a7f6d"/>
+    <text x="28" y="40" class="t">两个工程要点</text>
+    <text x="28" y="76" class="b">EVALSHA 按 SHA1 调用缓存脚本；切换或重启后缓存可能为空，返回 NOSCRIPT，客户端要回退到 EVAL。</text>
+    <text x="28" y="106" class="b">脚本会独占执行路径：一条 100ms 的脚本让这段时间内所有请求一起等 100ms。</text>
+    <text x="28" y="134" class="s">Cluster 下脚本访问的 Key 必须显式通过 KEYS[] 传入并落在同一槽，否则 CROSSSLOT。</text>
+  </g>
+</svg>

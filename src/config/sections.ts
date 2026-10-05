@@ -75,11 +75,6 @@ export const backendSubcategories: Subcategory[] = [
 		slug: 'redis',
 		description: '缓存、数据结构、集群与稳定性。',
 		plannedTopics: [
-			{ title: 'Redis 过期与淘汰：Key 到底为什么消失', seriesOrder: 60 },
-			{ title: 'Redis 持久化：RDB、AOF 与数据丢失边界', seriesOrder: 70 },
-			{ title: 'Redis 主从复制与 Sentinel：故障切换会不会丢数据', seriesOrder: 80 },
-			{ title: 'Redis Cluster：Slot、路由、扩容与热点', seriesOrder: 90 },
-			{ title: 'Redis 事务、WATCH 与 Lua：原子性到底到哪里', seriesOrder: 100 },
 			{ title: 'Redis Big Key 与 Hot Key：发现、影响与治理', seriesOrder: 110 },
 			{ title: 'Redis 线上排障与可观测性', seriesOrder: 120 },
 		],

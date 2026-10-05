@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">MULTI/EXEC 的两种错误语义</title>
+  <desc id="desc">入队时错误（参数缺失、命令不存在）会让 EXEC 返回 EXECABORT、整队不执行；执行时错误（类型不匹配）只让失败命令返回错误，其余命令照常执行，没有回滚。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 16px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="54" class="h">MULTI/EXEC：入队错整队不执行，执行错不回滚</text>
+  <text x="56" y="88" class="b">两种错误发生在不同阶段，结果完全不同。</text>
+
+  <g transform="translate(55 140)">
+    <rect width="530" height="280" rx="20" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="265" y="40" text-anchor="middle" class="t" fill="#466b48">入队时错误：整队不执行</text>
+    <text x="265" y="76" text-anchor="middle" class="m">MULTI</text>
+    <text x="265" y="104" text-anchor="middle" class="m">SET k1 v1</text>
+    <text x="265" y="132" text-anchor="middle" class="m" fill="#943b37">INCR（缺参数）</text>
+    <text x="265" y="160" text-anchor="middle" class="m">EXEC</text>
+    <line x1="265" y1="178" x2="265" y2="206" stroke="#8a7f6d" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <rect x="140" y="210" width="250" height="44" rx="10" fill="#f4eace" stroke="#8a6b31"/>
+    <text x="265" y="238" text-anchor="middle" class="b">EXECABORT，k1 也没有被设置</text>
+  </g>
+
+  <g transform="translate(615 140)">
+    <rect width="530" height="280" rx="20" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+    <text x="265" y="40" text-anchor="middle" class="t" fill="#943b37">执行时错误：其余照常执行</text>
+    <text x="265" y="76" text-anchor="middle" class="m">MULTI</text>
+    <text x="265" y="104" text-anchor="middle" class="m" fill="#943b37">INCR counter（WRONGTYPE）</text>
+    <text x="265" y="132" text-anchor="middle" class="m">SET k2 v2</text>
+    <text x="265" y="160" text-anchor="middle" class="m">EXEC</text>
+    <line x1="265" y1="178" x2="265" y2="206" stroke="#8a7f6d" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <rect x="140" y="210" width="250" height="44" rx="10" fill="#f4eace" stroke="#8a6b31"/>
+    <text x="265" y="238" text-anchor="middle" class="b">INCR 报错，但 k2 已生效</text>
+  </g>
+
+  <g transform="translate(55 460)">
+    <rect width="1090" height="170" rx="20" fill="#ebe4d4" stroke="#8a7f6d"/>
+    <text x="28" y="40" class="t">为什么没有回滚</text>
+    <text x="28" y="76" class="b">Redis 事务是「执行时不穿插」，不是「执行了能撤销」。执行时错误不会触发回滚，前面的写已经生效。</text>
+    <text x="28" y="106" class="b">需要「要么全做、要么全不做」时，应在 Lua 脚本里做前置条件判断，或回到有事务语义的数据库。</text>
+    <text x="28" y="136" class="s">`EXEC` 返回的数组里混着错误项，不代表整组失败；业务必须逐项判断。</text>
+  </g>
+</svg>
