@@ -2,7 +2,7 @@
 title: 缓存为什么会命中：从局部性、LRU/LFU 到 Caffeine
 description: 从重用距离和访问序列理解缓存命中，复现 LRU 的扫描污染与 LFU 的热点滞后，再拆解 Caffeine 的 W-TinyLFU、频率草图、并发维护和业务接入边界。
 category: 后端
-subcategory: 数据结构与存储
+subcategory: 工程原理与选型
 articleClass: flagship
 seriesOrder: 20
 featured: true

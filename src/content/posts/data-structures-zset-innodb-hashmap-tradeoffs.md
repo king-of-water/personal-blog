@@ -2,7 +2,7 @@
 title: 从 ZSet 到 InnoDB：跳表、B+ 树与红黑树的工程取舍
 description: 用一个排行榜串起 Redis ZSet、InnoDB 索引和 Java HashMap，比较排序、排名、页访问、哈希冲突与更新成本，解释为什么相似的复杂度会走向不同实现。
 category: 后端
-subcategory: 数据结构与存储
+subcategory: 工程原理与选型
 articleClass: flagship
 seriesOrder: 10
 featured: true

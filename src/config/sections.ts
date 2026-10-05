@@ -51,9 +51,16 @@ export const agentSubcategories: Subcategory[] = [
 
 export const backendSubcategories: Subcategory[] = [
 	{
-		name: '数据结构与存储',
+		name: '工程原理与选型',
 		slug: 'data-structures-storage',
-		description: '从真实系统的访问路径出发，理解数据结构、索引与缓存策略背后的工程取舍。',
+		description: '从日常工程现象出发，理解背后的机制，对比不同方案的适用条件、成本与取舍。',
+		plannedTopics: [
+			{ title: '同样叫“写入成功”，重启后为什么可能丢数据？', seriesOrder: 30 },
+			{ title: '同样是缓存，为什么有的更新数据库后删除，有的先写缓存？', seriesOrder: 40 },
+			{ title: '为什么加了队列，系统反而越来越慢？', seriesOrder: 50 },
+			{ title: '为什么一个索引查询很快，另一个写入很快？', seriesOrder: 60 },
+			{ title: '为什么扩容机器后，热点问题还是没解决？', seriesOrder: 70 },
+		],
 	},
 	{
 		name: '分布式',
