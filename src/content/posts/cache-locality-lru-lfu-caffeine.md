@@ -202,7 +202,7 @@ ProductView view = cache.get(productId);
 CacheStats stats = cache.stats();
 ```
 
-首次 `get` Miss，加载器取得数据并返回；成功的条目进入缓存。后续命中会读取值并留下策略访问事件。达到刷新资格后的一次访问可以触发异步刷新，在刷新完成前仍可能返回旧值；`refreshAfterWrite` 不等于每分钟主动扫描数据库。刷新失败时旧值的处理与错误记录应结合版本行为核对；超过 `expireAfterWrite` 的条目不可继续作为普通命中返回。[官方 Refresh 说明](https://github.com/ben-manes/caffeine/wiki/Refresh)是这几种语义的依据。
+首次 `get` Miss，加载器取得数据并返回；成功的条目进入缓存。后续命中会读取值并留下策略访问事件。达到刷新资格后的一次访问可以触发异步刷新，在刷新完成前仍可能返回旧值；`refreshAfterWrite` 不等于每分钟主动扫描数据库。刷新抛出异常时，旧值会保留，异常被记录；旧条目仍受过期约束，超过 `expireAfterWrite` 后不可继续作为普通命中返回。[官方 Refresh 说明](https://github.com/ben-manes/caffeine/wiki/Refresh)是这几种语义的依据。
 
 一分和十分都只是演示参数。选值应来自业务允许的陈旧窗口、回源成本和失败预算。若促销状态必须秒级生效，不能照抄十分钟有效期；若简介变化极少，过于频繁刷新又会增加数据库负担。刷新 executor 也要规划，阻塞数据库调用不应在共享线程池里无限排队。
 

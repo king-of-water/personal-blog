@@ -35,7 +35,7 @@ Redis ZSet 用跳表，InnoDB 用 B+ 树，HashMap 冲突多了会转红黑树�
 
 这张表里的“维护什么”比结构名更稳定。未来换语言、换数据库，仍然要回答：读请求给了什么条件，结构凭什么跳过无关数据，写请求要修复哪些索引状态。
 
-已有的 [Redis 内部编码](/posts/redis-data-structures-internal-encodings/)、[MySQL 联合索引](/posts/mysql-composite-index-leftmost-prefix-bplus-tree/) 和 [HashMap 源码文章](/posts/hashmap-concurrenthashmap-hashing-concurrency/)分别讨论过单个系统。这里更关注它们之间的选择依据，而不是再抄一遍各自的 API。
+已有的 [Redis 内部编码](/posts/redis-data-structures-internal-encodings/)、[MySQL 联合索引](/posts/mysql-composite-index-leftmost-prefix-bplus-tree/) 和 [HashMap 源码文章](/posts/hashmap-concurrenthashmap-hashing-concurrency/)分别讨论过单个系统。这里把它们放在相同的访问需求下，比较各自需要维护的状态和成本。
 
 ## 二、同样的 O(log N)，访问单位可能完全不同
 
@@ -83,13 +83,13 @@ ZSet 的业务语义是：member 唯一，每个 member 关联一个 score，整
 
 Redis 的命令执行模型也不能被跳表的潜在并发实现替代。跳表可以设计成并发结构，并不证明 Redis 正是因为需要并发改同一棵跳表而选择它。把数据结构的可能性写成产品的设计动机，需要额外证据。
 
-## 四、小 ZSet 和红黑树都让“总是用跳表”失效
+## 四、小集合的紧凑编码与跳表的替代方案
 
 只有几个成员时，字典桶、跳表节点、各层指针和独立内存分配会显得昂贵。Redis 使用 Listpack，把 member 和 score 成对、按序放在紧凑内存里。按成员查找和插入位置需要扫描，但少量数据可以接受；内存布局更紧凑，也减少了指针和分配开销。
 
 官方内存优化文档给出的常见默认边界是 `zset-max-listpack-entries 128` 和 `zset-max-listpack-value 64`。这是版本与配置边界，不是 ZSet 永久不变的数学性质，更不是可以不经测试调到百万的参数。增加紧凑编码上限，会把更多操作留在线性扫描和内存搬移路径上。[Redis 内存优化文档](https://redis.io/docs/latest/operate/oss_and_stack/management/optimization/memory-optimization/)也提醒，扩大编码范围后应测试转换和操作成本。
 
-在独立测试实例中，可以用下面的命令观察编码。它们会创建测试 Key，不要复制到保存业务数据的实例里。两次 `OBJECT ENCODING` 的具体结果取决于配置；这里展示的是验证方法，没有声称在当前机器运行了 Redis。
+在独立测试实例中，可以用下面的命令观察编码。它们会创建测试 Key，不要复制到保存业务数据的实例里。`OBJECT ENCODING` 的具体结果取决于版本、集合大小和配置。
 
 ```sh
 redis-cli ZADD demo:ranking:small 10 A 20 B 30 C
