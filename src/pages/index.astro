@@ -34,7 +34,7 @@ const featuredPosts = featuredPostIds.flatMap((id) => {
 		<a class="home-portrait" href="/about/" aria-label="了解 king-of-water">
 			<img src="/images/avatar.jpg" alt="king-of-water 的头像" width="200" height="200" />
 			<span>关于我 <span aria-hidden="true">↗</span></span>
-			<span class="home-portrait-bubble" aria-hidden="true">taste so good, even a devil may cry</span>
+			<span class="home-portrait-bubble" aria-hidden="true">blog so good, even a devil may cry</span>
 		</a>
 		</div>
 		<aside class="home-featured" aria-labelledby="home-featured-title">
@@ -76,3 +76,21 @@ const featuredPosts = featuredPostIds.flatMap((id) => {
 		<div class="post-list">{posts.slice(0, 5).map((post) => <PostCard post={post} />)}</div>
 	</section>
 </BaseLayout>
+
+<script>
+	const portrait = document.querySelector('.home-portrait');
+	const bubble = portrait?.querySelector<HTMLElement>('.home-portrait-bubble');
+	if (portrait && bubble) {
+		// 首屏延迟一点弹出
+		bubble.classList.add('is-intro', 'is-playing');
+
+		// 悬停头像时重播（去掉 is-intro → 无延迟立即播）
+		const replay = () => {
+			bubble.classList.remove('is-playing', 'is-intro');
+			void bubble.offsetWidth; // 强制回流，动画才会重新开始
+			bubble.classList.add('is-playing');
+		};
+		portrait.addEventListener('mouseenter', replay);
+		portrait.addEventListener('focusin', replay);
+	}
+</script>
