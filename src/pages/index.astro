@@ -6,27 +6,15 @@ import PostCard from '../components/PostCard.astro';
 const allPosts = (await getCollection('posts', ({ data }) => !data.draft))
 	.sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
 const posts = allPosts.slice(0, 6);
-const featuredPost = posts[0];
-const recentPosts = posts.slice(1, 4);
+const recentPosts = posts.slice(0, 3);
 ---
 
 <BaseLayout>
 	<section class="home-intro home-stage shell">
 		<span class="home-folio" aria-hidden="true">Folio III · MMXXVI</span>
 		<div class="intro-main">
-			<p class="eyebrow">持续拆解复杂技术</p>
-			<h1>把系统讲清楚，<br />把边界写明白。</h1>
-			<p>关于 Agent、后端工程、分布式系统与互联网行业的长期笔记。</p>
-			{featuredPost && (
-				<a class="home-feature" href={`/posts/${featuredPost.id}/`}>
-					<span class="home-feature-mark" aria-hidden="true"><i></i><i></i></span>
-					<span class="home-feature-copy">
-						<small>最新文章 · {featuredPost.data.subcategory ?? featuredPost.data.category}</small>
-						<strong>{featuredPost.data.title}</strong>
-						<span>{featuredPost.data.description}</span>
-					</span>
-				</a>
-			)}
+			<h1>Hello, I am<br />king-of-water.</h1>
+			<p>从代码出发，理解系统与行业。</p>
 		</div>
 		<aside class="home-recent" aria-labelledby="home-recent-title">
 			<div class="home-recent-heading">
