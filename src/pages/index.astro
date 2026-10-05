@@ -40,19 +40,21 @@ const featuredPostsForHome = [...featuredPosts, ...plannedFeaturedPosts];
 				<h2 id="home-featured-title">精选文章</h2>
 				<a href="/posts/">全部文章</a>
 			</div>
-			{featuredPostsForHome.map((post) => (
-				post.href ? (
-					<a class="home-featured-item" href={post.href}>
-						<small>{post.label}</small>
-						<strong>{post.title}</strong>
-					</a>
-				) : (
-					<div class="home-featured-item is-planned">
-						<small>{post.label}</small>
-						<strong>{post.title}</strong>
-					</div>
-				)
-			))}
+			<div class="home-featured-grid">
+				{featuredPostsForHome.map((post) => (
+					post.href ? (
+						<a class="home-featured-item" href={post.href}>
+							<small>{post.label}</small>
+							<strong>{post.title}</strong>
+						</a>
+					) : (
+						<div class="home-featured-item is-planned">
+							<small>{post.label}</small>
+							<strong>{post.title}</strong>
+						</div>
+					)
+				))}
+			</div>
 		</aside>
 	</section>
 
