@@ -1,6 +1,6 @@
 ---
 title: HashMap 与 ConcurrentHashMap：从哈希到并发安全
-description: 深入 HashMap 源码：hash 扰动与 2 的幂、put 完整流程、扩容 resize 的高低位拆分、树化与退化的阈值、JDK 7 头插死循环；再深入 ConcurrentHashMap：JDK 7 分段锁到 JDK 8 的 CAS+synchronized、sizeCtl 与 ForwardingNode 与 transfer 的多线程协同扩容、get 无锁与 baseCount+CounterCell 计数。
+description: 从「hash 值不等于索引位置」讲起，深入 HashMap 源码：put 完整流程、扩容 resize 的高低位拆分、树化与退化阈值、红黑树五条性质、负载因子 0.75 的权衡、JDK 7 头插死循环；再深入 ConcurrentHashMap：分段锁到 CAS+synchronized、为什么用 synchronized 而不是 ReentrantLock、sizeCtl 与 ForwardingNode 与 transfer 的多线程协同扩容、get 无锁与 baseCount+CounterCell 计数；最后补 LinkedHashMap 的 LRU 与被淘汰的 Hashtable。
 category: 后端
 subcategory: Java
 articleClass: flagship
@@ -8,7 +8,7 @@ seriesOrder: 20
 featured: true
 publishedAt: 2026-10-05
 updatedAt: 2026-10-05
-tags: [Java, HashMap, ConcurrentHashMap, 哈希, 红黑树, 扩容, resize, 分段锁, CAS, ForwardingNode, sizeCtl]
+tags: [Java, HashMap, ConcurrentHashMap, 哈希, 红黑树, 负载因子, 扩容, resize, 分段锁, CAS, ForwardingNode, sizeCtl, LinkedHashMap, LRU, Hashtable]
 ---
 
 `HashMap` 和 `ConcurrentHashMap` 是 Java 里被问到最多的两个类，但大多数人对它们的理解停在"数组加链表、链表太长转红黑树、CHM 用 CAS 不用锁"这三句话。这三句话没错，却远远不够——真正决定它们行为的是几个具体的源码机制：`resize` 里那段"高低位拆分"、树化的精确阈值、JDK 7 头插法怎么把链表接成环、CHM 的 `sizeCtl` 怎么协调多个线程一起扩容。
@@ -25,9 +25,16 @@ tags: [Java, HashMap, ConcurrentHashMap, 哈希, 红黑树, 扩容, resize, 分�
 
 ![HashMap 的数组、链表与红黑树结构](/images/posts/hashmap-structure.svg)
 
-## 二、hash 扰动和 2 的幂：定位的两个前提
+## 二、hash 值不等于索引位置
 
-`put` 的第一步是算 Key 在哪个桶，公式是 `(n - 1) & hash`，其中 `n` 是数组长度。这里有两个前提，缺一个公式就不成立。
+先澄清一个最容易混的概念：**`hashCode()` 算出的 hash 值，不等于 Key 在数组里的索引位置**。这是两个环节、两个结果：
+
+- **hash 值**是 Key 的 32 位整数摘要，由 `hashCode()` 经扰动得到。同一个 Key，hash 值永远不变。
+- **索引位置**是"这个 Key 落在第几个桶"，由 `hash & (capacity - 1)` 决定。同一个 Key，**扩容后索引就可能变**。
+
+中间隔着"按容量取模"这一步，所以两者不能混为一谈。理解这个区分，才能听懂后面"扩容要重新定位"和"高低位拆分"到底在做什么——变的从来不是 hash 值，是"hash 值对容量取模"的结果。
+
+`put` 的第一步就是算索引，公式是 `(n - 1) & hash`，其中 `n` 是数组长度。这里有两个前提，缺一个公式就不成立。
 
 **前提一：数组长度必须是 2 的幂。** 只有当 `n` 是 2 的幂时，`n - 1` 的二进制才是"低 k 位全是 1"（比如 `n=16`，`n-1=15=1111₂`），此时 `(n-1) & hash` 恰好等于 `hash % n`，而且位运算比取模快得多。这也是为什么 `HashMap` 的默认容量是 16、扩容永远是翻倍——保证容量一直是 2 的幂。
 
@@ -133,7 +140,39 @@ for (int j = 0; j < oldCap; ++j) {
 
 为什么是 8？JDK 源码注释里给了一个概率解释：如果 hashCode 分布良好，冲突近似泊松分布，一个桶里挂 8 个节点的概率约为千万分之一（`0.00000006`）。也就是说，正常情况下链表根本到不了 8，真到了 8，多半是 hashCode 写得烂或有人恶意构造，此时转红黑树是"防退化的兜底"。8 和 6 之间留了 2 的差值，是为了避免"树和链表在 7 附近反复横跳"的抖动。
 
-## 六、JDK 7 的头插死循环：为什么改了
+## 六、红黑树特性：为什么用它替链表
+
+`HashMap` 选的不是普通二叉搜索树，而是**红黑树**。原因是普通二叉搜索树在极端情况下会退化成链表——按顺序插入 1、2、3、4、5，树会长成一条"斜链"，查找又回到 O(n)。红黑树用一组约束保证**近似平衡**，把最坏情况的查找锁在 O(log n)。
+
+红黑树的性质有五条：
+
+1. 每个节点是红色或黑色；
+2. 根节点是黑色；
+3. 每个叶子节点（NIL 空节点）是黑色；
+4. 红色节点的两个子节点必须是黑色（**不能有连续的红色**）；
+5. 从任一节点到它所有叶子的路径，包含**相同数目的黑色节点**。
+
+第 4 条和第 5 条是关键。第 4 条禁止"红红相连"，第 5 条保证"黑高一致"，两条合起来把**最长路径限制在最短路径的两倍以内**——最短路径全是黑节点，最长路径只能是"黑红交替"，而黑色节点数又被第 5 条锁死。于是树高被压在 O(log n)，查找、插入、删除都是 O(log n)。
+
+**它是怎么维持平衡的**：插入或删除后如果违反了上面某条性质，就靠**左旋、右旋**改变局部结构，再配合**重新着色**修正。旋转只动几个指针、成本 O(1)，一次插入最多两次旋转，删除最多三次。这正是红黑树相对 AVL 树的取舍——AVL 树平衡更严格（查询略快），但插入删除要旋转更多次；红黑树放松一点平衡约束，换来更少的旋转次数，更适合"增删查都频繁"的场景，而 `HashMap` 恰好就是这种场景。
+
+**那为什么阈值要 8 才树化**：树节点 `TreeNode` 比链表节点 `Node` 占的内存大得多（多了 `parent`、`left`、`right`、`red` 等字段），而红黑树查找虽然渐进复杂度更优，常数因子也比遍历短链表大。所以只有在"链表真的长了"时才值得付这个空间成本——上一节那个千万分之一的概率就是用来说明：绝大多数桶用链表就够了，树是极少数情况下的兜底。
+
+![红黑树的五条性质与旋转](/images/posts/hashmap-red-black-tree.svg)
+
+## 七、负载因子 0.75：在空间和冲突之间权衡
+
+`threshold = capacity × loadFactor`，默认 `loadFactor = 0.75`。这个 0.75 不是随手定的，它平衡的是**空间利用率**和**冲突概率（查询效率）**这两件事。
+
+**调大**负载因子（比如 1.0）：桶要装得更满才扩容，空间利用率高，但代价是冲突概率上升——桶里平均元素变多、链表变长、查询变慢，也更容易触发树化。等效于"省内存，费查询"。
+
+**调小**负载因子（比如 0.5）：桶装一半就扩容，冲突少、查询快，但数组利用率低，而且**扩容更频繁**——每次扩容都要新建数组、把所有元素重新 hash 一遍，开销很大。等效于"费内存、费 CPU，换查询快"。
+
+0.75 就是这两个方向的折中点。它还有一个数学上的便利：容量是 2 的幂时，`capacity × 0.75` 仍然是整数（`16 × 0.75 = 12`、`32 × 0.75 = 24`），阈值不用取整，实现干净。源码注释里的说法也是这个意思——0.75 让空间开销和查找开销在统计上取得较好的折中，同时让桶内元素数的期望值维持在一个很小的量级（这也是"链表长度到 8"属于极小概率的前提）。
+
+**那要不要改它**：一般不要，默认值已经调好。确知"内存紧张、能接受查询略慢"可以往上调（上限 1.0）；确知"查询是瓶颈、内存充足"可以往下调——但往下调会明显增加扩容次数，得连着一起评估。
+
+## 八、JDK 7 的头插死循环：为什么改了
 
 JDK 7 的 `HashMap` 在并发扩容时会死循环，这是它最著名的坑。根源是 JDK 7 的两个设计：链表用**头插法**，且扩容时**逐个节点重新插入**新数组。
 
@@ -141,7 +180,7 @@ JDK 7 的 `HashMap` 在并发扩容时会死循环，这是它最著名的坑。
 
 JDK 8 的两个改动恰好拆掉了这个炸弹：一是**尾插法**（不再倒置链表顺序），二是**高低位拆分**（每个桶一次拆成两段、不再逐个摘插）。尾插保证链表顺序不变，拆分保证迁移过程更"原子"，环就形成不了了。但要记住：JDK 8 只是消除了死循环，`HashMap` 依然线程不安全——多线程同时 `put` 还是会丢数据、读到不一致的中间态。
 
-## 七、ConcurrentHashMap：从分段锁到 CAS + synchronized
+## 九、ConcurrentHashMap：从分段锁到 CAS + synchronized
 
 `ConcurrentHashMap` 的线程安全，不是"给 `HashMap` 套把大锁"（那是 `Hashtable`，并发写全串行），它的演进有两条路线。
 
@@ -172,9 +211,19 @@ for (Node<K,V>[] tab = table;;) {
 
 锁的粒度从"一段"缩到"一个桶"，并发度大幅提升。之所以敢用 `synchronized`，是因为 JDK 6 之后 `synchronized` 有了锁升级（偏向锁、轻量级锁），在"锁竞争不激烈"时性能已经很好，配合"锁单个桶头节点"这种短临界区，绰绰有余。
 
+**那为什么用 `synchronized` 而不是 `ReentrantLock`？** 这是 CHM 设计里被问得最多的一个问题，答案有三层。
+
+**第一层：够用。** CHM 的临界区极短——只包住"一个桶里的链表/树遍历与插入"。这种短临界区在 `synchronized` 的锁升级路径里，绝大多数时候落在偏向锁（无竞争，几乎零开销）或轻量级锁（轻度竞争，CAS 自旋），根本走不到需要挂起线程的重量级锁。既然落不到重量级，`ReentrantLock` 那套等待队列和 `park/unpark` 的优势就发挥不出来。
+
+**第二层：省内存。** `ReentrantLock` 是一个实实在在的对象，每个实例都带自己的 AQS 同步队列、`state` 字段、`exclusiveOwnerThread` 引用。CHM 的桶数量随容量增长（16 → 32 → 64 …），如果每个桶都配一把 `ReentrantLock`，光锁对象就是一笔可观的内存开销。而 `synchronized` 的锁信息直接编码在**对象头的 Mark Word** 里（第一篇讲对象内存布局时提过），不给桶额外分配任何锁对象——"每桶一把锁"的内存成本因此是零。
+
+**第三层：省去锁对象的管理麻烦。** 用 `ReentrantLock` 就要管创建、持有、释放，还要时刻提防忘记 `unlock`；而 CHM 在扩容时桶头节点会被搬走、被替换成 `ForwardingNode`，锁定对象的生命周期本身就更复杂。`synchronized` 锁的是"当前桶头节点这个对象"，代码块结束自动释放，没有这些负担。
+
+一句话总结：**JDK 8 的选择是用 Mark Word 里的内置锁，把"每桶一把锁"的内存成本降为零，代价是放弃 `ReentrantLock` 独有的超时、可中断、公平——而 CHM 的短临界区并不需要这些能力。**
+
 ![ConcurrentHashMap 从分段锁到 CAS+synchronized 的演进](/images/posts/concurrenthashmap-evolution.svg)
 
-## 八、ConcurrentHashMap 的扩容：多线程协同迁移
+## 十、ConcurrentHashMap 的扩容：多线程协同迁移
 
 CHM 的扩容是它和 `HashMap` 最大的区别，也是最该看源码的部分。核心围绕一个字段 `sizeCtl` 和一个节点 `ForwardingNode`。
 
@@ -209,20 +258,74 @@ while (advance) {
 
 ![ConcurrentHashMap 的多线程协同扩容](/images/posts/concurrenthashmap-transfer.svg)
 
-## 九、get 无锁和 size 计数
+## 十一、get 无锁和 size 计数
 
 **`get` 全程无锁**。CHM 的 `get` 不阻塞、不加锁，靠的是 `Node` 的 `val` 和 `next` 字段都声明为 `volatile`，读到的总是最新可见值。`get` 的流程：定位桶 → 桶是 `ForwardingNode` 就去新数组 → 桶头是目标就返回 → 否则沿链表/树找。整条路径没有一个 `synchronized` 或 CAS 写入，这也是上一篇 volatile 里"堆上共享字段靠 volatile 保证可见性"的直接应用。
 
 **`size()` 的计数**则用"分散计数"解决热点：不维护一个会被并发写坏的 `int size`，而是用 `baseCount` 加一个 `CounterCell[]` 数组。竞争低时，直接 CAS 累加 `baseCount`；竞争高时（CAS 失败），线程去不同的 `CounterCell` 里累加；`size()` 时把 `baseCount` 和所有 `CounterCell` 加起来。这样"统计总大小"这个高频写，被摊到了多个计数器上，避免了所有线程抢同一个变量的瓶颈。`size()` 返回的是弱一致的快照，不是精确瞬时值——这是它"无锁、高性能"的代价。
 
-## 十、怎么选
+## 十二、LinkedHashMap 与 Hashtable：两个近亲
+
+### LinkedHashMap：在 HashMap 上挂一条双向链表
+
+`LinkedHashMap` 继承 `HashMap`，只多做了一件事——在 `HashMap` 的节点上再挂一条**双向链表**，把"插入顺序"或"访问顺序"串起来。
+
+它的节点是 `Entry`（继承 `HashMap.Node`），多了 `before` 和 `after` 两个指针。哈希表那部分完全复用 `HashMap`，所以查找仍是 O(1)；额外那条双向链表只决定**遍历顺序**。
+
+关键在构造参数 `accessOrder`：
+
+- `accessOrder = false`（默认）：链表维护**插入顺序**，遍历时按插入先后输出；
+- `accessOrder = true`：链表维护**访问顺序**，每次 `get`/`put` 命中一个节点，就把它移到链表尾部。
+
+`accessOrder = true` 让它天然支持 **LRU（最近最少使用）**：链表头部就是"最久没被访问"的元素。再重写 `removeEldestEntry`，就能实现"超出容量自动淘汰最久未用"：
+
+```java
+class LRUCache<K, V> extends LinkedHashMap<K, V> {
+    private final int capacity;
+
+    LRUCache(int capacity) {
+        super(capacity, 0.75f, true);   // 第三个参数 accessOrder = true
+        this.capacity = capacity;
+    }
+
+    @Override
+    protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
+        return size() > capacity;       // 超容量就淘汰链表头部（最久未用）
+    }
+}
+```
+
+这就是"用 `LinkedHashMap` 几行实现 LRU"的由来，也是它最常被考的点。要注意两点：`accessOrder = true` 时 `get` 也是**结构性修改**（会动链表），并发下更不安全；它不影响 `HashMap` 那套扩容和树化逻辑，只是多维护一条链。
+
+![LinkedHashMap 的双向链表与 LRU 淘汰](/images/posts/linkedhashmap-lru.svg)
+
+### Hashtable：被淘汰的"线程安全版"
+
+`Hashtable` 是 Java 最早的线程安全 Map：它所有方法都加 `synchronized`，锁的是**整个 Hashtable 对象**——任何读写都要抢同一把锁，并发写完全串行。本质上就是"给 `HashMap` 套一把大锁"。
+
+它和 `HashMap` 还有几处不同：
+
+| 维度 | HashMap | Hashtable |
+| --- | --- | --- |
+| 线程安全 | 不安全 | 安全（全表锁） |
+| null 键值 | 允许（key 一个 null、value 可多个） | 都不允许 |
+| 初始容量 | 16，扩容翻倍 | 11，扩容 `2n + 1` |
+| 迭代器 | fail-fast | fail-fast（但 `Enumeration` 不是） |
+| 现状 | 主要选择 | 已淘汰，只在遗留代码里见 |
+
+它出局的理由只有一条：**锁粒度太粗**。并发场景下 `ConcurrentHashMap` 用"CAS + 桶级锁"把并发度做了上去，`Hashtable` 却始终是全表一把锁。今天写新代码，线程安全需求一律用 `ConcurrentHashMap`；`Hashtable`（以及 `Collections.synchronizedMap()` 包装出来的 Map，同一套全表锁思路）只在读老代码时才会遇到。
+
+## 十三、怎么选
 
 | 场景 | 选择 | 理由 |
 | --- | --- | --- |
 | 单线程、局部临时用 | `HashMap` | 无同步开销，最快 |
-| 多线程读多写少 | `ConcurrentHashMap` | `get` 无锁，读接近 `HashMap` |
+| 需要记住插入顺序 / 实现 LRU | `LinkedHashMap` | 在 HashMap 上挂双向链表，`accessOrder` 支持 LRU |
+| 多线程读多写少 | `ConcurrentHashMap` | `get` 无锁，读性能接近 `HashMap` |
 | 多线程写也频繁 | `ConcurrentHashMap` | 桶级锁 + 协同扩容，并发度远高于 `Hashtable` |
 | 想要精确的 `size` | 看需求 | CHM 的 `size` 是弱一致快照 |
+| 需要有序的线程安全 Map | `ConcurrentSkipListMap` | 跳表实现，有序 + 并发安全 |
+| `Hashtable` | 换掉 | 全表锁已淘汰，用 `ConcurrentHashMap` |
 | 想用 `HashMap` + 自己加锁 | 不建议 | 锁粒度、读写互斥要自己拿捏，易错 |
 
 一条朴素的判断：只要涉及多线程，默认 `ConcurrentHashMap`，别给 `HashMap` 手工套锁。套锁容易，套对粒度难——CHM 的 `get` 无锁、写锁细到桶、扩容还多线程协同，已经把最难的部分做完了。
