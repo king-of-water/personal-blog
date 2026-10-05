@@ -76,7 +76,17 @@ export const backendSubcategories: Subcategory[] = [
 		description: '缓存、数据结构、集群与稳定性。',
 	},
 	{ name: 'Java', slug: 'java', description: '语言、JVM、并发与常用框架。' },
-	{ name: '消息队列', slug: 'message-queue', description: '异步通信、削峰、顺序与消息可靠性。' },
+	{
+		name: '消息队列',
+		slug: 'message-queue',
+		description: '异步通信、削峰、顺序与消息可靠性。',
+		plannedTopics: [
+			{ title: '顺序消息：为什么全局有序几乎不可取', seriesOrder: 40 },
+			{ title: '延迟与定时消息：三种实现与适用边界', seriesOrder: 50 },
+			{ title: '消费位点与 Rebalance：消息为什么会重复', seriesOrder: 60 },
+			{ title: 'RocketMQ 存储架构：CommitLog 与 ConsumeQueue', seriesOrder: 70 },
+		],
+	},
 ];
 
 export const categoryPath = (category: MainCategory) => (

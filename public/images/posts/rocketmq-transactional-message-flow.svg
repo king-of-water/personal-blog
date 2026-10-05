@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">RocketMQ 事务消息的半消息、二次确认与状态回查</title>
+  <desc id="desc">生产者先发一条对消费者不可见的半消息，Broker 持久化后返回确认；生产者执行本地事务后发 Commit 或 Rollback；若第二次确认因崩溃或断网丢失，Broker 定期回查生产者查询本地事务状态，据此放行或丢弃半消息。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <marker id="arrowG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#466b48"/></marker>
+    <marker id="arrowR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#943b37"/></marker>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 15px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="54" class="h">半消息先占位，本地事务定了再放行</text>
+  <text x="56" y="88" class="b">第二次确认丢失时，Broker 回查补上；回查的次数和间隔有上限。</text>
+
+  <line x1="200" y1="150" x2="200" y2="600" stroke="#c5baa7" stroke-width="2"/>
+  <line x1="600" y1="150" x2="600" y2="600" stroke="#c5baa7" stroke-width="2"/>
+  <line x1="1000" y1="150" x2="1000" y2="600" stroke="#c5baa7" stroke-width="2"/>
+  <rect x="120" y="130" width="160" height="40" rx="10" fill="#e3dde2" stroke="#5e5083"/>
+  <text x="200" y="155" text-anchor="middle" class="t" fill="#5e5083">Producer</text>
+  <rect x="520" y="130" width="160" height="40" rx="10" fill="#f4eace" stroke="#8a6b31"/>
+  <text x="600" y="155" text-anchor="middle" class="t" fill="#725923">Broker</text>
+  <rect x="920" y="130" width="160" height="40" rx="10" fill="#d8dee0" stroke="#295279"/>
+  <text x="1000" y="155" text-anchor="middle" class="t" fill="#295279">Consumer</text>
+
+  <line x1="200" y1="185" x2="600" y2="185" stroke="#8a7f6d" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="400" y="178" text-anchor="middle" class="m">1. 发半消息（不可见）</text>
+  <line x1="600" y1="210" x2="200" y2="210" stroke="#8a7f6d" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="400" y="205" text-anchor="middle" class="m">2. ack（已持久化）</text>
+
+  <rect x="90" y="232" width="220" height="46" rx="12" fill="#e3dde2" stroke="#5e5083" stroke-width="2"/>
+  <text x="200" y="260" text-anchor="middle" class="b">3. 执行本地事务</text>
+
+  <line x1="200" y1="300" x2="600" y2="300" stroke="#466b48" stroke-width="3" marker-end="url(#arrowG)"/>
+  <text x="400" y="292" text-anchor="middle" class="m" fill="#466b48">4. Commit（放行）</text>
+  <line x1="600" y1="325" x2="1000" y2="325" stroke="#466b48" stroke-width="3" marker-end="url(#arrowG)"/>
+  <text x="800" y="318" text-anchor="middle" class="m" fill="#466b48">5. 投递给消费者</text>
+
+  <line x1="200" y1="372" x2="600" y2="372" stroke="#943b37" stroke-width="2.5" marker-end="url(#arrowR)"/>
+  <text x="400" y="364" text-anchor="middle" class="m" fill="#943b37">4'. Rollback（丢弃）</text>
+
+  <path d="M600 430 L200 430" stroke="#8a7f6d" stroke-width="2.5" fill="none" stroke-dasharray="7 7" marker-end="url(#arrow)"/>
+  <text x="400" y="422" text-anchor="middle" class="m">6. 回查（第二次确认丢失时）</text>
+  <path d="M200 452 L600 452" stroke="#8a7f6d" stroke-width="2.5" fill="none" stroke-dasharray="7 7" marker-end="url(#arrow)"/>
+  <text x="400" y="472" text-anchor="middle" class="m">checkLocalTransaction → Commit/Rollback</text>
+
+  <g transform="translate(70 520)">
+    <rect width="1060" height="90" rx="18" fill="#ebe4d4" stroke="#8a7f6d"/>
+    <text x="28" y="36" class="t">回查有上限</text>
+    <text x="28" y="66" class="b">默认超 6 秒未确认即待回查，每 30 秒回查一次，最多 15 次；仍无法确定则丢弃或进死信。</text>
+  </g>
+</svg>
