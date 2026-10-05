@@ -1,16 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1440" height="860" viewBox="0 0 1440 860" role="img" aria-labelledby="title desc">
-  <title id="title">Personal Agent 在模块化服务与超级 App 生态中的不同路径</title>
-  <desc id="desc">左侧的 Personal Agent 通过多个授权连接器和网页访问独立服务，能形成跨应用任务链；右侧各超级 App 在内部拥有身份、支付、数据与服务，小程序对宿主开放，但跨宿主行动需要分别协商。</desc>
+  <title id="title">通用 Personal Agent 与平台 Agent 的权限边界</title>
+  <desc id="desc">左侧的通用 Personal Agent 通过授权连接器和网页访问独立服务，形成跨应用任务链；右侧各超级 App 在内部拥有身份、支付、数据与服务，并倾向建设自己的 Agent，跨宿主行动需要分别协商。</desc>
   <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#8a7f6d"/></marker></defs>
   <rect width="1440" height="860" fill="#fdfaf3"/>
   <g font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">
-    <text x="70" y="66" fill="#2b2620" font-size="34" font-weight="700">同样是很多 App，Agent 面对的接口结构并不相同</text>
-    <text x="70" y="104" fill="#6f6659" font-size="19">差异不在应用数量，而在跨应用授权、数据可携带性与行动接口</text>
+    <text x="70" y="66" fill="#2b2620" font-size="34" font-weight="700">中国缺的不是 Agent，而是大 App 之间的行动接口</text>
+    <text x="70" y="104" fill="#6f6659" font-size="19">每个平台都想建设自己的 Agent，很少愿意把完整权限交给外部总入口</text>
 
     <rect x="60" y="150" width="635" height="625" rx="26" fill="#fbf8f1" stroke="#295279" stroke-width="3"/>
     <rect x="745" y="150" width="635" height="625" rx="26" fill="#fbf8f1" stroke="#466b48" stroke-width="3"/>
     <text x="100" y="201" fill="#2f5d8a" font-size="24" font-weight="700">模块化服务：跨应用编排</text>
-    <text x="785" y="201" fill="#3d6340" font-size="24" font-weight="700">超级 App：平台内能力完整</text>
+    <text x="785" y="201" fill="#3d6340" font-size="24" font-weight="700">超级 App：各自建设平台 Agent</text>
 
     <rect x="252" y="244" width="250" height="105" rx="22" fill="#d8dee0" stroke="#295279" stroke-width="3"/>
     <text x="377" y="286" text-anchor="middle" fill="#2b2620" font-size="22" font-weight="700">Personal Agent</text>
@@ -53,9 +53,9 @@
       <rect x="992" y="462" width="140" height="44" rx="10"/>
     </g>
     <text x="1062" y="490" text-anchor="middle" fill="#2b2620" font-size="15">跨平台边界</text>
-    <text x="785" y="753" fill="#6f6659" font-size="16">内部接口丰富，不等于第三方 Agent 可以横跨多个宿主执行。</text>
+    <text x="785" y="753" fill="#6f6659" font-size="16">内部能力越完整，平台越没有动力向外部总 Agent 让出入口。</text>
 
     <rect x="225" y="800" width="990" height="42" rx="10" fill="#ebe4d4"/>
-    <text x="720" y="827" text-anchor="middle" fill="#2b2620" font-size="17">Personal Agent 能力上限，取决于它获得多少经过授权、可撤销、可审计的行动接口。</text>
+    <text x="720" y="827" text-anchor="middle" fill="#2b2620" font-size="17">模型可以复制，跨平台的授权网络需要重新谈判。</text>
   </g>
 </svg>
