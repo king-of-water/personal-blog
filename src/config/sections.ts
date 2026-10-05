@@ -80,7 +80,6 @@ export const backendSubcategories: Subcategory[] = [
 		slug: 'java',
 		description: '语言、JVM、并发与常用框架。',
 		plannedTopics: [
-			{ title: '动态代理：JDK 代理与 CGLIB', seriesOrder: 30 },
 			{ title: 'volatile 与 JMM：可见性、有序性与 happens-before', seriesOrder: 40 },
 			{ title: 'synchronized 与 ReentrantLock：锁升级与 AQS', seriesOrder: 50 },
 			{ title: 'ThreadLocal：线程私有变量与内存泄漏', seriesOrder: 60 },

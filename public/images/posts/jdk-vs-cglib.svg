@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">JDK 动态代理与 CGLIB 的继承关系对比</title>
+  <desc id="desc">JDK 动态代理生成一个实现接口的类，和真实类平行、都实现同一接口；CGLIB 生成真实类的子类，通过继承重写方法。JDK 代理要求接口，CGLIB 要求类和方法不能是 final。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 15px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="54" class="h">JDK 代理靠「实现接口」，CGLIB 靠「继承子类」</text>
+  <text x="56" y="88" class="b">Java 单继承决定了 JDK 代理只能实现接口，CGLIB 只能走继承、不能碰 final。</text>
+
+  <g transform="translate(70 140)">
+    <rect width="510" height="430" rx="20" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="255" y="40" text-anchor="middle" class="t" fill="#466b48">JDK 动态代理</text>
+
+    <rect x="140" y="70" width="230" height="50" rx="10" fill="#d8dee0" stroke="#295279"/>
+    <text x="255" y="101" text-anchor="middle" class="m">接口 UserService</text>
+
+    <rect x="60" y="170" width="170" height="90" rx="12" fill="#dee3d6" stroke="#466b48"/>
+    <text x="145" y="205" text-anchor="middle" class="t" fill="#466b48">真实类</text>
+    <text x="145" y="232" text-anchor="middle" class="s">implements 接口</text>
+
+    <rect x="280" y="170" width="170" height="90" rx="12" fill="#f4eace" stroke="#8a6b31"/>
+    <text x="365" y="205" text-anchor="middle" class="t" fill="#725923">代理类</text>
+    <text x="365" y="232" text-anchor="middle" class="s">implements 接口</text>
+
+    <line x1="255" y1="120" x2="230" y2="170" stroke="#8a7f6d" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <line x1="255" y1="120" x2="280" y2="170" stroke="#8a7f6d" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+    <path d="M365 260 L365 320 L230 320 L230 260" stroke="#8a7f6d" stroke-width="2.5" fill="none" stroke-dasharray="7 7" marker-end="url(#arrow)"/>
+    <text x="297" y="345" text-anchor="middle" class="s">代理内部持有真实对象，转发调用</text>
+
+    <rect x="60" y="360" width="390" height="44" rx="10" fill="#ebe4d4"/>
+    <text x="255" y="387" text-anchor="middle" class="b">目标必须实现接口，否则用不了</text>
+  </g>
+
+  <g transform="translate(620 140)">
+    <rect width="510" height="430" rx="20" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="255" y="40" text-anchor="middle" class="t" fill="#8a6b31">CGLIB</text>
+
+    <rect x="140" y="70" width="230" height="50" rx="10" fill="#dee3d6" stroke="#466b48"/>
+    <text x="255" y="101" text-anchor="middle" class="m">真实类 UserServiceImpl</text>
+
+    <rect x="140" y="170" width="230" height="90" rx="12" fill="#f4eace" stroke="#8a6b31"/>
+    <text x="255" y="205" text-anchor="middle" class="t" fill="#725923">代理类（子类）</text>
+    <text x="255" y="232" text-anchor="middle" class="s">extends 真实类</text>
+
+    <line x1="255" y1="120" x2="255" y2="170" stroke="#8a7f6d" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <text x="300" y="150" class="s">继承</text>
+
+    <text x="255" y="310" text-anchor="middle" class="b">重写所有非 final 方法</text>
+    <text x="255" y="340" text-anchor="middle" class="s">final 类 / final 方法代理不了</text>
+
+    <rect x="60" y="360" width="390" height="44" rx="10" fill="#ebe4d4"/>
+    <text x="255" y="387" text-anchor="middle" class="b">不要求接口，但要求可被继承</text>
+  </g>
+</svg>
