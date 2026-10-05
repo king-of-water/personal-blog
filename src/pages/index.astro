@@ -8,31 +8,11 @@ const allPosts = (await getCollection('posts', ({ data }) => !data.draft))
 const posts = allPosts.slice(0, 6);
 const featuredPost = posts[0];
 const recentPosts = posts.slice(1, 4);
-const tickerItems = [
-	...posts.slice(0, 3).map((post) => ({
-		label: '新文章',
-		text: post.data.title,
-		href: `/posts/${post.id}/`,
-	})),
-	...Array.from(new Set(posts.map((post) => post.data.subcategory).filter(Boolean)))
-		.slice(0, 3)
-		.map((topic) => ({ label: '专题', text: topic!, href: '/posts/' })),
-];
 ---
 
 <BaseLayout>
-	<div class="home-feed" aria-label="近期文章与专题">
-		<div class="home-feed-track">
-			<div class="home-feed-group">
-				{tickerItems.map((item) => <a href={item.href}><span>{item.label}</span>{item.text}</a>)}
-			</div>
-			<div class="home-feed-group" aria-hidden="true">
-				{tickerItems.map((item) => <a href={item.href} tabindex="-1"><span>{item.label}</span>{item.text}</a>)}
-			</div>
-		</div>
-	</div>
-
 	<section class="home-intro home-stage shell">
+		<span class="home-folio" aria-hidden="true">Folio III · MMXXVI</span>
 		<div class="intro-main">
 			<p class="eyebrow">持续拆解复杂技术</p>
 			<h1>把系统讲清楚，<br />把边界写明白。</h1>
