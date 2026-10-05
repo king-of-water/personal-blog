@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">相同总耗时可能来自不同的慢查询路径</title>
+  <desc id="desc">四条时间轴分别展示锁等待、存储 I/O、CPU 与过量扫描、以及结果传输。它们总耗时接近，但需要用不同证据诊断。</desc>
+  <defs>
+    <style>
+      .title { font: 700 28px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #2b2620; }
+      .label { font: 700 18px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #2b2620; }
+      .body { font: 16px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #554d42; }
+      .small { font: 15px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #6f6659; }
+      .axis { stroke: #8a7f6d; stroke-width: 2; }
+      .normal { fill: #ebe4d4; stroke: #8a7f6d; stroke-width: 1.5; }
+      .lock { fill: #eed9d3; stroke: #943b37; stroke-width: 1.5; }
+      .io { fill: #d8dee0; stroke: #295279; stroke-width: 1.5; }
+      .cpu { fill: #dee3d6; stroke: #466b48; stroke-width: 1.5; }
+      .send { fill: #e3dde2; stroke: #5e5083; stroke-width: 1.5; }
+    </style>
+  </defs>
+  <rect width="1200" height="720" fill="#fdfaf3"/>
+  <text x="60" y="60" class="title">总耗时相近，根因可以完全不同</text>
+  <text x="60" y="92" class="small">时间轴是结构示意，不代表固定比例；每一行右侧给出最直接的现场证据</text>
+
+  <line x1="240" y1="135" x2="870" y2="135" class="axis"/>
+  <text x="240" y="124" class="small">开始</text>
+  <text x="835" y="124" class="small">约 2 秒</text>
+
+  <text x="60" y="198" class="label">行锁等待</text>
+  <rect x="240" y="170" width="95" height="42" rx="8" class="normal"/>
+  <rect x="335" y="170" width="455" height="42" rx="8" class="lock"/>
+  <rect x="790" y="170" width="80" height="42" rx="8" class="normal"/>
+  <text x="562" y="198" text-anchor="middle" class="body">等待阻塞事务提交</text>
+  <text x="900" y="198" class="body">sys.innodb_lock_waits 有等待边</text>
+
+  <text x="60" y="310" class="label">存储 I/O</text>
+  <rect x="240" y="282" width="130" height="42" rx="8" class="normal"/>
+  <rect x="370" y="282" width="440" height="42" rx="8" class="io"/>
+  <rect x="810" y="282" width="60" height="42" rx="8" class="normal"/>
+  <text x="590" y="310" text-anchor="middle" class="body">读取数据页或临时文件</text>
+  <text x="900" y="310" class="body">文件 I/O 延迟和物理读取上升</text>
+
+  <text x="60" y="422" class="label">CPU / 扫描</text>
+  <rect x="240" y="394" width="560" height="42" rx="8" class="cpu"/>
+  <rect x="800" y="394" width="70" height="42" rx="8" class="normal"/>
+  <text x="520" y="422" text-anchor="middle" class="body">过滤、连接、聚合和排序大量记录</text>
+  <text x="900" y="422" class="body">Rows_examined、actual rows 与 CPU 高</text>
+
+  <text x="60" y="534" class="label">结果传输</text>
+  <rect x="240" y="506" width="180" height="42" rx="8" class="normal"/>
+  <rect x="420" y="506" width="450" height="42" rx="8" class="send"/>
+  <text x="645" y="534" text-anchor="middle" class="body">网络发送、驱动读取与对象映射</text>
+  <text x="900" y="534" class="body">Rows_sent、Bytes_sent 与应用取数慢</text>
+
+  <rect x="60" y="610" width="1080" height="65" rx="12" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+  <text x="600" y="650" text-anchor="middle" class="body">Query_time 只能说明结果慢。等待事件、处理行数和资源指标才决定下一步改事务、索引、SQL 还是接口。</text>
+</svg>

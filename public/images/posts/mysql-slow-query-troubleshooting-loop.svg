@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="680" viewBox="0 0 1200 680" role="img" aria-labelledby="title desc">
+  <title id="title">MySQL 慢查询从告警到验证的排查闭环</title>
+  <desc id="desc">排查过程依次经过发现影响、归因 SQL、诊断时间消耗、实施可回滚修改和验证效果。验证不通过时回到归因和诊断，而不是继续堆叠修改。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#5b5245"/>
+    </marker>
+    <style>
+      .title { font: 700 28px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #2b2620; }
+      .label { font: 700 21px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #2b2620; }
+      .body { font: 16px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #554d42; }
+      .small { font: 15px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #6f6659; }
+      .box { fill: #f5f0e4; stroke: #8a7f6d; stroke-width: 2; rx: 16; }
+      .accent { fill: #d8dee0; stroke: #295279; stroke-width: 2; rx: 16; }
+      .verify { fill: #dee3d6; stroke: #466b48; stroke-width: 2; rx: 16; }
+      .arrow { fill: none; stroke: #5b5245; stroke-width: 2.5; marker-end: url(#arrow); }
+      .feedback { fill: none; stroke: #943b37; stroke-width: 2.5; stroke-dasharray: 9 7; marker-end: url(#arrow); }
+    </style>
+  </defs>
+  <rect width="1200" height="680" fill="#fdfaf3"/>
+  <text x="60" y="62" class="title">慢查询排查是一条证据闭环</text>
+  <text x="60" y="94" class="small">每一步都产出下一步需要的输入，修改之前先定义怎样证明它有效</text>
+
+  <rect x="60" y="185" width="185" height="160" class="box"/>
+  <text x="152" y="226" text-anchor="middle" class="label">1. 发现</text>
+  <text x="152" y="264" text-anchor="middle" class="body">接口与时间窗口</text>
+  <text x="152" y="292" text-anchor="middle" class="body">租户、分片、参数</text>
+  <text x="152" y="320" text-anchor="middle" class="body">p95 / p99 与错误率</text>
+
+  <rect x="285" y="185" width="185" height="160" class="box"/>
+  <text x="377" y="226" text-anchor="middle" class="label">2. 归因</text>
+  <text x="377" y="264" text-anchor="middle" class="body">Trace 与 DB Span</text>
+  <text x="377" y="292" text-anchor="middle" class="body">慢日志单次样本</text>
+  <text x="377" y="320" text-anchor="middle" class="body">Digest 总量与长尾</text>
+
+  <rect x="510" y="185" width="185" height="160" class="accent"/>
+  <text x="602" y="226" text-anchor="middle" class="label">3. 诊断</text>
+  <text x="602" y="264" text-anchor="middle" class="body">运行还是等待</text>
+  <text x="602" y="292" text-anchor="middle" class="body">实际行数与 loops</text>
+  <text x="602" y="320" text-anchor="middle" class="body">CPU、I/O 与锁</text>
+
+  <rect x="735" y="185" width="185" height="160" class="box"/>
+  <text x="827" y="226" text-anchor="middle" class="label">4. 修改</text>
+  <text x="827" y="264" text-anchor="middle" class="body">索引、SQL、事务</text>
+  <text x="827" y="292" text-anchor="middle" class="body">接口或数据模型</text>
+  <text x="827" y="320" text-anchor="middle" class="body">灰度与回滚方案</text>
+
+  <rect x="960" y="185" width="185" height="160" class="verify"/>
+  <text x="1052" y="226" text-anchor="middle" class="label">5. 验证</text>
+  <text x="1052" y="264" text-anchor="middle" class="body">语义和扫描量</text>
+  <text x="1052" y="292" text-anchor="middle" class="body">尾延迟与总成本</text>
+  <text x="1052" y="320" text-anchor="middle" class="body">写入和其他查询</text>
+
+  <path d="M245 265 H273" class="arrow"/>
+  <path d="M470 265 H498" class="arrow"/>
+  <path d="M695 265 H723" class="arrow"/>
+  <path d="M920 265 H948" class="arrow"/>
+
+  <rect x="285" y="455" width="635" height="105" class="box"/>
+  <text x="602" y="492" text-anchor="middle" class="label">证据不成立时，回到归因与诊断</text>
+  <text x="602" y="527" text-anchor="middle" class="body">没有扫描量、等待关系或资源指标变化，就不能证明修改击中了根因</text>
+  <path d="M1052 345 C1052 430 965 508 932 508" class="feedback"/>
+  <path d="M285 508 C215 508 180 430 180 357" class="feedback"/>
+
+  <text x="60" y="630" class="small">排查交付物：影响范围、SQL 模板、真实参数、时间去向、修改方案、前后对比和副作用。</text>
+</svg>
