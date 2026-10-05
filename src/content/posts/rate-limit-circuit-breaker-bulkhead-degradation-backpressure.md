@@ -5,7 +5,7 @@ category: 后端
 subcategory: 系统设计与高并发
 articleClass: flagship
 seriesOrder: 70
-publishedAt: 2026-09-28T21:42:00+08:00
+publishedAt: 2026-09-15T22:23:00+08:00
 tags: [系统设计, 高并发, 限流, 熔断, 隔离, 降级, 背压, 重试]
 ---
 

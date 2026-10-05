@@ -6,8 +6,8 @@ subcategory: AI 应用与思考
 articleClass: flagship
 seriesOrder: 30
 featured: false
-publishedAt: 2026-09-15T22:23:00+08:00
-updatedAt: 2026-09-15T22:23:00+08:00
+publishedAt: 2026-09-28T20:07:00+08:00
+updatedAt: 2026-09-28T20:07:00+08:00
 tags: [SDD, Spec-Driven Development, AI Coding, Spec Kit, Codex, 开发流程]
 tools:
   - name: humanizer

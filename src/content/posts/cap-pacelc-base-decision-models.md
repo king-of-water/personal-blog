@@ -5,7 +5,7 @@ category: 后端
 subcategory: 分布式
 articleClass: focused
 seriesOrder: 30
-publishedAt: 2026-08-27T09:04:00+08:00
+publishedAt: 2026-08-15T14:00:00+08:00
 tags: [分布式系统, CAP, PACELC, BASE, 一致性, 系统设计]
 ---
 

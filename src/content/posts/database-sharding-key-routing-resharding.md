@@ -5,7 +5,7 @@ category: 后端
 subcategory: 分布式
 articleClass: flagship
 seriesOrder: 90
-publishedAt: 2026-09-04T20:45:00+08:00
+publishedAt: 2026-08-23T20:29:00+08:00
 tags: [分布式系统, 分库分表, 分片键, 数据路由, 一致性哈希, 数据迁移, MySQL]
 ---
 

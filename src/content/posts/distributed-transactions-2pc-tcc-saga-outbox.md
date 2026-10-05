@@ -5,7 +5,7 @@ category: 后端
 subcategory: 分布式
 articleClass: flagship
 seriesOrder: 110
-publishedAt: 2026-09-06T20:01:00+08:00
+publishedAt: 2026-08-24T20:42:00+08:00
 tags: [分布式系统, 分布式事务, 2PC, TCC, Saga, Outbox, 事务消息, 状态机]
 ---
 

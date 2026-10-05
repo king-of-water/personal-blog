@@ -5,7 +5,7 @@ category: 后端
 subcategory: 分布式
 articleClass: flagship
 seriesOrder: 80
-publishedAt: 2026-09-01T21:41:00+08:00
+publishedAt: 2026-08-20T09:10:00+08:00
 tags: [分布式系统, 分布式 ID, UUID, Snowflake, Leaf, MySQL, Java]
 ---
 

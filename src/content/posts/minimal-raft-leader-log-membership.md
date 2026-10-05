@@ -5,7 +5,7 @@ category: 后端
 subcategory: 分布式
 articleClass: flagship
 seriesOrder: 140
-publishedAt: 2026-09-08T20:27:00+08:00
+publishedAt: 2026-08-29T14:44:00+08:00
 tags: [Raft, 共识算法, Leader Election, 日志复制, 状态机复制, 成员变更]
 ---
 

@@ -5,7 +5,7 @@ category: 后端
 subcategory: 系统设计与高并发
 articleClass: flagship
 seriesOrder: 90
-publishedAt: 2026-09-29T21:55:00+08:00
+publishedAt: 2026-09-18T20:17:00+08:00
 tags: [短链接, 系统设计, 分布式 ID, 分库分表, 缓存, 热点, 高可用, Redis]
 ---
 

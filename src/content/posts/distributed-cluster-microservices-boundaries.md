@@ -5,7 +5,7 @@ category: 后端
 subcategory: 分布式
 articleClass: field-note
 seriesOrder: 20
-publishedAt: 2026-08-26T21:08:00+08:00
+publishedAt: 2026-08-13T09:16:00+08:00
 tags: [分布式系统, 集群, 微服务, 系统设计, 后端]
 ---
 

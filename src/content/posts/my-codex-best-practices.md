@@ -6,8 +6,8 @@ subcategory: AI 应用与思考
 articleClass: flagship
 seriesOrder: 20
 featured: false
-publishedAt: 2026-09-15T20:48:00+08:00
-updatedAt: 2026-09-15T20:48:00+08:00
+publishedAt: 2026-09-25T20:38:00+08:00
+updatedAt: 2026-09-25T20:38:00+08:00
 tags: [Codex, AI Coding, AGENTS.md, Skills, Worktree, Goals, SDD]
 tools:
   - name: humanizer

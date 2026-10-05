@@ -6,8 +6,8 @@ subcategory: Agent 产品拆解
 articleClass: flagship
 seriesOrder: 50
 featured: false
-publishedAt: 2026-08-20T09:10:00+08:00
-updatedAt: 2026-08-20T09:10:00+08:00
+publishedAt: 2026-09-06T20:01:00+08:00
+updatedAt: 2026-09-06T20:01:00+08:00
 tags: [Hermes Agent, Nous Research, Agent Harness, Memory, Agent Skills, Self-Improving Agent]
 tools:
   - name: humanizer

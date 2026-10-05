@@ -6,7 +6,7 @@ subcategory: 系统设计与高并发
 articleClass: flagship
 seriesOrder: 10
 featured: true
-publishedAt: 2026-09-20T20:43:00+08:00
+publishedAt: 2026-09-08T20:27:00+08:00
 tags: [系统设计, 高并发, 容量规划, 架构设计, 数据建模, SLO, 可观测性]
 ---
 
