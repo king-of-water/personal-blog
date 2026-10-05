@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">Redis Cluster 的分片主从与 cluster bus 全互联</title>
+  <desc id="desc">三个分片各由一个主节点和若干副本组成，主节点持有槽范围；所有节点通过 cluster bus 全互联，用 gossip 传播失败检测与配置更新。cluster bus 端口默认是数据端口加 10000。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 16px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="54" class="h">每个分片是一主多副本，节点之间全互联</text>
+  <text x="56" y="88" class="b">槽归主节点，副本接管同一批槽；失败检测与切换授权走 cluster bus。</text>
+
+  <g transform="translate(70 140)">
+    <rect width="320" height="210" rx="20" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="160" y="34" text-anchor="middle" class="s">分片 1</text>
+    <rect x="45" y="50" width="230" height="60" rx="14" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="160" y="76" text-anchor="middle" class="t" fill="#466b48">主 A</text>
+    <text x="160" y="100" text-anchor="middle" class="m">slots 0–5500</text>
+    <rect x="45" y="130" width="230" height="56" rx="14" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="160" y="155" text-anchor="middle" class="t" fill="#295279">副本 A1</text>
+    <text x="160" y="176" text-anchor="middle" class="s">复制 A</text>
+  </g>
+  <g transform="translate(440 140)">
+    <rect width="320" height="210" rx="20" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="160" y="34" text-anchor="middle" class="s">分片 2</text>
+    <rect x="45" y="50" width="230" height="60" rx="14" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="160" y="76" text-anchor="middle" class="t" fill="#466b48">主 B</text>
+    <text x="160" y="100" text-anchor="middle" class="m">slots 5501–11000</text>
+    <rect x="45" y="130" width="230" height="56" rx="14" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="160" y="155" text-anchor="middle" class="t" fill="#295279">副本 B1</text>
+    <text x="160" y="176" text-anchor="middle" class="s">复制 B</text>
+  </g>
+  <g transform="translate(810 140)">
+    <rect width="320" height="210" rx="20" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="160" y="34" text-anchor="middle" class="s">分片 3</text>
+    <rect x="45" y="50" width="230" height="60" rx="14" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="160" y="76" text-anchor="middle" class="t" fill="#466b48">主 C</text>
+    <text x="160" y="100" text-anchor="middle" class="m">slots 11001–16383</text>
+    <rect x="45" y="130" width="230" height="56" rx="14" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="160" y="155" text-anchor="middle" class="t" fill="#295279">副本 C1</text>
+    <text x="160" y="176" text-anchor="middle" class="s">复制 C</text>
+  </g>
+
+  <path d="M230 250 C 300 380, 420 380, 500 250" stroke="#8a7f6d" stroke-width="2.5" fill="none" stroke-dasharray="7 7"/>
+  <path d="M600 250 C 660 380, 780 380, 870 250" stroke="#8a7f6d" stroke-width="2.5" fill="none" stroke-dasharray="7 7"/>
+  <path d="M300 250 C 360 470, 820 470, 880 250" stroke="#8a7f6d" stroke-width="2.5" fill="none" stroke-dasharray="7 7"/>
+  <text x="600" y="430" text-anchor="middle" class="s">cluster bus 全互联（虚线），gossip 传播状态</text>
+
+  <g transform="translate(70 540)">
+    <rect width="1060" height="110" rx="20" fill="#ebe4d4" stroke="#8a7f6d"/>
+    <text x="28" y="38" class="t">每个节点开两个端口</text>
+    <text x="28" y="72" class="b">数据端口（如 6379）服务客户端；cluster bus 端口默认 +10000（如 16379），用二进制协议做失败检测、配置更新与切换授权。</text>
+    <text x="28" y="98" class="s">防火墙必须同时放行两个端口，否则节点无法互相通信、集群无法切换。</text>
+  </g>
+</svg>

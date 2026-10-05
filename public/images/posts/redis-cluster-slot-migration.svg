@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">Redis Cluster 槽迁移的状态机</title>
+  <desc id="desc">把一个槽从源节点 A 搬到目标节点 B：先给 A 标 MIGRATING、B 标 IMPORTING，再用 MIGRATE 逐 Key 搬数据；迁移期间缺 Key 的请求被 ASK 到 B，最后在所有主节点上执行 SETSLOT 把槽归属改成 B。单 Key 命令全程可用。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <marker id="arrowG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#466b48"/></marker>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 16px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="54" class="h">搬一个槽：标状态、搬数据、改归属</text>
+  <text x="56" y="88" class="b">槽是迁移的最小单位；单 Key 命令在整个过程里始终可用。</text>
+
+  <g transform="translate(70 150)">
+    <rect width="330" height="150" rx="18" fill="#f4eace" stroke="#8a6b31" stroke-width="2"/>
+    <text x="165" y="42" text-anchor="middle" class="t" fill="#725923">源节点 A</text>
+    <text x="165" y="78" text-anchor="middle" class="m">SETSLOT 1330 MIGRATING B</text>
+    <text x="165" y="108" text-anchor="middle" class="s">仍服务手上的旧 Key</text>
+  </g>
+  <line x1="400" y1="225" x2="460" y2="225" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+  <g transform="translate(460 150)">
+    <rect width="330" height="150" rx="18" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="165" y="42" text-anchor="middle" class="t" fill="#295279">MIGRATE 搬 Key</text>
+    <text x="165" y="78" text-anchor="middle" class="m">MIGRATE … KEYS &lt;key&gt;</text>
+    <text x="165" y="108" text-anchor="middle" class="s">A 缺 Key 时回 ASK 指向 B</text>
+  </g>
+  <line x1="790" y1="225" x2="850" y2="225" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+  <g transform="translate(850 150)">
+    <rect width="280" height="150" rx="18" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="140" y="42" text-anchor="middle" class="t" fill="#466b48">目标节点 B</text>
+    <text x="140" y="78" text-anchor="middle" class="m">SETSLOT 1330 IMPORTING A</text>
+    <text x="140" y="108" text-anchor="middle" class="s">只接带 ASKING 的查询</text>
+  </g>
+
+  <g transform="translate(70 360)">
+    <rect width="1060" height="120" rx="20" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="28" y="40" class="t">迁移期间谁响应这个槽</text>
+    <text x="28" y="76" class="b">A 上还有的 Key 由 A 响应；A 上找不到的 Key，A 返回 ASK 把客户端指到 B；B 只接受带 ASKING 的这次查询。</text>
+    <text x="28" y="102" class="s">多 Key 命令要求同槽，槽正分裂，因此可能短暂不可用；单 Key 命令不受影响。</text>
+  </g>
+
+  <g transform="translate(70 520)">
+    <rect width="1060" height="120" rx="20" fill="#ebe4d4" stroke="#8a7f6d"/>
+    <text x="28" y="40" class="t">收尾：改正式归属</text>
+    <text x="28" y="76" class="m">CLUSTER SETSLOT 1330 NODE B</text>
+    <text x="28" y="102" class="b">在所有主节点上执行，把槽的正式归属改成 B；之后该槽的 MOVED 指向 B，迁移结束。</text>
+  </g>
+</svg>

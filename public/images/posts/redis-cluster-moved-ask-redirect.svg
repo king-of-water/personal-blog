@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">Redis Cluster 的 MOVED 与 ASK 重定向</title>
+  <desc id="desc">MOVED 是永久重定向：节点知道槽的正确归属，客户端更新槽映射后直连正确节点。ASK 只在槽迁移期间出现：源节点缺 Key 时让客户端带 ASKING 到目标节点试一次，但不更新槽映射。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <marker id="arrowG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#466b48"/></marker>
+    <marker id="arrowB" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#295279"/></marker>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 16px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="54" class="h">MOVED 是永久改路，ASK 是迁移期的一次借道</text>
+  <text x="56" y="88" class="b">节点不转发请求，只把客户端指到对的节点。</text>
+
+  <g transform="translate(55 140)">
+    <rect width="530" height="300" rx="20" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="265" y="40" text-anchor="middle" class="t" fill="#466b48">稳定态：MOVED（永久）</text>
+    <g transform="translate(25 60)">
+      <rect width="150" height="70" rx="14" fill="#e3dde2" stroke="#5e5083" stroke-width="2"/>
+      <text x="75" y="42" text-anchor="middle" class="t" fill="#5e5083">客户端</text>
+    </g>
+    <g transform="translate(255 60)">
+      <rect width="150" height="70" rx="14" fill="#f4eace" stroke="#8a6b31" stroke-width="2"/>
+      <text x="75" y="42" text-anchor="middle" class="t" fill="#725923">错误节点</text>
+    </g>
+    <line x1="175" y1="95" x2="255" y2="95" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+    <g transform="translate(25 190)">
+      <rect width="150" height="70" rx="14" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+      <text x="75" y="42" text-anchor="middle" class="t" fill="#466b48">正确节点 C</text>
+    </g>
+    <line x1="330" y1="130" x2="330" y2="190" stroke="#8a7f6d" stroke-width="2.5" stroke-dasharray="7 7" marker-end="url(#arrow)"/>
+    <text x="210" y="165" class="m">-MOVED 12182 10.0.0.3:6379</text>
+    <line x1="175" y1="225" x2="100" y2="225" stroke="#466b48" stroke-width="3" marker-end="url(#arrowG)"/>
+    <text x="240" y="250" class="s">更新槽映射后直连</text>
+  </g>
+
+  <g transform="translate(615 140)">
+    <rect width="530" height="300" rx="20" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="265" y="40" text-anchor="middle" class="t" fill="#295279">迁移期：ASK（仅一次）</text>
+    <g transform="translate(25 60)">
+      <rect width="150" height="70" rx="14" fill="#e3dde2" stroke="#5e5083" stroke-width="2"/>
+      <text x="75" y="42" text-anchor="middle" class="t" fill="#5e5083">客户端</text>
+    </g>
+    <g transform="translate(255 60)">
+      <rect width="150" height="70" rx="14" fill="#f4eace" stroke="#8a6b31" stroke-width="2"/>
+      <text x="75" y="42" text-anchor="middle" class="t" fill="#725923">源节点 A</text>
+    </g>
+    <line x1="175" y1="95" x2="255" y2="95" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+    <g transform="translate(25 190)">
+      <rect width="150" height="70" rx="14" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+      <text x="75" y="42" text-anchor="middle" class="t" fill="#295279">目标节点 B</text>
+    </g>
+    <line x1="330" y1="130" x2="330" y2="190" stroke="#8a7f6d" stroke-width="2.5" stroke-dasharray="7 7" marker-end="url(#arrow)"/>
+    <text x="200" y="165" class="m">-ASK 1330 10.0.0.2:6379</text>
+    <line x1="175" y1="225" x2="100" y2="225" stroke="#295279" stroke-width="3" marker-end="url(#arrowB)"/>
+    <text x="230" y="250" class="s">带 ASKING 去目标试一次</text>
+  </g>
+
+  <g transform="translate(55 480)">
+    <rect width="1090" height="150" rx="20" fill="#ebe4d4" stroke="#8a7f6d"/>
+    <text x="28" y="40" class="t">两者的区别在客户端要不要改映射</text>
+    <text x="28" y="76" class="b">MOVED：槽归属已定，更新缓存里的槽映射，之后直接连新节点。</text>
+    <text x="28" y="106" class="b">ASK：迁移未完成，槽仍归源节点，只对这一次请求借道目标节点，不改映射。</text>
+  </g>
+</svg>
