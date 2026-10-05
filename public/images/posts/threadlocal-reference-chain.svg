@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">ThreadLocal 的强引用链与弱引用 key</title>
+  <desc id="desc">从 Thread 对象到 value 的整条引用链都是强引用：Thread 的 threadLocals 字段指向 ThreadLocalMap，map 持有 Entry 数组，数组元素是 Entry 对象，Entry 的 value 字段强引用着实际的值。唯一的弱引用是 Entry 到 ThreadLocal（key）。因此只要线程活着，value 就不会被回收；key 被 GC 后 Entry 变成 key 为 null 的脏槽位。</desc>
+  <defs>
+    <marker id="arrowS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#943b37"/></marker>
+    <marker id="arrowW" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#295279"/></marker>
+    <style>.h{font:700 28px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 18px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 14px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="52" class="h">整条链都是强引用，只有 key 是弱引用</text>
+  <text x="56" y="84" class="b">红色实线 = 强引用（GC 不能回收）；蓝色虚线 = 弱引用（只有它指向时即可回收）。</text>
+
+  <!-- 引用链 -->
+  <g transform="translate(70 120)">
+    <rect width="1060" height="240" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="28" y="34" class="t">线程活着 ⇒ value 活着</text>
+
+    <rect x="30" y="60" width="150" height="80" rx="12" fill="#e3dde2" stroke="#5e5083" stroke-width="2"/>
+    <text x="105" y="94" text-anchor="middle" class="b">Thread</text>
+    <text x="105" y="120" text-anchor="middle" class="s">线程对象</text>
+
+    <rect x="250" y="60" width="170" height="80" rx="12" fill="#d8dee0" stroke="#295279"/>
+    <text x="335" y="90" text-anchor="middle" class="s">threadLocals 字段</text>
+    <text x="335" y="118" text-anchor="middle" class="m">ThreadLocalMap</text>
+
+    <rect x="490" y="60" width="150" height="80" rx="12" fill="#d8dee0" stroke="#295279"/>
+    <text x="565" y="94" text-anchor="middle" class="m">Entry[]</text>
+    <text x="565" y="120" text-anchor="middle" class="s">数组</text>
+
+    <rect x="710" y="60" width="150" height="80" rx="12" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="785" y="94" text-anchor="middle" class="m">Entry</text>
+    <text x="785" y="120" text-anchor="middle" class="s">对象</text>
+
+    <rect x="930" y="60" width="110" height="80" rx="12" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+    <text x="985" y="94" text-anchor="middle" class="m" fill="#943b37">value</text>
+    <text x="985" y="120" text-anchor="middle" class="s" fill="#943b37">你存的值</text>
+
+    <line x1="180" y1="100" x2="250" y2="100" stroke="#943b37" stroke-width="3" marker-end="url(#arrowS)"/>
+    <line x1="420" y1="100" x2="490" y2="100" stroke="#943b37" stroke-width="3" marker-end="url(#arrowS)"/>
+    <line x1="640" y1="100" x2="710" y2="100" stroke="#943b37" stroke-width="3" marker-end="url(#arrowS)"/>
+    <line x1="860" y1="100" x2="930" y2="100" stroke="#943b37" stroke-width="3" marker-end="url(#arrowS)"/>
+
+    <text x="530" y="196" text-anchor="middle" class="b" fill="#943b37">这条链上每一环都是强引用 —— 线程不死，value 就回收不了</text>
+  </g>
+
+  <!-- 弱引用 -->
+  <g transform="translate(70 390)">
+    <rect width="1060" height="190" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="28" y="34" class="t" fill="#295279">唯一的弱引用：Entry → ThreadLocal（key）</text>
+
+    <rect x="300" y="60" width="180" height="80" rx="12" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="390" y="94" text-anchor="middle" class="m">Entry</text>
+    <text x="390" y="120" text-anchor="middle" class="s">extends WeakReference</text>
+
+    <rect x="620" y="60" width="200" height="80" rx="12" fill="#f4eace" stroke="#8a6b31" stroke-width="2"/>
+    <text x="720" y="94" text-anchor="middle" class="m">ThreadLocal 对象</text>
+    <text x="720" y="120" text-anchor="middle" class="s">被当作 key</text>
+
+    <line x1="480" y1="100" x2="620" y2="100" stroke="#295279" stroke-width="3" stroke-dasharray="8 6" marker-end="url(#arrowW)"/>
+    <text x="550" y="90" text-anchor="middle" class="s" fill="#295279">弱引用</text>
+
+    <text x="40" y="176" class="s">外部不再强引用这个 ThreadLocal 时，它会被 GC → Entry 变成 key = null 的脏槽位，但 value 还挂在上面那条强引用链上。</text>
+  </g>
+
+  <!-- 结论 -->
+  <g transform="translate(70 610)">
+    <rect width="1060" height="70" rx="16" fill="#ebe4d4" stroke="#8a7f6d"/>
+    <text x="28" y="32" class="b">结论：remove() 主动断开 value 的强引用；惰性清理（expungeStaleEntry）只是兜底，不及时也不彻底。</text>
+    <text x="28" y="58" class="s">线程池场景把窗口放大：线程长期存活 + 任务反复 set，脏槽位越积越多。</text>
+  </g>
+</svg>

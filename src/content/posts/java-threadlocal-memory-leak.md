@@ -68,6 +68,14 @@ private static int nextIndex(int i, int len) {
 }
 ```
 
+这一行就是线性探测的"下一步"：**下标加一；如果已经走到数组末尾，就绕回 0**。逻辑简单到不能再简单，但它是开放地址法的地基——后面几乎所有"继续往后找"的动作都调它：
+
+- `set` 找空位时，冲突了就 `nextIndex` 往后挪一格；
+- `get` 没命中时，也是 `nextIndex` 往后找；
+- `expungeStaleEntry` 清理完一个槽位后，还要靠它往后遍历、重新安置那些"错位"的 Entry。
+
+为什么是"绕着数组转一圈"，而不是像 `HashMap` 那样"挂在同一个桶后面"（链地址法）？因为 `ThreadLocalMap` 的表**通常很小**——一个应用里的 `ThreadLocal` 数量一般就几个到几十个。这种小表上，开放地址法更划算：不需要额外的链表节点（省内存），数据在数组里连续存放（缓存局部性更好）。代价是删除时要特殊处理：链表删除只需改 `next` 指针，而开放地址法删掉一个元素后，后面那些因为冲突而"错位"的元素必须重新安置，否则 `get` 的探测链就断了——这正是第五节 `expungeStaleEntry` 要解决的麻烦。
+
 ## 三、set 的完整流程
 
 `set` 是理解 `ThreadLocalMap` 的核心，因为它既插入、又顺便清理：
@@ -98,6 +106,10 @@ private void set(ThreadLocal<?> key, Object value) {
 流程里的第 ③ 步是 `ThreadLocal` 独有的：`k == null` 表示这个 Entry 的 key（弱引用的 `ThreadLocal`）已经被 GC 回收了，留下一个"脏"槽位。`set` 遇到它就调 `replaceStaleEntry` 把它替换掉——这就是"惰性清理"的一种，`set` 顺路把脏槽位打扫了。
 
 第 ⑤ 步的 `rehash()` 也不是简单扩容，它先做一次全表清理，清理完还不够才扩容，这个在第五节展开。
+
+![ThreadLocalMap.set 的完整流程](/images/posts/threadlocal-set-flow.svg)
+
+这张图把 `set` 的路径完整串了一遍：**定位 → 线性探测的三个互斥分支 → 计数 → 惰性清理 → 必要时扩容**。要注意第 ③ 个分支（`k == null`）——它才是"惰性清理"真正发生的地方：`set` 在寻找插入位置的过程中，一旦路过一个 key 已经被回收的脏槽位，就顺手把它复用掉，而不是继续往后找空位。这样既不浪费空间，也缩短了探测链。
 
 ## 四、get 的完整流程
 
@@ -207,6 +219,10 @@ private void rehash() {
 
 而 `Entry` 到 `ThreadLocal`（key）的引用是**弱引用**（`Entry extends WeakReference<ThreadLocal<?>>`）。当外部没有强引用指向这个 `ThreadLocal` 对象时，它会被 GC 回收，此时 `Entry` 的 key 变成 `null`，但 `Entry` 和它的 `value` 还在表里、还被上面的强引用链拴着。
 
+![ThreadLocal 的强引用链与弱引用 key](/images/posts/threadlocal-reference-chain.svg)
+
+把这条链画成图，"谁强谁弱"就一目了然了：**从线程一路到 value 全是强引用（红色实线），全程只有 Entry → ThreadLocal 这一根是弱引用（蓝色虚线）**。所以"泄漏"的成因可以一句话概括——**决定 value 该不该留的标识（key）被回收了，而真正占内存的 value 却被一条谁都不断的强引用链拴着**。
+
 于是泄漏的精确表述是：**key 被回收后，value 失去了"该由哪个 ThreadLocal 拥有"的标识，却还挂在线程的表里**。`get`/`set` 路过时会靠 `expungeStaleEntry` 清理掉它们，但这个清理是"碰巧路过才清"——如果这个 `ThreadLocal` 再也没人访问，脏 Entry 就永远留在表里。线程池场景把这个坑放大：线程长期复用，表也跟着长期存活，脏 Entry 越积越多，value 占的内存收不回。
 
 ![key 被回收后，value 残留造成泄漏](/images/posts/java-threadlocal-leak.svg)
@@ -217,7 +233,32 @@ private void rehash() {
 
 ## 七、remove 与 InheritableThreadLocal
 
-`remove()` 做的事很直接：定位到 key，把它连同 value 从表里删掉，并做一次 `expungeStaleEntry` 把后面的 Entry 重新排位。它和 `set(null)` 不一样——`set(null)` 只是把 value 置空，Entry 还在；`remove` 是把 Entry 整个删除、引用彻底断开。
+`remove()` 的源码很短，一眼能看完它做的三件事：
+
+```java
+private void remove(ThreadLocal<?> key) {
+    Entry[] tab = table;
+    int len = tab.length;
+    int i = key.threadLocalHashCode & (len - 1);   // ① 同样先定位
+    for (Entry e = tab[i]; e != null; e = tab[i = nextIndex(i, len)]) {
+        if (e.get() == key) {                      // ② 找到这个 key
+            e.clear();                             //    断开弱引用（Reference.clear）
+            expungeStaleEntry(i);                  // ③ 清空 value + 重排后面的 Entry
+            return;
+        }
+    }
+}
+```
+
+三步逐个看：
+
+- **① 定位**：用的是和 `set`/`get` 同一套 `threadLocalHashCode & (len-1)` + 线性探测，所以能准确找到那个槽位；
+- **② `e.clear()`**：这是 `Reference.clear()`，把弱引用本身置空（等价于让 key 立刻变成 null）；
+- **③ `expungeStaleEntry(i)`**：真正关键的一步。它做的正是第五节讲过的那套——**把 `value` 置为 null（断开强引用）、把 Entry 从数组里删掉、再往后重排所有因冲突而错位的 Entry**。
+
+所以 `remove()` 和 `set(null)` 的区别就在这里：**`set(null)` 只是把 `value` 置成 null，Entry 还在表里占着槽位、key 也还在**；而 `remove()` 是**把整个 Entry 删除、并顺手修好探测链**。要彻底断开引用、避免泄漏，必须用 `remove`。
+
+这也解释了为什么 `remove` 之后不需要再做什么"清理"：它就是最彻底的那一次清理。
 
 `InheritableThreadLocal` 是另一个点：子线程创建时（`Thread` 构造器里），会把父线程的 `inheritableThreadLocals` 表**浅拷贝**一份给子线程。注意是浅拷贝——子线程拿到的是父线程当时的 value 引用（或值），之后父线程再 `set`，子线程看不到。它适合"父线程的上下文传给子线程"的场景，但不适合"父子线程共享可变状态"，那从来不是 `ThreadLocal` 的职责。
 

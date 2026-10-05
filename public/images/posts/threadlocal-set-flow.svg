@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="740" viewBox="0 0 1200 740" role="img" aria-labelledby="title desc">
+  <title id="title">ThreadLocalMap.set 的完整流程</title>
+  <desc id="desc">set 先用 threadLocalHashCode 与长度减一取模定位初始槽位，然后线性探测：key 相同则覆盖 value；遇到 key 为 null 的 stale entry 则调用 replaceStaleEntry 替换；遇到空位则插入新 Entry。插入后 size 加一，再调用 cleanSomeSlots 做惰性清理，最后判断是否达到阈值触发 rehash。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <marker id="arrowG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#466b48"/></marker>
+    <marker id="arrowR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#943b37"/></marker>
+    <style>.h{font:700 28px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 18px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 14px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="740" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="52" class="h">set 既插入，又顺手清理</text>
+  <text x="56" y="84" class="b">定位 → 线性探测三分支 → 计数 → 惰性清理 → 必要时扩容。</text>
+
+  <!-- 起点 -->
+  <g transform="translate(80 125)">
+    <rect width="330" height="62" rx="12" fill="#e3dde2" stroke="#5e5083" stroke-width="2"/>
+    <text x="165" y="27" text-anchor="middle" class="t" fill="#5e5083">set(key, value)</text>
+    <text x="165" y="50" text-anchor="middle" class="s">Thread.currentThread().threadLocals.set(this, v)</text>
+  </g>
+  <line x1="245" y1="187" x2="245" y2="215" stroke="#8a7f6d" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <!-- 定位 -->
+  <g transform="translate(80 215)">
+    <rect width="330" height="66" rx="12" fill="#f4eace" stroke="#8a6b31" stroke-width="2"/>
+    <text x="165" y="28" text-anchor="middle" class="b">① 定位初始槽位</text>
+    <text x="165" y="52" text-anchor="middle" class="m">i = threadLocalHashCode &amp; (len-1)</text>
+  </g>
+  <line x1="245" y1="281" x2="245" y2="309" stroke="#8a7f6d" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <!-- 三分支 -->
+  <g transform="translate(80 309)">
+    <rect width="600" height="290" rx="16" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="20" y="30" class="t" fill="#5e5083">② 从 i 开始线性探测（e = tab[i]，逐个 nextIndex 往后）</text>
+
+    <rect x="20" y="48" width="270" height="66" rx="10" fill="#dee3d6" stroke="#466b48"/>
+    <text x="155" y="74" text-anchor="middle" class="m">e == null</text>
+    <text x="155" y="98" text-anchor="middle" class="s">空位 → 放新 Entry，结束</text>
+
+    <rect x="310" y="48" width="270" height="66" rx="10" fill="#d8dee0" stroke="#295279"/>
+    <text x="445" y="74" text-anchor="middle" class="m">k == key</text>
+    <text x="445" y="98" text-anchor="middle" class="s">同一个 key → 覆盖 value，结束</text>
+
+    <rect x="20" y="130" width="560" height="66" rx="10" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+    <text x="300" y="156" text-anchor="middle" class="m" fill="#943b37">k == null（stale entry）</text>
+    <text x="300" y="180" text-anchor="middle" class="s">key 已被 GC → replaceStaleEntry 替换掉这个脏槽位</text>
+
+    <text x="20" y="228" class="s">三个分支互斥，命中哪个都会 return —— 探测最多绕数组一圈</text>
+    <text x="20" y="256" class="s">「顺手清理」就发生在第三个分支：路过的脏槽位被复用</text>
+  </g>
+
+  <!-- 插入后 -->
+  <line x1="390" y1="599" x2="390" y2="627" stroke="#8a7f6d" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <g transform="translate(80 627)">
+    <rect width="600" height="90" rx="14" fill="#f4eace" stroke="#8a6b31" stroke-width="2"/>
+    <text x="20" y="30" class="b">③ sz = ++size；cleanSomeSlots(i, sz)</text>
+    <text x="20" y="56" class="s">做 O(log n) 次探测的惰性清理；若清掉了脏 Entry 就不扩容</text>
+    <text x="20" y="80" class="m">④ if (!cleaned &amp;&amp; sz &gt;= threshold) rehash();</text>
+  </g>
+
+  <!-- 右侧说明 -->
+  <g transform="translate(720 125)">
+    <rect width="410" height="592" rx="16" fill="#ebe4d4" stroke="#8a7f6d"/>
+    <text x="24" y="34" class="t">三个设计要点</text>
+
+    <text x="24" y="76" class="b" fill="#466b48">① 定位不用 hashCode()</text>
+    <text x="24" y="102" class="s">用 threadLocalHashCode（黄金分割递增），</text>
+    <text x="24" y="126" class="s">让连续的 ThreadLocal 均匀错开。</text>
+
+    <text x="24" y="172" class="b" fill="#943b37">② 冲突用线性探测</text>
+    <text x="24" y="198" class="s">不是 HashMap 的链表，而是往后找空位 ——</text>
+    <text x="24" y="222" class="s">小表上更省内存、缓存更友好。</text>
+
+    <text x="24" y="268" class="b" fill="#5e5083">③ 插入路径带清理</text>
+    <text x="24" y="294" class="s">遇到 stale entry 就复用，</text>
+    <text x="24" y="318" class="s">插入后再做一次惰性清理，</text>
+    <text x="24" y="342" class="s">清理有收获就不急着扩容。</text>
+
+    <rect x="24" y="380" width="362" height="180" rx="12" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="42" y="410" class="b">阈值为什么是 2/3 而不是 0.75</text>
+    <text x="42" y="440" class="s">开放地址法对「表太满」更敏感：</text>
+    <text x="42" y="464" class="s">装得越满，线性探测的链越长，</text>
+    <text x="42" y="488" class="s">查找退化成 O(n) 的风险越大。</text>
+    <text x="42" y="522" class="s">所以更早扩容，同时留出余量给清理。</text>
+  </g>
+</svg>
