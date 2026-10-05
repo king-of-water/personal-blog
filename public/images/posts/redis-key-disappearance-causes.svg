@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="690" viewBox="0 0 1100 690" role="img" aria-labelledby="title desc">
+  <title id="title">Redis Key 消失的四类原因与可观测证据</title>
+  <desc id="desc">客户端读不到 Key 后，应分别调查 TTL 到期、内存淘汰、业务删除或覆盖、切换或恢复差异，并使用不同证据验证。</desc>
+  <rect width="1100" height="690" rx="28" fill="#fdfaf3"/>
+  <g font-family="sans-serif">
+    <text x="54" y="62" font-size="30" font-weight="700" fill="#2b2620">同一个 Miss，背后可能是四条完全不同的路径</text>
+    <text x="54" y="98" font-size="18" fill="#6f6659">TTL = -2 只描述当前状态，删除原因要靠时间窗证据确认</text>
+
+    <rect x="54" y="145" width="242" height="112" rx="20" fill="#d8dee0" stroke="#295279" stroke-width="3"/>
+    <text x="175" y="191" text-anchor="middle" font-size="23" font-weight="700" fill="#295279">客户端读不到 Key</text>
+    <text x="175" y="226" text-anchor="middle" font-size="18" fill="#554d42">GET nil · TTL -2 · Miss</text>
+
+    <path d="M296 201H358" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+    <path d="M358 201V154H404M358 201V286H404M358 201V418H404M358 201V550H404" fill="none" stroke="#8a7f6d" stroke-width="3"/>
+
+    <g transform="translate(404 111)">
+      <rect width="642" height="100" rx="18" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+      <text x="30" y="39" font-size="21" font-weight="700" fill="#466b48">TTL 到期</text>
+      <text x="30" y="71" font-size="17" fill="#554d42">expired_keys 增量 · expired 事件 · 绝对截止时间</text>
+    </g>
+    <g transform="translate(404 243)">
+      <rect width="642" height="100" rx="18" fill="#f4eace" stroke="#8a6b31" stroke-width="2"/>
+      <text x="30" y="39" font-size="21" font-weight="700" fill="#725923">内存淘汰</text>
+      <text x="30" y="71" font-size="17" fill="#554d42">evicted_keys 增量 · maxmemory · evicted 事件</text>
+    </g>
+    <g transform="translate(404 375)">
+      <rect width="642" height="100" rx="18" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+      <text x="30" y="39" font-size="21" font-weight="700" fill="#943b37">业务删除或覆盖</text>
+      <text x="30" y="71" font-size="17" fill="#554d42">命令审计 · del / overwritten 事件 · 任务日志</text>
+    </g>
+    <g transform="translate(404 507)">
+      <rect width="642" height="100" rx="18" fill="#e3dde2" stroke="#5e5083" stroke-width="2"/>
+      <text x="30" y="39" font-size="21" font-weight="700" fill="#5e5083">切换或恢复差异</text>
+      <text x="30" y="71" font-size="17" fill="#554d42">run_id · role / Offset · Failover · RDB / AOF 来源</text>
+    </g>
+
+    <rect x="54" y="618" width="992" height="44" rx="12" fill="#f5f0e4"/>
+    <text x="550" y="647" text-anchor="middle" font-size="17" fill="#554d42">先确认实例和时间窗；若观察的不是同一份数据集，所有 TTL 推理都会失效。</text>
+  </g>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker></defs>
+</svg>

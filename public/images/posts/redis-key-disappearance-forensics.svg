@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="710" viewBox="0 0 1100 710" role="img" aria-labelledby="title desc">
+  <title id="title">Redis Key 消失事故的现场取证时间线</title>
+  <desc id="desc">从记录 Miss 开始，先固定实例与拓扑，再比较过期和淘汰计数器增量，对齐内存与业务事件，最后给出带证据边界的结论并补齐监控。</desc>
+  <rect width="1100" height="710" rx="28" fill="#fdfaf3"/>
+  <g font-family="sans-serif">
+    <text x="54" y="62" font-size="30" font-weight="700" fill="#2b2620">取证顺序决定能否保住现场</text>
+    <text x="54" y="98" font-size="18" fill="#6f6659">先保存会变化的时间窗数据，再分析单个 Key 为什么不存在</text>
+
+    <line x1="132" y1="159" x2="132" y2="621" stroke="#8a7f6d" stroke-width="4"/>
+
+    <g transform="translate(86 139)">
+      <circle cx="46" cy="46" r="34" fill="#295279"/>
+      <text x="46" y="54" text-anchor="middle" font-size="22" font-weight="700" fill="#fff">1</text>
+      <rect x="102" y="0" width="858" height="92" rx="18" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+      <text x="132" y="37" font-size="21" font-weight="700" fill="#295279">固定观察对象</text>
+      <text x="132" y="67" font-size="17" fill="#554d42">时间 · 地址 / DB / Slot · role · run_id · 完整 Key · 客户端来源</text>
+    </g>
+    <g transform="translate(86 253)">
+      <circle cx="46" cy="46" r="34" fill="#466b48"/>
+      <text x="46" y="54" text-anchor="middle" font-size="22" font-weight="700" fill="#fff">2</text>
+      <rect x="102" y="0" width="858" height="92" rx="18" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+      <text x="132" y="37" font-size="21" font-weight="700" fill="#466b48">保存实例级增量</text>
+      <text x="132" y="67" font-size="17" fill="#554d42">expired_keys · evicted_keys · used_memory · 超限时长 · Key 数</text>
+    </g>
+    <g transform="translate(86 367)">
+      <circle cx="46" cy="46" r="34" fill="#8a6b31"/>
+      <text x="46" y="54" text-anchor="middle" font-size="22" font-weight="700" fill="#fff">3</text>
+      <rect x="102" y="0" width="858" height="92" rx="18" fill="#f4eace" stroke="#8a6b31" stroke-width="2"/>
+      <text x="132" y="37" font-size="21" font-weight="700" fill="#725923">对齐业务和拓扑时间线</text>
+      <text x="132" y="67" font-size="17" fill="#554d42">发布 / 清理任务 · 流量峰值 · Failover · 重启 · RDB / AOF 恢复</text>
+    </g>
+    <g transform="translate(86 481)">
+      <circle cx="46" cy="46" r="34" fill="#943b37"/>
+      <text x="46" y="54" text-anchor="middle" font-size="22" font-weight="700" fill="#fff">4</text>
+      <rect x="102" y="0" width="858" height="92" rx="18" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+      <text x="132" y="37" font-size="21" font-weight="700" fill="#943b37">寻找逐 Key 证据</text>
+      <text x="132" y="67" font-size="17" fill="#554d42">expired / evicted / del 事件 · 命令审计 · 请求 ID · 绝对截止时间</text>
+    </g>
+    <g transform="translate(86 595)">
+      <circle cx="46" cy="46" r="34" fill="#5e5083"/>
+      <text x="46" y="54" text-anchor="middle" font-size="22" font-weight="700" fill="#fff">5</text>
+      <rect x="102" y="0" width="858" height="92" rx="18" fill="#e3dde2" stroke="#5e5083" stroke-width="2"/>
+      <text x="132" y="37" font-size="21" font-weight="700" fill="#5e5083">按证据强度下结论</text>
+      <text x="132" y="67" font-size="17" fill="#554d42">能定案就定位调用方；只有时间相关就保留限制，并补齐下一次采集</text>
+    </g>
+  </g>
+</svg>

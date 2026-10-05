@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="650" viewBox="0 0 1100 650" role="img" aria-labelledby="title desc">
+  <title id="title">Redis TTL 到期后的惰性与主动过期路径</title>
+  <desc id="desc">Key 的绝对截止时间到达后，客户端访问会触发惰性过期；无人访问时由有时间预算的主动过期循环抽样清理，最终删除并传播到 AOF 和副本。</desc>
+  <rect width="1100" height="650" rx="28" fill="#fdfaf3"/>
+  <g font-family="sans-serif">
+    <text x="54" y="62" font-size="30" font-weight="700" fill="#2b2620">TTL 归零，不代表同一毫秒完成内存回收</text>
+    <text x="54" y="98" font-size="18" fill="#6f6659">访问路径保证读不到过期数据，主动循环负责逐步清理冷 Key</text>
+
+    <rect x="382" y="132" width="336" height="90" rx="18" fill="#d8dee0" stroke="#295279" stroke-width="3"/>
+    <text x="550" y="168" text-anchor="middle" font-size="21" font-weight="700" fill="#295279">绝对截止时间已到</text>
+    <text x="550" y="198" text-anchor="middle" font-size="17" fill="#554d42">Key 在逻辑上已经过期</text>
+
+    <path d="M477 222V271H287V308" fill="none" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+    <path d="M623 222V271H813V308" fill="none" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+    <text x="360" y="259" font-size="16" fill="#6f6659">有命令访问</text>
+    <text x="675" y="259" font-size="16" fill="#6f6659">没有访问</text>
+
+    <g transform="translate(54 308)">
+      <rect width="466" height="142" rx="20" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+      <text x="233" y="43" text-anchor="middle" font-size="22" font-weight="700" fill="#466b48">惰性过期</text>
+      <text x="233" y="78" text-anchor="middle" font-size="17" fill="#554d42">GET / TTL 等访问先检查截止时间</text>
+      <text x="233" y="108" text-anchor="middle" font-size="17" fill="#554d42">发现到期后删除，并向客户端返回不存在</text>
+    </g>
+    <g transform="translate(580 308)">
+      <rect width="466" height="142" rx="20" fill="#f4eace" stroke="#8a6b31" stroke-width="2"/>
+      <text x="233" y="43" text-anchor="middle" font-size="22" font-weight="700" fill="#725923">主动过期</text>
+      <text x="233" y="78" text-anchor="middle" font-size="17" fill="#554d42">Slow / Fast Cycle 按预算扫描带 TTL 的 Key</text>
+      <text x="233" y="108" text-anchor="middle" font-size="17" fill="#554d42">积压越高越积极，达到时间上限就让出执行权</text>
+    </g>
+
+    <path d="M287 450V493H550V523" fill="none" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+    <path d="M813 450V493H550V523" fill="none" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+    <rect x="242" y="523" width="616" height="80" rx="18" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+    <text x="550" y="556" text-anchor="middle" font-size="21" font-weight="700" fill="#943b37">真正从 Keyspace 删除</text>
+    <text x="550" y="583" text-anchor="middle" font-size="17" fill="#554d42">expired_keys 增加 · 发布 expired 事件 · 向 AOF / 副本传播删除</text>
+  </g>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker></defs>
+</svg>
