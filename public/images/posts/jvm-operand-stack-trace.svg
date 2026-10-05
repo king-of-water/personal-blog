@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">局部变量表与操作数栈的逐步变化</title>
+  <desc id="desc">以 foo(5) 执行为例，逐步展示局部变量表与操作数栈的变化：iload_1 把槽 1 的 x 压栈，iconst_1 压入常量 1，iadd 弹出两个相加后把结果压回栈，istore_2 弹出结果写回槽 2 即 y。所有运算都只能在操作数栈顶发生，局部变量表只是仓库。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <style>.h{font:700 28px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 17px ui-sans-serif,system-ui,sans-serif}.b{font:400 15px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 13px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:700 15px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="720" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="52" class="h">运算只在操作数栈顶发生，局部变量表只是仓库</text>
+  <text x="56" y="84" class="b">以 void foo(int x) { int y = x + 1; } 调用 foo(5) 为例</text>
+
+  <!-- 步骤 1 -->
+  <g transform="translate(70 115)">
+    <rect width="1060" height="118" rx="16" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="28" y="30" class="m" fill="#5e5083">iload_1</text>
+    <text x="150" y="30" class="s">把局部变量表槽 1 的 x 读出来，压入操作数栈</text>
+
+    <rect x="28" y="46" width="300" height="56" rx="10" fill="#dee3d6" stroke="#466b48"/>
+    <text x="178" y="70" text-anchor="middle" class="s">局部变量表</text>
+    <text x="178" y="92" text-anchor="middle" class="m">槽1 x=5　槽2 y=?</text>
+
+    <line x1="340" y1="74" x2="400" y2="74" stroke="#8a6b31" stroke-width="3" marker-end="url(#arrow)"/>
+
+    <rect x="410" y="46" width="240" height="56" rx="10" fill="#f4eace" stroke="#8a6b31" stroke-width="2"/>
+    <text x="530" y="70" text-anchor="middle" class="s">操作数栈</text>
+    <text x="530" y="92" text-anchor="middle" class="m">[ 5 ]</text>
+  </g>
+
+  <!-- 步骤 2 -->
+  <g transform="translate(70 250)">
+    <rect width="1060" height="118" rx="16" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="28" y="30" class="m" fill="#5e5083">iconst_1</text>
+    <text x="150" y="30" class="s">把常量 1 压入操作数栈</text>
+
+    <rect x="28" y="46" width="300" height="56" rx="10" fill="#dee3d6" stroke="#466b48"/>
+    <text x="178" y="70" text-anchor="middle" class="s">局部变量表</text>
+    <text x="178" y="92" text-anchor="middle" class="m">槽1 x=5　槽2 y=?</text>
+
+    <line x1="340" y1="74" x2="400" y2="74" stroke="#8a6b31" stroke-width="3" marker-end="url(#arrow)"/>
+
+    <rect x="410" y="46" width="240" height="56" rx="10" fill="#f4eace" stroke="#8a6b31" stroke-width="2"/>
+    <text x="530" y="70" text-anchor="middle" class="s">操作数栈</text>
+    <text x="530" y="92" text-anchor="middle" class="m">[ 5 , 1 ]</text>
+  </g>
+
+  <!-- 步骤 3 -->
+  <g transform="translate(70 385)">
+    <rect width="1060" height="118" rx="16" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="28" y="30" class="m" fill="#943b37">iadd</text>
+    <text x="150" y="30" class="s">弹出栈顶两个数、相加，结果压回栈顶</text>
+
+    <rect x="28" y="46" width="300" height="56" rx="10" fill="#dee3d6" stroke="#466b48"/>
+    <text x="178" y="70" text-anchor="middle" class="s">局部变量表</text>
+    <text x="178" y="92" text-anchor="middle" class="m">槽1 x=5　槽2 y=?</text>
+
+    <line x1="340" y1="74" x2="400" y2="74" stroke="#8a6b31" stroke-width="3" marker-end="url(#arrow)"/>
+
+    <rect x="410" y="46" width="240" height="56" rx="10" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+    <text x="530" y="70" text-anchor="middle" class="s">操作数栈</text>
+    <text x="530" y="92" text-anchor="middle" class="m" fill="#943b37">[ 6 ]</text>
+  </g>
+
+  <!-- 步骤 4 -->
+  <g transform="translate(70 520)">
+    <rect width="1060" height="118" rx="16" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="28" y="30" class="m" fill="#466b48">istore_2</text>
+    <text x="150" y="30" class="s">弹出栈顶结果，写回局部变量表槽 2（即 y）</text>
+
+    <rect x="28" y="46" width="300" height="56" rx="10" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="178" y="70" text-anchor="middle" class="s">局部变量表</text>
+    <text x="178" y="92" text-anchor="middle" class="m" fill="#466b48">槽1 x=5　槽2 y=6</text>
+
+    <line x1="340" y1="74" x2="400" y2="74" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+
+    <rect x="410" y="46" width="240" height="56" rx="10" fill="#f5f0e4" stroke="#d7cebd" stroke-dasharray="6 5"/>
+    <text x="530" y="70" text-anchor="middle" class="s">操作数栈</text>
+    <text x="530" y="92" text-anchor="middle" class="m">[ ]（已清空）</text>
+  </g>
+
+  <g transform="translate(70 655)">
+    <rect width="1060" height="50" rx="14" fill="#ebe4d4" stroke="#8a7f6d"/>
+    <text x="28" y="32" class="b">要点：要用变量先 iload 取出，算完再 istore 存回 —— 指令不带操作数地址，字节码因此更紧凑。</text>
+  </g>
+</svg>
