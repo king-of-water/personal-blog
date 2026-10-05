@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="580" viewBox="0 0 800 580" role="img" aria-labelledby="title desc">
+  <title id="title">内容电商旅程与系统承诺</title>
+  <desc id="desc">发现、决策、成交、交付和售后五个阶段依次推进。每个阶段对应用户问题和可验证的系统承诺，支付成功之后仍需要交付与售后证据。</desc>
+  <rect width="800" height="580" rx="16" fill="#fdfaf3"/>
+  <text x="36" y="49" font-size="26" font-weight="700" fill="#2b2620">一段购买旅程，五种不同承诺</text>
+  <text x="36" y="80" font-size="17" fill="#6f6659">按用户目标阅读；框内是完成证据，不是微服务清单</text>
+  <g fill="#f5f0e4" stroke="#8a7f6d" stroke-width="1.5">
+    <rect x="36" y="108" width="728" height="72" rx="8"/>
+    <rect x="36" y="196" width="728" height="72" rx="8"/>
+    <rect x="36" y="284" width="728" height="72" rx="8" fill="#dee3d6" stroke="#466b48"/>
+    <rect x="36" y="372" width="728" height="72" rx="8"/>
+    <rect x="36" y="460" width="728" height="72" rx="8"/>
+  </g>
+  <g fill="#2b2620" font-size="22">
+    <text x="56" y="153" font-weight="700">01 发现</text><text x="194" y="137" font-size="18">这件东西适合我吗？</text><text x="194" y="163" font-size="18">内容与商品关联可解释，失效入口有说明</text>
+    <text x="56" y="241" font-weight="700">02 决策</text><text x="194" y="225" font-size="18">买哪个规格，最终多少钱？</text><text x="194" y="251" font-size="18">SKU、资格、价格与优惠规则明确</text>
+    <text x="56" y="329" font-weight="700">03 成交</text><text x="194" y="313" font-size="18">订单确认了吗，会不会多扣？</text><text x="194" y="339" font-size="18">稳定身份、库存占用、支付事实与快照</text>
+    <text x="56" y="417" font-weight="700">04 交付</text><text x="194" y="401" font-size="18">何时收到，还有哪个包裹未到？</text><text x="194" y="427" font-size="18">订单项关联履约任务，异常可追踪</text>
+    <text x="56" y="505" font-weight="700">05 售后</text><text x="194" y="489" font-size="18">退多少，要寄回吗，钱到哪了？</text><text x="194" y="515" font-size="18">售后、实物退回、退款和结算分别收尾</text>
+  </g>
+  <g stroke="#8a7f6d" stroke-width="1.5" fill="none"><path d="M106 180v16m-5-5 5 5 5-5"/><path d="M106 268v16m-5-5 5 5 5-5"/><path d="M106 356v16m-5-5 5 5 5-5"/><path d="M106 444v16m-5-5 5 5 5-5"/></g>
+  <text x="36" y="559" font-size="16" fill="#6f6659">通用设计模型：局部接口成功，不等于整段用户目标完成</text>
+</svg>

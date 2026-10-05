@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="610" viewBox="0 0 800 610" role="img" aria-labelledby="title desc">
+  <title id="title">订单连接独立事实，但不替它们宣布成功</title>
+  <desc id="desc">订单及成交快照通过稳定身份关联库存、支付、履约与售后退款。查询聚合将各域事实转译成页面状态，事件与扫描器负责传播和唤醒。</desc>
+  <rect width="800" height="610" rx="16" fill="#fdfaf3"/>
+  <text x="36" y="49" font-size="26" font-weight="700" fill="#2b2620">每份事实有自己的所有者</text>
+  <text x="36" y="80" font-size="17" fill="#6f6659">关联线表示业务身份联系，不表示同步调用或提交顺序</text>
+  <g fill="#f5f0e4" stroke="#8a7f6d" stroke-width="1.5">
+    <rect x="36" y="115" width="330" height="105" rx="8"/><rect x="434" y="115" width="330" height="105" rx="8"/>
+    <rect x="36" y="366" width="330" height="105" rx="8"/><rect x="434" y="366" width="330" height="105" rx="8"/>
+  </g>
+  <rect x="168" y="256" width="464" height="74" rx="8" fill="#dee3d6" stroke="#466b48" stroke-width="1.5"/>
+  <g fill="#2b2620" text-anchor="middle">
+    <text x="201" y="151" font-size="23" font-weight="700">库存</text><text x="201" y="181" font-size="18">预占 / 确认 / 释放</text><text x="201" y="207" font-size="16">回答这份资源是否仍归本订单</text>
+    <text x="599" y="151" font-size="23" font-weight="700">支付</text><text x="599" y="181" font-size="18">尝试号 / 渠道结果</text><text x="599" y="207" font-size="16">回答资金是否已经扣除</text>
+    <text x="400" y="286" font-size="23" font-weight="700">订单与成交快照</text><text x="400" y="314" font-size="18">连接主体、订单项、金额与各域业务身份</text>
+    <text x="201" y="402" font-size="23" font-weight="700">履约</text><text x="201" y="432" font-size="18">任务 / 包裹 / 物流</text><text x="201" y="458" font-size="16">回答实物在哪里、是否已交付</text>
+    <text x="599" y="402" font-size="23" font-weight="700">售后与退款</text><text x="599" y="432" font-size="18">诉求 / 逆向物流 / 资金退回</text><text x="599" y="458" font-size="16">不同对象分别保存处理证据</text>
+  </g>
+  <g fill="none" stroke="#8a7f6d" stroke-width="1.5"><path d="M201 220v36"/><path d="M599 220v36"/><path d="M201 330v36"/><path d="M599 330v36"/></g>
+  <rect x="36" y="510" width="728" height="61" rx="8" fill="#fbf8f1" stroke="#8a7f6d" stroke-width="1.5"/>
+  <text x="400" y="537" text-anchor="middle" font-size="20" fill="#2b2620">查询聚合：将独立事实转成用户可理解的进度</text>
+  <text x="400" y="559" text-anchor="middle" font-size="16" fill="#2b2620">事件、回调与扫描器传播 / 唤醒，不能替代权威事实</text>
+  <text x="36" y="593" font-size="16" fill="#6f6659">通用模型：部署可以合并，责任与证据仍要清楚</text>
+</svg>
