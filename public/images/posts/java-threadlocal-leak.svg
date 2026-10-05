@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">ThreadLocal 内存泄漏：key 没了，value 还在</title>
+  <desc id="desc">Entry 的 key 是弱引用，ThreadLocal 对象没有外部强引用后被 GC，Entry 变成 key 为 null、value 还在；value 是强引用，只要线程还活着就一直被 Thread 引用链挂着，回收不了。线程池里线程长期复用，泄漏被放大。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <marker id="arrowR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#943b37"/></marker>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 15px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="54" class="h">弱引用 key 被回收，强引用 value 却留下</text>
+  <text x="56" y="88" class="b">线程不死，value 不散——线程池把泄漏放大。</text>
+
+  <g transform="translate(70 150)">
+    <rect width="320" height="420" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="160" y="38" text-anchor="middle" class="t" fill="#466b48">正常</text>
+    <rect x="40" y="70" width="240" height="60" rx="10" fill="#f4eace" stroke="#8a6b31"/>
+    <text x="160" y="96" text-anchor="middle" class="m">ThreadLocal（key）</text>
+    <text x="160" y="118" text-anchor="middle" class="s">有外部强引用，存活</text>
+    <line x1="160" y1="130" x2="160" y2="170" stroke="#8a7f6d" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <rect x="40" y="170" width="240" height="60" rx="10" fill="#dee3d6" stroke="#466b48"/>
+    <text x="160" y="196" text-anchor="middle" class="m">value（强引用）</text>
+    <text x="160" y="218" text-anchor="middle" class="s">随 key 一起可达</text>
+    <text x="160" y="300" text-anchor="middle" class="b">remove() 断开引用，</text>
+    <text x="160" y="330" text-anchor="middle" class="b">value 才能被 GC。</text>
+  </g>
+
+  <line x1="390" y1="360" x2="470" y2="360" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="430" y="350" text-anchor="middle" class="s">key 被 GC</text>
+
+  <g transform="translate(470 150)">
+    <rect width="320" height="420" rx="18" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+    <text x="160" y="38" text-anchor="middle" class="t" fill="#943b37">泄漏</text>
+    <rect x="40" y="70" width="240" height="60" rx="10" fill="#f5f0e4" stroke="#d7cebd" stroke-dasharray="7 7"/>
+    <text x="160" y="96" text-anchor="middle" class="m">key = null</text>
+    <text x="160" y="118" text-anchor="middle" class="s">ThreadLocal 已被回收</text>
+    <line x1="160" y1="130" x2="160" y2="170" stroke="#943b37" stroke-width="2.5" marker-end="url(#arrowR)"/>
+    <rect x="40" y="170" width="240" height="60" rx="10" fill="#eed9d3" stroke="#943b37"/>
+    <text x="160" y="196" text-anchor="middle" class="m" fill="#943b37">value 还挂着</text>
+    <text x="160" y="218" text-anchor="middle" class="s">强引用，回收不了</text>
+    <text x="160" y="300" text-anchor="middle" class="b" fill="#943b37">线程池线程长期存活，</text>
+    <text x="160" y="330" text-anchor="middle" class="b" fill="#943b37">value 越积越多 → OOM</text>
+  </g>
+
+  <line x1="790" y1="360" x2="870" y2="360" stroke="#466b48" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <g transform="translate(870 150)">
+    <rect width="260" height="420" rx="18" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="130" y="38" text-anchor="middle" class="t" fill="#466b48">解法</text>
+    <text x="130" y="110" text-anchor="middle" class="b">finally 里</text>
+    <text x="130" y="145" text-anchor="middle" class="m">threadLocal.remove()</text>
+    <text x="130" y="200" text-anchor="middle" class="b">删除 Entry，</text>
+    <text x="130" y="235" text-anchor="middle" class="b">断开 value 的强引用，</text>
+    <text x="130" y="270" text-anchor="middle" class="b">value 才能被 GC。</text>
+  </g>
+</svg>
