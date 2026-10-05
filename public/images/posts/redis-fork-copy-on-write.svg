@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="660" viewBox="0 0 1100 660" role="img" aria-labelledby="title desc">
+  <title id="title">Redis Fork 和 Copy-on-Write 的延迟与内存成本</title>
+  <desc id="desc">父进程 Fork 子进程时短暂停顿，之后父子共享内存页。父进程写入共享页会触发 Copy-on-Write，复制页面并增加内存与带宽消耗。</desc>
+  <rect width="1100" height="660" rx="28" fill="#fdfaf3"/>
+  <g font-family="sans-serif">
+    <text x="54" y="62" font-size="30" font-weight="700" fill="#2b2620">后台保存不等于完全没有前台成本</text>
+    <text x="54" y="98" font-size="18" fill="#6f6659">Fork 造成短暂停顿，保存期间的写入再触发 Copy-on-Write</text>
+
+    <rect x="50" y="139" width="245" height="118" rx="20" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="172" y="178" text-anchor="middle" font-size="22" font-weight="700" fill="#295279">Redis 父进程</text>
+    <text x="172" y="211" text-anchor="middle" font-size="17" fill="#2b2620">持续处理业务命令</text>
+    <text x="172" y="237" text-anchor="middle" font-size="15" fill="#6f6659">内存数据集 24 GB（示意）</text>
+    <path d="M303 198H409" stroke="#943b37" stroke-width="3" marker-end="url(#arrowRed)"/>
+    <rect x="315" y="146" width="82" height="38" rx="19" fill="#eed9d3"/>
+    <text x="356" y="171" text-anchor="middle" font-size="16" font-weight="700" fill="#943b37">fork()</text>
+
+    <rect x="418" y="139" width="286" height="118" rx="20" fill="#f4eace" stroke="#8a6b31" stroke-width="2"/>
+    <text x="561" y="178" text-anchor="middle" font-size="22" font-weight="700" fill="#725923">复制进程与页表</text>
+    <text x="561" y="211" text-anchor="middle" font-size="17" fill="#943b37">父进程短暂停止服务</text>
+    <text x="561" y="237" text-anchor="middle" font-size="15" fill="#6f6659">数据集越大，页表准备通常越重</text>
+    <path d="M712 198H818" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+
+    <rect x="827" y="139" width="223" height="118" rx="20" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="938" y="178" text-anchor="middle" font-size="22" font-weight="700" fill="#466b48">后台子进程</text>
+    <text x="938" y="211" text-anchor="middle" font-size="17" fill="#2b2620">写 RDB / 重写 AOF</text>
+    <text x="938" y="237" text-anchor="middle" font-size="15" fill="#6f6659">与父进程共享旧页面</text>
+
+    <text x="54" y="316" font-size="21" font-weight="700" fill="#2b2620">Fork 完成后：没有修改的页继续共享</text>
+    <g transform="translate(54 340)" text-anchor="middle">
+      <text x="95" y="25" font-size="18" font-weight="700" fill="#295279">父进程页表</text>
+      <rect x="0" y="46" width="72" height="62" rx="9" fill="#d8dee0" stroke="#295279"/><text x="36" y="83" font-size="18">P1</text>
+      <rect x="82" y="46" width="72" height="62" rx="9" fill="#eed9d3" stroke="#943b37"/><text x="118" y="83" font-size="18">P2'</text>
+      <rect x="164" y="46" width="72" height="62" rx="9" fill="#d8dee0" stroke="#295279"/><text x="200" y="83" font-size="18">P3</text>
+      <text x="95" y="160" font-size="18" font-weight="700" fill="#466b48">子进程页表</text>
+      <rect x="0" y="180" width="72" height="62" rx="9" fill="#dee3d6" stroke="#466b48"/><text x="36" y="217" font-size="18">P1</text>
+      <rect x="82" y="180" width="72" height="62" rx="9" fill="#dee3d6" stroke="#466b48"/><text x="118" y="217" font-size="18">P2</text>
+      <rect x="164" y="180" width="72" height="62" rx="9" fill="#dee3d6" stroke="#466b48"/><text x="200" y="217" font-size="18">P3</text>
+
+      <path d="M244 77H355" stroke="#8a7f6d" stroke-width="2" marker-end="url(#arrow)"/>
+      <path d="M244 211H355" stroke="#8a7f6d" stroke-width="2" marker-end="url(#arrow)"/>
+      <rect x="365" y="75" width="118" height="92" rx="14" fill="#fbf8f1" stroke="#8a7f6d"/><text x="424" y="111" font-size="17" font-weight="700">共享页</text><text x="424" y="141" font-size="16">P1 / P3</text>
+      <rect x="521" y="40" width="166" height="96" rx="14" fill="#eed9d3" stroke="#943b37" stroke-width="2"/><text x="604" y="75" font-size="18" font-weight="700" fill="#943b37">父进程写 P2</text><text x="604" y="106" font-size="16" fill="#554d42">复制为新页 P2'</text>
+      <path d="M488 107H513" stroke="#943b37" stroke-width="3" marker-end="url(#arrowRed)"/>
+
+      <rect x="735" y="40" width="257" height="202" rx="18" fill="#f4eace" stroke="#8a6b31" stroke-width="2"/>
+      <text x="863" y="78" font-size="20" font-weight="700" fill="#725923">COW 放大的资源</text>
+      <text x="765" y="117" text-anchor="start" font-size="17" fill="#2b2620">• 额外物理内存</text>
+      <text x="765" y="151" text-anchor="start" font-size="17" fill="#2b2620">• 内存复制带宽</text>
+      <text x="765" y="185" text-anchor="start" font-size="17" fill="#2b2620">• CPU 与缓存压力</text>
+      <text x="765" y="219" text-anchor="start" font-size="16" fill="#943b37">THP 会放大复制粒度</text>
+    </g>
+
+    <rect x="50" y="606" width="1000" height="34" rx="10" fill="#f5f0e4"/>
+    <text x="550" y="629" text-anchor="middle" font-size="16" fill="#554d42">数据集规模决定 Fork 基础成本；后台保存期间的写入率决定 COW 增量成本。</text>
+  </g>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <marker id="arrowRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#943b37"/></marker>
+  </defs>
+</svg>

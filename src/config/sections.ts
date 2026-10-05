@@ -75,7 +75,6 @@ export const backendSubcategories: Subcategory[] = [
 		slug: 'redis',
 		description: '缓存、数据结构、集群与稳定性。',
 		plannedTopics: [
-			{ title: 'Redis 为什么快，也为什么会突然变慢', seriesOrder: 50 },
 			{ title: 'Redis 过期与淘汰：Key 到底为什么消失', seriesOrder: 60 },
 			{ title: 'Redis 持久化：RDB、AOF 与数据丢失边界', seriesOrder: 70 },
 			{ title: 'Redis 主从复制与 Sentinel：故障切换会不会丢数据', seriesOrder: 80 },

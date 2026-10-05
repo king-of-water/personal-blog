@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="790" viewBox="0 0 1100 790" role="img" aria-labelledby="title desc">
+  <title id="title">Redis 延迟排查的分层证据路径</title>
+  <desc id="desc">从应用端延迟开始，依次检查网络往返、慢命令、Redis 内部事件、持久化时间线和操作系统基线，每层使用不同工具缩小范围。</desc>
+  <rect width="1100" height="700" rx="28" fill="#fdfaf3"/>
+  <g font-family="sans-serif">
+    <text x="54" y="62" font-size="30" font-weight="700" fill="#2b2620">先定位时间花在哪一层，再讨论优化</text>
+    <text x="54" y="98" font-size="18" fill="#6f6659">每种工具只观察请求路径的一部分，证据需要按时间对齐</text>
+
+    <g transform="translate(54 137)">
+      <rect x="0" y="0" width="992" height="88" rx="18" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+      <circle cx="48" cy="44" r="25" fill="#295279"/><text x="48" y="51" text-anchor="middle" font-size="20" font-weight="700" fill="#fff">1</text>
+      <text x="91" y="35" font-size="21" font-weight="700" fill="#295279">应用端：是谁慢、从什么时候开始</text>
+      <text x="91" y="64" font-size="17" fill="#554d42">Trace / Timer · 连接池等待 · 命令、实例、可用区与超时率</text>
+
+      <path d="M496 92V119" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+      <rect x="0" y="126" width="992" height="88" rx="18" fill="#f4eace" stroke="#8a6b31" stroke-width="2"/>
+      <circle cx="48" cy="170" r="25" fill="#8a6b31"/><text x="48" y="177" text-anchor="middle" font-size="20" font-weight="700" fill="#fff">2</text>
+      <text x="91" y="161" font-size="21" font-weight="700" fill="#725923">网络路径：PING 往返是否同时抖动</text>
+      <text x="91" y="190" font-size="17" fill="#554d42">redis-cli --latency-history · RTT · 丢包 · 网卡与输出缓冲区</text>
+
+      <path d="M496 218V245" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+      <rect x="0" y="252" width="992" height="88" rx="18" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+      <circle cx="48" cy="296" r="25" fill="#943b37"/><text x="48" y="303" text-anchor="middle" font-size="20" font-weight="700" fill="#fff">3</text>
+      <text x="91" y="287" font-size="21" font-weight="700" fill="#943b37">命令执行：是否有队头阻塞</text>
+      <text x="91" y="316" font-size="17" fill="#554d42">SLOWLOG · INFO commandstats / latencystats · Big Key / Hot Key</text>
+
+      <path d="M496 344V371" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+      <rect x="0" y="378" width="992" height="88" rx="18" fill="#e3dde2" stroke="#5e5083" stroke-width="2"/>
+      <circle cx="48" cy="422" r="25" fill="#5e5083"/><text x="48" y="429" text-anchor="middle" font-size="20" font-weight="700" fill="#fff">4</text>
+      <text x="91" y="413" font-size="21" font-weight="700" fill="#5e5083">Redis 内部：哪个事件与尖峰重合</text>
+      <text x="91" y="442" font-size="17" fill="#554d42">LATENCY LATEST / DOCTOR · fork · expire · eviction · persistence</text>
+
+      <path d="M496 470V497" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+      <rect x="0" y="504" width="992" height="88" rx="18" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+      <circle cx="48" cy="548" r="25" fill="#466b48"/><text x="48" y="555" text-anchor="middle" font-size="20" font-weight="700" fill="#fff">5</text>
+      <text x="91" y="539" font-size="21" font-weight="700" fill="#466b48">操作系统：机器是否还能提供目标延迟</text>
+      <text x="91" y="568" font-size="17" fill="#554d42">intrinsic latency · CPU Throttling · Swap · THP · 磁盘与 Noisy Neighbor</text>
+    </g>
+    <text x="550" y="766" text-anchor="middle" font-size="17" fill="#554d42">结论必须能同时解释时间、范围和指标变化；单个当前值通常不够。</text>
+  </g>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker></defs>
+</svg>
