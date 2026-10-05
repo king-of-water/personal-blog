@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="690" viewBox="0 0 1100 690" role="img" aria-labelledby="title desc">
+  <title id="title">Redis ZSet 的 Dict 与 Skiplist</title>
+  <desc id="desc">Dict 按 member 快速定位，Skiplist 按 score 和 member 维护顺序并借助 span 计算排名，ZADD 同时维护两份结构。</desc>
+  <rect width="1100" height="690" rx="28" fill="#fdfaf3"/>
+  <g font-family="sans-serif">
+    <text x="54" y="62" font-size="30" font-weight="700" fill="#2b2620">ZSet：为两种查询，维护两份索引</text>
+    <text x="54" y="98" font-size="18" fill="#6f6659">Dict 解决“按 member 找”，Skiplist 解决“按 score 排”</text>
+
+    <rect x="50" y="132" width="1000" height="198" rx="20" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="82" y="174" font-size="23" font-weight="700" fill="#295279">Dict：member → score / node</text>
+    <text x="82" y="204" font-size="16" fill="#554d42">ZSCORE alice 直接按 member 哈希定位，平均 O(1)</text>
+    <g transform="translate(82 232)" font-size="17" fill="#2b2620">
+      <rect x="0" y="0" width="240" height="58" rx="11" fill="#fbf8f1"/><text x="20" y="36">alice</text><text x="202" y="36" text-anchor="end" font-weight="700" fill="#295279">1200</text>
+      <rect x="270" y="0" width="240" height="58" rx="11" fill="#fbf8f1"/><text x="290" y="36">bob</text><text x="472" y="36" text-anchor="end" font-weight="700" fill="#295279">980</text>
+      <rect x="540" y="0" width="240" height="58" rx="11" fill="#fbf8f1"/><text x="560" y="36">carol</text><text x="742" y="36" text-anchor="end" font-weight="700" fill="#295279">1050</text>
+      <rect x="810" y="0" width="108" height="58" rx="11" fill="#fbf8f1"/><text x="864" y="36" text-anchor="middle">…</text>
+    </g>
+
+    <path d="M550 331V378" stroke="#943b37" stroke-width="3" marker-end="url(#arrowRed)"/>
+    <rect x="447" y="342" width="206" height="39" rx="19" fill="#eed9d3"/>
+    <text x="550" y="367" text-anchor="middle" font-size="16" font-weight="700" fill="#943b37">ZADD 同时维护</text>
+
+    <rect x="50" y="390" width="1000" height="236" rx="20" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="82" y="432" font-size="23" font-weight="700" fill="#466b48">Skiplist：按 (score, member) 排序</text>
+    <text x="82" y="462" font-size="16" fill="#554d42">ZRANGE / ZRANK 找到起点后沿底层顺序扫描；span 用来跨层累计排名</text>
+    <g transform="translate(96 492)" font-size="15" fill="#2b2620" text-anchor="middle">
+      <text x="-26" y="17" fill="#6f6659">L3</text><path d="M0 12H260M300 12H770" stroke="#5e5083" stroke-width="3"/><text x="278" y="7" fill="#5e5083">span 2</text>
+      <text x="-26" y="55" fill="#6f6659">L2</text><path d="M0 50H120M160 50H450M490 50H770" stroke="#295279" stroke-width="3"/><text x="140" y="45" fill="#295279">1</text><text x="470" y="45" fill="#295279">2</text>
+      <text x="-26" y="93" fill="#6f6659">L1</text><path d="M0 88H770" stroke="#466b48" stroke-width="4"/>
+      <circle cx="0" cy="88" r="8" fill="#466b48"/><circle cx="160" cy="88" r="8" fill="#466b48"/><circle cx="300" cy="88" r="8" fill="#466b48"/><circle cx="490" cy="88" r="8" fill="#466b48"/><circle cx="770" cy="88" r="8" fill="#466b48"/>
+      <text x="0" y="126">HEAD</text><text x="160" y="126">bob · 980</text><text x="300" y="126">carol · 1050</text><text x="490" y="126">alice · 1200</text><text x="770" y="126">dave · 1510</text>
+    </g>
+    <rect x="50" y="644" width="1000" height="32" rx="10" fill="#f5f0e4"/>
+    <text x="550" y="666" text-anchor="middle" font-size="16" fill="#554d42">冗余增加了内存，却同时获得 member 定位、范围遍历与排名能力。</text>
+  </g>
+  <defs><marker id="arrowRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#943b37"/></marker></defs>
+</svg>

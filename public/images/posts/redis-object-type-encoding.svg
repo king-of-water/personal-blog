@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="610" viewBox="0 0 1100 610" role="img" aria-labelledby="title desc">
+  <title id="title">Redis 逻辑数据类型、对象编码与底层结构</title>
+  <desc id="desc">展示 Redis 命令面对的逻辑类型，Redis Object 记录的类型和编码，以及最终使用的 Listpack、Hashtable、Quicklist 和 Skiplist 等底层结构。</desc>
+  <rect width="1100" height="610" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="64" font-family="sans-serif" font-size="30" font-weight="700" fill="#2b2620">同一个逻辑类型，可以切换不同内部编码</text>
+  <text x="56" y="98" font-family="sans-serif" font-size="18" fill="#6f6659">命令语义保持不变，Redis 根据对象规模选择存储方式</text>
+  <g font-family="sans-serif">
+    <text x="62" y="158" font-size="18" font-weight="700" fill="#725923">① 逻辑类型</text>
+    <rect x="50" y="180" width="220" height="76" rx="16" fill="#f4eace" stroke="#8a6b31" stroke-width="2"/>
+    <text x="160" y="226" text-anchor="middle" font-size="23" font-weight="700" fill="#2b2620">Hash / List / ZSet</text>
+    <text x="160" y="286" text-anchor="middle" font-size="16" fill="#6f6659">决定命令与业务语义</text>
+    <path d="M286 218H367" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+
+    <text x="392" y="158" font-size="18" font-weight="700" fill="#295279">② Redis Object</text>
+    <rect x="370" y="180" width="334" height="214" rx="18" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <rect x="397" y="207" width="280" height="46" rx="10" fill="#fbf8f1"/>
+    <text x="421" y="237" font-size="20" fill="#2b2620">type</text><text x="552" y="237" font-size="20" font-weight="700" fill="#295279">hash</text>
+    <rect x="397" y="263" width="280" height="46" rx="10" fill="#fbf8f1"/>
+    <text x="421" y="293" font-size="20" fill="#2b2620">encoding</text><text x="552" y="293" font-size="20" font-weight="700" fill="#295279">listpack</text>
+    <rect x="397" y="319" width="280" height="46" rx="10" fill="#fbf8f1"/>
+    <text x="421" y="349" font-size="20" fill="#2b2620">ptr</text><text x="552" y="349" font-size="20" font-weight="700" fill="#295279">真实数据</text>
+    <text x="537" y="425" text-anchor="middle" font-size="16" fill="#6f6659">记录类型、编码与对象元数据</text>
+    <path d="M720 284H792" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+
+    <text x="817" y="158" font-size="18" font-weight="700" fill="#466b48">③ 底层结构</text>
+    <rect x="794" y="180" width="256" height="58" rx="14" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="922" y="216" text-anchor="middle" font-size="21" font-weight="700" fill="#2b2620">Listpack</text>
+    <rect x="794" y="252" width="256" height="58" rx="14" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="922" y="288" text-anchor="middle" font-size="21" font-weight="700" fill="#2b2620">Hashtable</text>
+    <rect x="794" y="324" width="122" height="58" rx="14" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="855" y="360" text-anchor="middle" font-size="19" font-weight="700" fill="#2b2620">Quicklist</text>
+    <rect x="928" y="324" width="122" height="58" rx="14" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="989" y="360" text-anchor="middle" font-size="19" font-weight="700" fill="#2b2620">Skiplist</text>
+    <text x="922" y="425" text-anchor="middle" font-size="16" fill="#6f6659">真正保存字节、桶与节点</text>
+
+    <rect x="50" y="474" width="1000" height="82" rx="18" fill="#f5f0e4" stroke="#c5baa6"/>
+    <text x="78" y="508" font-size="18" font-weight="700" fill="#2b2620">观察方法</text>
+    <text x="78" y="538" font-size="18" fill="#554d42">TYPE 看逻辑类型　·　OBJECT ENCODING 看当前编码　·　MEMORY USAGE 看实际占用</text>
+  </g>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker></defs>
+</svg>

@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="650" viewBox="0 0 1100 650" role="img" aria-labelledby="title desc">
+  <title id="title">Redis String 的 int、embstr、raw 编码与 SDS 布局</title>
+  <desc id="desc">比较整数、短字符串和长字符串的三种编码，并展示 SDS 中长度、容量、标志和缓冲区的布局。</desc>
+  <rect width="1100" height="650" rx="28" fill="#fdfaf3"/>
+  <g font-family="sans-serif">
+    <text x="55" y="62" font-size="30" font-weight="700" fill="#2b2620">String 的三种常见编码</text>
+    <text x="55" y="96" font-size="18" fill="#6f6659">值的形态不同，分配方式也不同</text>
+
+    <rect x="50" y="135" width="300" height="248" rx="18" fill="#f4eace" stroke="#8a6b31" stroke-width="2"/>
+    <text x="200" y="177" text-anchor="middle" font-size="24" font-weight="700" fill="#725923">int</text>
+    <rect x="91" y="202" width="218" height="108" rx="14" fill="#fbf8f1" stroke="#c5baa6"/>
+    <text x="112" y="237" font-size="18" fill="#554d42">type = string</text>
+    <text x="112" y="269" font-size="18" fill="#554d42">encoding = int</text>
+    <text x="112" y="301" font-size="18" fill="#554d42">value = 12345</text>
+    <text x="200" y="347" text-anchor="middle" font-size="17" fill="#6f6659">整数直接保存在对象中</text>
+
+    <rect x="400" y="135" width="300" height="248" rx="18" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="550" y="177" text-anchor="middle" font-size="24" font-weight="700" fill="#295279">embstr</text>
+    <rect x="438" y="204" width="224" height="50" rx="12" fill="#fbf8f1" stroke="#295279"/>
+    <text x="550" y="236" text-anchor="middle" font-size="18" fill="#2b2620">Redis Object</text>
+    <rect x="438" y="254" width="224" height="76" rx="12" fill="#eaf0f3" stroke="#295279"/>
+    <text x="550" y="284" text-anchor="middle" font-size="18" fill="#2b2620">SDS header</text>
+    <text x="550" y="313" text-anchor="middle" font-size="18" fill="#2b2620">"hello"</text>
+    <text x="550" y="357" text-anchor="middle" font-size="17" fill="#6f6659">一次连续内存分配</text>
+
+    <rect x="750" y="135" width="300" height="248" rx="18" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="900" y="177" text-anchor="middle" font-size="24" font-weight="700" fill="#466b48">raw</text>
+    <rect x="791" y="204" width="218" height="61" rx="12" fill="#fbf8f1" stroke="#466b48"/>
+    <text x="900" y="242" text-anchor="middle" font-size="18" fill="#2b2620">Redis Object　ptr ──┐</text>
+    <path d="M976 266V284" stroke="#466b48" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="791" y="290" width="218" height="58" rx="12" fill="#edf1e8" stroke="#466b48"/>
+    <text x="900" y="326" text-anchor="middle" font-size="18" fill="#2b2620">独立分配的 SDS</text>
+    <text x="900" y="373" text-anchor="middle" font-size="17" fill="#6f6659">对象头与内容分开</text>
+
+    <text x="55" y="447" font-size="23" font-weight="700" fill="#2b2620">SDS 为什么不是普通 C 字符串</text>
+    <g transform="translate(55 478)">
+      <rect x="0" y="0" width="150" height="88" rx="12" fill="#eed9d3" stroke="#943b37"/>
+      <rect x="150" y="0" width="150" height="88" fill="#f4eace" stroke="#8a6b31"/>
+      <rect x="300" y="0" width="150" height="88" fill="#e3dde2" stroke="#5e5083"/>
+      <rect x="450" y="0" width="485" height="88" rx="12" fill="#dee3d6" stroke="#466b48"/>
+      <text x="75" y="36" text-anchor="middle" font-size="19" font-weight="700" fill="#943b37">len</text><text x="75" y="63" text-anchor="middle" font-size="15" fill="#554d42">已用长度</text>
+      <text x="225" y="36" text-anchor="middle" font-size="19" font-weight="700" fill="#725923">alloc</text><text x="225" y="63" text-anchor="middle" font-size="15" fill="#554d42">已分配容量</text>
+      <text x="375" y="36" text-anchor="middle" font-size="19" font-weight="700" fill="#5e5083">flags</text><text x="375" y="63" text-anchor="middle" font-size="15" fill="#554d42">头部类型</text>
+      <text x="692" y="36" text-anchor="middle" font-size="19" font-weight="700" fill="#466b48">buf: h e l l o \0</text><text x="692" y="63" text-anchor="middle" font-size="15" fill="#554d42">二进制安全，仍保留终止符兼容 C API</text>
+    </g>
+    <text x="55" y="608" font-size="18" fill="#554d42">读取长度无需扫描；追加时根据 alloc 判断是否扩容。</text>
+  </g>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#466b48"/></marker></defs>
+</svg>

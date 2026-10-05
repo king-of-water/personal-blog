@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="660" viewBox="0 0 1100 660" role="img" aria-labelledby="title desc">
+  <title id="title">Redis Set 的 Intset、Listpack 和 Hashtable</title>
+  <desc id="desc">根据成员是否为整数、集合规模和成员长度，Redis Set 可以选择 Intset、Listpack 或 Hashtable。</desc>
+  <rect width="1100" height="660" rx="28" fill="#fdfaf3"/>
+  <g font-family="sans-serif">
+    <text x="54" y="62" font-size="30" font-weight="700" fill="#2b2620">Set：先看成员形态，再看集合规模</text>
+    <text x="54" y="98" font-size="18" fill="#6f6659">三种编码对外都提供去重与集合运算</text>
+
+    <rect x="388" y="132" width="324" height="70" rx="18" fill="#f4eace" stroke="#8a6b31" stroke-width="2"/>
+    <text x="550" y="162" text-anchor="middle" font-size="20" font-weight="700" fill="#725923">新成员能否表示为整数？</text>
+    <text x="550" y="187" text-anchor="middle" font-size="16" fill="#554d42">还要同时满足数量阈值</text>
+    <path d="M447 203L235 269" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/><text x="335" y="230" font-size="16" fill="#466b48">是</text>
+    <path d="M653 203L864 269" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/><text x="744" y="230" font-size="16" fill="#943b37">否</text>
+
+    <rect x="47" y="277" width="310" height="264" rx="20" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="202" y="320" text-anchor="middle" font-size="24" font-weight="700" fill="#295279">Intset</text>
+    <text x="202" y="348" text-anchor="middle" font-size="16" fill="#554d42">有序、连续的整数数组</text>
+    <g transform="translate(75 380)" text-anchor="middle" font-size="18" fill="#2b2620">
+      <rect x="0" y="0" width="62" height="58" rx="8" fill="#fbf8f1"/><text x="31" y="36">3</text>
+      <rect x="69" y="0" width="62" height="58" rx="8" fill="#fbf8f1"/><text x="100" y="36">7</text>
+      <rect x="138" y="0" width="62" height="58" rx="8" fill="#fbf8f1"/><text x="169" y="36">42</text>
+      <rect x="207" y="0" width="62" height="58" rx="8" fill="#fbf8f1"/><text x="238" y="36">91</text>
+    </g>
+    <text x="202" y="471" text-anchor="middle" font-size="17" fill="#554d42">16 / 32 / 64 位宽度升级</text>
+    <text x="202" y="502" text-anchor="middle" font-size="16" fill="#6f6659">查找可二分，插入可能搬移</text>
+
+    <rect x="395" y="277" width="310" height="264" rx="20" fill="#e3dde2" stroke="#5e5083" stroke-width="2"/>
+    <text x="550" y="320" text-anchor="middle" font-size="24" font-weight="700" fill="#5e5083">Listpack</text>
+    <text x="550" y="348" text-anchor="middle" font-size="16" fill="#554d42">小型、短字符串集合</text>
+    <g transform="translate(425 380)" text-anchor="middle" font-size="17" fill="#2b2620">
+      <rect x="0" y="0" width="78" height="58" rx="8" fill="#fbf8f1"/><text x="39" y="36">redis</text>
+      <rect x="86" y="0" width="78" height="58" rx="8" fill="#fbf8f1"/><text x="125" y="36">cache</text>
+      <rect x="172" y="0" width="78" height="58" rx="8" fill="#fbf8f1"/><text x="211" y="36">mq</text>
+    </g>
+    <text x="550" y="471" text-anchor="middle" font-size="17" fill="#554d42">Redis 7.2 起支持</text>
+    <text x="550" y="502" text-anchor="middle" font-size="16" fill="#6f6659">省指针，成员判断需扫描</text>
+
+    <rect x="743" y="277" width="310" height="264" rx="20" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="898" y="320" text-anchor="middle" font-size="24" font-weight="700" fill="#466b48">Hashtable</text>
+    <text x="898" y="348" text-anchor="middle" font-size="16" fill="#554d42">更大或成员更长的集合</text>
+    <g transform="translate(782 378)" font-size="16" fill="#2b2620">
+      <rect x="0" y="0" width="56" height="42" rx="7" fill="#fbf8f1"/><text x="28" y="27" text-anchor="middle">0</text><path d="M58 21H87" stroke="#466b48" stroke-width="2" marker-end="url(#arrowGreen)"/><text x="100" y="27">redis</text>
+      <rect x="0" y="54" width="56" height="42" rx="7" fill="#fbf8f1"/><text x="28" y="81" text-anchor="middle">1</text><path d="M58 75H87" stroke="#466b48" stroke-width="2" marker-end="url(#arrowGreen)"/><text x="100" y="81">backend</text>
+      <rect x="0" y="108" width="56" height="42" rx="7" fill="#fbf8f1"/><text x="28" y="135" text-anchor="middle">2</text><path d="M58 129H87" stroke="#466b48" stroke-width="2" marker-end="url(#arrowGreen)"/><text x="100" y="135">cache</text>
+    </g>
+    <text x="898" y="502" text-anchor="middle" font-size="16" fill="#6f6659">成员查询通常平均 O(1)</text>
+
+    <rect x="47" y="573" width="1006" height="49" rx="13" fill="#f5f0e4"/>
+    <text x="550" y="605" text-anchor="middle" font-size="18" fill="#554d42">集合运算还要看参与集合大小和结果基数，不能只看 SISMEMBER 的复杂度。</text>
+  </g>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#466b48"/></marker>
+  </defs>
+</svg>

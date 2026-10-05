@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="620" viewBox="0 0 1100 620" role="img" aria-labelledby="title desc">
+  <title id="title">Redis List 从 Listpack 到 Quicklist</title>
+  <desc id="desc">小列表使用连续的 Listpack，列表增长后使用双向链表形式的 Quicklist，每个节点内部保存一段 Listpack。</desc>
+  <rect width="1100" height="620" rx="28" fill="#fdfaf3"/>
+  <g font-family="sans-serif">
+    <text x="54" y="62" font-size="30" font-weight="700" fill="#2b2620">List：连续内存与链式分段的折中</text>
+    <text x="54" y="98" font-size="18" fill="#6f6659">小列表先省元数据，大列表再限制单块搬移成本</text>
+
+    <text x="54" y="158" font-size="21" font-weight="700" fill="#295279">元素较少：单个 Listpack</text>
+    <rect x="54" y="185" width="790" height="102" rx="16" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <g font-size="18" fill="#2b2620" text-anchor="middle">
+      <rect x="78" y="207" width="132" height="58" rx="9" fill="#fbf8f1"/><text x="144" y="243">task-1</text>
+      <rect x="220" y="207" width="132" height="58" rx="9" fill="#fbf8f1"/><text x="286" y="243">task-2</text>
+      <rect x="362" y="207" width="132" height="58" rx="9" fill="#fbf8f1"/><text x="428" y="243">task-3</text>
+      <rect x="504" y="207" width="132" height="58" rx="9" fill="#fbf8f1"/><text x="570" y="243">task-4</text>
+      <rect x="646" y="207" width="174" height="58" rx="9" fill="#fbf8f1"/><text x="733" y="243">连续字节</text>
+    </g>
+    <text x="873" y="222" font-size="17" fill="#554d42">元数据少</text><text x="873" y="252" font-size="17" fill="#554d42">局部性好</text><text x="873" y="282" font-size="17" fill="#943b37">中间修改会搬移</text>
+
+    <path d="M550 315V361" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+    <text x="574" y="346" font-size="16" fill="#6f6659">对象继续增长</text>
+
+    <text x="54" y="405" font-size="21" font-weight="700" fill="#466b48">元素较多：Quicklist = 双向链表 + 多个 Listpack</text>
+    <g transform="translate(54 433)">
+      <rect x="0" y="0" width="286" height="106" rx="16" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+      <text x="143" y="29" text-anchor="middle" font-size="17" font-weight="700" fill="#466b48">quicklistNode</text>
+      <rect x="20" y="43" width="246" height="43" rx="8" fill="#fbf8f1"/>
+      <text x="143" y="70" text-anchor="middle" font-size="17" fill="#2b2620">[ a ][ b ][ c ][ d ]</text>
+      <path d="M292 53H343" stroke="#466b48" stroke-width="3" marker-end="url(#arrowGreen)"/><path d="M343 75H292" stroke="#466b48" stroke-width="2" marker-end="url(#arrowGreen)"/>
+      <rect x="350" y="0" width="286" height="106" rx="16" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+      <text x="493" y="29" text-anchor="middle" font-size="17" font-weight="700" fill="#466b48">quicklistNode</text>
+      <rect x="370" y="43" width="246" height="43" rx="8" fill="#fbf8f1"/>
+      <text x="493" y="70" text-anchor="middle" font-size="17" fill="#2b2620">[ e ][ f ][ g ][ h ]</text>
+      <path d="M642 53H693" stroke="#466b48" stroke-width="3" marker-end="url(#arrowGreen)"/><path d="M693 75H642" stroke="#466b48" stroke-width="2" marker-end="url(#arrowGreen)"/>
+      <rect x="700" y="0" width="286" height="106" rx="16" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+      <text x="843" y="29" text-anchor="middle" font-size="17" font-weight="700" fill="#466b48">quicklistNode</text>
+      <rect x="720" y="43" width="246" height="43" rx="8" fill="#fbf8f1"/>
+      <text x="843" y="70" text-anchor="middle" font-size="17" fill="#2b2620">[ i ][ j ][ k ][ l ]</text>
+      <text x="0" y="137" font-size="16" fill="#6f6659">HEAD：两端操作快速定位</text><text x="986" y="137" text-anchor="end" font-size="16" fill="#6f6659">TAIL</text>
+    </g>
+    <text x="54" y="596" font-size="17" fill="#554d42">Quicklist 不是“一元素一节点”：链表节点内部仍是一段紧凑的 Listpack。</text>
+  </g>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#466b48"/></marker>
+  </defs>
+</svg>

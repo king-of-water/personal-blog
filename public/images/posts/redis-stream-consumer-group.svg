@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="650" viewBox="0 0 1100 650" role="img" aria-labelledby="title desc">
+  <title id="title">Redis Stream 的消费者组、PEL 和确认流程</title>
+  <desc id="desc">生产者追加按 ID 排序的 Entry，消费者组将消息分配给多个消费者，领取后进入 Pending 列表，处理成功通过 XACK 确认，超时可重新认领。</desc>
+  <rect width="1100" height="650" rx="28" fill="#fdfaf3"/>
+  <g font-family="sans-serif">
+    <text x="54" y="62" font-size="30" font-weight="700" fill="#2b2620">Stream：消息存在、已领取、已完成是三种状态</text>
+    <text x="54" y="98" font-size="18" fill="#6f6659">消费者组记录分配与确认，业务处理仍要保证幂等</text>
+
+    <rect x="50" y="145" width="180" height="88" rx="18" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="140" y="178" text-anchor="middle" font-size="20" font-weight="700" fill="#295279">Producer</text>
+    <text x="140" y="207" text-anchor="middle" font-size="17" fill="#2b2620">XADD *</text>
+    <path d="M237 189H295" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+
+    <rect x="305" y="128" width="745" height="126" rx="20" fill="#f4eace" stroke="#8a6b31" stroke-width="2"/>
+    <text x="334" y="161" font-size="19" font-weight="700" fill="#725923">Stream：按 ID 追加的 Entry</text>
+    <g transform="translate(334 178)" text-anchor="middle" font-size="16" fill="#2b2620">
+      <rect x="0" y="0" width="190" height="48" rx="9" fill="#fbf8f1"/><text x="95" y="29">1000-0 · order 1</text>
+      <path d="M196 24H228" stroke="#8a6b31" stroke-width="2" marker-end="url(#arrowGold)"/>
+      <rect x="236" y="0" width="190" height="48" rx="9" fill="#fbf8f1"/><text x="331" y="29">1001-0 · order 2</text>
+      <path d="M432 24H464" stroke="#8a6b31" stroke-width="2" marker-end="url(#arrowGold)"/>
+      <rect x="472" y="0" width="190" height="48" rx="9" fill="#fbf8f1"/><text x="567" y="29">1001-1 · order 3</text>
+    </g>
+
+    <path d="M677 260V306" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+    <rect x="535" y="282" width="284" height="48" rx="22" fill="#e3dde2" stroke="#5e5083"/>
+    <text x="677" y="312" text-anchor="middle" font-size="17" font-weight="700" fill="#5e5083">Consumer Group：billing</text>
+
+    <rect x="118" y="350" width="256" height="104" rx="18" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="246" y="384" text-anchor="middle" font-size="20" font-weight="700" fill="#466b48">worker-1</text>
+    <text x="246" y="414" text-anchor="middle" font-size="16" fill="#2b2620">领取 1000-0</text><text x="246" y="438" text-anchor="middle" font-size="15" fill="#6f6659">XREADGROUP</text>
+    <rect x="410" y="350" width="256" height="104" rx="18" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="538" y="384" text-anchor="middle" font-size="20" font-weight="700" fill="#466b48">worker-2</text>
+    <text x="538" y="414" text-anchor="middle" font-size="16" fill="#2b2620">领取 1001-0</text><text x="538" y="438" text-anchor="middle" font-size="15" fill="#6f6659">XREADGROUP</text>
+    <path d="M598 331L538 348M756 331L805 348" stroke="#5e5083" stroke-width="2.5" marker-end="url(#arrowPurple)"/>
+
+    <rect x="702" y="350" width="348" height="154" rx="18" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+    <text x="876" y="384" text-anchor="middle" font-size="20" font-weight="700" fill="#943b37">PEL：尚未确认</text>
+    <rect x="730" y="403" width="292" height="38" rx="8" fill="#fbf8f1"/><text x="876" y="428" text-anchor="middle" font-size="16" fill="#2b2620">1000-0 → worker-1</text>
+    <rect x="730" y="449" width="292" height="38" rx="8" fill="#fbf8f1"/><text x="876" y="474" text-anchor="middle" font-size="16" fill="#2b2620">1001-0 → worker-2</text>
+    <path d="M375 402H695" stroke="#943b37" stroke-width="2.5" marker-end="url(#arrowRed)"/>
+    <path d="M667 421H695" stroke="#943b37" stroke-width="2.5" marker-end="url(#arrowRed)"/>
+
+    <rect x="118" y="526" width="548" height="76" rx="17" fill="#d8dee0" stroke="#295279"/>
+    <text x="144" y="557" font-size="18" font-weight="700" fill="#295279">处理成功：XACK</text>
+    <text x="144" y="583" font-size="16" fill="#554d42">从 PEL 移除确认状态，但不会自动删除 Stream Entry</text>
+    <rect x="702" y="526" width="348" height="76" rx="17" fill="#f4eace" stroke="#8a6b31"/>
+    <text x="728" y="557" font-size="18" font-weight="700" fill="#725923">超时未处理：Claim</text>
+    <text x="728" y="583" font-size="16" fill="#554d42">由其他消费者认领并重试</text>
+    <path d="M876 505V520" stroke="#8a6b31" stroke-width="2.5" marker-end="url(#arrowGold)"/>
+  </g>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <marker id="arrowGold" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a6b31"/></marker>
+    <marker id="arrowPurple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#5e5083"/></marker>
+    <marker id="arrowRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#943b37"/></marker>
+  </defs>
+</svg>

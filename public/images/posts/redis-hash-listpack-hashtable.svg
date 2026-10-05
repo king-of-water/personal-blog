@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="620" viewBox="0 0 1100 620" role="img" aria-labelledby="title desc">
+  <title id="title">Redis Hash 的 Listpack 与 Hashtable</title>
+  <desc id="desc">小 Hash 在连续 Listpack 中交替保存字段和值，超过配置阈值后转换为 Hashtable，通过字段哈希定位桶和条目。</desc>
+  <rect width="1100" height="620" rx="28" fill="#fdfaf3"/>
+  <g font-family="sans-serif">
+    <text x="54" y="62" font-size="30" font-weight="700" fill="#2b2620">Hash：小对象省内存，大对象省查找</text>
+    <text x="54" y="98" font-size="18" fill="#6f6659">转换由字段数量和字段/值长度等配置共同决定</text>
+
+    <rect x="48" y="142" width="430" height="350" rx="20" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="263" y="182" text-anchor="middle" font-size="24" font-weight="700" fill="#295279">Listpack</text>
+    <text x="263" y="211" text-anchor="middle" font-size="16" fill="#554d42">字段和值交替存放在连续内存</text>
+    <g transform="translate(78 240)" text-anchor="middle" font-size="17">
+      <rect x="0" y="0" width="130" height="62" rx="10" fill="#fbf8f1" stroke="#295279"/><text x="65" y="27" fill="#295279" font-weight="700">field</text><text x="65" y="50" fill="#2b2620">name</text>
+      <rect x="140" y="0" width="180" height="62" rx="10" fill="#f5f0e4" stroke="#8a7f6d"/><text x="230" y="27" fill="#725923" font-weight="700">value</text><text x="230" y="50" fill="#2b2620">Alice</text>
+      <rect x="0" y="78" width="130" height="62" rx="10" fill="#fbf8f1" stroke="#295279"/><text x="65" y="105" fill="#295279" font-weight="700">field</text><text x="65" y="128" fill="#2b2620">city</text>
+      <rect x="140" y="78" width="180" height="62" rx="10" fill="#f5f0e4" stroke="#8a7f6d"/><text x="230" y="105" fill="#725923" font-weight="700">value</text><text x="230" y="128" fill="#2b2620">Beijing</text>
+    </g>
+    <path d="M107 412H398" stroke="#943b37" stroke-width="3" stroke-dasharray="8 7" marker-end="url(#arrowRed)"/>
+    <text x="253" y="448" text-anchor="middle" font-size="17" fill="#943b37">HGET：顺序比较字段，O(N)</text>
+    <text x="263" y="477" text-anchor="middle" font-size="16" fill="#6f6659">N 小时，连续扫描成本可控</text>
+
+    <path d="M495 316H590" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+    <rect x="494" y="252" width="100" height="42" rx="21" fill="#f4eace" stroke="#8a6b31"/>
+    <text x="544" y="279" text-anchor="middle" font-size="15" font-weight="700" fill="#725923">超过阈值</text>
+
+    <rect x="610" y="142" width="442" height="350" rx="20" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="831" y="182" text-anchor="middle" font-size="24" font-weight="700" fill="#466b48">Hashtable</text>
+    <text x="831" y="211" text-anchor="middle" font-size="16" fill="#554d42">字段哈希后定位桶，冲突再沿 Entry 查找</text>
+    <rect x="645" y="240" width="132" height="50" rx="10" fill="#fbf8f1" stroke="#466b48"/>
+    <text x="711" y="271" text-anchor="middle" font-size="18" fill="#2b2620">hash(city)</text>
+    <path d="M778 265H830" stroke="#466b48" stroke-width="3" marker-end="url(#arrowGreen)"/>
+    <g transform="translate(835 230)" font-size="16" fill="#2b2620">
+      <rect x="0" y="0" width="70" height="46" rx="8" fill="#fbf8f1" stroke="#466b48"/><text x="35" y="28" text-anchor="middle">0</text>
+      <rect x="0" y="54" width="70" height="46" rx="8" fill="#fbf8f1" stroke="#466b48"/><text x="35" y="82" text-anchor="middle">1</text>
+      <rect x="0" y="108" width="70" height="46" rx="8" fill="#f4eace" stroke="#8a6b31"/><text x="35" y="136" text-anchor="middle">2</text>
+      <rect x="0" y="162" width="70" height="46" rx="8" fill="#fbf8f1" stroke="#466b48"/><text x="35" y="190" text-anchor="middle">3</text>
+      <path d="M72 131H103" stroke="#8a6b31" stroke-width="3" marker-end="url(#arrowGold)"/>
+      <rect x="108" y="105" width="96" height="52" rx="9" fill="#f4eace" stroke="#8a6b31"/><text x="156" y="127" text-anchor="middle">city</text><text x="156" y="148" text-anchor="middle">Beijing</text>
+    </g>
+    <text x="831" y="448" text-anchor="middle" font-size="17" fill="#466b48">HGET：平均 O(1)，但元数据更多</text>
+    <text x="831" y="477" text-anchor="middle" font-size="16" fill="#6f6659">扩缩容通过渐进式 Rehash 摊开</text>
+
+    <rect x="48" y="526" width="1004" height="54" rx="14" fill="#f5f0e4"/>
+    <text x="550" y="560" text-anchor="middle" font-size="18" fill="#554d42">编码转换是内部实现；业务应依赖 Hash 命令语义，而不是固定某一种编码。</text>
+  </g>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <marker id="arrowRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#943b37"/></marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#466b48"/></marker>
+    <marker id="arrowGold" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a6b31"/></marker>
+  </defs>
+</svg>

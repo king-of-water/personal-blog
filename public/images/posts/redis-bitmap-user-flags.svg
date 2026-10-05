@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="600" viewBox="0 0 1100 600" role="img" aria-labelledby="title desc">
+  <title id="title">Redis Bitmap 把用户编号映射为 Bit</title>
+  <desc id="desc">用户编号作为偏移量映射到每日位图，GETBIT 查询单个状态，BITCOUNT 统计人数，BITOP 组合多天状态。</desc>
+  <rect width="1100" height="600" rx="28" fill="#fdfaf3"/>
+  <g font-family="sans-serif">
+    <text x="54" y="62" font-size="30" font-weight="700" fill="#2b2620">Bitmap：offset 决定位置，Bit 只表达是或否</text>
+    <text x="54" y="98" font-size="18" fill="#6f6659">适合 ID 稠密、边界可控的布尔状态</text>
+
+    <text x="54" y="158" font-size="20" font-weight="700" fill="#295279">用户编号</text>
+    <g transform="translate(54 178)" font-size="17" text-anchor="middle">
+      <rect x="0" y="0" width="100" height="48" rx="12" fill="#d8dee0" stroke="#295279"/><text x="50" y="30" fill="#2b2620">user 1</text>
+      <rect x="120" y="0" width="100" height="48" rx="12" fill="#d8dee0" stroke="#295279"/><text x="170" y="30" fill="#2b2620">user 3</text>
+      <rect x="240" y="0" width="100" height="48" rx="12" fill="#d8dee0" stroke="#295279"/><text x="290" y="30" fill="#2b2620">user 7</text>
+    </g>
+    <path d="M104 230L240 302M224 230L400 302M344 230L638 302" stroke="#8a7f6d" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+    <text x="54" y="285" font-size="20" font-weight="700" fill="#466b48">login:2026-10-05</text>
+    <g transform="translate(54 306)" font-size="16" text-anchor="middle">
+      <rect x="0" y="0" width="92" height="72" rx="8" fill="#fbf8f1" stroke="#8a7f6d"/><text x="46" y="25" fill="#6f6659">offset 0</text><text x="46" y="56" font-size="25" fill="#943b37">0</text>
+      <rect x="96" y="0" width="92" height="72" rx="8" fill="#dee3d6" stroke="#466b48"/><text x="142" y="25" fill="#6f6659">1</text><text x="142" y="56" font-size="25" font-weight="700" fill="#466b48">1</text>
+      <rect x="192" y="0" width="92" height="72" rx="8" fill="#fbf8f1" stroke="#8a7f6d"/><text x="238" y="25" fill="#6f6659">2</text><text x="238" y="56" font-size="25" fill="#943b37">0</text>
+      <rect x="288" y="0" width="92" height="72" rx="8" fill="#dee3d6" stroke="#466b48"/><text x="334" y="25" fill="#6f6659">3</text><text x="334" y="56" font-size="25" font-weight="700" fill="#466b48">1</text>
+      <rect x="384" y="0" width="92" height="72" rx="8" fill="#fbf8f1" stroke="#8a7f6d"/><text x="430" y="25" fill="#6f6659">4</text><text x="430" y="56" font-size="25" fill="#943b37">0</text>
+      <rect x="480" y="0" width="92" height="72" rx="8" fill="#fbf8f1" stroke="#8a7f6d"/><text x="526" y="25" fill="#6f6659">5</text><text x="526" y="56" font-size="25" fill="#943b37">0</text>
+      <rect x="576" y="0" width="92" height="72" rx="8" fill="#fbf8f1" stroke="#8a7f6d"/><text x="622" y="25" fill="#6f6659">6</text><text x="622" y="56" font-size="25" fill="#943b37">0</text>
+      <rect x="672" y="0" width="92" height="72" rx="8" fill="#dee3d6" stroke="#466b48"/><text x="718" y="25" fill="#6f6659">7</text><text x="718" y="56" font-size="25" font-weight="700" fill="#466b48">1</text>
+      <rect x="768" y="0" width="194" height="72" rx="8" fill="#f5f0e4" stroke="#8a7f6d"/><text x="865" y="43" fill="#6f6659">… 直到最高 offset</text>
+    </g>
+
+    <g transform="translate(54 430)">
+      <rect x="0" y="0" width="295" height="82" rx="16" fill="#d8dee0"/>
+      <text x="24" y="34" font-size="18" font-weight="700" fill="#295279">GETBIT</text><text x="24" y="61" font-size="16" fill="#554d42">某个用户是否登录</text>
+      <rect x="316" y="0" width="295" height="82" rx="16" fill="#dee3d6"/>
+      <text x="340" y="34" font-size="18" font-weight="700" fill="#466b48">BITCOUNT</text><text x="340" y="61" font-size="16" fill="#554d42">当天共有多少个 1</text>
+      <rect x="632" y="0" width="330" height="82" rx="16" fill="#f4eace"/>
+      <text x="656" y="34" font-size="18" font-weight="700" fill="#725923">BITOP AND / OR</text><text x="656" y="61" font-size="16" fill="#554d42">连续登录或多日触达</text>
+    </g>
+    <text x="54" y="558" font-size="18" fill="#943b37">注意：空间由最高 offset 决定，不由置 1 的人数决定。</text>
+  </g>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker></defs>
+</svg>
