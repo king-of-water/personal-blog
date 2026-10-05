@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">任务进入线程池的完整流程</title>
+  <desc id="desc">任务提交后依次判断：线程数小于核心线程数则新建核心线程；核心线程满则进队列；队列满且线程数小于最大线程数则新建非核心线程；线程和队列都满则执行拒绝策略。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <marker id="arrowG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#466b48"/></marker>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 15px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="54" class="h">任务来了，依次过四道关</text>
+  <text x="56" y="88" class="b">核心线程 → 队列 → 非核心线程 → 拒绝策略，顺序固定。</text>
+
+  <g transform="translate(470 130)">
+    <rect width="260" height="56" rx="12" fill="#e3dde2" stroke="#5e5083" stroke-width="2"/>
+    <text x="130" y="35" text-anchor="middle" class="t" fill="#5e5083">任务提交 execute()</text>
+  </g>
+  <line x1="600" y1="186" x2="600" y2="220" stroke="#8a7f6d" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <g transform="translate(420 220)">
+    <rect width="360" height="70" rx="14" fill="#f4eace" stroke="#8a6b31" stroke-width="2"/>
+    <text x="180" y="32" text-anchor="middle" class="b">① 线程数 &lt; corePoolSize？</text>
+    <text x="180" y="56" text-anchor="middle" class="s">是 → 新建核心线程执行</text>
+  </g>
+  <line x1="600" y1="290" x2="600" y2="330" stroke="#8a7f6d" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="614" y="315" class="s">否</text>
+
+  <g transform="translate(420 330)">
+    <rect width="360" height="70" rx="14" fill="#f4eace" stroke="#8a6b31" stroke-width="2"/>
+    <text x="180" y="32" text-anchor="middle" class="b">② 队列满了？</text>
+    <text x="180" y="56" text-anchor="middle" class="s">否 → 进队列排队等待</text>
+  </g>
+  <line x1="600" y1="400" x2="600" y2="440" stroke="#8a7f6d" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="614" y="425" class="s">是</text>
+
+  <g transform="translate(420 440)">
+    <rect width="360" height="70" rx="14" fill="#f4eace" stroke="#8a6b31" stroke-width="2"/>
+    <text x="180" y="32" text-anchor="middle" class="b">③ 线程数 &lt; maximumPoolSize？</text>
+    <text x="180" y="56" text-anchor="middle" class="s">是 → 新建非核心线程执行</text>
+  </g>
+  <line x1="600" y1="510" x2="600" y2="550" stroke="#8a7f6d" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="614" y="535" class="s">否</text>
+
+  <g transform="translate(420 550)">
+    <rect width="360" height="70" rx="14" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+    <text x="180" y="32" text-anchor="middle" class="t" fill="#943b37">④ 执行拒绝策略</text>
+    <text x="180" y="56" text-anchor="middle" class="s">Abort / CallerRuns / Discard / DiscardOldest</text>
+  </g>
+
+  <g transform="translate(70 130)">
+    <rect width="300" height="490" rx="16" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="150" y="34" text-anchor="middle" class="t" fill="#466b48">三个关键点</text>
+    <text x="40" y="80" class="b">① 先建满核心线程，</text>
+    <text x="40" y="110" class="b">即使有线程空闲也建。</text>
+    <text x="40" y="170" class="b">② 队列有界才安全，</text>
+    <text x="40" y="200" class="b">无界队列会 OOM。</text>
+    <text x="40" y="260" class="b">③ CallerRuns 是背压，</text>
+    <text x="40" y="290" class="b">让提交方自己慢下来。</text>
+    <text x="40" y="360" class="s">核心线程数决定常态负载，</text>
+    <text x="40" y="390" class="s">最大线程数决定峰值上限。</text>
+  </g>
+</svg>
