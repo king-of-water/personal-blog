@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">ThreadPoolExecutor 的 ctl 位布局</title>
+  <desc id="desc">ctl 是一个 AtomicInteger，高 3 位存运行状态、低 29 位存工作线程数。RUNNING 为 -1 左移 29 位得到高三位全 1 的负数，SHUTDOWN、STOP、TIDYING、TERMINATED 依次为 0、1、2、3 左移 29 位，因此可以直接用 rs >= SHUTDOWN 做数值比较判断是否已停止接收任务。两个字段合成一个 int 是为了用一次 CAS 原子地同时修改状态与线程数。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <style>.h{font:700 28px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 18px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 15px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="720" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="52" class="h">一个 int，装下状态和线程数</text>
+  <text x="56" y="84" class="b">高 3 位 = 运行状态；低 29 位 = 工作线程数。一次 CAS 改两者。</text>
+
+  <!-- 位布局 -->
+  <g transform="translate(70 120)">
+    <rect width="1060" height="170" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="28" y="34" class="t">32 位的布局</text>
+
+    <rect x="60" y="56" width="180" height="80" rx="10" fill="#e3dde2" stroke="#5e5083" stroke-width="2"/>
+    <text x="150" y="88" text-anchor="middle" class="m">高 3 位</text>
+    <text x="150" y="116" text-anchor="middle" class="s">runState</text>
+
+    <rect x="250" y="56" width="770" height="80" rx="10" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="635" y="88" text-anchor="middle" class="m">低 29 位</text>
+    <text x="635" y="116" text-anchor="middle" class="s">workerCount（上限 CAPACITY = 2²⁹ − 1 ≈ 5.36 亿）</text>
+
+    <text x="60" y="160" class="s">COUNT_BITS = 32 − 3 = 29</text>
+  </g>
+
+  <!-- 五个状态 -->
+  <g transform="translate(70 320)">
+    <rect width="520" height="290" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="260" y="34" text-anchor="middle" class="t" fill="#5e5083">五个状态的高 3 位</text>
+
+    <text x="30" y="76" class="m" fill="#466b48">RUNNING    = -1 &lt;&lt; 29 → 111</text>
+    <text x="30" y="118" class="m">SHUTDOWN   =  0 &lt;&lt; 29 → 000</text>
+    <text x="30" y="160" class="m">STOP       =  1 &lt;&lt; 29 → 001</text>
+    <text x="30" y="202" class="m">TIDYING    =  2 &lt;&lt; 29 → 010</text>
+    <text x="30" y="244" class="m">TERMINATED =  3 &lt;&lt; 29 → 011</text>
+
+    <text x="30" y="278" class="s">低位全是 0，所以状态值和线程数互不干扰</text>
+  </g>
+
+  <!-- 为什么 -->
+  <g transform="translate(620 320)">
+    <rect width="510" height="290" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="255" y="34" text-anchor="middle" class="t" fill="#8a6b31">为什么这样排</text>
+
+    <rect x="30" y="56" width="450" height="90" rx="12" fill="#f4eace" stroke="#8a6b31" stroke-width="2"/>
+    <text x="50" y="86" class="b">RUNNING 最高位是 1 → 它是负数</text>
+    <text x="50" y="116" class="b">其余四个状态依次递增且非负</text>
+
+    <text x="30" y="182" class="b" fill="#466b48">于是可以直接做数值比较：</text>
+    <text x="30" y="214" class="m">if (rs &gt;= SHUTDOWN) { /* 已停止收新任务 */ }</text>
+    <text x="30" y="252" class="s">不用写一串 || 判断 —— 用编码顺序换判断简洁</text>
+  </g>
+
+  <!-- 掩码 -->
+  <g transform="translate(70 640)">
+    <rect width="1060" height="60" rx="14" fill="#ebe4d4" stroke="#8a7f6d"/>
+    <text x="28" y="38" class="b">runStateOf(c) = c &amp; ~CAPACITY（取高 3 位）  ·  workerCountOf(c) = c &amp; CAPACITY（取低 29 位）</text>
+  </g>
+</svg>

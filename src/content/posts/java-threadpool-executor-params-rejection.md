@@ -53,6 +53,22 @@ private static int runStateOf(int c)    { return c & ~CAPACITY; }   // 取高 3 
 private static int workerCountOf(int c) { return c & CAPACITY; }    // 取低 29 位
 ```
 
+这段是这个类里最"位运算"的部分，逐行拆开看每个常量为什么是它：
+
+- **`COUNT_BITS = Integer.SIZE - 3` = 29**：一个 int 有 32 位，拿最高的 3 位存运行状态，剩下 29 位存工作线程数。
+- **`CAPACITY = (1 << 29) - 1`**：低 29 位全为 1 的掩码（约 5.36 亿）。它既是"取线程数"的掩码，也顺带定义了**线程数的上限**——超过就溢出了，所以线程池理论上最多放 5 亿多个线程（现实中远远够用）。
+- **五个状态常量**：注意它们全部写成 `x << 29` 的形式，也就是说**只有高 3 位有值，低 29 位全是 0**。逐个看：
+  - `RUNNING = -1 << 29`：`-1` 的补码是 32 位全 1（`111...111`），左移 29 位后变成 `111` 后面跟 29 个 0，于是高 3 位是 `111`；
+  - `SHUTDOWN = 0 << 29` → 高 3 位 `000`；
+  - `STOP = 1 << 29` → `001`；`TIDYING = 2 << 29` → `010`；`TERMINATED = 3 << 29` → `011`。
+- **这个顺序是有意设计的**：`RUNNING` 因为最高位是 1 而成了**负数**，其余四个状态依次递增且都是非负数。于是后面的代码可以直接用 `rs >= SHUTDOWN` 这样的**数值比较**来判断"是否已经不接受新任务了"——如果状态值不是这么排的，就得写一串 `||` 判断。这是典型的"用编码顺序换判断简洁"。
+- **`runStateOf(c) = c & ~CAPACITY`**：`~CAPACITY` 是"低 29 位全 0、高 3 位全 1"的掩码，与运算后只剩高 3 位——也就是取出状态。
+- **`workerCountOf(c) = c & CAPACITY`**：与上低 29 位的掩码，取出线程数。
+
+**为什么非要把两个字段塞进一个 int？** 因为**状态和线程数经常要一起改**。比如"从 RUNNING 变成 SHUTDOWN，同时线程数一"这个动作，如果分成两个字段，就得做两次 CAS，中间的那一瞬间数据是不一致的（状态说 RUNNING、线程数却已经是 0），别的线程读到这里就可能做错判断。塞进一个 int 后，**一次 CAS 就能原子地改完两者**——这是 `ctl` 这个设计的全部理由。
+
+![ctl 的位布局：高 3 位状态，低 29 位线程数](/images/posts/threadpool-ctl-layout.svg)
+
 ## 三、五种状态及转换
 
 线程池有五态，各自的"能做什么"不同：
@@ -74,6 +90,50 @@ SHUTDOWN ──shutdownNow()──▶ STOP
 ```
 
 `shutdown()` 和 `shutdownNow()` 的差别，就是这张图最核心的一行：`shutdown()` 停止收新任务、但把队列里已排队的干完再停；`shutdownNow()` 停止收新任务、**不**处理队列（返回未执行的任务列表）、并中断正在跑的任务。所以"优雅停机"用 `shutdown()`（配合 `awaitTermination` 等它干完），"立即停机"用 `shutdownNow()`。
+
+两者的源码正好把"一个温和、一个强硬"体现得很清楚：
+
+```java
+public void shutdown() {
+    final ReentrantLock mainLock = this.mainLock;
+    mainLock.lock();                          // 关停动作要加锁，避免和别的关停并发
+    try {
+        checkShutdownAccess();
+        advanceRunState(SHUTDOWN);            // ① 状态推进到 SHUTDOWN
+        interruptIdleWorkers();               // ② 只中断「空闲」线程
+        onShutdown();                         // 钩子，给子类用
+    } finally {
+        mainLock.unlock();
+    }
+    tryTerminate();                           // ③ 尝试收尾
+}
+
+public List<Runnable> shutdownNow() {
+    List<Runnable> tasks;
+    final ReentrantLock mainLock = this.mainLock;
+    mainLock.lock();
+    try {
+        checkShutdownAccess();
+        advanceRunState(STOP);                // ① 状态推进到 STOP（比 SHUTDOWN 更狠）
+        interruptWorkers();                   // ② 中断「所有」线程
+        tasks = drainQueue();                 // ③ 把队列里没跑的任务倒出来返回
+    } finally {
+        mainLock.unlock();
+    }
+    tryTerminate();
+    return tasks;
+}
+```
+
+三段差异逐条对照：
+
+- **① 状态不同**：`shutdown` 推进到 `SHUTDOWN`，`shutdownNow` 推进到 `STOP`。这个差别决定了一切——`getTask` 里判断 `rs >= SHUTDOWN && (rs >= STOP || workQueue.isEmpty())` 时，`SHUTDOWN` 的线程会继续把队列取空，而 `STOP` 的线程立刻返回 `null`、退出循环；
+- **② 中断范围不同**：`shutdown` 调 `interruptIdleWorkers()`，**只中断空闲线程**（那些正阻塞在 `getTask` 取任务的），正在执行任务的线程不去打断它，让当前任务跑完；`shutdownNow` 调 `interruptWorkers()`，**所有线程一律中断**，正在跑的任务也会收到中断信号（能不能停下来，取决于任务自己是否响应中断）；
+- **③ 队列处理不同**：`shutdown` 不动队列，让它自然被消费完；`shutdownNow` 用 `drainQueue()` 把队列里**还没开始执行**的任务全部取出来、作为返回值交给你——所以"任务丢了"这件事是显式的，你能拿到它们做补偿或记录。
+
+最后两者都调 `tryTerminate()`：它检查"是不是所有线程都退出了"，是的话把状态推进到 `TIDYING` → 执行 `terminated()` 钩子 → `TERMINATED`。
+
+`tryTerminate()` 还有个容易忽略的作用：**它是"渐进式收尾"的引擎**。`SHUTDOWN` 状态下队列里还有任务时，`tryTerminate` 反而会**补建一个线程**去处理队列——这就是为什么 `shutdown()` 之后线程池还能继续干活，直到队列清空才真正终止。
 
 ![线程池五种状态及转换](/images/posts/java-threadpool-state.svg)
 
@@ -105,6 +165,47 @@ public void execute(Runnable command) {
 ```
 
 三个细节值得盯。第一，第 ② 步入队成功后有个**双重检查**：入队的瞬间线程池可能被 `shutdown` 了，所以要重读状态，若已停止就从队列里移除这个任务并拒绝。第二，`addWorker(null, false)` 传的是 `null` 任务——它的作用是"队列里还有活、但没有线程去干，补一个线程"，这个线程会去 `getTask` 里从队列取任务。第三，第 ③ 步的 `addWorker(command, false)` 是"建非核心线程"，第二个参数 `false` 表示"不是核心"，受 `maximumPoolSize` 约束。
+
+`addWorker` 自己做的事，是把"加线程"这个动作拆成"先 CAS 占名额、再真正建线程"两步：
+
+```java
+private boolean addWorker(Runnable firstTask, boolean core) {
+    retry:
+    for (;;) {
+        int c = ctl.get();
+        int rs = runStateOf(c);
+        // ① 状态检查：已停止就不再接受新线程（除非是 SHUTDOWN 且队列非空且任务是 null）
+        if (rs >= SHUTDOWN &&
+            !(rs == SHUTDOWN && firstTask == null && !workQueue.isEmpty()))
+            return false;
+        for (;;) {
+            int wc = workerCountOf(c);
+            // ② 容量检查：核心线程看 corePoolSize，非核心看 maximumPoolSize
+            if (wc >= CAPACITY || wc >= (core ? corePoolSize : maximumPoolSize))
+                return false;
+            // ③ 先 CAS 把 workerCount 加一，占住名额
+            if (compareAndIncrementWorkerCount(c))
+                break retry;
+            c = ctl.get();
+            if (runStateOf(c) != rs) continue retry;   // 状态变了，回到外层重试
+        }
+    }
+    // ④ 名额占住了，才真正创建 Worker、加入 workers 集合、启动线程
+    boolean workerStarted = false;
+    Worker w = new Worker(firstTask);
+    workers.add(w);
+    w.thread.start();
+    workerStarted = true;
+    return workerStarted;
+}
+```
+
+这段源码里有几个关键设计，逐点看：
+
+- **① 状态检查**：线程池已经 `STOP` 或更靠后的状态时，直接拒绝建线程。那个例外条件 `rs == SHUTDOWN && firstTask == null && !workQueue.isEmpty()` 是给"关停时补线程清队列"用的——`shutdown()` 之后队列里还有任务，得允许再建线程把它们干完；
+- **② 容量检查**：`core` 参数在这里起作用——建核心线程比的是 `corePoolSize`，建非核心线程比的是 `maximumPoolSize`。这也解释了 `addWorker` 第二个参数的真正含义：**它不是"新建的线程属于哪一类"，而是"按哪个上限来判断能不能建"**；
+- **③ 先用 CAS 占名额**：注意顺序——**先 CAS 把 `workerCount` 加一，再去创建线程**。为什么不能反过来？因为创建线程、加入集合、启动线程是慢操作，如果先建再计数，多个线程可能同时判断"还没到上限"、一起创建，导致线程数超限。**先把名额原子地占住，再慢慢建**，这是并发编程里"预订-交付"的常见手法。
+- **④ 占住名额后**才 `new Worker(...)`、加入 `workers` 集合、`thread.start()`。
 
 ![任务进入线程池的完整流程](/images/posts/java-threadpool-flow.svg)
 
