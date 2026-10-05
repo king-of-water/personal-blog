@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">Redis 可观测性信号的四个层级</title>
+  <desc id="desc">从下到上：指标（INFO 各段、监控曲线）最便宜、适合自动告警；事件（SLOWLOG、Latency Monitor）保留单条异常细节；命令统计（commandstats、latencystats）按命令拆延迟分位；原始流量（MONITOR、抓包）最贵，只做兜底。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 16px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="54" class="h">从指标发现问题，用事件和命令定位，原始层兜底</text>
+  <text x="56" y="88" class="b">越往下越便宜、越粗；越往上越贵、越细。大多数排障在三层内收敛。</text>
+
+  <g transform="translate(560 140)">
+    <rect x="-210" y="0" width="420" height="110" rx="16" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+    <text x="0" y="40" text-anchor="middle" class="t" fill="#943b37">原始流量 raw</text>
+    <text x="0" y="74" text-anchor="middle" class="m">MONITOR / 抓包</text>
+    <text x="0" y="98" text-anchor="middle" class="s">最贵，只做兜底</text>
+  </g>
+  <g transform="translate(560 250)">
+    <rect x="-300" y="0" width="600" height="110" rx="16" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="0" y="40" text-anchor="middle" class="t" fill="#295279">命令级统计 command stats</text>
+    <text x="0" y="74" text-anchor="middle" class="m">commandstats / latencystats</text>
+    <text x="0" y="98" text-anchor="middle" class="s">按命令拆 P50/P99，定位哪类命令慢</text>
+  </g>
+  <g transform="translate(560 360)">
+    <rect x="-390" y="0" width="780" height="110" rx="16" fill="#f4eace" stroke="#8a6b31" stroke-width="2"/>
+    <text x="0" y="40" text-anchor="middle" class="t" fill="#725923">事件 event</text>
+    <text x="0" y="74" text-anchor="middle" class="m">SLOWLOG / LATENCY LATEST</text>
+    <text x="0" y="98" text-anchor="middle" class="s">保留单条命令、单次 fork/expire 的细节</text>
+  </g>
+  <g transform="translate(560 470)">
+    <rect x="-480" y="0" width="960" height="110" rx="16" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="0" y="40" text-anchor="middle" class="t" fill="#466b48">指标 metric</text>
+    <text x="0" y="74" text-anchor="middle" class="m">INFO 各段 / 监控曲线</text>
+    <text x="0" y="98" text-anchor="middle" class="s">便宜、适合自动告警和看趋势</text>
+  </g>
+  <text x="130" y="180" class="s">粒度粗 → 细</text>
+  <text x="130" y="230" class="s">代价低 → 高</text>
+</svg>

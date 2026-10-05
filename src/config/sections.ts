@@ -74,9 +74,6 @@ export const backendSubcategories: Subcategory[] = [
 		name: 'Redis',
 		slug: 'redis',
 		description: '缓存、数据结构、集群与稳定性。',
-		plannedTopics: [
-			{ title: 'Redis 线上排障与可观测性', seriesOrder: 120 },
-		],
 	},
 	{ name: 'Java', slug: 'java', description: '语言、JVM、并发与常用框架。' },
 	{ name: '消息队列', slug: 'message-queue', description: '异步通信、削峰、顺序与消息可靠性。' },

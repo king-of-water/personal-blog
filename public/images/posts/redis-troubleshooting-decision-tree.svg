@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">从现象到根因的 Redis 排障决策树</title>
+  <desc id="desc">常见现象（延迟高、内存高、CPU 高、错误率、副本落后）各自先看哪段 INFO 或哪个工具，再指向根因域：慢命令与后台任务、内存构成、单主路径 CPU、连接与淘汰、复制进度。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 15px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="54" class="h">先分清现象，再选第一层信号</text>
+  <text x="56" y="88" class="b">每种现象对应一个 INFO 段或一个工具，再深入根因域。</text>
+
+  <text x="90" y="150" class="t">现象</text>
+  <text x="400" y="150" class="t">先看</text>
+  <text x="800" y="150" class="t">根因域</text>
+
+  <g transform="translate(70 180)">
+    <rect width="230" height="72" rx="14" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="115" y="44" text-anchor="middle" class="b">延迟高</text>
+  </g>
+  <line x1="300" y1="216" x2="370" y2="216" stroke="#8a7f6d" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <g transform="translate(370 180)">
+    <rect width="270" height="72" rx="14" fill="#d8dee0" stroke="#295279"/>
+    <text x="135" y="44" text-anchor="middle" class="m">stats / latencystats / SLOWLOG</text>
+  </g>
+  <line x1="640" y1="216" x2="710" y2="216" stroke="#8a7f6d" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <g transform="translate(710 180)">
+    <rect width="330" height="72" rx="14" fill="#dee3d6" stroke="#466b48"/>
+    <text x="165" y="44" text-anchor="middle" class="b">慢命令 / 后台任务 / 网络</text>
+  </g>
+
+  <g transform="translate(70 282)">
+    <rect width="230" height="72" rx="14" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="115" y="44" text-anchor="middle" class="b">内存高</text>
+  </g>
+  <line x1="300" y1="318" x2="370" y2="318" stroke="#8a7f6d" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <g transform="translate(370 282)">
+    <rect width="270" height="72" rx="14" fill="#d8dee0" stroke="#295279"/>
+    <text x="135" y="44" text-anchor="middle" class="m">memory / CLIENT LIST omem</text>
+  </g>
+  <line x1="640" y1="318" x2="710" y2="318" stroke="#8a7f6d" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <g transform="translate(710 282)">
+    <rect width="330" height="72" rx="14" fill="#dee3d6" stroke="#466b48"/>
+    <text x="165" y="44" text-anchor="middle" class="b">数据 / 碎片 / 客户端缓冲区</text>
+  </g>
+
+  <g transform="translate(70 384)">
+    <rect width="230" height="72" rx="14" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="115" y="44" text-anchor="middle" class="b">CPU 高</text>
+  </g>
+  <line x1="300" y1="420" x2="370" y2="420" stroke="#8a7f6d" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <g transform="translate(370 384)">
+    <rect width="270" height="72" rx="14" fill="#d8dee0" stroke="#295279"/>
+    <text x="135" y="44" text-anchor="middle" class="m">cpu / commandstats</text>
+  </g>
+  <line x1="640" y1="420" x2="710" y2="420" stroke="#8a7f6d" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <g transform="translate(710 384)">
+    <rect width="330" height="72" rx="14" fill="#dee3d6" stroke="#466b48"/>
+    <text x="165" y="44" text-anchor="middle" class="b">单主路径被某类命令占满</text>
+  </g>
+
+  <g transform="translate(70 486)">
+    <rect width="230" height="72" rx="14" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="115" y="44" text-anchor="middle" class="b">错误率</text>
+  </g>
+  <line x1="300" y1="522" x2="370" y2="522" stroke="#8a7f6d" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <g transform="translate(370 486)">
+    <rect width="270" height="72" rx="14" fill="#d8dee0" stroke="#295279"/>
+    <text x="135" y="44" text-anchor="middle" class="m">stats（rejected / evicted）</text>
+  </g>
+  <line x1="640" y1="522" x2="710" y2="522" stroke="#8a7f6d" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <g transform="translate(710 486)">
+    <rect width="330" height="72" rx="14" fill="#dee3d6" stroke="#466b48"/>
+    <text x="165" y="44" text-anchor="middle" class="b">连接打满 / 淘汰 / 缓存穿透</text>
+  </g>
+
+  <g transform="translate(70 588)">
+    <rect width="230" height="72" rx="14" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="115" y="44" text-anchor="middle" class="b">副本落后</text>
+  </g>
+  <line x1="300" y1="624" x2="370" y2="624" stroke="#8a7f6d" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <g transform="translate(370 588)">
+    <rect width="270" height="72" rx="14" fill="#d8dee0" stroke="#295279"/>
+    <text x="135" y="44" text-anchor="middle" class="m">replication（offset 差）</text>
+  </g>
+  <line x1="640" y1="624" x2="710" y2="624" stroke="#8a7f6d" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <g transform="translate(710 588)">
+    <rect width="330" height="72" rx="14" fill="#dee3d6" stroke="#466b48"/>
+    <text x="165" y="44" text-anchor="middle" class="b">传输慢 / 回放慢</text>
+  </g>
+</svg>
