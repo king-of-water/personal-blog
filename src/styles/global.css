@@ -331,6 +331,22 @@ main { min-height: calc(100vh - 150px); }
 	.footer-inner { flex-direction: column; }
 }
 
+/* Typography responds to the pointer without moving the surrounding layout. */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+	.intro-main h1, .intro-main > p, .page-intro h1, .page-intro > p:not(.eyebrow),
+	.topic-row h3, .subcategory-grid h2, .home-featured-item strong {
+		transform-origin: left center;
+		transition: transform 520ms var(--spring), color 220ms ease;
+	}
+	.intro-main h1, .intro-main > p, .page-intro h1, .page-intro > p:not(.eyebrow) { width: fit-content; }
+	.intro-main h1:hover, .page-intro h1:hover { transform: translateY(-3px) scale(1.035); color: var(--accent); }
+	.intro-main > p:hover, .page-intro > p:not(.eyebrow):hover { transform: translateY(-2px) scale(1.025); color: var(--accent); }
+	.topic-row:is(:hover, :focus-visible) h3 { transform: translateY(-2px) scale(1.07); }
+	.subcategory-grid > a { transition-timing-function: ease, ease, ease, ease, var(--spring); }
+	.subcategory-grid > a:is(:hover, :focus-visible) h2 { transform: translate(3px, -2px) scale(1.055); }
+	.home-featured-item:is(a):is(:hover, :focus-visible) strong { transform: translateY(-2px) scale(1.025); }
+}
+
 @media (prefers-reduced-motion: reduce) {
 	.brand:is(:hover, :focus-visible) .brand-mark, .brand:is(:hover, :focus-visible) .brand-copy,
 	.home-portrait:is(:hover, :focus-visible) img, .home-featured-item:is(a):is(:hover, :focus-visible) { transform: none; }
