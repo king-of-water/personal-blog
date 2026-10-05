@@ -80,7 +80,6 @@ export const backendSubcategories: Subcategory[] = [
 		slug: 'java',
 		description: '语言、JVM、并发与常用框架。',
 		plannedTopics: [
-			{ title: 'synchronized 与 ReentrantLock：锁升级与 AQS', seriesOrder: 50 },
 			{ title: 'ThreadLocal：线程私有变量与内存泄漏', seriesOrder: 60 },
 			{ title: '线程池：七个参数、拒绝策略与大小', seriesOrder: 70 },
 			{ title: '垃圾回收算法与收集器：从 Serial 到 ZGC', seriesOrder: 80 },

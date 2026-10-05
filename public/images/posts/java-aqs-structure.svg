@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">AQS 的 state、CLH 队列与 CAS</title>
+  <desc id="desc">AQS 由三样东西组成：一个 volatile int state 表示锁状态，一个 FIFO 队列存放等待的线程，以及一组 CAS 操作。加锁用 CAS 把 state 从 0 改成 1，失败就入队挂起；释放时把 state 减到 0，唤醒队头。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <marker id="arrowG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#466b48"/></marker>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 15px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="54" class="h">AQS = volatile state + FIFO 队列 + CAS</text>
+  <text x="56" y="88" class="b">ReentrantLock、Semaphore、CountDownLatch 都建立在这三样东西上。</text>
+
+  <g transform="translate(70 160)">
+    <rect width="300" height="380" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="150" y="38" text-anchor="middle" class="t" fill="#466b48">AQS</text>
+    <rect x="40" y="60" width="220" height="90" rx="12" fill="#dee3d6" stroke="#466b48"/>
+    <text x="150" y="95" text-anchor="middle" class="m">volatile int state</text>
+    <text x="150" y="125" text-anchor="middle" class="s">0 = 无锁，1 = 已锁</text>
+    <text x="150" y="180" text-anchor="middle" class="m">CAS(state, 0, 1)</text>
+    <text x="150" y="210" text-anchor="middle" class="s">把 state 从 0 改成 1，成功即抢到锁</text>
+    <text x="150" y="260" text-anchor="middle" class="m">FIFO 队列（CLH）</text>
+    <text x="150" y="290" text-anchor="middle" class="s">抢不到锁的线程挂到队尾</text>
+    <text x="150" y="330" text-anchor="middle" class="s">释放锁时唤醒队头</text>
+  </g>
+
+  <line x1="370" y1="350" x2="460" y2="350" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <g transform="translate(460 160)">
+    <rect width="670" height="380" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="335" y="38" text-anchor="middle" class="t" fill="#5e5083">抢锁与排队的过程</text>
+    <rect x="50" y="60" width="570" height="60" rx="12" fill="#e3dde2" stroke="#5e5083"/>
+    <text x="335" y="86" text-anchor="middle" class="b">线程 T1：CAS(state,0,1) 成功 → 持有锁，state=1</text>
+    <text x="335" y="108" text-anchor="middle" class="s">可重入时再进一层 state 加一</text>
+
+    <rect x="50" y="140" width="270" height="90" rx="12" fill="#f4eace" stroke="#8a6b31"/>
+    <text x="185" y="172" text-anchor="middle" class="b">T2：CAS 失败</text>
+    <text x="185" y="198" text-anchor="middle" class="s">挂到队尾，自旋几次后挂起</text>
+    <rect x="350" y="140" width="270" height="90" rx="12" fill="#f4eace" stroke="#8a6b31"/>
+    <text x="485" y="172" text-anchor="middle" class="b">T3：CAS 失败</text>
+    <text x="485" y="198" text-anchor="middle" class="s">排在 T2 后面</text>
+
+    <rect x="50" y="260" width="570" height="60" rx="12" fill="#dee3d6" stroke="#466b48"/>
+    <text x="335" y="286" text-anchor="middle" class="b">T1 释放：state 减到 0 → 唤醒队头 T2</text>
+    <text x="335" y="308" text-anchor="middle" class="s">T2 再 CAS，抢到锁，state=1</text>
+  </g>
+
+  <g transform="translate(70 580)">
+    <rect width="1060" height="70" rx="16" fill="#ebe4d4" stroke="#8a7f6d"/>
+    <text x="28" y="36" class="b">Semaphore 的 state 是「许可证数」，CountDownLatch 的 state 是「倒计数」——换 state 的语义，就得到不同的同步器。</text>
+    <text x="28" y="60" class="s">这就是 AQS 值得吃透的原因：它是 j.u.c 里几乎所有同步器的公共底座。</text>
+  </g>
+</svg>

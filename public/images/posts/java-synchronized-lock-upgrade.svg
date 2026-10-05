@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">synchronized 的锁升级路径</title>
+  <desc id="desc">无锁状态不竞争；偏向锁记录线程 ID，同一线程重复进入零开销；出现竞争后升级为轻量级锁，用 CAS 加自旋、不阻塞；竞争再激烈升级为重量级锁，向操作系统申请 Monitor、阻塞挂起等待线程。升级不可逆。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 15px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="54" class="h">只在竞争时才往上升，多数锁停留在低开销阶段</text>
+  <text x="56" y="88" class="b">升级不可逆：无锁 → 偏向 → 轻量级 → 重量级。</text>
+
+  <g transform="translate(70 170)">
+    <rect width="230" height="200" rx="16" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="115" y="40" text-anchor="middle" class="t">无锁</text>
+    <text x="115" y="78" text-anchor="middle" class="b">Mark Word 记录锁状态</text>
+    <text x="115" y="112" text-anchor="middle" class="s">不竞争，无开销</text>
+  </g>
+  <line x1="300" y1="270" x2="350" y2="270" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <g transform="translate(350 170)">
+    <rect width="230" height="200" rx="16" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="115" y="40" text-anchor="middle" class="t" fill="#295279">偏向锁</text>
+    <text x="115" y="78" text-anchor="middle" class="b">记录偏向线程 ID</text>
+    <text x="115" y="112" text-anchor="middle" class="s">同线程重复进入，直接放行</text>
+    <text x="115" y="150" text-anchor="middle" class="s">JDK 15 默认禁用</text>
+  </g>
+  <line x1="580" y1="270" x2="630" y2="270" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <g transform="translate(630 170)">
+    <rect width="230" height="200" rx="16" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="115" y="40" text-anchor="middle" class="t" fill="#8a6b31">轻量级锁</text>
+    <text x="115" y="78" text-anchor="middle" class="b">CAS + 自旋</text>
+    <text x="115" y="112" text-anchor="middle" class="s">不阻塞线程</text>
+    <text x="115" y="150" text-anchor="middle" class="s">适合竞争不激烈、临界区短</text>
+  </g>
+  <line x1="860" y1="270" x2="910" y2="270" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <g transform="translate(910 170)">
+    <rect width="220" height="200" rx="16" fill="#eed9d3" stroke="#943b37" stroke-width="2"/>
+    <text x="110" y="40" text-anchor="middle" class="t" fill="#943b37">重量级锁</text>
+    <text x="110" y="78" text-anchor="middle" class="b">OS Monitor</text>
+    <text x="110" y="112" text-anchor="middle" class="s">阻塞 + 唤醒</text>
+    <text x="110" y="150" text-anchor="middle" class="s">竞争激烈才值得</text>
+  </g>
+
+  <g transform="translate(70 430)">
+    <rect width="1060" height="180" rx="20" fill="#ebe4d4" stroke="#8a7f6d"/>
+    <text x="28" y="38" class="t">为什么这样设计</text>
+    <text x="28" y="74" class="b">大多数锁其实很少被竞争（锁短暂持有），让它们停在偏向锁/轻量级锁，几乎零开销。</text>
+    <text x="28" y="104" class="b">只有竞争真的激烈，才付出重量级锁的「线程挂起 + 唤醒」上下文切换成本。</text>
+    <text x="28" y="140" class="b">这是「乐观地假设无竞争、竞争了再升级」的思路，和 CAS 的乐观思想一脉相承。</text>
+  </g>
+</svg>
