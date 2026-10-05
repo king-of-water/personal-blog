@@ -55,7 +55,6 @@ export const backendSubcategories: Subcategory[] = [
 		slug: 'data-structures-storage',
 		description: '从日常工程现象出发，理解背后的机制，对比不同方案的适用条件、成本与取舍。',
 		plannedTopics: [
-			{ title: '缓存一致性：更新、失效与并发竞态（下一篇）', seriesOrder: 30 },
 			{ title: '哈希的不同用法：哈希表、冲突处理与一致性哈希的工程取舍', seriesOrder: 40 },
 			{ title: '判断“有没有”：Redis Bitmap、Bloom Filter 与精确集合的选型', seriesOrder: 50 },
 			{ title: '延迟队列怎样管理时间：堆、时间轮与 ZSet 的工程取舍', seriesOrder: 60 },
