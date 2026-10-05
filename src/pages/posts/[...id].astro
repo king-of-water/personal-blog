@@ -179,7 +179,7 @@ const librarySections = categorySections.map((section) => ({
 				if (linkRect.top < safeTop || linkRect.bottom > safeBottom) {
 					desktopTocScroller.scrollTo({
 						top: Math.max(0, desktopTocScroller.scrollTop + linkRect.top - scrollerRect.top - desktopTocScroller.clientHeight * 0.28),
-						behavior: 'auto',
+						behavior: 'smooth',
 					});
 				}
 				lastActiveId = activeId;
@@ -252,6 +252,17 @@ const librarySections = categorySections.map((section) => ({
 			});
 			window.addEventListener('scroll', updateBackToTop, { passive: true });
 			updateBackToTop();
+		}
+
+		// 侧栏隐藏了滚动条，用上下渐隐提示「还有内容」
+		for (const scroller of document.querySelectorAll<HTMLElement>('.article-library-inner, .article-toc-sidebar-inner')) {
+			const syncScroller = () => {
+				scroller.classList.toggle('is-scrollable', scroller.scrollHeight > scroller.clientHeight + 1);
+				scroller.classList.toggle('is-scrolled', scroller.scrollTop > 2);
+			};
+			scroller.addEventListener('scroll', syncScroller, { passive: true });
+			window.addEventListener('resize', syncScroller);
+			syncScroller();
 		}
 
 		const statsRoot = document.querySelector<HTMLElement>('[data-post-stats]');
