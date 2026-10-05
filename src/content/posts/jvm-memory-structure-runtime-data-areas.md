@@ -6,8 +6,8 @@ subcategory: Java
 articleClass: flagship
 seriesOrder: 10
 featured: true
-publishedAt: 2026-06-03T23:31:00+08:00
-updatedAt: 2026-06-03T23:31:00+08:00
+publishedAt: 2026-06-03T20:26:00+08:00
+updatedAt: 2026-06-03T20:26:00+08:00
 tags: [Java, JVM, 运行时数据区, 堆, 栈, 方法区, 元空间, 栈帧, 对象内存布局, 逃逸分析]
 ---
 

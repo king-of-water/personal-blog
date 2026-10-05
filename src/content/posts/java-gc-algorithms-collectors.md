@@ -6,8 +6,8 @@ subcategory: Java
 articleClass: focused
 seriesOrder: 80
 featured: true
-publishedAt: 2026-06-12T22:09:00+08:00
-updatedAt: 2026-06-12T22:09:00+08:00
+publishedAt: 2026-06-12T20:03:00+08:00
+updatedAt: 2026-06-12T20:03:00+08:00
 tags: [Java, GC, 垃圾回收, 标记清除, 复制算法, 标记整理, G1, ZGC, CMS, 分代收集]
 ---
 

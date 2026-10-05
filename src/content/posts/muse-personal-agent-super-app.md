@@ -4,7 +4,7 @@ description: Muse 想成为替用户完成所有事情的 Personal Agent。中�
 category: 行业
 articleClass: focused
 featured: true
-publishedAt: 2026-10-05T22:09:00+08:00
+publishedAt: 2026-10-05T22:03:00+08:00
 tags: [Muse, Personal Agent, 超级 App, 平台生态, 中美互联网]
 ---
 

@@ -5,7 +5,7 @@ category: 后端
 subcategory: 分布式
 articleClass: flagship
 seriesOrder: 100
-publishedAt: 2026-07-24T14:03:00+08:00
+publishedAt: 2026-09-05T14:11:00+08:00
 tags: [分布式系统, MySQL, 数据库复制, 读写分离, 复制延迟, Quorum, 一致性]
 ---
 

@@ -6,8 +6,8 @@ subcategory: LLM 原理与训练
 articleClass: focused
 seriesOrder: 50
 featured: false
-publishedAt: 2026-08-23T22:09:00+08:00
-updatedAt: 2026-08-23T22:09:00+08:00
+publishedAt: 2026-06-21T22:25:00+08:00
+updatedAt: 2026-06-21T22:25:00+08:00
 tags: [LLM, 后训练, SFT, RLHF, DPO, GRPO, 强化学习, 偏好对齐]
 tools:
   - name: humanizer

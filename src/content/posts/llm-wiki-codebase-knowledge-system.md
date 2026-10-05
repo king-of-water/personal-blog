@@ -6,8 +6,8 @@ subcategory: RAG 与知识工程
 articleClass: flagship
 seriesOrder: 50
 featured: false
-publishedAt: 2026-09-01T22:48:00+08:00
-updatedAt: 2026-09-01T22:48:00+08:00
+publishedAt: 2026-07-11T14:00:00+08:00
+updatedAt: 2026-07-11T14:00:00+08:00
 tags: [LLM Wiki, 代码知识库, 知识工程, Context Engineering, 代码理解]
 tools:
   - name: humanizer

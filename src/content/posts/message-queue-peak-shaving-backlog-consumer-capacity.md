@@ -5,7 +5,7 @@ category: 后端
 subcategory: 系统设计与高并发
 articleClass: flagship
 seriesOrder: 50
-publishedAt: 2026-08-06T10:44:00+08:00
+publishedAt: 2026-09-25T20:38:00+08:00
 tags: [消息队列, Kafka, RabbitMQ, 削峰, 消息积压, 消费者, 背压, 重试, 高并发]
 ---
 

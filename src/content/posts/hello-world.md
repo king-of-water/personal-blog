@@ -3,7 +3,7 @@ title: 你好，世界
 description: 这是博客的第一篇文章，也是一段长期记录的开始。
 category: 项目
 articleClass: field-note
-publishedAt: 2026-06-01T21:07:00+08:00
+publishedAt: 2026-06-01T20:00:00+08:00
 tags: [随笔, 博客]
 ---
 

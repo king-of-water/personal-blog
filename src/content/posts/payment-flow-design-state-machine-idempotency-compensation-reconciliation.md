@@ -5,7 +5,7 @@ category: 后端
 subcategory: 系统设计与高并发
 articleClass: flagship
 seriesOrder: 110
-publishedAt: 2026-08-13T22:18:00+08:00
+publishedAt: 2026-10-02T20:59:00+08:00
 tags: [支付系统, 状态机, 幂等, 补偿, 对账, 消息队列, Scanner, CAS, 系统设计]
 ---
 

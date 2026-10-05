@@ -5,7 +5,7 @@ category: 后端
 subcategory: 分布式
 articleClass: flagship
 seriesOrder: 130
-publishedAt: 2026-07-26T21:52:00+08:00
+publishedAt: 2026-09-06T23:11:00+08:00
 tags: [分布式任务, 定时任务, 租约, Leader Election, 幂等, Fencing Token, 调度系统]
 ---
 

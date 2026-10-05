@@ -6,8 +6,8 @@ subcategory: Redis
 articleClass: field-note
 seriesOrder: 30
 featured: true
-publishedAt: 2026-06-27T23:26:00+08:00
-updatedAt: 2026-06-27T23:26:00+08:00
+publishedAt: 2026-07-14T21:09:00+08:00
+updatedAt: 2026-07-14T21:09:00+08:00
 tags: [Redis, Pipeline, RTT, 批处理, 网络延迟, 客户端缓冲区]
 ---
 

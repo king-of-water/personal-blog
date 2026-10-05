@@ -6,8 +6,8 @@ subcategory: LLM 原理与训练
 articleClass: focused
 seriesOrder: 30
 featured: false
-publishedAt: 2026-08-20T10:44:00+08:00
-updatedAt: 2026-08-20T10:44:00+08:00
+publishedAt: 2026-06-19T20:24:00+08:00
+updatedAt: 2026-06-19T20:24:00+08:00
 tags: [LLM, KV Cache, Attention, GQA, PagedAttention, 推理优化, 显存]
 tools:
   - name: humanizer

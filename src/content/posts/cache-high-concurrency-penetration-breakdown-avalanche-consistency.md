@@ -5,7 +5,7 @@ category: 后端
 subcategory: 系统设计与高并发
 articleClass: flagship
 seriesOrder: 40
-publishedAt: 2026-08-06T09:35:00+08:00
+publishedAt: 2026-09-24T09:35:00+08:00
 tags: [缓存, Redis, Cache Aside, 缓存穿透, 缓存击穿, 缓存雪崩, 缓存一致性, 高并发]
 ---
 

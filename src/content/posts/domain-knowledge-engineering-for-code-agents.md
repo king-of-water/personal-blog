@@ -6,8 +6,8 @@ subcategory: RAG 与知识工程
 articleClass: flagship
 seriesOrder: 20
 featured: false
-publishedAt: 2026-08-29T22:18:00+08:00
-updatedAt: 2026-08-29T22:18:00+08:00
+publishedAt: 2026-07-07T20:48:00+08:00
+updatedAt: 2026-07-07T20:48:00+08:00
 tags: [Agent, Skills, 代码知识库, 知识工程, 软件工程]
 ---
 

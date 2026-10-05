@@ -6,8 +6,8 @@ subcategory: AI 应用与思考
 articleClass: flagship
 seriesOrder: 40
 featured: false
-publishedAt: 2026-10-02T10:44:00+08:00
-updatedAt: 2026-10-02T10:44:00+08:00
+publishedAt: 2026-09-18T20:17:00+08:00
+updatedAt: 2026-09-18T20:17:00+08:00
 tags: [AI Coding, Code Agent, 知识工程, Context Engineering, SDD, 软件工程]
 tools:
   - name: humanizer

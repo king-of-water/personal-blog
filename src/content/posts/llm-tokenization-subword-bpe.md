@@ -6,8 +6,8 @@ subcategory: LLM 原理与训练
 articleClass: focused
 seriesOrder: 20
 featured: false
-publishedAt: 2026-08-19T09:35:00+08:00
-updatedAt: 2026-08-19T09:35:00+08:00
+publishedAt: 2026-06-18T09:09:00+08:00
+updatedAt: 2026-06-18T09:09:00+08:00
 tags: [LLM, Tokenization, BPE, Token, Tokenizer, 词表, 子词]
 tools:
   - name: humanizer

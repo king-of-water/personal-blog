@@ -6,8 +6,8 @@ subcategory: Redis
 articleClass: flagship
 seriesOrder: 120
 featured: true
-publishedAt: 2026-07-08T10:44:00+08:00
-updatedAt: 2026-07-08T10:44:00+08:00
+publishedAt: 2026-07-25T14:44:00+08:00
+updatedAt: 2026-07-25T14:44:00+08:00
 tags: [Redis, 可观测性, 排障, INFO, SLOWLOG, Latency Monitor, 监控, 告警, 指标, 故障排查]
 ---
 

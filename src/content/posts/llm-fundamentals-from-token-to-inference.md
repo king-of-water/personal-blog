@@ -6,8 +6,8 @@ subcategory: LLM 原理与训练
 articleClass: flagship
 seriesOrder: 1
 featured: false
-publishedAt: 2026-08-15T20:41:00+08:00
-updatedAt: 2026-08-15T20:41:00+08:00
+publishedAt: 2026-06-14T20:29:00+08:00
+updatedAt: 2026-06-14T20:29:00+08:00
 tags: [LLM, Transformer, Attention, Token, Pretraining, Post-training, KV Cache]
 tools:
   - name: humanizer

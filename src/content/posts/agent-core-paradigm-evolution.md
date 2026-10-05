@@ -6,8 +6,8 @@ subcategory: AI 应用与思考
 articleClass: focused
 seriesOrder: 5
 featured: false
-publishedAt: 2026-09-28T23:31:00+08:00
-updatedAt: 2026-09-28T23:31:00+08:00
+publishedAt: 2026-09-13T20:22:00+08:00
+updatedAt: 2026-09-13T20:22:00+08:00
 tags: [Agent, ReAct, Context Engineering, Agent Skills, Memory, Tools]
 tools:
   - name: humanizer

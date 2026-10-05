@@ -6,8 +6,8 @@ subcategory: RAG 与知识工程
 articleClass: flagship
 seriesOrder: 40
 featured: false
-publishedAt: 2026-08-31T20:41:00+08:00
-updatedAt: 2026-08-31T20:41:00+08:00
+publishedAt: 2026-07-10T20:17:00+08:00
+updatedAt: 2026-07-10T20:17:00+08:00
 tags: [FastCode, Code RAG, 代码知识库, Context Engineering, 代码检索]
 tools:
   - name: humanizer

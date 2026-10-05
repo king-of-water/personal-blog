@@ -6,8 +6,8 @@ subcategory: Java
 articleClass: focused
 seriesOrder: 60
 featured: true
-publishedAt: 2026-06-10T10:44:00+08:00
-updatedAt: 2026-06-10T10:44:00+08:00
+publishedAt: 2026-06-10T20:47:00+08:00
+updatedAt: 2026-06-10T20:47:00+08:00
 tags: [Java, ThreadLocal, ThreadLocalMap, 线性探测, 弱引用, 强引用, expungeStaleEntry, 内存泄漏, InheritableThreadLocal]
 ---
 

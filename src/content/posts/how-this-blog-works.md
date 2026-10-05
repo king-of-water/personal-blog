@@ -4,7 +4,7 @@ description: 用 Astro、GitHub 和 Cloudflare Pages 搭建一个无需维护服
 category: 项目
 articleClass: field-note
 featured: true
-publishedAt: 2026-06-01T22:18:00+08:00
+publishedAt: 2026-06-01T21:35:00+08:00
 tags: [Astro, Cloudflare]
 ---
 

@@ -6,8 +6,8 @@ subcategory: MySQL
 articleClass: focused
 seriesOrder: 80
 featured: true
-publishedAt: 2026-06-23T09:35:00+08:00
-updatedAt: 2026-06-23T09:35:00+08:00
+publishedAt: 2026-07-03T22:41:00+08:00
+updatedAt: 2026-07-03T22:41:00+08:00
 tags: [MySQL, 表结构设计, 主键, 数据类型, 索引, JSON, 大字段]
 ---
 

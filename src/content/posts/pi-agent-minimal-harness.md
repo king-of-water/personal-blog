@@ -6,8 +6,8 @@ subcategory: Agent 产品拆解
 articleClass: flagship
 seriesOrder: 10
 featured: false
-publishedAt: 2026-09-18T10:44:00+08:00
-updatedAt: 2026-09-18T10:44:00+08:00
+publishedAt: 2026-08-15T15:35:00+08:00
+updatedAt: 2026-08-15T15:35:00+08:00
 tags: [Pi Agent, Agent Harness, Agent Loop, Tool Calling, Context Engineering]
 tools:
   - name: humanizer

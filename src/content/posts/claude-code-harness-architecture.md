@@ -6,8 +6,8 @@ subcategory: Agent 产品拆解
 articleClass: flagship
 seriesOrder: 20
 featured: false
-publishedAt: 2026-09-19T14:03:00+08:00
-updatedAt: 2026-09-19T14:03:00+08:00
+publishedAt: 2026-08-18T20:34:00+08:00
+updatedAt: 2026-08-18T20:34:00+08:00
 tags: [Claude Code, Agent Harness, Query Loop, Compact, Memory, Context Engineering, SubAgent]
 tools:
   - name: humanizer

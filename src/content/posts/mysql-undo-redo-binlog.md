@@ -6,7 +6,7 @@ subcategory: MySQL
 articleClass: focused
 seriesOrder: 20
 featured: true
-publishedAt: 2026-06-15T21:07:00+08:00
+publishedAt: 2026-06-25T10:38:00+08:00
 tags: [MySQL, InnoDB, Undo Log, Redo Log, Binlog, WAL, 两阶段提交]
 ---
 

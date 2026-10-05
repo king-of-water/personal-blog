@@ -6,8 +6,8 @@ subcategory: LLM 原理与训练
 articleClass: focused
 seriesOrder: 40
 featured: false
-publishedAt: 2026-08-23T14:03:00+08:00
-updatedAt: 2026-08-23T14:03:00+08:00
+publishedAt: 2026-06-21T20:50:00+08:00
+updatedAt: 2026-06-21T20:50:00+08:00
 tags: [LLM, LoRA, QLoRA, 微调, Fine-tuning, PEFT, 参数高效微调]
 tools:
   - name: humanizer

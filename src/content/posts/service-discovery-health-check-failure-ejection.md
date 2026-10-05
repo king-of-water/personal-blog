@@ -5,7 +5,7 @@ category: 后端
 subcategory: 分布式
 articleClass: flagship
 seriesOrder: 120
-publishedAt: 2026-07-26T23:26:00+08:00
+publishedAt: 2026-09-06T21:36:00+08:00
 tags: [分布式系统, 服务发现, 注册中心, 健康检查, 故障摘除, Nacos, Consul, Kubernetes]
 ---
 

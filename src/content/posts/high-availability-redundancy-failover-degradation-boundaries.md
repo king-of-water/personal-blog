@@ -5,7 +5,7 @@ category: 后端
 subcategory: 系统设计与高并发
 articleClass: flagship
 seriesOrder: 80
-publishedAt: 2026-08-11T23:26:00+08:00
+publishedAt: 2026-09-29T20:20:00+08:00
 tags: [高可用, 冗余, 故障转移, 健康检查, 主备, 降级, SLO, 故障演练]
 ---
 

@@ -6,8 +6,8 @@ subcategory: Redis
 articleClass: flagship
 seriesOrder: 90
 featured: true
-publishedAt: 2026-07-05T22:48:00+08:00
-updatedAt: 2026-07-05T22:48:00+08:00
+publishedAt: 2026-07-21T21:55:00+08:00
+updatedAt: 2026-07-21T21:55:00+08:00
 tags: [Redis, Redis Cluster, 分片, Hash Slot, 一致性哈希, 扩容, 热点, MOVED, ASK, 高可用]
 ---
 

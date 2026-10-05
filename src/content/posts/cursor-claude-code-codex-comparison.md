@@ -6,8 +6,8 @@ subcategory: AI 应用与思考
 articleClass: flagship
 seriesOrder: 10
 featured: false
-publishedAt: 2026-09-28T20:41:00+08:00
-updatedAt: 2026-09-28T20:41:00+08:00
+publishedAt: 2026-09-13T21:57:00+08:00
+updatedAt: 2026-09-13T21:57:00+08:00
 tags: [Cursor, Claude Code, Codex, AI Coding, Coding Agent, 选型]
 tools:
   - name: humanizer

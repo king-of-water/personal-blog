@@ -6,8 +6,8 @@ subcategory: Redis
 articleClass: flagship
 seriesOrder: 80
 featured: true
-publishedAt: 2026-07-03T20:41:00+08:00
-updatedAt: 2026-07-03T20:41:00+08:00
+publishedAt: 2026-07-21T20:20:00+08:00
+updatedAt: 2026-07-21T20:20:00+08:00
 tags: [Redis, 主从复制, Sentinel, 高可用, 故障切换, 复制流, PSYNC, 数据丢失, WAIT, min-replicas-to-write]
 ---
 

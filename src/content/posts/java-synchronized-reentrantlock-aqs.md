@@ -6,8 +6,8 @@ subcategory: Java
 articleClass: flagship
 seriesOrder: 50
 featured: true
-publishedAt: 2026-06-08T09:35:00+08:00
-updatedAt: 2026-06-08T09:35:00+08:00
+publishedAt: 2026-06-08T20:21:00+08:00
+updatedAt: 2026-06-08T20:21:00+08:00
 tags: [Java, synchronized, ReentrantLock, AQS, CAS, 锁升级, 偏向锁, 轻量级锁, Monitor, Condition, CLH, ABA]
 ---
 

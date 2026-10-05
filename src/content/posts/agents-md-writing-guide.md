@@ -6,8 +6,8 @@ subcategory: AI 应用与思考
 articleClass: focused
 seriesOrder: 35
 featured: false
-publishedAt: 2026-09-30T09:35:00+08:00
-updatedAt: 2026-09-30T09:35:00+08:00
+publishedAt: 2026-09-16T21:01:00+08:00
+updatedAt: 2026-09-16T21:01:00+08:00
 tags: [AGENTS.md, AI Coding, Coding Agent, Context Engineering, 验证闭环, 仓库聚合]
 tools:
   - name: humanizer

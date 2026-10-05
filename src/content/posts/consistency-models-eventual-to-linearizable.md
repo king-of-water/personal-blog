@@ -5,7 +5,7 @@ category: 后端
 subcategory: 分布式
 articleClass: focused
 seriesOrder: 40
-publishedAt: 2026-07-17T23:31:00+08:00
+publishedAt: 2026-08-29T14:44:00+08:00
 tags: [分布式系统, 一致性, 最终一致, 线性一致, 因果一致, 事务]
 ---
 

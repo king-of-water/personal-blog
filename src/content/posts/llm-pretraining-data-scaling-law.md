@@ -6,8 +6,8 @@ subcategory: LLM 原理与训练
 articleClass: focused
 seriesOrder: 60
 featured: false
-publishedAt: 2026-08-24T23:26:00+08:00
-updatedAt: 2026-08-24T23:26:00+08:00
+publishedAt: 2026-06-23T20:06:00+08:00
+updatedAt: 2026-06-23T20:06:00+08:00
 tags: [LLM, 预训练, Scaling Law, 训练数据, 目标函数, Transformer, 语言模型]
 tools:
   - name: humanizer

@@ -6,8 +6,8 @@ subcategory: Java
 articleClass: focused
 seriesOrder: 30
 featured: true
-publishedAt: 2026-06-06T22:48:00+08:00
-updatedAt: 2026-06-06T22:48:00+08:00
+publishedAt: 2026-06-06T14:00:00+08:00
+updatedAt: 2026-06-06T14:00:00+08:00
 tags: [Java, 动态代理, JDK 代理, CGLIB, InvocationHandler, MethodInterceptor, Proxy, Spring AOP, 字节码, FastClass]
 ---
 

@@ -6,8 +6,8 @@ subcategory: Redis
 articleClass: flagship
 seriesOrder: 100
 featured: true
-publishedAt: 2026-07-06T23:12:00+08:00
-updatedAt: 2026-07-06T23:12:00+08:00
+publishedAt: 2026-07-24T20:59:00+08:00
+updatedAt: 2026-07-24T20:59:00+08:00
 tags: [Redis, 事务, MULTI, EXEC, WATCH, Lua, EVAL, 原子性, 乐观锁, CAS, 脚本]
 ---
 

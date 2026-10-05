@@ -6,8 +6,8 @@ subcategory: RAG 与知识工程
 articleClass: flagship
 seriesOrder: 30
 featured: false
-publishedAt: 2026-08-29T23:31:00+08:00
-updatedAt: 2026-08-29T23:31:00+08:00
+publishedAt: 2026-07-08T21:01:00+08:00
+updatedAt: 2026-07-08T21:01:00+08:00
 tags: [Repo Map, Aider, 代码理解, Context Engineering, Tree-sitter, PageRank]
 tools:
   - name: humanizer

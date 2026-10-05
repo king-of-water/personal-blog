@@ -5,7 +5,7 @@ category: 后端
 subcategory: 分布式
 articleClass: flagship
 seriesOrder: 160
-publishedAt: 2026-07-31T23:31:00+08:00
+publishedAt: 2026-09-11T21:06:00+08:00
 tags: [Jepsen, 故障注入, 一致性验证, 线性一致性, Knossos, Elle, 混沌工程]
 ---
 

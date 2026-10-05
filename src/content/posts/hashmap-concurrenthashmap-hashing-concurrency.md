@@ -6,8 +6,8 @@ subcategory: Java
 articleClass: flagship
 seriesOrder: 20
 featured: true
-publishedAt: 2026-06-05T20:41:00+08:00
-updatedAt: 2026-06-05T20:41:00+08:00
+publishedAt: 2026-06-05T20:52:00+08:00
+updatedAt: 2026-06-05T20:52:00+08:00
 tags: [Java, HashMap, ConcurrentHashMap, 哈希, 红黑树, 负载因子, 扩容, resize, 分段锁, CAS, ForwardingNode, sizeCtl, LinkedHashMap, LRU, Hashtable]
 ---
 

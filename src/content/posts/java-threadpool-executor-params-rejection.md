@@ -6,8 +6,8 @@ subcategory: Java
 articleClass: focused
 seriesOrder: 70
 featured: true
-publishedAt: 2026-06-11T14:03:00+08:00
-updatedAt: 2026-06-11T14:03:00+08:00
+publishedAt: 2026-06-11T09:15:00+08:00
+updatedAt: 2026-06-11T09:15:00+08:00
 tags: [Java, 线程池, ThreadPoolExecutor, ctl, 状态机, Worker, getTask, 拒绝策略, 线程复用]
 ---
 
