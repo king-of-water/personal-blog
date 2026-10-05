@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">InheritableThreadLocal 的父子拷贝</title>
+  <desc id="desc">子线程创建时，把父线程的 inheritableThreadLocals 表浅拷贝一份给子线程。浅拷贝意味着子线程拿到的是创建那一刻的 value 快照，之后父线程再改，子线程看不到。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 15px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="54" class="h">子线程继承父线程的 ThreadLocal 快照</text>
+  <text x="56" y="88" class="b">浅拷贝：只复制创建那一刻的值，之后父子互不影响。</text>
+
+  <g transform="translate(70 160)">
+    <rect width="420" height="380" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="210" y="38" text-anchor="middle" class="t" fill="#5e5083">父线程</text>
+    <rect x="60" y="70" width="300" height="100" rx="12" fill="#e3dde2" stroke="#5e5083"/>
+    <text x="210" y="100" text-anchor="middle" class="m">inheritableThreadLocals</text>
+    <text x="210" y="130" text-anchor="middle" class="s">key=TL, value="alice"</text>
+    <text x="210" y="230" text-anchor="middle" class="b">子线程创建时，</text>
+    <text x="210" y="260" text-anchor="middle" class="b">把这张表浅拷贝给子线程。</text>
+  </g>
+
+  <line x1="490" y1="350" x2="600" y2="350" stroke="#8a7f6d" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <g transform="translate(600 160)">
+    <rect width="420" height="380" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="210" y="38" text-anchor="middle" class="t" fill="#466b48">子线程</text>
+    <rect x="60" y="70" width="300" height="100" rx="12" fill="#dee3d6" stroke="#466b48"/>
+    <text x="210" y="100" text-anchor="middle" class="m">inheritableThreadLocals</text>
+    <text x="210" y="130" text-anchor="middle" class="s">key=TL, value="alice"（拷贝）</text>
+    <text x="210" y="230" text-anchor="middle" class="b">之后父线程改成 "bob"，</text>
+    <text x="210" y="260" text-anchor="middle" class="b">子线程看不到，仍是 "alice"。</text>
+  </g>
+
+  <g transform="translate(70 590)">
+    <rect width="1060" height="70" rx="16" fill="#ebe4d4" stroke="#8a7f6d"/>
+    <text x="28" y="36" class="b">注意：继承的是「创建那一刻的快照」，不是共享引用——InheritableThreadLocal 不提供父子共享可变状态。</text>
+  </g>
+</svg>

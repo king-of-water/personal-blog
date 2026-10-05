@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">ThreadLocalMap 的线性探测与 stale 清理</title>
+  <desc id="desc">ThreadLocalMap 用开放地址法，哈希冲突时线性探测找下一个空位。key 被 GC 后留下 key 为 null 的 stale Entry，set/get 路过时用 expungeStaleEntry 清理它，并把后面连续的非空 Entry 重新定位到正确 slot。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8a7f6d"/></marker>
+    <style>.h{font:700 29px ui-sans-serif,system-ui,sans-serif;fill:#2b2620}.t{font:700 19px ui-sans-serif,system-ui,sans-serif}.b{font:400 16px ui-sans-serif,system-ui,sans-serif;fill:#554d42}.s{font:400 14px ui-sans-serif,system-ui,sans-serif;fill:#6f6659}.m{font:600 15px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2b2620}</style>
+  </defs>
+  <rect width="1200" height="700" rx="28" fill="#fdfaf3"/>
+  <text x="56" y="54" class="h">开放地址法：冲突线性探测，stale 顺手清理</text>
+  <text x="56" y="88" class="b">清理一个 stale，要把后面错位的 Entry 重新排位。</text>
+
+  <g transform="translate(70 150)">
+    <rect width="1060" height="200" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="530" y="36" text-anchor="middle" class="t">Entry[] table</text>
+
+    <rect x="50" y="60" width="230" height="100" rx="12" fill="#e3dde2" stroke="#5e5083"/>
+    <text x="165" y="92" text-anchor="middle" class="m">slot 0</text>
+    <text x="165" y="120" text-anchor="middle" class="s">key=TL1, value=v1</text>
+
+    <rect x="300" y="60" width="230" height="100" rx="12" fill="#eed9d3" stroke="#943b37"/>
+    <text x="415" y="92" text-anchor="middle" class="m" fill="#943b37">slot 1（stale）</text>
+    <text x="415" y="120" text-anchor="middle" class="s">key=null, value=v2</text>
+    <text x="415" y="144" text-anchor="middle" class="s">key 被 GC，value 残留</text>
+
+    <rect x="550" y="60" width="230" height="100" rx="12" fill="#d8dee0" stroke="#295279"/>
+    <text x="665" y="92" text-anchor="middle" class="m">slot 2</text>
+    <text x="665" y="120" text-anchor="middle" class="s">key=TL2, value=v3</text>
+
+    <rect x="800" y="60" width="230" height="100" rx="12" fill="#f5f0e4" stroke="#d7cebd" stroke-dasharray="7 7"/>
+    <text x="915" y="92" text-anchor="middle" class="m">slot 3</text>
+    <text x="915" y="120" text-anchor="middle" class="s">空</text>
+  </g>
+
+  <g transform="translate(70 400)">
+    <rect width="1060" height="220" rx="18" fill="#f5f0e4" stroke="#d7cebd"/>
+    <text x="530" y="36" text-anchor="middle" class="t">线性探测与清理</text>
+    <text x="60" y="80" class="b">① TL2 的 hash 定位到 slot 0，被占 → 线性探测到 slot 2 插入。</text>
+    <text x="60" y="116" class="b">② get/set 遇到 slot 1 的 stale → expungeStaleEntry 清理。</text>
+    <text x="60" y="152" class="b">③ 清理后 slot 2 的 TL2 重新定位：原来"错位"在 slot 2，可挪回它 hash 该在的位置。</text>
+    <text x="60" y="188" class="b">④ 开放地址法的删除必须连锁重排后续 Entry，否则 get 线性探测会漏掉它们。</text>
+  </g>
+</svg>
