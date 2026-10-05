@@ -5,7 +5,7 @@ category: 后端
 subcategory: 分布式
 articleClass: flagship
 seriesOrder: 70
-publishedAt: 2026-10-03
+publishedAt: 2026-07-21T23:12:00+08:00
 tags: [分布式系统, Redis, ZooKeeper, etcd, 分布式锁, Fencing Token, Java]
 ---
 

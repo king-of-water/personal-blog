@@ -6,8 +6,8 @@ subcategory: Agent 开发
 articleClass: focused
 seriesOrder: 130
 featured: false
-publishedAt: 2026-10-03T10:00:00+08:00
-updatedAt: 2026-10-03
+publishedAt: 2026-09-15T23:12:00+08:00
+updatedAt: 2026-09-15T23:12:00+08:00
 tags: [Agent, Subagent, Multi-Agent, Orchestration, Handoff, Parallelism]
 tools:
   - name: humanizer

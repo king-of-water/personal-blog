@@ -6,8 +6,8 @@ subcategory: 消息队列
 articleClass: focused
 seriesOrder: 30
 featured: true
-publishedAt: 2026-10-05
-updatedAt: 2026-10-05
+publishedAt: 2026-07-13T23:26:00+08:00
+updatedAt: 2026-07-13T23:26:00+08:00
 tags: [RocketMQ, 事务消息, 半消息, 回查, 本地事务, Outbox, 一致性, 消息队列]
 ---
 

@@ -6,8 +6,8 @@ subcategory: MySQL
 articleClass: focused
 seriesOrder: 50
 featured: true
-publishedAt: 2026-10-05
-updatedAt: 2026-10-05
+publishedAt: 2026-06-19T20:41:00+08:00
+updatedAt: 2026-06-19T20:41:00+08:00
 tags: [MySQL, SQL 优化, 查询优化器, EXPLAIN, EXPLAIN ANALYZE, 执行计划]
 ---
 

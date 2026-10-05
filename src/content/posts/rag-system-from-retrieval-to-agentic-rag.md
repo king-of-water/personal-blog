@@ -6,8 +6,8 @@ subcategory: RAG 与知识工程
 articleClass: flagship
 seriesOrder: 10
 featured: false
-publishedAt: 2026-10-01T20:00:00+08:00
-updatedAt: 2026-10-01
+publishedAt: 2026-08-27T21:07:00+08:00
+updatedAt: 2026-08-27T21:07:00+08:00
 tags: [RAG, GraphRAG, LightRAG, Retrieval, Agentic RAG, 知识库]
 tools:
   - name: humanizer

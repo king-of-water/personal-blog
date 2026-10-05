@@ -6,7 +6,7 @@ subcategory: MySQL
 articleClass: focused
 seriesOrder: 10
 featured: true
-publishedAt: 2026-10-04
+publishedAt: 2026-06-14T21:52:00+08:00
 tags: [MySQL, InnoDB, B+ 树, 联合索引, 最左匹配, EXPLAIN]
 ---
 

@@ -5,7 +5,7 @@ category: 后端
 subcategory: 分布式
 articleClass: focused
 seriesOrder: 60
-publishedAt: 2026-10-03
+publishedAt: 2026-07-19T22:48:00+08:00
 tags: [分布式系统, RPC, 超时, 重试, 幂等, 接口设计]
 ---
 

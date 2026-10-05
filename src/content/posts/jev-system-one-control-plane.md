@@ -6,8 +6,8 @@ subcategory: Agent 产品拆解
 articleClass: flagship
 seriesOrder: 70
 featured: false
-publishedAt: 2026-10-01T20:03:00+08:00
-updatedAt: 2026-10-01
+publishedAt: 2026-09-25T22:18:00+08:00
+updatedAt: 2026-09-25T22:18:00+08:00
 tags: [Jev, System One Model, Agent Control Plane, Model Routing, Agentic Memory]
 tools:
   - name: humanizer

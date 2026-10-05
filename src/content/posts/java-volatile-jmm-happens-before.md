@@ -6,8 +6,8 @@ subcategory: Java
 articleClass: focused
 seriesOrder: 40
 featured: true
-publishedAt: 2026-10-05
-updatedAt: 2026-10-05
+publishedAt: 2026-06-07T23:12:00+08:00
+updatedAt: 2026-06-07T23:12:00+08:00
 tags: [Java, volatile, JMM, happens-before, 可见性, 有序性, 内存屏障, StoreLoad, 双重检查锁, DCL]
 ---
 

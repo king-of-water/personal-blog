@@ -6,8 +6,8 @@ subcategory: MySQL
 articleClass: focused
 seriesOrder: 90
 featured: true
-publishedAt: 2026-10-05
-updatedAt: 2026-10-05
+publishedAt: 2026-06-24T10:44:00+08:00
+updatedAt: 2026-06-24T10:44:00+08:00
 tags: [MySQL, 大表治理, 数据归档, 分区表, 分库分表, Online DDL]
 ---
 

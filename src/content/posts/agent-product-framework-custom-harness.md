@@ -6,8 +6,8 @@ subcategory: Agent 开发
 articleClass: flagship
 seriesOrder: 10
 featured: false
-publishedAt: 2026-10-02
-updatedAt: 2026-10-02
+publishedAt: 2026-09-04T09:35:00+08:00
+updatedAt: 2026-09-04T09:35:00+08:00
 tags: [Agent, Agent Framework, Harness, Build or Buy, LangGraph, AutoGen, Pydantic AI]
 tools:
   - name: humanizer

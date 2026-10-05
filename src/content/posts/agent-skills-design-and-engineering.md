@@ -6,8 +6,8 @@ subcategory: Agent 开发
 articleClass: flagship
 seriesOrder: 80
 featured: false
-publishedAt: 2026-10-02
-updatedAt: 2026-10-02
+publishedAt: 2026-09-09T21:07:00+08:00
+updatedAt: 2026-09-09T21:07:00+08:00
 tags: [Agent, Skills, Context Engineering, Codex, Workflow]
 tools:
   - name: humanizer

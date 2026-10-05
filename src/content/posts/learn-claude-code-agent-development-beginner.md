@@ -6,8 +6,8 @@ subcategory: Agent 开发
 articleClass: focused
 seriesOrder: 20
 featured: false
-publishedAt: 2026-10-02
-updatedAt: 2026-10-02
+publishedAt: 2026-09-05T10:44:00+08:00
+updatedAt: 2026-09-05T10:44:00+08:00
 tags: [Agent, Learn Claude Code, Agent Loop, Tool Use, ReAct, Harness]
 tools:
   - name: humanizer

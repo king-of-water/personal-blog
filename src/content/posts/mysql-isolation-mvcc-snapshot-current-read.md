@@ -6,7 +6,7 @@ subcategory: MySQL
 articleClass: focused
 seriesOrder: 30
 featured: true
-publishedAt: 2026-10-05
+publishedAt: 2026-06-16T22:18:00+08:00
 tags: [MySQL, InnoDB, 事务隔离, MVCC, Read View, 快照读, 当前读]
 ---
 

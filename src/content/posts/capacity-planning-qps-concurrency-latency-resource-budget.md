@@ -5,7 +5,7 @@ category: 后端
 subcategory: 系统设计与高并发
 articleClass: flagship
 seriesOrder: 20
-publishedAt: 2026-10-04
+publishedAt: 2026-08-01T22:48:00+08:00
 tags: [容量规划, 高并发, QPS, Little's Law, 性能, 压测, 自动扩缩容]
 ---
 

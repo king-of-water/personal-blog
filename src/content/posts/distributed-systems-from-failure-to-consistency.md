@@ -6,7 +6,7 @@ subcategory: 分布式
 articleClass: flagship
 seriesOrder: 10
 featured: true
-publishedAt: 2026-10-03
+publishedAt: 2026-07-13T21:52:00+08:00
 tags: [分布式系统, 一致性, Raft, CAP, 分布式事务, 后端]
 ---
 

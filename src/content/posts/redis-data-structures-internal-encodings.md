@@ -6,8 +6,8 @@ subcategory: Redis
 articleClass: flagship
 seriesOrder: 40
 featured: true
-publishedAt: 2026-10-05
-updatedAt: 2026-10-05
+publishedAt: 2026-06-28T21:52:00+08:00
+updatedAt: 2026-06-28T21:52:00+08:00
 tags: [Redis, 数据结构, SDS, Listpack, Quicklist, Hashtable, Skiplist, Bitmap, HyperLogLog, Stream]
 ---
 

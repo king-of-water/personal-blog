@@ -6,8 +6,8 @@ subcategory: LLM 原理与训练
 articleClass: flagship
 seriesOrder: 2
 featured: false
-publishedAt: 2026-10-04T04:00:00+08:00
-updatedAt: 2026-10-04
+publishedAt: 2026-08-18T22:48:00+08:00
+updatedAt: 2026-08-18T22:48:00+08:00
 tags: [LLM, Transformer, Attention, Self-Attention, 论文精读, RNN, 序列建模]
 tools:
   - name: humanizer

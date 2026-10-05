@@ -6,8 +6,8 @@ subcategory: LLM 原理与训练
 articleClass: focused
 seriesOrder: 70
 featured: false
-publishedAt: 2026-10-04T03:00:00+08:00
-updatedAt: 2026-10-04
+publishedAt: 2026-08-26T21:52:00+08:00
+updatedAt: 2026-08-26T21:52:00+08:00
 tags: [LLM, 推理优化, Continuous Batching, 量化, 投机解码, vLLM, PagedAttention, 吞吐量]
 tools:
   - name: humanizer

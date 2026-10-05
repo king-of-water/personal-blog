@@ -6,8 +6,8 @@ subcategory: MySQL
 articleClass: focused
 seriesOrder: 60
 featured: true
-publishedAt: 2026-10-05
-updatedAt: 2026-10-05
+publishedAt: 2026-06-21T22:48:00+08:00
+updatedAt: 2026-06-21T22:48:00+08:00
 tags: [MySQL, 慢查询, Performance Schema, Slow Query Log, SQL 优化, 故障排查]
 ---
 

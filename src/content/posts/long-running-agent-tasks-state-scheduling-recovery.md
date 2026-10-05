@@ -6,8 +6,8 @@ subcategory: Agent 开发
 articleClass: focused
 seriesOrder: 120
 featured: false
-publishedAt: 2026-10-03T09:00:00+08:00
-updatedAt: 2026-10-03
+publishedAt: 2026-09-15T22:48:00+08:00
+updatedAt: 2026-09-15T22:48:00+08:00
 tags: [Agent, Long-running Task, Durable Execution, Scheduler, Idempotency, Recovery]
 tools:
   - name: humanizer

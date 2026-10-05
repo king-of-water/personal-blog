@@ -6,8 +6,8 @@ subcategory: Agent 开发
 articleClass: flagship
 seriesOrder: 110
 featured: false
-publishedAt: 2026-10-01T20:01:00+08:00
-updatedAt: 2026-10-01
+publishedAt: 2026-09-13T20:41:00+08:00
+updatedAt: 2026-09-13T20:41:00+08:00
 tags: [Agent Evaluation, Evals, LLM Judge, Reward Hacking, Agent 自进化, Observability]
 tools:
   - name: humanizer

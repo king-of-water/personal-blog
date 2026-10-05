@@ -6,8 +6,8 @@ subcategory: LLM 原理与训练
 articleClass: flagship
 seriesOrder: 3
 featured: false
-publishedAt: 2026-10-04T05:00:00+08:00
-updatedAt: 2026-10-04
+publishedAt: 2026-08-18T23:12:00+08:00
+updatedAt: 2026-08-18T23:12:00+08:00
 tags: [LLM, Transformer, Decoder, RoPE, RMSNorm, GQA, SwiGLU, 采样, 推理]
 tools:
   - name: humanizer

@@ -6,8 +6,8 @@ subcategory: Agent 开发
 articleClass: flagship
 seriesOrder: 60
 featured: false
-publishedAt: 2026-10-02
-updatedAt: 2026-10-02
+publishedAt: 2026-09-08T21:52:00+08:00
+updatedAt: 2026-09-08T21:52:00+08:00
 tags: [Agent, Tool Use, Function Calling, CLI, Browser, Code Execution, MCP]
 tools:
   - name: humanizer

@@ -6,8 +6,8 @@ subcategory: Agent 开发
 articleClass: flagship
 seriesOrder: 100
 featured: false
-publishedAt: 2026-10-01T20:02:00+08:00
-updatedAt: 2026-10-01
+publishedAt: 2026-09-13T23:31:00+08:00
+updatedAt: 2026-09-13T23:31:00+08:00
 tags: [Agent 自进化, Self-Evolving Agents, ACE, EvoSkill, Darwin Gödel Machine, AlphaEvolve]
 tools:
   - name: humanizer

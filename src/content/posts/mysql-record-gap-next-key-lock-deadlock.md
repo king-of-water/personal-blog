@@ -6,7 +6,7 @@ subcategory: MySQL
 articleClass: focused
 seriesOrder: 40
 featured: true
-publishedAt: 2026-10-05
+publishedAt: 2026-06-18T23:31:00+08:00
 tags: [MySQL, InnoDB, Record Lock, Gap Lock, Next-Key Lock, 死锁, 索引]
 ---
 

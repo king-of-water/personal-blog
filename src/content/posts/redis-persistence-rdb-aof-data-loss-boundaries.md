@@ -6,8 +6,8 @@ subcategory: Redis
 articleClass: flagship
 seriesOrder: 70
 featured: true
-publishedAt: 2026-10-05
-updatedAt: 2026-10-05
+publishedAt: 2026-07-03T23:31:00+08:00
+updatedAt: 2026-07-03T23:31:00+08:00
 tags: [Redis, RDB, AOF, 持久化, fsync, 数据恢复, Copy-on-Write, WAITAOF]
 ---
 

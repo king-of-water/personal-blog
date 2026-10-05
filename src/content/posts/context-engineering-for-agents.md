@@ -6,8 +6,8 @@ subcategory: Agent 开发
 articleClass: flagship
 seriesOrder: 40
 featured: false
-publishedAt: 2026-10-02
-updatedAt: 2026-10-02
+publishedAt: 2026-09-06T22:09:00+08:00
+updatedAt: 2026-09-06T22:09:00+08:00
 tags: [Agent, Context Engineering, Context Window, Compaction, RAG, Memory, AI Coding]
 tools:
   - name: humanizer

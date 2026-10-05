@@ -6,8 +6,8 @@ subcategory: Agent 开发
 articleClass: flagship
 seriesOrder: 50
 featured: false
-publishedAt: 2026-10-02
-updatedAt: 2026-10-02
+publishedAt: 2026-09-06T23:26:00+08:00
+updatedAt: 2026-09-06T23:26:00+08:00
 tags: [Agent, Agent Loop, ReAct, Planning, Reflection, Reflexion, Self-Refine]
 tools:
   - name: humanizer

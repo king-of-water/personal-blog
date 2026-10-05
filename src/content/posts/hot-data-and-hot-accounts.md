@@ -5,7 +5,7 @@ category: 后端
 subcategory: 系统设计与高并发
 articleClass: flagship
 seriesOrder: 60
-publishedAt: 2026-10-04
+publishedAt: 2026-08-08T14:03:00+08:00
 tags: [热点数据, 热点账户, Hot Key, Redis, 数据库锁, 分片, 账本, 高并发]
 ---
 

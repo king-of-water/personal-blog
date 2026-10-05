@@ -6,8 +6,8 @@ subcategory: AI 应用与思考
 articleClass: flagship
 seriesOrder: 50
 featured: false
-publishedAt: 2026-10-03T21:00:00+08:00
-updatedAt: 2026-10-03
+publishedAt: 2026-10-05T14:03:00+08:00
+updatedAt: 2026-10-05T14:03:00+08:00
 tags: [AI Native, AI Coding, Multi-Agent, 软件工程, 组织协同, Agent Orchestration]
 tools:
   - name: humanizer

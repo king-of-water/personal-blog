@@ -6,8 +6,8 @@ subcategory: Redis
 articleClass: flagship
 seriesOrder: 50
 featured: true
-publishedAt: 2026-10-05
-updatedAt: 2026-10-05
+publishedAt: 2026-07-01T21:07:00+08:00
+updatedAt: 2026-07-01T21:07:00+08:00
 tags: [Redis, 性能, 延迟, Event Loop, Slowlog, Fork, Copy-on-Write, Big Key, 故障排查]
 ---
 

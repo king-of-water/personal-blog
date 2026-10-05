@@ -5,7 +5,7 @@ category: 后端
 subcategory: 系统设计与高并发
 articleClass: flagship
 seriesOrder: 100
-publishedAt: 2026-10-04
+publishedAt: 2026-08-12T21:07:00+08:00
 tags: [秒杀, 系统设计, 库存, Redis, 消息队列, 限流, 幂等, 防超卖, 高并发]
 ---
 

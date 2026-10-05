@@ -6,8 +6,8 @@ subcategory: Java
 articleClass: focused
 seriesOrder: 90
 featured: true
-publishedAt: 2026-10-05
-updatedAt: 2026-10-05
+publishedAt: 2026-06-13T23:26:00+08:00
+updatedAt: 2026-06-13T23:26:00+08:00
 tags: [Java, GC, 三色标记, 并发标记, 漏标, 增量更新, SATB, CMS, G1, 写屏障]
 ---
 

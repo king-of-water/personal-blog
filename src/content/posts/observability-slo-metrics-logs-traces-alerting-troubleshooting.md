@@ -5,7 +5,7 @@ category: 后端
 subcategory: 系统设计与高并发
 articleClass: flagship
 seriesOrder: 120
-publishedAt: 2026-10-04
+publishedAt: 2026-08-15T23:31:00+08:00
 tags: [可观测性, SLO, SLI, Metrics, Logs, Traces, OpenTelemetry, Prometheus, 告警, 故障定位]
 ---
 

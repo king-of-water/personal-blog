@@ -5,7 +5,7 @@ category: 后端
 subcategory: 分布式
 articleClass: flagship
 seriesOrder: 150
-publishedAt: 2026-10-04
+publishedAt: 2026-07-29T22:18:00+08:00
 tags: [多机房, 灾难恢复, RPO, RTO, 容灾, 异地多活, 故障切换]
 ---
 

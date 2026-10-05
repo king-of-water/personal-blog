@@ -6,8 +6,8 @@ subcategory: Redis
 articleClass: flagship
 seriesOrder: 60
 featured: true
-publishedAt: 2026-10-05
-updatedAt: 2026-10-05
+publishedAt: 2026-07-01T22:18:00+08:00
+updatedAt: 2026-07-01T22:18:00+08:00
 tags: [Redis, TTL, 过期, 淘汰, LRU, LFU, maxmemory, 故障排查, Keyspace Notification]
 ---
 

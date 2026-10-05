@@ -6,8 +6,8 @@ subcategory: MySQL
 articleClass: focused
 seriesOrder: 70
 featured: true
-publishedAt: 2026-10-05
-updatedAt: 2026-10-05
+publishedAt: 2026-06-21T23:12:00+08:00
+updatedAt: 2026-06-21T23:12:00+08:00
 tags: [MySQL, 主从复制, 读写分离, GTID, 半同步复制, 故障切换]
 ---
 

@@ -5,7 +5,7 @@ category: 后端
 subcategory: 分布式
 articleClass: focused
 seriesOrder: 50
-publishedAt: 2026-10-03
+publishedAt: 2026-07-18T20:41:00+08:00
 tags: [分布式系统, 超时, 重试, 幂等, Exactly-once, API 设计]
 ---
 
