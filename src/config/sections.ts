@@ -95,14 +95,6 @@ export const backendSubcategories: Subcategory[] = [
 		name: '消息队列',
 		slug: 'message-queue',
 		description: '异步通信、削峰、顺序与消息可靠性。',
-		plannedTopics: [
-			{ title: '顺序消费：同一个订单的消息怎样依次生效', seriesOrder: 40 },
-			{ title: '延迟与定时消息：三种实现与适用边界', seriesOrder: 50 },
-			{ title: '重复消费与幂等：重试、确认丢失与 Rebalance', seriesOrder: 60 },
-			{ title: '重试与死信：失败消息怎样恢复，怎样不拖垮消费', seriesOrder: 70 },
-			{ title: 'RocketMQ 存储架构：CommitLog 与 ConsumeQueue', seriesOrder: 80 },
-			{ title: 'Kafka 底层：分区日志、复制与消费位点', seriesOrder: 90 },
-		],
 	},
 ];
 
