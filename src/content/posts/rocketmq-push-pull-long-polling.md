@@ -1,39 +1,42 @@
 ---
-title: RocketMQ 推拉模式：本质只有一个「拉」
-description: 拆开 Push Consumer 与 Pull Consumer 的 API 形态和底层传输两层，说明 RocketMQ 底层只有「拉」一种模式，Push 是「拉 + 长轮询」的封装，并给出日常该用哪种、为什么。
+title: RocketMQ 推拉模式：Push 背后的长轮询与消费控制
+description: 以 RocketMQ 4.x Remoting 消费者为主，拆开回调 API、主动拉取与长轮询，说明流控和位点提交的边界，并区分 5.x PushConsumer、SimpleConsumer 的接口与确认模型。
 category: 后端
 subcategory: 消息队列
 articleClass: field-note
 seriesOrder: 10
 featured: true
 publishedAt: 2026-09-30T20:33:00+08:00
-updatedAt: 2026-09-30T20:33:00+08:00
+updatedAt: 2026-10-06T15:46:00+08:00
 tags: [RocketMQ, 消息队列, Push, Pull, 长轮询, 消费模型, DefaultMQPushConsumer, 背压]
 ---
 
 RocketMQ 的文档里既有 Push Consumer，也有 Pull Consumer，两个都能把消息从 Broker 取回来。于是自然有一个问题：消息队列的消费模型不是分"推"和"拉"两种吗，RocketMQ 到底支持哪一种？
 
-答案可以提前说清：**RocketMQ 底层只有一种，就是「拉」**。所谓 Push Consumer，名字里的 Push 是 API 层面的封装，底层仍是「拉」，只是加了一层长轮询，让"拉"看起来像"推"。搞清这一层，才能理解为什么日常开发几乎都用 Push、却又能放心它不会把慢消费者打爆。
+先限定范围：本文的 `DefaultMQPushConsumer` 与 `DefaultLitePullConsumer` 指 4.x Remoting API，不以 Broker 的大版本号直接判断客户端模型。这里 Push 的消息获取由客户端主动拉取、长轮询与回调调度组成，不是 Broker 无请求地持续推送。5.x gRPC SDK 另有 PushConsumer、SimpleConsumer 等接口，不能把旧类名、消费位点和逐消息 ACK 混为一谈。
 
 ## 一、先拆两层：API 形态和传输机制
 
 "推"和"拉"这两个词，混着两件不同的事，这是大多数误解的来源。
 
-第一层是 **API 形态**，也就是你写代码时看到的接口长什么样。Push Consumer 是 `DefaultMQPushConsumer`：你注册一个回调，消息来了框架自动调用你的 `consumeMessage`，你只管写消费逻辑。Pull Consumer 是 `DefaultLitePullConsumer`：你自己主动去 `poll`，拉回来一批自己处理，位点也自己管。
+第一层是 API 形态，也就是代码里的入口。`DefaultMQPushConsumer` 注册监听器，由 SDK 调用消费逻辑并根据返回值管理进度。`DefaultLitePullConsumer` 让应用主动 `poll()` 获取消息；它也提供自动提交配置，并非调用 `poll()` 就天然变成手动提交。需要业务完成后提交时，要关闭自动提交并设计失败、并发与重平衡处理。
 
 ```java
-// Push：注册回调，消息来了框架调用，位点自动提交
+// 4.x Push：handle 必须完成约定业务边界后才返回成功
 consumer.registerMessageListener((msgs, ctx) -> {
     handle(msgs);
     return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
 });
 
-// Pull：自己拉、自己处理、自己提交位点
+// 4.x LitePull：示意手动管理进度；配置须在 start 之前设置
+litePullConsumer.setAutoCommit(false);
+// ... start、循环、异常处理等省略
 List<MessageExt> msgs = litePullConsumer.poll();
 handle(msgs);
+litePullConsumer.commitSync();
 ```
 
-第二层是 **传输机制**，也就是消息到底怎么从 Broker 到消费者进程。这一层 RocketMQ 只有一种：消费者主动向 Broker 发拉取请求，Broker 返回消息。
+第二层是获取协议。上述 Remoting 消费者向 Broker 发拉取请求，Broker 返回匹配消息。LitePull 的 `poll()` 主要从客户端本地缓存获取消息，后台线程执行实际拉取；它也不等于每次 `poll()` 都同步访问 Broker。
 
 官方文档的 Push Consumer 页有一句关键的话：用户"不需要关注 rebalance 和 **pulling** 的逻辑，只需要写自己的消费逻辑"。这句话其实已经承认了 push 背后有一套 pulling 逻辑存在，只是框架帮你藏起来了。所以"Push vs Pull"在 RocketMQ 里不是两种传输方式的对比，而是"框架帮你拉"和"你自己拉"的对比。
 
@@ -43,31 +46,31 @@ handle(msgs);
 
 消费者进程内部有一个 `PullMessageService` 线程，它持续向 Broker 发拉取请求。如果 Broker 上正好有消息，就返回，消费者收到后触发回调——这一步看起来确实像"推"。关键在于"正好没有消息"的时候：如果消费者拉一次、Broker 回个空、消费者立刻再拉，就成了空转轮询，白烧 CPU 和网络。
 
-RocketMQ 用长轮询解决空转。Broker 端默认开启长轮询（源码里 `longPollingEnable` 默认是 `true`），消息不足时不立刻返回空，而是把这次拉取请求挂起一小段时间（`PullRequestHoldService` 持有它），等新消息落盘后再唤醒这个挂起的请求、把消息返回；如果一直没消息，才超时返回空，消费者再发起下一次拉取。短轮询是"一秒一问、大多空手"，长轮询是"问了就等着、有货再回"。
+RocketMQ 用长轮询减少空查询。满足请求挂起条件时，Broker 不立即返回空结果，而由 `PullRequestHoldService` 保存请求，等待匹配消息可读或等待期限结束，再重新检查并响应。这个机制不会为每个等待请求阻塞一条业务线程，也不是必须等到物理磁盘 fsync 才唤醒；消息可读与刷盘耐久是不同边界。消息过滤、扫描与调度还会影响实际延迟，长轮询不保证零等待。
 
 ![长轮询让「拉」既不空转又接近推的实时性](/images/posts/rocketmq-push-pull-long-polling.svg)
 
-这张图里三条线对应三种可能：短轮询是消费者不停空手而归；纯 push 是 Broker 主动推（RocketMQ 不走这条）；长轮询是消费者拉一次、Broker 挂着等、有新消息再回。RocketMQ 的 `DefaultMQPushConsumer` 走的是第三条。长轮询用"挂起请求"这一个动作，同时买到两样东西：不空转（省资源），延迟低（消息一到就回，接近 push 的实时性）。
+这张图对比短轮询、无请求的主动推送，以及挂起拉取请求的长轮询。本文讨论的 `DefaultMQPushConsumer` 走第三条。它减少空响应，避免为了及时获知消息而高频询问，但网络、过滤、调度与业务队列依然可能造成延迟。
 
-源码里还有一个更直白的证据：`defaultMessageRequestMode` 的默认值是 `PULL`。也就是说，整个 RocketMQ 默认的消息请求模式，写出来就是 PULL。
+不能拿某个默认配置值证明“整个 RocketMQ 只有一种协议”。服务端和客户端还存在 POP、逐消息确认等路径，5.x 官方消费者文档也区分消息级与队列级负载均衡。理解具体行为，应同时确认 SDK、协议与消费类型。
 
-## 三、为什么底层只留「拉」
+## 三、主动拉取便于控制节奏，但背压不是自动成立
 
-只留"拉"一种传输方式，根子在一个词：**背压**。
+主动拉取使消费者能够决定请求节奏，这是实现背压的一个入口。
 
-拉模式下，消费速度由消费者自己决定。消费者按自己的处理能力去拉——处理得快就拉得快，处理得慢就拉得慢，甚至暂时不拉。于是"消费慢"天然会反向传导成"拉得慢"，Broker 和消费者之间形成了一道天然的背压，慢消费者不会被打爆。
+SDK 会根据本地缓存数量、大小、位点跨度等阈值延缓拉取。实际系统仍要限制消费线程、单批工作量、外部连接池和业务侧队列。拉取速度高于完成速度时，消息照样能在客户端缓存或自建线程池积压。长轮询解决空查询，不直接解决慢 SQL、无限异步分发和内存失控。
 
-纯 push 就没有这道背压。Broker 如果不管消费者能不能消化、一个劲地推，慢消费者要么被打挂，要么消息在它那边积压失控；要避免这个，Broker 端就得自己维护一套复杂的流控——按消费者的消费进度决定推多快。RocketMQ 选择不做这套流控，而是把"拉多快"的控制权交还给消费者自己，代价只是把"拉"的循环封装进框架。
+主动推送也可以有背压，例如利用信用额度、预取上限和未确认消息数量限制发送。不能把“拉”与“安全”画等号，也不能说推送协议必定无法控制流量。选择的区别在于流控信号、状态和调度由谁维护。
 
-「拉」还顺带解决了另一个问题：位点（offset）的主动权。拉模式下，什么时候拉、拉哪个队列、拉到哪、失败之后从哪里重来，都是消费者可以自己决定的。这对需要精确控制消费进度、或者要做批量拉取、限速、暂停恢复的场景，是必不可少的自由度。纯 push 模式下，这些都要靠 Broker 侧的协议去协商，复杂得多。
+4.x LitePull 还允许应用更直接地管理消费进度。但位点不是一条消息的独立完成标记：如果并发处理时后面的消息先完成，不能直接跨过前面未完成的消息提交。提交应覆盖连续完成的范围，并协调队列重新分配；否则所谓“自己控制”反而会漏处理。
 
 ## 四、平时用哪种，为什么
 
-日常开发里，绝大多数场景用 **Push Consumer（`DefaultMQPushConsumer`）**，原因不是它"更高级"，而是它把该省的都省了：
+在 4.x 回调式业务消费中，Push 通常能省去自行管理拉取与调度的工作，但要遵守监听器的完成语义：
 
 - 你不用写"拉循环 + 存位点 + 失败重拉"这套样板代码，只写一个回调；
-- 位点自动提交，失败自动重试，超过最大次数进死信队列，负载均衡（Rebalance）也是框架自动做；
-- 底层是长轮询的拉，所以它保留了背压——消费慢不会被打爆，这一点很多人误以为 push 会失去。
+- 在适用的集群消费与重试模式下，SDK 管理进度、失败重试与 Rebalance；广播等模式不能直接照搬这套保证。
+- 有缓存与调度流控，但仍需限制下游并发。把消息提交给内存线程池后立即返回成功，会让 MQ 误以为业务已经完成。
 
 Pull Consumer（现在的 `DefaultLitePullConsumer`，老的 `DefaultMQPullConsumer` 已不推荐）只在一种情况下用：**你需要把手伸进消费循环里**。具体说，是这几类：
 
@@ -75,12 +78,14 @@ Pull Consumer（现在的 `DefaultLitePullConsumer`，老的 `DefaultMQPullConsu
 - 要批量、限速：一次拉一批、按自己的节奏消费，或主动暂停、恢复、seek 到指定 offset；
 - 消费语义不标准：数据同步、数据抽取、流计算这类"消费"本质上是"搬运"或"处理一批"，不是"处理一条回调一次"。
 
-一句话：**能用 Push 就用 Push，只有当你需要自己掌控"拉"的节奏和位点时，才换成 Pull**。想清楚这一层，就不会被"推拉模式"这个说法绕进去——RocketMQ 里从来没有"推"这种传输方式，只有"框架帮你拉"和"你自己拉"两种 API。
+如果使用 5.x gRPC SDK，按 [官方消费者类型](https://rocketmq.apache.org/docs/featureBehavior/06consumertype/)选择：PushConsumer 在监听器完成后返回结果；SimpleConsumer 通过 `receive`、`ack` 与不可见时间管理处理，适合更自主的业务调度；PullConsumer 主要用于流处理集成。不可见时间是有限处理租约，超时、确认失败仍可能重复投递，并不取消幂等要求。
+
+日常选择先看当前客户端类型，再看是否需要自主调度、怎样确认业务完成、怎样控制并发。理解 Push 背后的长轮询有助于定位延迟，但确认、背压和版本边界必须一起看。
 
 ## 参考资料
 
 - [RocketMQ 官方文档：Push Consumer](https://rocketmq.apache.org/docs/4.x/consumer/02push/)
 - [RocketMQ 官方文档：Pull Consumer](https://rocketmq.apache.org/docs/4.x/consumer/03pull/)
-- [RocketMQ 源码：BrokerConfig（longPollingEnable / defaultMessageRequestMode）](https://github.com/apache/rocketmq/blob/develop/common/src/main/java/org/apache/rocketmq/common/BrokerConfig.java)
-- [RocketMQ 源码：PullMessageService](https://github.com/apache/rocketmq/blob/develop/client/src/main/java/org/apache/rocketmq/client/impl/consumer/PullMessageService.java)
-- [RocketMQ 源码：PullRequestHoldService](https://github.com/apache/rocketmq/blob/develop/broker/src/main/java/org/apache/rocketmq/broker/longpolling/PullRequestHoldService.java)
+- [RocketMQ 4.9.8：BrokerConfig](https://github.com/apache/rocketmq/blob/rocketmq-all-4.9.8/common/src/main/java/org/apache/rocketmq/common/BrokerConfig.java)
+- [RocketMQ 4.9.8：PullMessageService](https://github.com/apache/rocketmq/blob/rocketmq-all-4.9.8/client/src/main/java/org/apache/rocketmq/client/impl/consumer/PullMessageService.java)
+- [RocketMQ 4.9.8：PullRequestHoldService](https://github.com/apache/rocketmq/blob/rocketmq-all-4.9.8/broker/src/main/java/org/apache/rocketmq/broker/longpolling/PullRequestHoldService.java)

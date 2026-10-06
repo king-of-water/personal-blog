@@ -7,7 +7,7 @@ articleClass: focused
 seriesOrder: 30
 featured: true
 publishedAt: 2026-10-01T21:20:00+08:00
-updatedAt: 2026-10-01T21:20:00+08:00
+updatedAt: 2026-10-06T15:46:00+08:00
 tags: [RocketMQ, 事务消息, 半消息, 回查, 本地事务, Outbox, 一致性, 消息队列]
 ---
 
@@ -15,7 +15,7 @@ tags: [RocketMQ, 事务消息, 半消息, 回查, 本地事务, Outbox, 一致�
 
 RocketMQ 的事务消息就是为这个窗口设计的。它的解法可以一句话概括：**先发一条消费者暂时看不见的"半消息"，执行本地事务后再决定这条消息是投递还是丢弃；如果"决定"这一步因为崩溃或断网而丢失，Broker 会主动回来问"你的本地事务到底成没成"**。
 
-本文回答一个问题：这套"半消息 + 回查"机制具体怎么工作，它在什么情况下能保证一致、什么情况下保证不了。站内《分布式事务：2PC、TCC、Saga 与 Outbox》是从解法全景的角度把事务消息列为其中一种，本文只深入 RocketMQ 事务消息这一种机制；本文也不重述《超时、重试、幂等》里的幂等原则，但结论会落到它上面。主要依据是 RocketMQ 官方事务消息文档与 Broker 配置，托管版行为以各自文档为准。
+本文回答一个问题：这套“半消息 + 回查”机制具体怎么工作，它在什么情况下能收敛一致、什么情况下不能。代码采用 RocketMQ 4.x Remoting 的 `TransactionMQProducer` API，内部实现以 Apache RocketMQ 4.9.8 为参照；5.x gRPC SDK 的接口与部署方式不同，不能直接混用。站内 [分布式事务](/posts/distributed-transactions-2pc-tcc-saga-outbox/)讨论解法全景，本文深入事务消息的发布侧边界；消费可靠性另见 [消息怎样不丢失](/posts/message-queue-reliable-delivery-no-loss/)。
 
 ## 一、先看清要解决的窗口在哪
 
@@ -34,60 +34,64 @@ RocketMQ 的事务消息就是为这个窗口设计的。它的解法可以一�
 
 ## 二、半消息 + 二次确认：两阶段机制
 
-事务消息分两阶段。第一阶段发一条**半消息（half message）**：它被 Broker 持久化、返回 ack，但被标记为"暂不可投递"，消费者看不到它。半消息发成功后，生产者执行本地事务；第二阶段，根据本地事务结果向 Broker 发第二次确认——提交（Commit）或回滚（Rollback）。
+事务消息分两阶段。第一阶段发一条半消息（half message）：Broker 按存储配置接收并返回发送结果，但它暂不可投递，消费者看不到。生产者要检查发送结果是否符合所需的刷盘与复制条件，再执行本地事务；第二阶段，根据本地事务结果发提交（Commit）、回滚（Rollback）或未知状态。
 
 ```java
 TransactionMQProducer producer = new TransactionMQProducer("order-group");
 producer.setTransactionListener(new TransactionListener() {
     @Override
     public LocalTransactionState executeLocalTransaction(Message msg, Object arg) {
-        // 半消息已持久化，现在执行本地事务，并返回结果
-        boolean ok = createOrder(msg);
-        return ok ? LocalTransactionState.COMMIT_MESSAGE : LocalTransactionState.ROLLBACK_MESSAGE;
+        // 示例辅助函数：提交业务与事务结果记录后才返回 COMMIT；
+        // 确认回滚返回 ROLLBACK，提交结果未知则返回 UNKNOW。
+        return createOrderAndRecordTxOutcome(msg);
     }
 
     @Override
     public LocalTransactionState checkLocalTransaction(MessageExt msg) {
-        // Broker 回查时，根据消息里的订单号查本地事务的真实状态
-        return orderExists(msg) ? LocalTransactionState.COMMIT_MESSAGE : LocalTransactionState.ROLLBACK_MESSAGE;
+        // 示例辅助函数：按稳定 transactionId 查询权威持久记录。
+        // 已提交 -> COMMIT，明确终止 -> ROLLBACK；
+        // 仍执行、记录缺失、查询失败 -> UNKNOW。
+        return queryDurableTxOutcome(msg);
     }
 });
 producer.sendMessageInTransaction(msg, null);
 ```
 
-`executeLocalTransaction` 在半消息成功发出后立刻执行本地事务，`checkLocalTransaction` 留给 Broker 回查时用。第二个方法的语义很关键：它不是"重新执行一遍业务逻辑"，而是"查一下上次那个本地事务到底成没成"。
+这段代码展示回调形状，两个辅助函数需要业务系统实现。`executeLocalTransaction` 在半消息发送满足成功条件后执行本地事务，`checkLocalTransaction` 留给 Broker 回查。回查查询原事务的结果，不重新下单。特别不能写成 `orderExists ? COMMIT : ROLLBACK`：查不到订单，可能只是原事务尚未提交、读副本滞后或查询失败，并不能证明它已经回滚。
 
-半消息在 Broker 上不是存在原 Topic 里，而是先落到一个内部系统 Topic（`RMQ_SYS_TRANS_HALF_TOPIC`），被标记为不可投递。Commit 时，Broker 把消息从半消息 Topic 搬到真正的业务 Topic，消费者这才可见；Rollback 时直接丢弃。这个"搬"的动作，是半消息和普通消息在存储上的本质区别——它解释了为什么消费者永远看不到"半截"的消息：业务 Topic 里只有已经确认要投递的消息。
+在 4.9.8 实现中，半消息先写内部 Topic `RMQ_SYS_TRANS_HALF_TOPIC`，对业务消费者不可见。Commit 会恢复原 Topic 等属性并写入业务消息，再记录半消息已经处理；Rollback 记录该半消息不再放行。这里不是把磁盘上的记录物理搬走或立即擦除，旧日志仍由保留与清理机制处理。“半消息不可见”保证了下游不会提前消费，但发送确认的耐久程度仍取决于刷盘和复制策略。
 
 ![半消息、二次确认与状态回查的完整时序](/images/posts/rocketmq-transactional-message-flow.svg)
 
-这张时序图里有两条正常路径和一条兜底路径。正常路径：半消息发出 → 本地事务执行 → Commit（放行）或 Rollback（丢弃）。兜底路径：如果第二次确认因为进程崩溃、网络闪断而丢失，Broker 不会一直傻等，而是过一段时间主动回查生产者，根据 `checkLocalTransaction` 返回的状态把半消息放行或丢弃。
+正常路径是半消息确认、本地事务执行，再按结果 Commit 或 Rollback。第二次确认丢失或事务结果未知时，Broker 按检查策略回查生产者。已提交才放行，明确回滚则不投递，仍未知则在策略允许范围内继续等待。
 
 ## 三、三个状态，和一个必须写对的回查
 
 事务状态有三种：`COMMIT_MESSAGE`（提交，消费者可消费）、`ROLLBACK_MESSAGE`（回滚，消息丢弃）、`UNKNOW`（暂时无法确定）。`UNKNOW` 不是错误，它是"我还不知道本地事务结果"的诚实回答——常见于本地事务还在执行、或结果还没落库的情况。返回 `UNKNOW` 后，Broker 会等一段时间再回查。
 
-回查不是无限进行的。Broker 侧有参数约束：事务消息默认超过 `transactionTimeOut`（6 秒）还没收到第二次确认，就进入待回查队列；`TransactionCheckService` 按 `transactionCheckInterval`（默认 30 秒）周期性回查；一条半消息最多回查 `transactionCheckMax`（默认 15 次）。回查次数耗尽仍无法确定状态，半消息会被丢弃或进入死信。
+回查不是无限进行的。`transactionTimeOut`、`transactionCheckInterval` 与 `transactionCheckMax` 分别约束可检查时间、扫描周期与检查次数，具体值以运行版本和配置为准；并不是超过一个超时值就必定立刻回查。在 [4.9.8 的检查实现](https://github.com/apache/rocketmq/blob/rocketmq-all-4.9.8/broker/src/main/java/org/apache/rocketmq/broker/transaction/queue/TransactionalMessageServiceImpl.java)中，还要考虑检查保护时间、已有处理记录及消息保留时间。次数耗尽的默认处置会尝试转写 `TRANS_CHECK_MAXTIME_TOPIC`，见 [默认检查监听器](https://github.com/apache/rocketmq/blob/rocketmq-all-4.9.8/broker/src/main/java/org/apache/rocketmq/broker/transaction/queue/DefaultTransactionalMessageCheckListener.java)。这不是普通消费失败的 DLQ，不能假设业务死信工具一定能看到它。
 
-回查机制有一个容易被忽略的硬约束：**事务消息的 ProducerGroupName 不能随便设**。如果原生产者进程崩溃，Broker 会找同一 Producer Group 里的其他生产者实例，请它们代为执行 `checkLocalTransaction`。这意味着 `checkLocalTransaction` 必须能跨实例查到本地事务的真实状态——它不能只查"本进程内存里存没存过这个事务"，而要去数据库里按消息里的业务键（订单号）查订单到底在不在。很多事务消息写错，错就错在这里：把事务状态存进程内存，回查一旦落到别的实例，就查不到了。
+4.x 回查路由还依赖 Producer Group。原实例离线后，同组其他在线生产者可能接收回查，因此组内实例必须具有相同的查询能力，并能访问共享的权威事务状态。不能只查进程内存，也不能按订单号查到某一笔旧订单就认定本次事务成功。稳定的 `transactionId` 应对应本次逻辑操作，业务记录与已提交结果在同一数据库事务内落库；读路径必须避免把副本滞后解释成回滚。
+
+对于仍在执行、没有结果记录或查询失败的事务，先返回 `UNKNOW`。[官方事务消息说明](https://rocketmq.apache.org/docs/featureBehavior/04transactionmessage/)明确要求在执行中的事务不要提前返回 Commit 或 Rollback。长期未知则需要业务超时处置：通过锁、版本或状态条件阻止原执行者继续提交，确认最终终止后才记录回滚。否则回查刚判断“取消”，原事务稍后又成功，就会造成业务已提交而消息永久不可见。
 
 回查还是异步的，跑在生产者侧的独立线程里。官方示例专门为事务消息的 check 设置了一个线程池——`checkLocalTransaction` 被 Broker 的检查请求触发、并发执行。这带来两个推论：一是回查逻辑可能和业务请求并发跑，它读到的必须是"已经落库、能跨线程一致读到"的状态；二是回查请求会排队，线程池太小会在流量高峰积压回查，导致半消息迟迟得不到最终状态。所以事务消息的回查，本质是一套"生产者端要自己维护好的查询服务"，不是 Broker 替你包办。
 
 ## 四、失败模式与它到底保证什么
 
-事务消息保证的是**"下游最终只看到已提交的本地事务"**，它是最终一致，不是强一致。要理解它的边界，得看清几类失败各自的结果。
+事务消息在本地事务结果判定正确、存储与恢复条件成立时，让消息可见性跟随事务结果收敛。它不保证数据库和所有下游在同一时刻完成，也不负责消费者的业务事务。要理解边界，得看清几类失败各自的结果。
 
-用一个具体场景走一遍：用户下单，本地事务是"插入订单 + 扣减库存"（同一个数据库事务），消息要通知下游发券。正常路径——半消息发出、本地事务提交、Commit 发到 Broker、Broker 把消息搬到订单 Topic、下游发券。三种崩溃路径，回查都能把结果收敛到"订单和消息一致"：半消息刚发出、本地事务还没执行就崩溃，回查按订单号查不到订单，返回 Rollback，消息丢弃、下游不发券；本地事务提交了、Commit 没发出去就崩溃，回查查到订单存在，返回 Commit，消息最终投递、下游晚几秒发券；本地事务执行到一半数据库回滚，回查查不到完整订单，Rollback。崩溃点不同，结局都正确——这正是半消息 + 回查的价值。
+以用户下单为例，本地事务是“插入订单、扣减本库库存、记录本次事务已提交”，消息通知下游发券。正常路径是半消息确认、本地事务提交、发送 Commit、业务消息可见、下游幂等发券。若库存位于另一个独立服务，就不能把远程扣库存也说成同一个本地事务；需要另行设计跨服务补偿。
 
-**半消息发出后、本地事务执行前崩溃**：本地事务没执行，`checkLocalTransaction` 查订单查不到，返回 Rollback，半消息被丢弃。下游收不到消息，正确。
+**半消息发出后、本地事务执行前崩溃**：第一次查不到结果时先返回未知。业务恢复逻辑确认该操作终止且不会再提交后，持久记录回滚，再由回查返回 Rollback。不能仅凭一次空查询完成这个判断。
 
-**本地事务提交后、第二次确认发出前崩溃**：订单已落库，但 Commit 没到 Broker。回查时查到订单存在，返回 Commit，半消息放行。下游**晚一点**收到消息，但不会漏，正确。
+**本地事务提交后、第二次确认发出前崩溃**：业务数据与对应事务的已提交记录一起落库，回查据此返回 Commit。检查实例可用、半消息仍在有效恢复范围内时，消息可以被放行。消费者可能晚收到，不能承诺固定几秒内完成。
 
-**回查本身也失败**：Broker 回查、生产者恰好也联系不上，或回查超时。半消息继续挂着，直到回查次数耗尽后被丢弃或进死信。这时"订单在、消息丢了"的不一致又回来了——只是概率被压低，不是被消灭。所以事务消息不能替代对账：关键链路仍要有兜底扫描或对账，把这类漏网之鱼捞回来。
+**回查本身也失败**：没有可用生产者、查询超时、次数耗尽或保留时间越界，都可能使消息无法自动放行。必须观察长期未知事务、异常半消息处置和业务结果；关键链路仍需扫描与对账。对账补发使用原业务键，避免恢复时再次发券。
 
 **消费者重复消费**：Commit 之后、消费者消费完成之前崩溃，消息会被再次投递。事务消息解决的是"消息和本地事务是否一致"，不解决"消费是否恰好一次"。消费端仍然要幂等——这回到《超时、重试、幂等》那篇的原则：事务消息负责把"不该发的消息"拦在门外，幂等负责把"重复发的消息"消化掉，两者各管一段。
 
-一句话：事务消息把"本地事务和消息发送"的窗口从"可能不一致"压到"少数难以触发的场景不一致，且能靠回查和对账兜底"，但它不是分布式事务，也不提供恰好一次消费。
+事务消息是一种面向最终一致性的事务协调机制，可以用于分布式事务方案，但不是 XA 式跨资源原子提交。它解决发布侧的双写窗口，不提供下游业务恰好执行一次的保证，也不能用“故障概率很小”替代结果查询和恢复设计。
 
 事务消息也不是银弹，三种场景它帮不上忙。一是"本地事务"本身跨了多个系统、没有一个单一业务键能反查出最终状态——回查不知道该查谁，这套机制就落不了地。二是本地事务执行时间很长（比如要同步等外部接口），半消息长时间挂着、回查反复触发，消费者迟迟收不到消息。三是要求多个下游"要么都成功要么都失败"的强一致——事务消息只保证"消息和本地事务一致"，不保证"多个下游之间一致"，后者要靠 Saga 或对账。认清这些边界，才不会把事务消息当成万能的事务替代品，也不会在它覆盖不了的地方硬用它。
 
@@ -105,14 +109,14 @@ producer.sendMessageInTransaction(msg, null);
 | 跨实例回查 | 同 Producer Group 会被代查，回查必须查库 | 无此约束，逻辑更直白 |
 | 适用 | 团队已用 RocketMQ，且愿意写对回查 | 要解耦 MQ、或已有 Outbox 基础设施 |
 
-我的判断是：**团队已经在用 RocketMQ、且业务里双写窗口确实高频出现，用事务消息更省事**——它把消息表、轮询发送、补发这些自己造，换成了实现两个回调方法。但如果团队要解耦 MQ 选型、或已经有一套 Outbox 基础设施在跑，本地消息表更稳，因为它不把一致性绑在某个中间件的特性上。最忌讳的是两者都不做：先写数据库、再裸发一条消息，然后指望"大概率不会出事"。
+团队已经在用 RocketMQ，且能保存和查询本地事务结果时，可以优先评估事务消息。它省去了自行维护发布消息表和扫描器的一部分工作，但仍要实现可靠回查、超限处置和监控。如果需要跨 MQ，或者已有成熟的 Outbox 基础设施，继续使用本地消息表也合理。先写数据库再裸发消息，两种恢复机制都没有，则会留下双写窗口。
 
-无论选哪条，终点都一样：消费者幂等、关键链路对账，这两件事省不掉。事务消息和本地消息表都是把"不该发的消息"拦住的闸门，闸门之外的那段路，还得靠幂等和对账来兜。
+两种方案协调的是业务提交与事件发布。消费者仍需幂等处理重复，并通过关键链路对账发现应执行却未完成的业务。
 
 还有一种中间态值得一提：如果系统已经跑着本地消息表 / Outbox，没必要全量换成事务消息——两者可以共存、按链路区分。和本地事务强绑定、又恰好落在 RocketMQ 上的关键路径，用事务消息省事；跨 MQ、或已经有成熟 Outbox 基础设施的路径，继续用 Outbox。选型是逐链路判断，不是全站一刀切。
 
 ## 参考资料
 
 - [RocketMQ 官方文档：Transactional Message Sending](https://rocketmq.apache.org/docs/4.x/producer/06message5/)
-- [RocketMQ 源码：TransactionListener](https://github.com/apache/rocketmq/blob/develop/client/src/main/java/org/apache/rocketmq/client/producer/TransactionListener.java)
-- [RocketMQ 源码：BrokerConfig（transactionCheckInterval / transactionCheckMax）](https://github.com/apache/rocketmq/blob/develop/common/src/main/java/org/apache/rocketmq/common/BrokerConfig.java)
+- [RocketMQ 4.9.8：TransactionListener](https://github.com/apache/rocketmq/blob/rocketmq-all-4.9.8/client/src/main/java/org/apache/rocketmq/client/producer/TransactionListener.java)
+- [RocketMQ 4.9.8：BrokerConfig](https://github.com/apache/rocketmq/blob/rocketmq-all-4.9.8/common/src/main/java/org/apache/rocketmq/common/BrokerConfig.java)
