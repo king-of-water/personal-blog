@@ -6,7 +6,7 @@ subcategory: 消息队列
 articleClass: flagship
 seriesOrder: 35
 featured: false
-publishedAt: 2026-10-06T15:55:00+08:00
+publishedAt: 2026-09-30T21:45:00+08:00
 tags: [消息队列, RocketMQ, Kafka, RabbitMQ, 可靠性, Outbox, 幂等, ACK, 对账]
 ---
 

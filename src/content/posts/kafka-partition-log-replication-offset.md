@@ -5,7 +5,7 @@ category: 后端
 subcategory: 消息队列
 articleClass: flagship
 seriesOrder: 90
-publishedAt: 2026-10-06T16:45:00+08:00
+publishedAt: 2026-10-03T22:05:00+08:00
 tags: [Kafka, 分区日志, ISR, 消费位点, KRaft, 消息队列]
 ---
 

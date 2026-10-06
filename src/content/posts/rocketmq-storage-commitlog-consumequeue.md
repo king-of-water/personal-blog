@@ -5,7 +5,7 @@ category: 后端
 subcategory: 消息队列
 articleClass: flagship
 seriesOrder: 80
-publishedAt: 2026-10-06T16:36:00+08:00
+publishedAt: 2026-10-03T20:35:00+08:00
 tags: [RocketMQ, CommitLog, ConsumeQueue, 存储, 页缓存, 消息队列]
 ---
 

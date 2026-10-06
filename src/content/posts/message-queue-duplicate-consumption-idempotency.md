@@ -5,7 +5,7 @@ category: 后端
 subcategory: 消息队列
 articleClass: focused
 seriesOrder: 60
-publishedAt: 2026-10-06T16:27:00+08:00
+publishedAt: 2026-10-02T20:25:00+08:00
 tags: [消息队列, 幂等, 重复消费, RocketMQ, Kafka, 事务]
 ---
 

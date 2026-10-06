@@ -5,7 +5,7 @@ category: 后端
 subcategory: 消息队列
 articleClass: focused
 seriesOrder: 40
-publishedAt: 2026-10-06T16:14:00+08:00
+publishedAt: 2026-10-01T20:20:00+08:00
 tags: [消息队列, 顺序消费, RocketMQ, Kafka, 分区, 状态机]
 ---
 

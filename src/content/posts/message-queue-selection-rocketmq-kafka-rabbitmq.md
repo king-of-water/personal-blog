@@ -6,7 +6,7 @@ subcategory: 消息队列
 articleClass: flagship
 seriesOrder: 20
 featured: true
-publishedAt: 2026-10-02T20:59:00+08:00
+publishedAt: 2026-09-29T21:40:00+08:00
 updatedAt: 2026-10-06T15:46:00+08:00
 tags: [消息队列, RocketMQ, Kafka, RabbitMQ, 选型, 对比, 事务消息, 延迟消息, 消息回溯, 吞吐]
 ---

@@ -6,8 +6,8 @@ subcategory: AI 应用与思考
 articleClass: focused
 seriesOrder: 32
 featured: false
-publishedAt: 2026-10-06T13:07:00+08:00
-updatedAt: 2026-10-06T13:07:00+08:00
+publishedAt: 2026-09-27T14:30:00+08:00
+updatedAt: 2026-09-27T14:30:00+08:00
 tags: [TDD, SDD, Coding Agent, 软件测试, 幂等, 开发流程]
 tools:
   - name: humanizer

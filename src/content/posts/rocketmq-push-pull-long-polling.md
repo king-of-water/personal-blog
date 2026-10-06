@@ -6,7 +6,7 @@ subcategory: 消息队列
 articleClass: field-note
 seriesOrder: 10
 featured: true
-publishedAt: 2026-09-30T20:33:00+08:00
+publishedAt: 2026-09-29T20:15:00+08:00
 updatedAt: 2026-10-06T15:46:00+08:00
 tags: [RocketMQ, 消息队列, Push, Pull, 长轮询, 消费模型, DefaultMQPushConsumer, 背压]
 ---

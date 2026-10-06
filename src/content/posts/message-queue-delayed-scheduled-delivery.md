@@ -5,7 +5,7 @@ category: 后端
 subcategory: 消息队列
 articleClass: focused
 seriesOrder: 50
-publishedAt: 2026-10-06T16:24:00+08:00
+publishedAt: 2026-10-01T21:50:00+08:00
 tags: [消息队列, 延迟消息, RocketMQ, RabbitMQ, 调度, 状态机]
 ---
 
