@@ -7,7 +7,7 @@ articleClass: flagship
 seriesOrder: 30
 featured: false
 publishedAt: 2026-09-28T20:07:00+08:00
-updatedAt: 2026-09-28T20:07:00+08:00
+updatedAt: 2026-10-06T13:07:00+08:00
 tags: [SDD, Spec-Driven Development, AI Coding, Spec Kit, Codex, 开发流程]
 tools:
   - name: humanizer
@@ -415,6 +415,8 @@ R4 增加搜索分析
 | Skills | Agent 完成某类任务时遵守的操作方法 | 触发条件、步骤、工具和验收规则 |
 
 一个项目可以用 SDD 确定“博客搜索应该提供哪些行为”，用 BDD 写出搜索与空状态场景，用 TDD 实现匹配和排序，再用 Skill 要求 Agent 每次修改搜索功能都运行指定测试与页面检查。
+
+关于失败测试如何推动实现、单元测试的验证边界，以及怎样在任务内部组合两套流程，可以接着读 [TDD 与 Coding Agent：从失败测试到正确实现](/posts/test-driven-development-coding-agents/)。文章用订单取消与库存释放作为贯穿案例。
 
 Skills 还可以把 SDD 流程本身封装起来。例如一个 `feature-development` Skill 规定：先检查 Constitution，再生成 Spec，列出未决问题，得到确认后生成 Plan 与 Tasks，完成实现后运行 Converge。这样流程从团队约定变成 Agent 可以重复执行的操作。
 
