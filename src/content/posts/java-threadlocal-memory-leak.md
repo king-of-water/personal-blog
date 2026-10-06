@@ -1,273 +1,275 @@
 ---
-title: ThreadLocal：线程私有变量、ThreadLocalMap 与内存泄漏
-description: 深入 ThreadLocal 源码：ThreadLocalMap 的开放地址法与线性探测、threadLocalHashCode 的黄金分割散列、set/get 的完整流程、Entry 的弱引用 key 与强引用 value 的引用链、expungeStaleEntry/cleanSomeSlots/rehash 的清理与扩容，以及内存泄漏的精确成因。
+title: ThreadLocal：请求上下文、线程复用与内存残留
+description: 从请求用户信息串用出发，解释 ThreadLocal 的用途、独立存储与对象共享、ThreadLocalMap 的引用链、remove 与初始化、嵌套恢复和异步传播，再结合线性探测与清理机制验证生产中的边界。
 category: 后端
 subcategory: Java
 articleClass: focused
 seriesOrder: 60
 featured: true
 publishedAt: 2026-06-10T20:47:00+08:00
-updatedAt: 2026-06-10T20:47:00+08:00
-tags: [Java, ThreadLocal, ThreadLocalMap, 线性探测, 弱引用, 强引用, expungeStaleEntry, 内存泄漏, InheritableThreadLocal]
+updatedAt: 2026-10-06T12:26:00+08:00
+tags: [Java, ThreadLocal, 请求上下文, 线程池, ThreadLocalMap, 内存泄漏, 异步传播, InheritableThreadLocal]
+tools:
+  - name: documd-visuals
+    href: /toolbox/#documd-visuals
+  - name: humanizer
+    href: /toolbox/#humanizer
 ---
 
-`ThreadLocal` 给每个线程一份变量副本，但它的实现里藏着一套不那么显眼的机制：值不是存在 `ThreadLocal` 对象里，而是存在每个 `Thread` 自己的一张 `ThreadLocalMap` 里，这张表用**开放地址法**解决冲突，`key` 是**弱引用**、`value` 是**强引用**，靠 `expungeStaleEntry` 惰性清理。内存泄漏的根源，全在这几个设计细节里。
+请求 A 已经处理完，请求 B 的日志里却出现了 A 的用户 ID。检查全局变量没有发现赋值错误，用户信息放在 ThreadLocal 里，看起来也是“线程私有”的。真正的问题在于：两次请求使用了同一个工作线程，A 结束时没有清理，B 又在没有安装新上下文的路径上读取了旧值。
 
-大多数讲 `ThreadLocal` 的文章停在"用完记得 `remove`，否则内存泄漏"，却不讲"为什么 key 是弱引用、value 是强引用"、"泄漏时到底谁引用着谁"、"`ThreadLocalMap` 是怎么清理和扩容的"。这几个问题不讲清，`remove` 就只是一条要死记的规矩，而不是推导出来的必然结论。
+另一种现象是内存持续占用。业务不再使用某个对象，它却仍被工作线程的 ThreadLocalMap 引用。这里可能发生了弱引用 key 被回收，也可能 key 一直有效。把所有问题都归结为“弱引用导致泄漏”，会漏掉后一种情况，更无法解释用户信息串用。
 
-本文把 `ThreadLocal` 的源码机制摊开讲。目标是：读完你能画出 `Thread → ThreadLocalMap → Entry → value` 的完整引用链，说清弱引用 key 的设计意图，以及 `set`/`get`/`remove` 分别触发了什么清理。主要依据是 JDK 8 源码。
+本文的问题是：怎样让上下文跟随正确的请求，又不把它留给后续任务？先解释用途和使用边界，再从线程复用走到引用链、清理和异步传播。API 依据 Java 17 官方文档，内部机制依据固定版本的 [OpenJDK 17.0.16 ThreadLocal 源码](https://github.com/openjdk/jdk17u/blob/jdk-17.0.16%2B8/src/java.base/share/classes/java/lang/ThreadLocal.java)。可运行实验使用本机 OpenJDK 11，验证共同的公开行为；实验不依赖 GC 恰好在某个时间发生。
 
-## 一、存储结构：值存在 Thread 的 ThreadLocalMap 里
+## 一、为什么用 ThreadLocal：让同线程中的多层调用访问上下文
 
-`ThreadLocal` 最反直觉的一点：**值不是存在 `ThreadLocal` 对象里**。每个 `Thread` 对象有两个字段——`threadLocals` 和 `inheritableThreadLocals`，类型都是 `ThreadLocal.ThreadLocalMap`。`ThreadLocal.set(v)` 的实际动作是 `Thread.currentThread().threadLocals.set(this, v)`，也就是"拿当前线程的那张表，以这个 `ThreadLocal` 对象作 key，把 v 存进去"。
+一个订单请求经过入口、业务服务、数据库访问和日志组件。入口完成认证后获得用户 ID，生成链路标识 Trace ID，后面多层调用都需要使用这些信息。
 
-`ThreadLocalMap` 是一个**自定义的哈希表**，不是 `HashMap`，它有三个关键设计：
+最直白的方式是通过参数传递。依赖清楚、容易测试，也容易看出某个函数需要哪些信息。代价是一些只负责转发的方法也要携带上下文参数。ThreadLocal 提供另一种选择：把值绑定到当前线程，同一线程中的下层代码从约定入口读取，不必逐层传参。
+
+这种便利也带来隐藏依赖。一个方法签名不接收用户 ID，却在内部读取 ThreadLocal，测试与调用方就必须知道怎样建立上下文。如果需要让核心业务逻辑脱离线程环境运行，显式参数通常更合适；ThreadLocal 更适合由基础设施统一管理的日志上下文、调用范围内状态等。
+
+它与 synchronized 或锁解决的问题不同。锁协调多个线程对同一份状态的访问，ThreadLocal 为不同线程维护各自的绑定。给库存数量套上 ThreadLocal，不会得到正确的全局库存；每个线程只会看到自己绑定的值。
+
+这里还要区分线程生命周期与请求生命周期。在线服务的工作线程可以处理许多请求。ThreadLocal 只认识当前 Thread，不知道哪个 HTTP 请求刚刚开始，也不会收到“这个请求已经完成”的自动清理通知。请求入口或任务包装层必须管理这段范围。
+
+本文的请求上下文只包含不可变的用户 ID 与 Trace ID，不携带完整请求、响应对象或数据库连接。用户 ID 应来自已经验证的身份，不能因为某段代码把字符串放进 ThreadLocal，就认为权限校验已经完成。
+
+## 二、独立的是存储位置，不保证 value 对象互不共享
+
+一个 ThreadLocal 对象通常作为稳定的访问入口，例如一个类里的 static final 字段。不同线程用同一个入口，各自找到自己的存储位置。ThreadLocal 并不是“给每个线程复制一份对象”的深拷贝工具。
 
 ```java
-static class ThreadLocalMap {
-    static class Entry extends WeakReference<ThreadLocal<?>> {
-        Object value;                       // value 是强引用
-        Entry(ThreadLocal<?> k, Object v) {
-            super(k);                       // key 是弱引用（传给 WeakReference 构造器）
-            value = v;
+ThreadLocal<List<String>> local = new ThreadLocal<>();
+List<String> shared = new ArrayList<>();
+
+local.set(shared);
+// 如果另一个线程也 local.set(shared)，两边绑定的是同一个列表。
+```
+
+两张线程表可以指向同一对象。此时对 shared 的并发读写仍然需要同步，或者改成各线程使用独立对象。ThreadLocal 不会替 ArrayList 获得线程安全。
+
+`ThreadLocal.withInitial(ArrayList::new)` 可以让各线程首次访问时各自创建列表，因为每次初始化调用都执行 new。如果 Supplier 返回同一个全局列表，则仍然共享。判断是否隔离，要看 value 是怎样创建和传入的，不能只看变量类型。
+
+普通 ThreadLocal 的 set/get/remove 都针对调用它们的当前线程。在请求线程调用 remove，清理的是请求线程自己的绑定，不能顺便清掉异步工作线程的表。线程名相同也不代表同一个 Thread；演示线程复用时应比较实际执行线程，而不是根据日志时间猜测。
+
+这也解释了异步调用中常见的“上下文丢失”：请求线程设置了值，另一个工作线程直接 get，并没有这份绑定。问题与可见性关键字 volatile 无关。两边访问的是不同的存储位置，加锁或设置 volatile 都不会自动把值搬过去。[ThreadLocal API](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/ThreadLocal.html)
+
+## 三、复现请求串用：key 没被回收，问题也会发生
+
+用单线程池保证两次任务复用同一个工作线程。第一个任务设置用户，第二个任务模拟没有安装上下文就读取用户的路径。两个 Future 顺序等待，保证观察顺序，不依靠 sleep。
+
+```java
+ThreadLocal<String> user = new ThreadLocal<>();
+ExecutorService worker = Executors.newSingleThreadExecutor();
+try {
+    worker.submit(() -> user.set("user-A")).get();
+    String observed = worker.submit(() -> user.get()).get();
+    System.out.println(observed); // user-A，而不是“没有当前用户”
+} finally {
+    worker.shutdown();
+    worker.awaitTermination(5, TimeUnit.SECONDS);
+}
+```
+
+例子中 user 仍有强引用，没有任何 GC 前提。任务 A 已完成，但工作线程没有结束，绑定也没有结束。任务 B 如果直接把 observed 当作当前用户，就可能做出错误的日志归属或权限决策。
+
+![同一工作线程处理两个请求：未清理与 finally 清理的差别](/images/posts/threadlocal-request-reuse.svg)
+
+不是每个后续请求都会立刻暴露问题。如果 B 在任何读取之前设置自己的上下文，旧值会被覆盖。但异常分支、跳过入口的内部任务、匿名请求以及提前读取的日志，都可能打破这个条件。修复应建立完整的范围约定，而不是希望每个调用者总会先 set。
+
+在顶层请求边界，通常是安装上下文，执行处理，然后在 finally 中 remove：
+
+```java
+user.set("user-A");
+try {
+    // 日志、服务调用等同线程代码可以读取当前用户。
+    handleRequest();
+} finally {
+    user.remove();
+}
+```
+
+finally 覆盖的是正常返回、业务异常等退出路径。只在正常返回前写 remove，异常时仍会遗留。若中途切换到另一个线程，该线程上的安装与清理必须另行负责。
+
+ThreadLocal 只负责保存绑定，不能推断 handleRequest 有没有启动尚未结束的子任务，也不能把上下文范围延伸到网络服务。关于任务异常与工作线程复用，可以结合本站 [线程池文章](/posts/java-threadpool-executor-params-rejection/) 阅读。
+
+## 四、值到底放在哪里：Thread、Map、Entry 与引用链
+
+在 OpenJDK 实现中，Thread 有普通线程局部变量表 threadLocals，以及继承用的 inheritableThreadLocals。普通 ThreadLocal.set 会找到当前 Thread 的表，以当前 ThreadLocal 对象作为 key 保存值；如果还没有表，则按需建立。它并不把所有线程的值集中存入 ThreadLocal 自己。
+
+ThreadLocalMap 是专门的哈希表，其 Entry 继承 WeakReference：弱引用的目标是 ThreadLocal key，Entry.value 则普通地强引用业务对象。可以把它概括成两条路径：
+
+- 工作线程 → ThreadLocalMap → Entry 数组 → Entry → value：强引用路径。
+- Entry → ThreadLocal key：弱引用路径。
+
+![工作线程到 value 的强引用链，以及 Entry 到 key 的弱引用](/images/posts/threadlocal-retention-paths.svg)
+
+弱引用的目的，是允许不再被业务强引用的 ThreadLocal 对象被回收，避免线程表自己一直保住这个访问入口。它没有把 value 变成弱引用。GC 清掉 key 后，Entry 仍在数组中，value 仍可能从工作线程到达。
+
+一个 key 已清空、但 Entry 还在的槽位，源码称为 stale entry，本文称“失效条目”。ThreadLocalMap 没有使用引用队列在 GC 后立即删除条目，而是在后续访问和容量管理过程中清理。源码注释明确说明了这一实现边界。[Entry 与失效条目设计](https://github.com/openjdk/jdk17u/blob/jdk-17.0.16%2B8/src/java.base/share/classes/java/lang/ThreadLocal.java#L291)
+
+线程还活着，不代表 value 必然一直保留。remove、覆盖赋值或失效条目清理都可能切断这条路径。线程结束后，这份线程表也会被释放；value 能否最终被回收，还要看其他地方有没有引用。应当分析完整的可达关系，而不是把“线程不死，value 不散”当成规则。
+
+## 五、两类残留：有效 key 与失效 key 要分开看
+
+第一类是 key 仍然有效，业务值已经过期。典型情况是 static final ThreadLocal 作为长期入口，工作线程在请求结束后仍保留大对象。这条目不是 stale，自动清理 stale entry 的代码不会把它认作垃圾。只有业务覆盖、清理或其他生命周期处理，才能释放这条绑定对旧值的引用。
+
+这里不一定表现为内存无限增长。只有一个 ThreadLocal、一个固定线程时，可能只是长期保留最后一次请求的数据。许多线程、多个入口或 value 内持续累积集合时，影响会变大。用户串用也可能在占用很小的情况下发生，不能只用堆内存指标判断有没有问题。
+
+第二类是 key 已失效，value 还在。动态创建的 ThreadLocal 失去强引用后，GC 可以清空 Entry 的弱引用 key，但 value 没有随之立即被清掉。如果该线程长期空闲，或者后续访问没有触发相关清理，残留可能持续很久。
+
+“这个 ThreadLocal 不再被访问，所以条目永远无法清理”是不准确的。同一工作线程操作其他 ThreadLocal，也可能在探测或清理过程中遇到它。反过来，线程频繁调用某个直接命中的 get，也不代表整张表会被扫描。清理是否发生，要看实际执行的路径。
+
+还有一个边界：如果 value 对象自己直接或间接强引用 key，就可能形成线程 → Entry → value → ThreadLocal 的强路径。此时 Entry 到 key 的弱引用并不能让 key 回收。判断弱引用效果前，需要检查所有强引用，而不是只看 Entry 的声明。
+
+排查时可以从长寿命工作线程沿 threadLocals 和 Entry.value 找到保留对象，确认 key 是有效还是已失效，再结合任务结束时间判断对象是否仍有用途。强引用路径存在是证据，但对象仍在使用、缓存有明确容量等情况不能直接定性为泄漏。恢复措施也要说明责任：谁创建这份绑定，谁结束范围，谁检查异常退出路径。
+
+## 六、remove、set(null) 与再次初始化
+
+set(null) 会让当前绑定的 value 变成 null，因此可以断开旧对象的这条引用。但 Entry 仍然存在，语义是“当前线程已经设置过，值就是 null”。remove 删除当前线程的绑定，后续 get 若没有中间 set，会重新初始化。
+
+```java
+AtomicInteger sequence = new AtomicInteger();
+ThreadLocal<Integer> local =
+    ThreadLocal.withInitial(sequence::incrementAndGet);
+
+System.out.println(local.get()); // 1
+local.set(null);
+System.out.println(local.get()); // null，不重新调用 Supplier
+local.remove();
+System.out.println(local.get()); // 2，重新初始化
+local.remove();
+```
+
+如果使用默认 ThreadLocal，初始值也是 null，两条路径的打印结果可能一样，但内部是否存在绑定不同。仅用“get 返回 null”不能判断 remove 有没有执行。[初始化与 remove 契约](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/ThreadLocal.html#remove())
+
+另一个容易混淆的地方是：没有绑定时，get 不只是查询，它还会调用 initialValue，并把结果建立为当前线程的绑定。withInitial 可以创建新对象，普通 get 也可能建立一个 value=null 的条目。需要明确初始化有没有副作用，不能把它当成一个始终无成本的存在性检查。
+
+对于最外层请求边界，结束时 remove 很合适。但嵌套范围内，外层上下文可能仍然要使用。例如外层 Trace ID 为 outer，内部临时切换成 inner；内部结束后，应恢复 outer，不能直接 remove 后让外层失去状态。
+
+下面先给本文的上下文明确一个约定：只存非 null 的不可变 RequestContext，null 表示没有活动上下文。这样就能用读取到的 null 判断恢复时应该 remove 还是 set；它不适用于允许 null 本身代表有效业务值的通用 ThreadLocal。
+
+```java
+static final ThreadLocal<RequestContext> CURRENT = new ThreadLocal<>();
+
+static void install(RequestContext context) {
+    if (context == null) CURRENT.remove();
+    else CURRENT.set(context);
+}
+
+static Runnable withContext(RequestContext context, Runnable action) {
+    return () -> {
+        RequestContext previous = CURRENT.get();
+        install(context);
+        try {
+            action.run();
+        } finally {
+            install(previous);
         }
-    }
-    private Entry[] table;                   // 开放地址法的数组
-    private int size = 0;
-    private int threshold;                   // 扩容阈值 = table.length * 2/3
+    };
 }
 ```
 
-第一，`Entry` 继承 `WeakReference<ThreadLocal<?>>`——`key` 是弱引用、`value` 是强引用，这个不对称是内存泄漏的根。第二，它用**开放地址法（线性探测）**解决哈希冲突，而不是 `HashMap` 的"数组 + 链表"链地址法——冲突时往下找下一个空位。第三，阈值是 `2/3`，比 `HashMap` 的 `0.75` 更早触发扩容，因为它要留余量给"清理"。
+previous 为 null 时，最后 remove 也会清掉 get 可能创建的 null 条目。previous 非 null 时，恢复原值，保留外层范围。这个帮助函数的完整类定义和测试在文末实验中；它没有扫描所有 ThreadLocal，只管理 CURRENT 这一项。
 
-![ThreadLocal 的值存在每个 Thread 自己的表里](/images/posts/java-threadlocal-structure.svg)
+## 七、跨线程传播：提交时捕获，执行时安装，结束时恢复
 
-这张图解释了"线程私有"是怎么实现的：同一个 `ThreadLocal` 对象作 key，在不同线程的 `threadLocals` 表里映射到不同的 value。value 跟着线程走，线程结束、表被回收，value 也一起回收。
+请求线程的 ThreadLocal 不会自动传播到线程池工作线程。异步任务可能等到请求早已结束才开始，甚至在别的请求已经进入后才执行。正确的捕获时机，是创建任务包装或提交任务时，而不是在工作线程开始执行时再去读取“请求线程的当前值”。
 
-## 二、threadLocalHashCode 与线性探测
+![异步上下文：提交时捕获，执行时保存旧值并安装，finally 恢复](/images/posts/threadlocal-context-transfer.svg)
 
-`ThreadLocalMap` 用开放地址法，所以每个 `ThreadLocal` 需要一个散列值来决定初始位置。这个散列值不是 `hashCode()`，而是：
+沿用上一节的包装器：
 
 ```java
-private final int threadLocalHashCode = nextHashCode();
-private static AtomicInteger nextHashCode = new AtomicInteger();
-private static final int HASH_INCREMENT = 0x61c88647;   // 黄金分割比
-
-private static int nextHashCode() {
-    return nextHashCode.getAndAdd(HASH_INCREMENT);
-}
+RequestContext captured = CURRENT.get(); // 在提交方线程读取
+Runnable task = withContext(captured, () -> {
+    // 在实际执行线程中，CURRENT 已安装 captured。
+    System.out.println(CURRENT.get().traceId);
+});
+pool.execute(task);
 ```
 
-`0x61c88647` 是黄金分割比（约 0.618）乘 2^32 得到的数。每个新创建的 `ThreadLocal`，它的 `threadLocalHashCode` 就是上一个的值加上这个常数。这样做的效果是：**连续的 `ThreadLocal` 在 2 的幂大小的表里，初始位置会被均匀错开**，而不是挤在一起。它配合"开放地址法"，让"不同 `ThreadLocal` 落到不同 slot、冲突了就线性探测下一个"这套逻辑，在大多数情况下能直接命中。
+这里假设调用点一定有非 null 上下文；可被后台或匿名任务调用的接口，应定义缺失上下文的行为，不能直接解引用。captured 指向的是已经构造好的不可变上下文。若捕获完整可变请求对象，提交后请求线程还可能修改它，既有数据竞争，也可能把大型对象留在排队任务中。
 
-线性探测的 `nextIndex` 很简单，走到末尾就绕回开头：
+上下文恢复代码要放在实际执行任务的 finally 中。调用方 Future.get 超时或发出 cancel，并不表示执行线程已经退出，不能在调用方替工作线程清理。任务在队列中尚未执行时，包装器仍持有 captured；清理 ThreadLocal 也不会清掉队列对象里的引用。排队容量、超时、取消和任务移除仍属于线程池治理。
 
-```java
-private static int nextIndex(int i, int len) {
-    return ((i + 1 < len) ? i + 1 : 0);
-}
+如果拒绝策略是 CallerRuns，任务可能在提交线程直接执行。保存并恢复 previous 的包装器能保留调用方原来的上下文；简单地“结束就 remove”则可能破坏仍在处理请求的调用线程。拒绝且没有执行的任务不会安装这份上下文，但持有任务的队列、重试记录或其他集合仍可能保留快照。
+
+包装器只影响被包装的任务。任务内部再提交另一个未包装任务，或某个框架自行选择执行线程，传播仍然可能断开。对于多种执行器，需要在约定边界统一处理，避免有的任务捕获、有的任务遗漏；同时避免多层包装重复安装、相互覆盖。
+
+选择策略时，显式传递 RequestContext 是最容易看到依赖的方式。ThreadLocal 包装适合同步接口已经依赖当前上下文的代码。无论选择哪种，传播的数据应当最小化，并有明确的失效期限；不能把一次请求中的事务连接当作可任意跨线程共享的上下文。
+
+## 八、InheritableThreadLocal：继承发生在创建线程时
+
+InheritableThreadLocal 在创建子线程时，根据父线程当时的绑定计算子线程初始值。默认 childValue 返回父线程原来的 value；可以覆写它生成不同值或复制对象。因此，复制了映射结构不等于深拷贝了业务对象。[官方继承与 childValue 说明](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/InheritableThreadLocal.html)
+
+默认情况下，父子线程绑定同一个可变列表时，子线程修改列表，父线程可能观察到变化。父线程随后 set 另一个列表，则只是替换自己的绑定，子线程仍持有原列表。这两种操作的区别，是“修改共享对象”和“更换存储位置里的引用”。
+
+线程池的工作线程一般会被重复使用。假设请求 A 在提交时触发了首次工作线程创建，工作线程可能继承 A；随后请求 B 更新了提交线程中的值，再把任务交给已有工作线程，这次并没有创建线程，也就不会重新继承 B。线程池预启动、工厂选择不继承等情况，又可能让初始结果不同。
+
+因此，InheritableThreadLocal 不适合作为通用的线程池请求传播方案。它的时间基准是线程创建，业务希望的时间基准通常是每次任务提交。前一节的任务快照与执行范围，才是在这两个时间基准之间建立明确关系。
+
+创建子线程时是否继承还可以被关闭；即便继承成功，子线程的生命周期也可能远长于父请求。必须明确子任务何时完成，是否允许保留用户信息，以及它结束时怎样释放。父线程 remove 只清理父线程，不能撤销已经传给子线程的引用。
+
+## 九、源码补充：线性探测与清理为何绑在一起
+
+ThreadLocalMap 使用 Entry 数组与线性探测。初始位置由 threadLocalHashCode 与数组长度计算；槽位被其他 key 占用时，沿数组继续找，到末尾绕回开头。查找遇到空槽就结束，因此删除一个冲突链前面的条目后，需要重新安置后续条目，避免查找过早停止。
+
+例如 A、B 都映射到槽位 3，A 放在 3，B 探测后放在 4。删除 A 后，如果只是把 3 清空，查找 B 从 3 开始会立刻认为不存在。expungeStaleEntry 清理失效条目的 value 和数组槽位，再处理后续连续非空区间中的条目，把仍有效的绑定重新放进能够被找到的位置。
+
+set 有三个重要分支：找到同一个 key 则覆盖 value；遇到失效条目则调用 replaceStaleEntry；遇到空槽则插入新 Entry。replaceStaleEntry 不只是“把一个空 key 替换掉”，还需要检查附近的探测区间是否已有同一个 key，避免产生重复绑定，并处理区间中的其他失效条目。
+
+get 直接命中有效 key 时，走快速返回路径，不会因此顺便全表打扫。未直接命中时才继续探测，可能触发失效条目清理。完整的公开 get 还包括没有绑定时的初始化，不能把内部 getEntry 的代码当成全部 get 行为。
+
+| 清理入口 | 做什么 | 不能据此假定什么 |
+| --- | --- | --- |
+| get 的未命中探测 | 清理遇到的失效条目 | 每次 get 都清理全表 |
+| set / replaceStaleEntry | 更新、插入时处理相关区间 | 覆盖一个有效 key 必然扫到其他残留 |
+| cleanSomeSlots | 按启发式预算扫描部分槽位 | 整个过程最坏只花 O(log n) |
+| rehash | 先全表清理，再决定扩容 | 一到插入阈值就无条件翻倍 |
+| remove | 删除当前 key 的绑定并修复探测区间 | 替其他线程清理，或清掉所有 ThreadLocal |
+
+cleanSomeSlots 在没有遇到失效条目时采用对数级扫描预算；遇到失效条目会重新增加扫描预算，并调用可能遍历更长冲突区间的 expungeStaleEntry。所以“扫描预算是对数级”不能直接写成“总运行时间最坏为 O(log n)”。
+
+表长度为 2 的幂，插入阈值大致为长度的 2/3。rehash 先清理，再使用比插入阈值更低的判断线决定是否翻倍。这是控制装载与清理成本的实现细节，不应把阈值解释成已经得到官方证明的“专门给清理预留空间”。
+
+散列常数 HASH_INCREMENT=0x61c88647 是 1640531527，除以 2³² 约为 0.381966，而不是 0.618。连续创建的 ThreadLocal 以这个增量分配内部散列值，在 2 的幂长度表中错开起始槽位；它不保证任意使用集合都没有冲突。应用代码通常没有必要复制这套散列实现，也不能用它替代生命周期管理。
+
+以上路径对应固定版本的 [ThreadLocalMap 实现](https://github.com/openjdk/jdk17u/blob/jdk-17.0.16%2B8/src/java.base/share/classes/java/lang/ThreadLocal.java#L406)。内部结构解释“为什么需要这些动作”，公开 API 契约才是业务代码应依赖的边界。
+
+## 十、把一个请求从入口检查到异步任务结束
+
+订单请求进入后，先完成身份验证，再创建小型不可变上下文。入口安装 CURRENT，同线程里的日志与服务读取它。如果启动异步任务，提交方在此时捕获快照；异步任务执行时保存旧值、安装快照，退出时恢复。入口自己的 finally 负责结束请求线程上的范围。
+
+如果处理抛异常，入口仍应清理；如果异步任务抛异常，任务包装仍应恢复，失败交给 Future 或执行器的观察机制。若任务根本被拒绝，调用方处理提交失败，不把“未执行”当作成功。取消或超时后，应分别核对任务是否还在运行、队列是否还保存包装对象，不能只检查当前线程 get 是不是 null。
+
+可以用下面几项确认实现，而不是只检查代码里有没有 remove：
+
+| 检查位置 | 要验证的结果 |
+| --- | --- |
+| 同线程连续两个请求 | 后一个不能读取前一个的用户 |
+| 请求处理抛异常 | finally 后没有遗留当前请求上下文 |
+| 嵌套临时上下文 | 内层结束后恢复外层 |
+| 预启动的工作线程 | 未传播时没有请求值，传播后值正确 |
+| CallerRuns 执行路径 | 任务结束后保留提交线程原上下文 |
+| 可变 value | 不把绑定隔离误当成对象线程安全 |
+| 排队和取消 | 包装任务里的快照也有生命周期约束 |
+
+仓库提供 [ThreadLocalBehaviorChecks.java](https://github.com/king-of-water/personal-blog/blob/main/scripts/experiments/ThreadLocalBehaviorChecks.java)，包含本文帮助函数与八组确定性验证。所有跨线程结果等待都有超时，测试结束关闭线程池。可在仓库根目录运行：
+
+```sh
+javac -d /tmp scripts/experiments/ThreadLocalBehaviorChecks.java
+java -cp /tmp ThreadLocalBehaviorChecks
 ```
 
-这一行就是线性探测的"下一步"：**下标加一；如果已经走到数组末尾，就绕回 0**。逻辑简单到不能再简单，但它是开放地址法的地基——后面几乎所有"继续往后找"的动作都调它：
+实验验证公开行为和范围管理，没有通过反射访问 JDK 内部表，也不把 System.gc 当成回收保证。因此，它不声称复现了某个稳定的 GC 时间；失效 key 的保留与清理路径由固定源码取证。真实内存问题仍需结合线程生命周期、堆引用和业务对象用途分析。
 
-- `set` 找空位时，冲突了就 `nextIndex` 往后挪一格；
-- `get` 没命中时，也是 `nextIndex` 往后找；
-- `expungeStaleEntry` 清理完一个槽位后，还要靠它往后遍历、重新安置那些"错位"的 Entry。
-
-为什么是"绕着数组转一圈"，而不是像 `HashMap` 那样"挂在同一个桶后面"（链地址法）？因为 `ThreadLocalMap` 的表**通常很小**——一个应用里的 `ThreadLocal` 数量一般就几个到几十个。这种小表上，开放地址法更划算：不需要额外的链表节点（省内存），数据在数组里连续存放（缓存局部性更好）。代价是删除时要特殊处理：链表删除只需改 `next` 指针，而开放地址法删掉一个元素后，后面那些因为冲突而"错位"的元素必须重新安置，否则 `get` 的探测链就断了——这正是第五节 `expungeStaleEntry` 要解决的麻烦。
-
-## 三、set 的完整流程
-
-`set` 是理解 `ThreadLocalMap` 的核心，因为它既插入、又顺便清理：
-
-```java
-private void set(ThreadLocal<?> key, Object value) {
-    Entry[] tab = table;
-    int len = tab.length;
-    int i = key.threadLocalHashCode & (len - 1);    // ① 定位初始 slot
-    for (Entry e = tab[i]; e != null; e = tab[i = nextIndex(i, len)]) {
-        ThreadLocal<?> k = e.get();
-        if (k == key) {                             // ② key 匹配 → 覆盖 value
-            e.value = value;
-            return;
-        }
-        if (k == null) {                            // ③ 遇到 stale entry → 替换
-            replaceStaleEntry(key, value, i);
-            return;
-        }
-    }
-    tab[i] = new Entry(key, value);                 // ④ 找到空位 → 插入
-    int sz = ++size;
-    if (!cleanSomeSlots(i, sz) && sz >= threshold)  // ⑤ 惰性清理 + 判断扩容
-        rehash();
-}
-```
-
-流程里的第 ③ 步是 `ThreadLocal` 独有的：`k == null` 表示这个 Entry 的 key（弱引用的 `ThreadLocal`）已经被 GC 回收了，留下一个"脏"槽位。`set` 遇到它就调 `replaceStaleEntry` 把它替换掉——这就是"惰性清理"的一种，`set` 顺路把脏槽位打扫了。
-
-第 ⑤ 步的 `rehash()` 也不是简单扩容，它先做一次全表清理，清理完还不够才扩容，这个在第五节展开。
-
-![ThreadLocalMap.set 的完整流程](/images/posts/threadlocal-set-flow.svg)
-
-这张图把 `set` 的路径完整串了一遍：**定位 → 线性探测的三个互斥分支 → 计数 → 惰性清理 → 必要时扩容**。要注意第 ③ 个分支（`k == null`）——它才是"惰性清理"真正发生的地方：`set` 在寻找插入位置的过程中，一旦路过一个 key 已经被回收的脏槽位，就顺手把它复用掉，而不是继续往后找空位。这样既不浪费空间，也缩短了探测链。
-
-## 四、get 的完整流程
-
-`get` 同样带清理逻辑：
-
-```java
-private Entry getEntry(ThreadLocal<?> key) {
-    int i = key.threadLocalHashCode & (table.length - 1);
-    Entry e = table[i];
-    if (e != null && e.get() == key)
-        return e;                          // 直接命中
-    else
-        return getEntryAfterMiss(key, i, e);  // 未命中：线性探测 + 清理 stale
-}
-
-private Entry getEntryAfterMiss(ThreadLocal<?> key, int i, Entry e) {
-    Entry[] tab = table;
-    int len = tab.length;
-    while (e != null) {
-        ThreadLocal<?> k = e.get();
-        if (k == key) return e;            // 找到了
-        if (k == null)
-            expungeStaleEntry(i);          // 遇到 stale → 清理
-        else
-            i = nextIndex(i, len);         // 继续线性探测
-        e = tab[i];
-    }
-    return null;                           // 没有这个 key
-}
-```
-
-注意 `get` 也可能触发 `expungeStaleEntry`——它不只是"读"，还会"打扫"。这也是"惰性清理"的另一处：靠 `get`/`set` 这些常规操作路过时清理脏槽位，而不是专门的 GC 线程去清。
-
-## 五、清理与扩容：expungeStaleEntry、cleanSomeSlots、rehash
-
-"惰性清理"里最核心的是 `expungeStaleEntry`，它清理一个脏槽位，并顺手把它后面连续的非空 Entry 重新定位：
-
-```java
-private int expungeStaleEntry(int staleSlot) {
-    Entry[] tab = table;
-    int len = tab.length;
-    tab[staleSlot].value = null;   // 断开 value 的强引用
-    tab[staleSlot] = null;         // 删除这个 Entry
-    size--;
-    // 往后 rehash 连续的非空 Entry
-    Entry e; int i;
-    for (i = nextIndex(staleSlot, len); (e = tab[i]) != null; i = nextIndex(i, len)) {
-        ThreadLocal<?> k = e.get();
-        if (k == null) {           // 又遇到 stale，继续删
-            e.value = null;
-            tab[i] = null;
-            size--;
-        } else {                   // 非 stale，重新定位到它该在的 slot
-            int h = k.threadLocalHashCode & (len - 1);
-            if (h != i) {
-                tab[i] = null;
-                while (tab[h] != null) h = nextIndex(h, len);
-                tab[h] = e;
-            }
-        }
-    }
-    return i;
-}
-```
-
-为什么要"往后 rehash"？因为开放地址法下，一个 Entry 之所以不在它 hash 计算出的位置，是因为插入时那个位置被占了、往后探测放到了别处。现在删掉一个前面的 Entry，空出了位置，后面那些"错位"的 Entry 就可以（也需要）挪回更靠前的位置，否则 `get` 时线性探测会漏掉它们。这个"清理 + 重新排位"是 `ThreadLocalMap` 比 `HashMap` 复杂的地方——`HashMap` 的链表删除只要改 `next` 指针，开放地址法的删除却要连锁处理后续节点。
-
-`cleanSomeSlots` 是更轻量的清理，做 O(log n) 次探测、只清理碰巧遇到的 stale：
-
-```java
-private boolean cleanSomeSlots(int i, int n) {
-    boolean removed = false;
-    Entry[] tab = table;
-    int len = tab.length;
-    do {
-        i = nextIndex(i, len);
-        Entry e = tab[i];
-        if (e != null && e.get() == null) {   // 碰巧遇到 stale
-            n = len;
-            removed = true;
-            i = expungeStaleEntry(i);         // 清理
-        }
-    } while ((n >>>= 1) != 0);                // O(log n) 次
-    return removed;
-}
-```
-
-`rehash`（扩容入口）则先全表清理、清理后还超阈值才真正扩容：
-
-```java
-private void rehash() {
-    expungeStaleEntries();                  // 先全表清一遍 stale
-    if (size >= threshold - threshold / 4)  // 清完仍超过阈值的 3/4
-        resize();                           // 才扩容到 2 倍
-}
-```
-
-`resize` 把表翻倍，重新 hash 所有非 stale 的 Entry 到新表，顺便把 stale 的 value 断开。于是"清理"和"扩容"是绑在一起的：扩容前先清，清理能腾出空间就不必扩容。
-
-![ThreadLocalMap 的线性探测与 stale 清理](/images/posts/java-threadlocal-map.svg)
-
-## 六、强弱引用与内存泄漏的精确成因
-
-现在可以精确地画出内存泄漏的引用链了。
-
-`Thread`（线程对象）→ `threadLocals` 字段（强引用）→ `ThreadLocalMap` → `Entry[]` → `Entry` 对象 → `value` 字段（强引用）→ 你存的值。这条链上**每一环都是强引用**，所以只要线程活着，`value` 就活。
-
-而 `Entry` 到 `ThreadLocal`（key）的引用是**弱引用**（`Entry extends WeakReference<ThreadLocal<?>>`）。当外部没有强引用指向这个 `ThreadLocal` 对象时，它会被 GC 回收，此时 `Entry` 的 key 变成 `null`，但 `Entry` 和它的 `value` 还在表里、还被上面的强引用链拴着。
-
-![ThreadLocal 的强引用链与弱引用 key](/images/posts/threadlocal-reference-chain.svg)
-
-把这条链画成图，"谁强谁弱"就一目了然了：**从线程一路到 value 全是强引用（红色实线），全程只有 Entry → ThreadLocal 这一根是弱引用（蓝色虚线）**。所以"泄漏"的成因可以一句话概括——**决定 value 该不该留的标识（key）被回收了，而真正占内存的 value 却被一条谁都不断的强引用链拴着**。
-
-于是泄漏的精确表述是：**key 被回收后，value 失去了"该由哪个 ThreadLocal 拥有"的标识，却还挂在线程的表里**。`get`/`set` 路过时会靠 `expungeStaleEntry` 清理掉它们，但这个清理是"碰巧路过才清"——如果这个 `ThreadLocal` 再也没人访问，脏 Entry 就永远留在表里。线程池场景把这个坑放大：线程长期复用，表也跟着长期存活，脏 Entry 越积越多，value 占的内存收不回。
-
-![key 被回收后，value 残留造成泄漏](/images/posts/java-threadlocal-leak.svg)
-
-**为什么 key 要设计成弱引用？** 是为了让 `ThreadLocal` 对象本身在业务不再使用它时能被 GC 回收，而不是被每张线程表永久抓着。代价就是留下 key=null 的脏 Entry，靠惰性清理兜底。如果 key 是强引用，`ThreadLocal` 对象就永远回收不了，反而泄漏得更彻底——所以弱引用 key 不是 bug，是"让 ThreadLocal 对象可回收、用惰性清理处理残留"的权衡。
-
-**结论**：`remove()` 是正解，因为只有它主动、精确地断开 `value` 的强引用；惰性清理是兜底，不及时、不彻底，不能依赖。用完 `ThreadLocal` 在 `finally` 里 `remove`，是唯一可靠的做法。
-
-## 七、remove 与 InheritableThreadLocal
-
-`remove()` 的源码很短，一眼能看完它做的三件事：
-
-```java
-private void remove(ThreadLocal<?> key) {
-    Entry[] tab = table;
-    int len = tab.length;
-    int i = key.threadLocalHashCode & (len - 1);   // ① 同样先定位
-    for (Entry e = tab[i]; e != null; e = tab[i = nextIndex(i, len)]) {
-        if (e.get() == key) {                      // ② 找到这个 key
-            e.clear();                             //    断开弱引用（Reference.clear）
-            expungeStaleEntry(i);                  // ③ 清空 value + 重排后面的 Entry
-            return;
-        }
-    }
-}
-```
-
-三步逐个看：
-
-- **① 定位**：用的是和 `set`/`get` 同一套 `threadLocalHashCode & (len-1)` + 线性探测，所以能准确找到那个槽位；
-- **② `e.clear()`**：这是 `Reference.clear()`，把弱引用本身置空（等价于让 key 立刻变成 null）；
-- **③ `expungeStaleEntry(i)`**：真正关键的一步。它做的正是第五节讲过的那套——**把 `value` 置为 null（断开强引用）、把 Entry 从数组里删掉、再往后重排所有因冲突而错位的 Entry**。
-
-所以 `remove()` 和 `set(null)` 的区别就在这里：**`set(null)` 只是把 `value` 置成 null，Entry 还在表里占着槽位、key 也还在**；而 `remove()` 是**把整个 Entry 删除、并顺手修好探测链**。要彻底断开引用、避免泄漏，必须用 `remove`。
-
-这也解释了为什么 `remove` 之后不需要再做什么"清理"：它就是最彻底的那一次清理。
-
-`InheritableThreadLocal` 是另一个点：子线程创建时（`Thread` 构造器里），会把父线程的 `inheritableThreadLocals` 表**浅拷贝**一份给子线程。注意是浅拷贝——子线程拿到的是父线程当时的 value 引用（或值），之后父线程再 `set`，子线程看不到。它适合"父线程的上下文传给子线程"的场景，但不适合"父子线程共享可变状态"，那从来不是 `ThreadLocal` 的职责。
-
-![InheritableThreadLocal 的父子拷贝](/images/posts/java-threadlocal-inheritable.svg)
-
-`ThreadLocal` 的价值在"隔离"：它用"每线程一份"换掉了"共享 + 同步"的复杂度。代价是它把 value 挂在了线程身上，线程不死、value 不散，所以必须自己记住 `remove`。把 `Thread → ThreadLocalMap → 弱引用 key + 强引用 value` 这条链、以及 `expungeStaleEntry` 的清理逻辑记牢，`ThreadLocal` 的用法和它的坑，就都不是需要死记的规矩，而是能自己推导的结论。
+本文的使用约定可以概括为：每份上下文有明确的拥有者与结束范围；只有必要的小型数据跨任务传播；清理发生在实际拥有绑定的线程中；内层范围恢复外层值。ThreadLocalMap 的弱引用和惰性清理提供实现上的回收机会，不能代替这些业务约定。
 
 ## 参考资料
 
-- [OpenJDK：ThreadLocal 源码](https://github.com/openjdk/jdk/blob/master/src/java.base/share/classes/java/lang/ThreadLocal.java)
-- [OpenJDK：Thread 源码（threadLocals 字段）](https://github.com/openjdk/jdk/blob/master/src/java.base/share/classes/java/lang/Thread.java)
-- [Oracle：ThreadLocal（JavaDoc）](https://docs.oracle.com/javase/8/docs/api/java/lang/ThreadLocal.html)
+- [Java 17：ThreadLocal](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/ThreadLocal.html)
+- [Java 17：InheritableThreadLocal](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/InheritableThreadLocal.html)
+- [OpenJDK 17.0.16：ThreadLocal 与 ThreadLocalMap 固定版本源码](https://github.com/openjdk/jdk17u/blob/jdk-17.0.16%2B8/src/java.base/share/classes/java/lang/ThreadLocal.java)
