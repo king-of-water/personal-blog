@@ -1,1 +1,50 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="960" height="750" viewBox="0 0 960 750" role="img"><title>滑动窗口：旧请求没过期，新请求就占不到额度</title><desc>1.010 秒时，0.990 秒的 100 条记录仍在最近一秒内。删除过期记录、判断数量和添加新记录在同一原子操作里执行。</desc><defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8" fill="none" stroke="#8a7f6d" stroke-width="1.5"/></marker></defs><style>text{font-family:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;fill:#2b2620;font-size:22px;text-anchor:middle}.small{font-size:18px}.title{font-size:28px;font-weight:600}.line{fill:none;stroke:#8a7f6d;stroke-width:2;marker-end:url(#arrow)}.box{fill:#f5f0e4;stroke:#8a7f6d;stroke-width:1.5}.ok{fill:#d8dee0;stroke:#295279;stroke-width:1.5}.no{fill:#eed9d3;stroke:#943b37;stroke-width:1.5}</style><rect width="960" height="750" fill="#fdfaf3"/><text x="480" y="46" class="title">滑动窗口：跟着现在，回头看最近一秒</text><rect x="90" y="85" width="780" height="115" class="box" rx="10"/><path d="M135 145 H825" class="line"/><path d="M720 120 V165" fill="none" stroke="#295279" stroke-width="4"/><text x="170" y="118" class="small">左边界 0.010</text><text x="720" y="112" class="small">0.990：100 条</text><text x="785" y="185" class="small">现在 1.010</text><text x="395" y="185" class="small">这 100 条仍在 (0.010, 1.010] 内</text><rect x="285" y="235" width="390" height="60" rx="10" class="box"/><text x="480" y="273" class="">新请求到达：计算 now − 1 秒</text><path class="line" d="M480 200 V235"/><path class="line" d="M480 295 V320"/><rect x="285" y="320" width="390" height="60" rx="10" class="box"/><text x="480" y="358" class="">删除不晚于左边界的记录</text><path class="line" d="M480 380 V405"/><rect x="285" y="405" width="390" height="60" rx="10" class="box"/><text x="480" y="443" class="">剩余记录数 + 1 ≤ 100？</text><path class="line" d="M285 435 H165 V505"/><text x="220" y="422" class="small">否</text><rect x="40" y="505" width="310" height="60" rx="10" class="no"/><text x="195" y="543" class="">拒绝：不新增本次记录</text><path class="line" d="M675 435 H795 V505"/><text x="740" y="422" class="small">是</text><rect x="615" y="505" width="310" height="60" rx="10" class="ok"/><text x="770" y="543" class="">记录唯一请求 ID 与时间</text><path class="line" d="M770 565 V595"/><rect x="615" y="595" width="310" height="60" rx="10" class="ok"/><text x="770" y="633" class="">放行，继续执行查询</text><text x="340" y="635" class="small">本例：已有 100 条 → 拒绝</text><text x="480" y="710" class="small">删除、计数、条件新增须原子执行；到 1.990 秒，第一批才移出</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="740" viewBox="0 0 1200 740" role="img" aria-labelledby="title desc">
+<title id="title">滑动窗口：同样宽的时间框向右移动</title><desc id="desc">上下是同一时间轴的两个时刻。上方窗口覆盖零点零一至一点零一秒，一百个旧请求仍在框里，第二批被拒绝。下方移到零点九九至一点九九秒，旧请求从左边移出，额度恢复。</desc>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M1 1 L8 5 L1 9" fill="none" stroke="#5b5245" stroke-width="1.7"/></marker></defs>
+<style>text{font-family:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;fill:#2b2620;text-anchor:middle;font-size:23px}.title{font-size:34px;font-weight:650}.sub{font-size:21px;fill:#554d42}.small{font-size:19px}.num{font-size:27px;font-weight:600}.line{fill:none;stroke:#5b5245;stroke-width:2.5;marker-end:url(#arrow)}.rule{fill:none;stroke:#8a7f6d;stroke-width:2}.req{fill:#d8dee0;stroke:#295279;stroke-width:2}.reject{fill:#eed9d3;stroke:#943b37;stroke-width:2}</style>
+<rect width="1200" height="740" fill="#fdfaf3"/>
+<text x="600" y="57" class="title">滑动窗口：框一直向右走，只数框内的请求</text>
+<text x="600" y="98" class="sub">框宽始终是 1 秒；旧请求从左边移出去，才会腾出额度</text>
+<text x="170" y="158" class="num">① 现在 1.010 秒</text>
+<rect x="125" y="190" width="450" height="160" rx="6" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+<text x="330" y="225" class="small">最近 1 秒：(0.010, 1.010]</text>
+<g><rect x="548" y="242" width="19" height="15" rx="4" class="req"/><path d="M554 249 h7 M554 256 h1" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="548" y="261" width="19" height="15" rx="4" class="req"/><path d="M554 268 h7 M554 275 h1" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="548" y="280" width="19" height="15" rx="4" class="req"/><path d="M554 287 h7 M554 294 h1" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="548" y="299" width="19" height="15" rx="4" class="req"/><path d="M554 306 h7 M554 313 h1" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="548" y="318" width="19" height="15" rx="4" class="req"/><path d="M554 325 h7 M554 332 h1" stroke="#295279" stroke-width="1.5"/></g>
+<text x="320" y="285" class="">旧的 100 次仍在框内</text>
+<text x="850" y="240" class="">新的 100 次到达</text>
+<text x="850" y="278" class="">没有空位 → 拒绝</text>
+<g><rect x="755" y="300" width="30" height="22" rx="4" class="reject"/><path d="M761 307 h18 M761 314 h12" stroke="#943b37" stroke-width="1.5"/></g>
+<g><rect x="793" y="300" width="30" height="22" rx="4" class="reject"/><path d="M799 307 h18 M799 314 h12" stroke="#943b37" stroke-width="1.5"/></g>
+<g><rect x="831" y="300" width="30" height="22" rx="4" class="reject"/><path d="M837 307 h18 M837 314 h12" stroke="#943b37" stroke-width="1.5"/></g>
+<g><rect x="869" y="300" width="30" height="22" rx="4" class="reject"/><path d="M875 307 h18 M875 314 h12" stroke="#943b37" stroke-width="1.5"/></g>
+<g><rect x="907" y="300" width="30" height="22" rx="4" class="reject"/><path d="M913 307 h18 M913 314 h12" stroke="#943b37" stroke-width="1.5"/></g>
+<path d="M120 355 H1110" class="line"/>
+<path d="M120 349 v12" class="rule"/><text x="120" y="390" class="small">0.0s</text>
+<path d="M345 349 v12" class="rule"/><text x="345" y="390" class="small">0.5s</text>
+<path d="M570 349 v12" class="rule"/><text x="570" y="390" class="small">1.0s</text>
+<path d="M795 349 v12" class="rule"/><text x="795" y="390" class="small">1.5s</text>
+<path d="M1020 349 v12" class="rule"/><text x="1020" y="390" class="small">2.0s</text>
+<path d="M565 185 V350" stroke="#295279" stroke-width="2"/><path d="M330 429 H750" class="line"/>
+<text x="540" y="420" class="sub">时间向前，整个框右移</text>
+<text x="170" y="477" class="num">② 现在 1.990 秒</text>
+<rect x="565.5" y="505" width="450" height="160" rx="6" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+<text x="790" y="540" class="small">最近 1 秒：(0.990, 1.990]</text>
+<g><rect x="535" y="548" width="19" height="15" rx="4" class="req"/><path d="M541 555 h7 M541 562 h1" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="535" y="567" width="19" height="15" rx="4" class="req"/><path d="M541 574 h7 M541 581 h1" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="535" y="586" width="19" height="15" rx="4" class="req"/><path d="M541 593 h7 M541 600 h1" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="535" y="605" width="19" height="15" rx="4" class="req"/><path d="M541 612 h7 M541 619 h1" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="535" y="624" width="19" height="15" rx="4" class="req"/><path d="M541 631 h7 M541 638 h1" stroke="#295279" stroke-width="1.5"/></g>
+<path d="M548 578 H400" class="line"/>
+<text x="320" y="561" class="">旧请求从左侧移出</text>
+<text x="320" y="605" class="">不再计入用量</text>
+<text x="800" y="602" class="num">框内变空，可以接收新请求</text>
+<path d="M120 670 H1110" class="line"/>
+<path d="M120 664 v12" class="rule"/><text x="120" y="705" class="small">0.0s</text>
+<path d="M345 664 v12" class="rule"/><text x="345" y="705" class="small">0.5s</text>
+<path d="M570 664 v12" class="rule"/><text x="570" y="705" class="small">1.0s</text>
+<path d="M795 664 v12" class="rule"/><text x="795" y="705" class="small">1.5s</text>
+<path d="M1020 664 v12" class="rule"/><text x="1020" y="705" class="small">2.0s</text>
+</svg>

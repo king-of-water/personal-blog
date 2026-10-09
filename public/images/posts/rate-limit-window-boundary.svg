@@ -1,1 +1,53 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="960" height="520" viewBox="0 0 960 520" role="img"><title>固定窗口：跨秒就得到新额度</title><desc>0.990 秒放行 100 次，1.010 秒又放行 100 次；两个固定窗口分别合规，20 毫秒内总共进入 200 次。</desc><defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8" fill="none" stroke="#8a7f6d" stroke-width="1.5"/></marker></defs><style>text{font-family:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;fill:#2b2620;font-size:22px;text-anchor:middle}.small{font-size:18px}.title{font-size:28px;font-weight:600}.line{fill:none;stroke:#8a7f6d;stroke-width:2;marker-end:url(#arrow)}.box{fill:#f5f0e4;stroke:#8a7f6d;stroke-width:1.5}.ok{fill:#d8dee0;stroke:#295279;stroke-width:1.5}.no{fill:#eed9d3;stroke:#943b37;stroke-width:1.5}</style><rect width="960" height="520" fill="#fdfaf3"/><text x="480" y="48" class="title">固定窗口：两个窗口分别没超，交界处仍会拥挤</text><rect x="65" y="95" width="390" height="180" rx="10" class="box"/><text x="260" y="140" class="">窗口一：[0.000, 1.000)</text><rect x="505" y="95" width="390" height="180" rx="10" class="box"/><text x="700" y="140" class="">窗口二：[1.000, 2.000)</text><text x="260" y="195" class="">0.990 秒：100 次 → 全部放行</text><text x="700" y="195" class="">1.010 秒：100 次 → 全部放行</text><text x="260" y="240" class="small">本窗口：0 → 100 / 100</text><text x="700" y="240" class="small">新窗口：0 → 100 / 100</text><path d="M480 80 V300" fill="none" stroke="#8a7f6d" stroke-width="2" stroke-dasharray="6 6"/><text x="480" y="325" class="small">1.000 秒切换窗口：之前的计数不再参与判断</text><path class="line" d="M260 275 V360 H360"/><path class="line" d="M700 275 V360 H600"/><rect x="320" y="365" width="320" height="60" rx="10" class="no"/><text x="480" y="403" class="">仅隔 20 毫秒，进入 200 次</text><text x="480" y="472" class="small">限制每个整秒的数量 ≠ 限制任意一秒的数量</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+<title id="title">固定窗口：时间被切成互不共享额度的格子</title><desc id="desc">蓝色小卡片代表请求。相邻两个整秒窗口各容纳一百次，分别集中在零点九九秒和一点零一秒，交界附近二十毫秒内通过两百次。</desc>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M1 1 L8 5 L1 9" fill="none" stroke="#5b5245" stroke-width="1.7"/></marker></defs>
+<style>text{font-family:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;fill:#2b2620;text-anchor:middle;font-size:23px}.title{font-size:34px;font-weight:650}.sub{font-size:21px;fill:#554d42}.small{font-size:19px}.num{font-size:27px;font-weight:600}.line{fill:none;stroke:#5b5245;stroke-width:2.5;marker-end:url(#arrow)}.rule{fill:none;stroke:#8a7f6d;stroke-width:2}.req{fill:#d8dee0;stroke:#295279;stroke-width:2}.reject{fill:#eed9d3;stroke:#943b37;stroke-width:2}</style>
+<rect width="1200" height="700" fill="#fdfaf3"/>
+<text x="600" y="57" class="title">固定窗口：时间分格，每格重新给 100 次额度</text>
+<text x="600" y="98" class="sub">两批请求挤在格子的交界处，仍然都能通过</text>
+<rect x="100" y="165" width="500" height="220" rx="10" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+<rect x="600" y="165" width="500" height="220" rx="10" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+<text x="320" y="207" class="">窗口一 · 额度 100</text>
+<text x="870" y="207" class="">窗口二 · 额度 100</text>
+<g><rect x="505" y="240" width="30" height="22" rx="4" class="req"/><path d="M511 247 h18 M511 254 h12" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="617" y="240" width="30" height="22" rx="4" class="req"/><path d="M623 247 h18 M623 254 h12" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="543" y="240" width="30" height="22" rx="4" class="req"/><path d="M549 247 h18 M549 254 h12" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="655" y="240" width="30" height="22" rx="4" class="req"/><path d="M661 247 h18 M661 254 h12" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="505" y="267" width="30" height="22" rx="4" class="req"/><path d="M511 274 h18 M511 281 h12" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="617" y="267" width="30" height="22" rx="4" class="req"/><path d="M623 274 h18 M623 281 h12" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="543" y="267" width="30" height="22" rx="4" class="req"/><path d="M549 274 h18 M549 281 h12" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="655" y="267" width="30" height="22" rx="4" class="req"/><path d="M661 274 h18 M661 281 h12" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="505" y="294" width="30" height="22" rx="4" class="req"/><path d="M511 301 h18 M511 308 h12" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="617" y="294" width="30" height="22" rx="4" class="req"/><path d="M623 301 h18 M623 308 h12" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="543" y="294" width="30" height="22" rx="4" class="req"/><path d="M549 301 h18 M549 308 h12" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="655" y="294" width="30" height="22" rx="4" class="req"/><path d="M661 301 h18 M661 308 h12" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="505" y="321" width="30" height="22" rx="4" class="req"/><path d="M511 328 h18 M511 335 h12" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="617" y="321" width="30" height="22" rx="4" class="req"/><path d="M623 328 h18 M623 335 h12" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="543" y="321" width="30" height="22" rx="4" class="req"/><path d="M549 328 h18 M549 335 h12" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="655" y="321" width="30" height="22" rx="4" class="req"/><path d="M661 328 h18 M661 335 h12" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="505" y="348" width="30" height="22" rx="4" class="req"/><path d="M511 355 h18 M511 362 h12" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="617" y="348" width="30" height="22" rx="4" class="req"/><path d="M623 355 h18 M623 362 h12" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="543" y="348" width="30" height="22" rx="4" class="req"/><path d="M549 355 h18 M549 362 h12" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="655" y="348" width="30" height="22" rx="4" class="req"/><path d="M661 355 h18 M661 362 h12" stroke="#295279" stroke-width="1.5"/></g>
+<text x="320" y="310" class="num">100 次全部通过</text>
+<text x="870" y="310" class="num">100 次全部通过</text>
+<path d="M600 150 V405" stroke="#5b5245" stroke-width="3" stroke-dasharray="7 6"/><path d="M100 408 H1120" class="line"/>
+<text x="100" y="443" class="small">0.000 秒</text>
+<text x="600" y="443" class="small">1.000 秒</text>
+<text x="1100" y="443" class="small">2.000 秒</text>
+<path d="M542 370 L420 510 M655 370 L780 510" stroke="#8a7f6d" stroke-width="2" stroke-dasharray="5 5" fill="none"/><text x="340" y="534" class="">0.990 秒：第一批</text>
+<text x="860" y="534" class="">1.010 秒：第二批</text>
+<path d="M300 574 H920" class="line"/>
+<g><rect x="375" y="560" width="24" height="25" rx="4" class="req"/><path d="M381 567 h12 M381 574 h6" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="690" y="560" width="24" height="25" rx="4" class="req"/><path d="M696 567 h12 M696 574 h6" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="405" y="560" width="24" height="25" rx="4" class="req"/><path d="M411 567 h12 M411 574 h6" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="720" y="560" width="24" height="25" rx="4" class="req"/><path d="M726 567 h12 M726 574 h6" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="435" y="560" width="24" height="25" rx="4" class="req"/><path d="M441 567 h12 M441 574 h6" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="750" y="560" width="24" height="25" rx="4" class="req"/><path d="M756 567 h12 M756 574 h6" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="465" y="560" width="24" height="25" rx="4" class="req"/><path d="M471 567 h12 M471 574 h6" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="780" y="560" width="24" height="25" rx="4" class="req"/><path d="M786 567 h12 M786 574 h6" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="495" y="560" width="24" height="25" rx="4" class="req"/><path d="M501 567 h12 M501 574 h6" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="810" y="560" width="24" height="25" rx="4" class="req"/><path d="M816 567 h12 M816 574 h6" stroke="#295279" stroke-width="1.5"/></g>
+<path d="M600 538 V600" stroke="#8a7f6d" stroke-width="2" stroke-dasharray="5 5"/><text x="600" y="635" class="num">相隔仅 20 毫秒，200 次请求进入下游</text>
+<text x="600" y="680" class="small">小卡片示意请求群，不按逐条时间比例绘制</text>
+</svg>

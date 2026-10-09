@@ -1,1 +1,63 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="960" height="750" viewBox="0 0 960 750" role="img"><title>漏桶：请求可以挤进来，调用按节奏出去</title><desc>100 次同时到达，有界队列接收 20 次、拒绝 80 次。发送器每 10 毫秒启动一次调用，发送前检查取消或等待超时。</desc><defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8" fill="none" stroke="#8a7f6d" stroke-width="1.5"/></marker></defs><style>text{font-family:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;fill:#2b2620;font-size:22px;text-anchor:middle}.small{font-size:18px}.title{font-size:28px;font-weight:600}.line{fill:none;stroke:#8a7f6d;stroke-width:2;marker-end:url(#arrow)}.box{fill:#f5f0e4;stroke:#8a7f6d;stroke-width:1.5}.ok{fill:#d8dee0;stroke:#295279;stroke-width:1.5}.no{fill:#eed9d3;stroke:#943b37;stroke-width:1.5}</style><rect width="960" height="750" fill="#fdfaf3"/><text x="480" y="46" class="title">排队漏桶：吸收突发，要用等待时间来换</text><rect x="45" y="95" width="300" height="60" rx="10" class="box"/><text x="195" y="133" class="">0.990 秒：100 次到达</text><path class="line" d="M345 125 H430"/><rect x="440" y="95" width="470" height="60" rx="10" class="box"/><text x="675" y="133" class="">队列是否还有位置？</text><path class="line" d="M675 155 V215"/><text x="695" y="191" class="small">有</text><rect x="440" y="215" width="470" height="60" rx="10" class="ok"/><text x="675" y="253" class="">接收 20 次，进入待发送队列</text><path class="line" d="M440 125 H390 V260 H355"/><text x="390" y="198" class="small">满了</text><rect x="45" y="230" width="310" height="60" rx="10" class="no"/><text x="200" y="268" class="">其余 80 次拒绝</text><text x="240" y="350" class="">队列中的请求：① ② ③ … ⑳</text><path class="line" d="M675 275 V365"/><rect x="440" y="365" width="470" height="60" rx="10" class="box"/><text x="675" y="403" class="">每 10 毫秒，取出队头一项</text><path class="line" d="M675 425 V455"/><rect x="440" y="455" width="470" height="60" rx="10" class="box"/><text x="675" y="493" class="">已取消 / 超过等待期限？</text><path class="line" d="M440 485 H355"/><text x="390" y="472" class="small">是</text><rect x="45" y="455" width="310" height="60" rx="10" class="no"/><text x="200" y="493" class="">移除，不调用下游</text><path class="line" d="M675 515 V550"/><text x="695" y="541" class="small">否</text><rect x="440" y="550" width="470" height="60" rx="10" class="ok"/><text x="675" y="588" class="">启动下游调用</text><text x="240" y="565" class="small">第 1 次：0.990 秒</text><text x="240" y="600" class="small">第 2 次：1.000 秒</text><text x="240" y="635" class="small">第 20 次：1.180 秒</text><path d="M910 580 H935 V395 H910" class="line"/><text x="480" y="707" class="small">接收入队 ≠ 业务完成；队列长度与最长等待时间都要有限</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="780" viewBox="0 0 1200 780" role="img" aria-labelledby="title desc">
+<title id="title">漏桶：请求先积在桶内，再从窄出口按节奏流出</title><desc id="desc">矩形卡片表示请求。一次到达一百次，有界桶保存二十个待发送请求，多出的八十次从上方溢出并拒绝；底部出口每十毫秒发送一次，显示均匀间距与最后一项约一百九十毫秒的等待。</desc>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M1 1 L8 5 L1 9" fill="none" stroke="#5b5245" stroke-width="1.7"/></marker></defs>
+<style>text{font-family:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;fill:#2b2620;text-anchor:middle;font-size:23px}.title{font-size:34px;font-weight:650}.sub{font-size:21px;fill:#554d42}.small{font-size:19px}.num{font-size:27px;font-weight:600}.line{fill:none;stroke:#5b5245;stroke-width:2.5;marker-end:url(#arrow)}.rule{fill:none;stroke:#8a7f6d;stroke-width:2}.req{fill:#d8dee0;stroke:#295279;stroke-width:2}.reject{fill:#eed9d3;stroke:#943b37;stroke-width:2}</style>
+<rect width="1200" height="780" fill="#fdfaf3"/>
+<text x="600" y="57" class="title">漏桶：请求一拥而入，出口一个个放出去</text>
+<text x="600" y="98" class="sub">桶内存的是等待发送的请求；出口节奏固定，桶满就拒绝</text>
+<text x="530" y="153" class="">100 次同时到达</text>
+<g><rect x="460" y="172" width="30" height="22" rx="4" class="req"/><path d="M466 179 h18 M466 186 h12" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="500" y="172" width="30" height="22" rx="4" class="req"/><path d="M506 179 h18 M506 186 h12" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="540" y="172" width="30" height="22" rx="4" class="req"/><path d="M546 179 h18 M546 186 h12" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="460" y="204" width="30" height="22" rx="4" class="req"/><path d="M466 211 h18 M466 218 h12" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="500" y="204" width="30" height="22" rx="4" class="req"/><path d="M506 211 h18 M506 218 h12" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="540" y="204" width="30" height="22" rx="4" class="req"/><path d="M546 211 h18 M546 218 h12" stroke="#295279" stroke-width="1.5"/></g>
+<path d="M530 242 V258" class="line"/>
+<path d="M355 280 L387 527 Q530 573 673 527 L705 280" fill="#f5f0e4" stroke="#5b5245" stroke-width="4"/>
+<ellipse cx="530" cy="280" rx="175" ry="21" fill="#fdfaf3" stroke="#5b5245" stroke-width="3"/>
+<path d="M353 320 Q265 435 373 483" fill="none" stroke="#8a7f6d" stroke-width="3"/>
+<path d="M370 385 H690 L673 510 Q530 541 387 510 Z" fill="#d8dee0" stroke="none"/><g><rect x="416" y="479" width="32" height="23" rx="4" class="req"/><path d="M422 486 h20 M422 493 h14" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="460" y="479" width="32" height="23" rx="4" class="req"/><path d="M466 486 h20 M466 493 h14" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="504" y="479" width="32" height="23" rx="4" class="req"/><path d="M510 486 h20 M510 493 h14" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="548" y="479" width="32" height="23" rx="4" class="req"/><path d="M554 486 h20 M554 493 h14" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="592" y="479" width="32" height="23" rx="4" class="req"/><path d="M598 486 h20 M598 493 h14" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="416" y="446" width="32" height="23" rx="4" class="req"/><path d="M422 453 h20 M422 460 h14" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="460" y="446" width="32" height="23" rx="4" class="req"/><path d="M466 453 h20 M466 460 h14" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="504" y="446" width="32" height="23" rx="4" class="req"/><path d="M510 453 h20 M510 460 h14" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="548" y="446" width="32" height="23" rx="4" class="req"/><path d="M554 453 h20 M554 460 h14" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="592" y="446" width="32" height="23" rx="4" class="req"/><path d="M598 453 h20 M598 460 h14" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="416" y="413" width="32" height="23" rx="4" class="req"/><path d="M422 420 h20 M422 427 h14" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="460" y="413" width="32" height="23" rx="4" class="req"/><path d="M466 420 h20 M466 427 h14" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="504" y="413" width="32" height="23" rx="4" class="req"/><path d="M510 420 h20 M510 427 h14" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="548" y="413" width="32" height="23" rx="4" class="req"/><path d="M554 420 h20 M554 427 h14" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="592" y="413" width="32" height="23" rx="4" class="req"/><path d="M598 420 h20 M598 427 h14" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="416" y="380" width="32" height="23" rx="4" class="req"/><path d="M422 387 h20 M422 394 h14" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="460" y="380" width="32" height="23" rx="4" class="req"/><path d="M466 387 h20 M466 394 h14" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="504" y="380" width="32" height="23" rx="4" class="req"/><path d="M510 387 h20 M510 394 h14" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="548" y="380" width="32" height="23" rx="4" class="req"/><path d="M554 387 h20 M554 394 h14" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="592" y="380" width="32" height="23" rx="4" class="req"/><path d="M598 387 h20 M598 394 h14" stroke="#295279" stroke-width="1.5"/></g>
+<text x="535" y="355" class="small">最多存 20 个请求</text>
+<path d="M697 304 H898" class="line"/>
+<g><rect x="922" y="280" width="30" height="22" rx="4" class="reject"/><path d="M928 287 h18 M928 294 h12" stroke="#943b37" stroke-width="1.5"/></g>
+<g><rect x="964" y="280" width="30" height="22" rx="4" class="reject"/><path d="M970 287 h18 M970 294 h12" stroke="#943b37" stroke-width="1.5"/></g>
+<g><rect x="922" y="315" width="30" height="22" rx="4" class="reject"/><path d="M928 322 h18 M928 329 h12" stroke="#943b37" stroke-width="1.5"/></g>
+<g><rect x="964" y="315" width="30" height="22" rx="4" class="reject"/><path d="M970 322 h18 M970 329 h12" stroke="#943b37" stroke-width="1.5"/></g>
+<text x="988" y="390" class="">桶满溢出</text>
+<text x="988" y="430" class="num">80 次拒绝</text>
+<text x="160" y="400" class="">请求在桶内等待</text>
+<path d="M280 413 H380" class="line"/>
+<text x="160" y="441" class="small">等待也有期限</text>
+<path d="M513 540 V585 Q513 620 553 620 H1090" fill="none" stroke="#5b5245" stroke-width="8" stroke-linecap="round"/><path d="M513 549 V585 Q513 620 553 620 H1090" fill="none" stroke="#fdfaf3" stroke-width="3"/><g><rect x="635" y="605" width="32" height="29" rx="4" class="req"/><path d="M641 612 h20 M641 619 h14" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="730" y="605" width="32" height="29" rx="4" class="req"/><path d="M736 612 h20 M736 619 h14" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="825" y="605" width="32" height="29" rx="4" class="req"/><path d="M831 612 h20 M831 619 h14" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="920" y="605" width="32" height="29" rx="4" class="req"/><path d="M926 612 h20 M926 619 h14" stroke="#295279" stroke-width="1.5"/></g>
+<g><rect x="1015" y="605" width="32" height="29" rx="4" class="req"/><path d="M1021 612 h20 M1021 619 h14" stroke="#295279" stroke-width="1.5"/></g>
+<text x="810" y="574" class="num">窄出口：每 10 ms 发送一次</text>
+<text x="651" y="675" class="small">0.990s</text>
+<text x="746" y="675" class="small">1.000s</text>
+<text x="841" y="675" class="small">1.010s</text>
+<text x="1031" y="675" class="small">……</text>
+<text x="290" y="598" class="small">第 20 个约等 190 ms</text>
+<path d="M425 590 H490" class="line"/>
+<text x="600" y="746" class="sub">前提：发送器立即启动且无调度开销；接收入桶不等于业务完成</text>
+</svg>
