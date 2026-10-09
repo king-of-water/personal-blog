@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="550" viewBox="0 0 960 550" role="img" aria-labelledby="title desc">
+  <title id="title">线性一致：写后读与并发读写的时间窗口</title>
+  <desc id="desc">初始昵称为小王，只有一次写入阿水。上图写已成功返回后另一个读才开始，读必须返回阿水。下图读写时间窗口重叠，可以把读排在写生效之前或之后，因此小王与阿水都可能合法。</desc>
+  <defs><marker id="time" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8Z" fill="#8a7f6d"/></marker></defs>
+  <style>text{font-family:Arial,'PingFang SC','Microsoft YaHei',sans-serif;fill:#2b2620}.title{font-size:27px;font-weight:700}.body{font-size:22px}.small{font-size:19px}.axis{stroke:#8a7f6d;stroke-width:1.5;marker-end:url(#time)}.window{fill:#dee3d6;stroke:#466b48;stroke-width:2}.read{fill:#f5f0e4;stroke:#8a7f6d;stroke-width:2}.guide{stroke:#8a7f6d;stroke-width:1.5;stroke-dasharray:6 5}</style>
+  <rect width="960" height="550" fill="#fdfaf3"/>
+  <text x="36" y="45" class="title">关键是读何时开始，不是页面何时刷新完</text>
+  <text x="36" y="78" class="small">初始昵称“小王”；只有一次写“阿水”，没有后续覆盖。</text>
+  <text x="36" y="118" class="body">① 写已经成功返回，另一个读才开始</text>
+  <path d="M170 145H904" class="axis"/>
+  <rect x="200" y="163" width="320" height="44" rx="7" class="window"/>
+  <text x="360" y="192" text-anchor="middle" class="body">写“阿水”</text>
+  <text x="200" y="156" class="small">调用</text><text x="520" y="156" text-anchor="end" class="small">成功返回</text>
+  <path d="M520 149V251" class="guide"/>
+  <rect x="600" y="217" width="265" height="44" rx="7" class="read"/>
+  <text x="732" y="246" text-anchor="middle" class="body">读：必须是“阿水”</text>
+  <text x="600" y="210" class="small">开始读</text>
+  <text x="36" y="287" class="small">写与读没有重叠：必须把写排在读前面，不能返回旧版本。</text>
+  <text x="36" y="331" class="body">② 读取发生在写请求的执行窗口内</text>
+  <path d="M170 355H904" class="axis"/>
+  <rect x="200" y="373" width="640" height="44" rx="7" class="window"/>
+  <text x="520" y="402" text-anchor="middle" class="body">写“阿水”仍在执行</text>
+  <text x="200" y="366" class="small">调用</text><text x="840" y="366" text-anchor="end" class="small">成功返回</text>
+  <rect x="430" y="435" width="245" height="44" rx="7" class="read"/>
+  <text x="552" y="464" text-anchor="middle" class="body">读：“小王”或“阿水”</text>
+  <text x="36" y="521" class="small">读写窗口重叠：读可以排在写生效之前，也可以排在之后。</text>
+</svg>

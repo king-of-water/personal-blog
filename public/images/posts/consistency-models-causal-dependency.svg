@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="590" viewBox="0 0 960 590" role="img" aria-labelledby="title desc">
+  <title id="title">因果一致：回复先到时，等原帖到齐再展示</title>
+  <desc id="desc">回复 R 依赖原帖 P。另一区域先收到 R，读者请求时返回仍在同步，而不是展示孤立回复。P 到齐后，后续读取才同时取得原帖与回复。</desc>
+  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8Z" fill="#8a7f6d"/></marker></defs>
+  <style>text{font-family:Arial,'PingFang SC','Microsoft YaHei',sans-serif;fill:#2b2620}.title{font-size:27px;font-weight:700}.body{font-size:22px}.small{font-size:19px}.line{stroke:#8a7f6d;stroke-width:2;marker-end:url(#arrow)}.return{stroke-dasharray:6 5}.life{stroke:#8a7f6d;stroke-width:1.5;stroke-dasharray:5 7}.box{fill:#f5f0e4;stroke:#8a7f6d;stroke-width:1.5}</style>
+  <rect width="960" height="590" fill="#fdfaf3"/>
+  <text x="36" y="48" class="title">回复先到，不等于可以先展示回复</text>
+  <text x="36" y="82" class="small">初始：原帖 P 与回复 R 都尚未在另一区域可见；R 依赖 P。</text>
+  <rect x="50" y="108" width="230" height="48" rx="8" class="box"/><text x="165" y="140" text-anchor="middle" class="body">传播链路</text>
+  <rect x="365" y="108" width="230" height="48" rx="8" class="box"/><text x="480" y="140" text-anchor="middle" class="body">另一区域副本</text>
+  <rect x="680" y="108" width="230" height="48" rx="8" class="box"/><text x="795" y="140" text-anchor="middle" class="body">读者</text>
+  <path d="M165 156V516 M480 156V516 M795 156V516" class="life"/>
+  <path d="M165 202H480" class="line"/><text x="190" y="187" class="body">R 先到，附带依赖 P</text>
+  <rect x="340" y="214" width="280" height="39" rx="7" fill="#f5f0e4"/><text x="480" y="241" text-anchor="middle" class="small">缺少 P：暂不让 R 可见</text>
+  <path d="M795 283H480" class="line"/><text x="575" y="270" class="body">读取讨论</text>
+  <path d="M480 326H795" class="line return"/><text x="535" y="313" class="body">仍在同步，暂不展示</text>
+  <path d="M165 378H480" class="line"/><text x="250" y="365" class="body">P 后到</text>
+  <rect x="340" y="391" width="280" height="39" rx="7" fill="#dee3d6"/><text x="480" y="418" text-anchor="middle" class="small">依赖到齐：P、R 可见</text>
+  <path d="M795 457H480" class="line"/><text x="575" y="447" class="body">再次读取</text>
+  <path d="M480 500H795" class="line return"/><text x="530" y="487" class="body">返回原帖 P 与回复 R</text>
+  <text x="36" y="552" class="small">允许等待或补取依赖；不允许缺原帖时把孤立回复当作正常结果。</text>
+</svg>
