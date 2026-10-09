@@ -4,6 +4,7 @@ description: 从一次续签补偿扫描出发，拆开定时触发、任务抢�
 category: 后端
 subcategory: 分布式
 articleClass: flagship
+draft: true
 seriesOrder: 130
 publishedAt: 2026-08-27T09:04:00+08:00
 tags: [分布式任务, 定时任务, 租约, Leader Election, 幂等, Fencing Token, 调度系统]

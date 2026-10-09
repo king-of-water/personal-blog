@@ -4,6 +4,7 @@ description: 从支付服务调用钱包服务的完整路径出发，讲清注�
 category: 后端
 subcategory: 分布式
 articleClass: flagship
+draft: true
 seriesOrder: 120
 publishedAt: 2026-08-26T21:08:00+08:00
 tags: [分布式系统, 服务发现, 注册中心, 健康检查, 故障摘除, Nacos, Consul, Kubernetes]

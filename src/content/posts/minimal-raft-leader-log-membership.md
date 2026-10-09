@@ -4,6 +4,7 @@ description: 从三节点 KV 状态机出发，逐步实现 Raft 的任期、投
 category: 后端
 subcategory: 分布式
 articleClass: flagship
+draft: true
 seriesOrder: 140
 publishedAt: 2026-08-29T14:44:00+08:00
 tags: [Raft, 共识算法, Leader Election, 日志复制, 状态机复制, 成员变更]

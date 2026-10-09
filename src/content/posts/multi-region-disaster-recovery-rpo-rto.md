@@ -4,6 +4,7 @@ description: 从业务损失出发定义 RPO、RTO 与恢复边界，比较备�
 category: 后端
 subcategory: 分布式
 articleClass: flagship
+draft: true
 seriesOrder: 150
 publishedAt: 2026-08-29T16:19:00+08:00
 tags: [多机房, 灾难恢复, RPO, RTO, 容灾, 异地多活, 故障切换]
