@@ -9,20 +9,6 @@ import { SITE } from '../config';
 		<h1>关于作者</h1>
 		<p>我是一名武汉大学本科生，主要关注后端工程、AI 应用与 Agent 工程。</p>
 	</header>
-	<section class="about-grid about-details shell">
-		<div class="info-card">
-			<h2>这个空间</h2>
-			<p>这里记录学习过程、技术实践和个人项目。内容不追求面面俱到，只保留亲自实践、真正理解过的部分。</p>
-		</div>
-		<div class="info-card">
-			<h2>关注方向</h2>
-			<p>后端工程、AI 应用、Agent 工程，以及把想法做成稳定可用的系统。</p>
-		</div>
-		<div class="info-card">
-			<h2>找到我</h2>
-			<p>代码和公开项目会同步到下方的 GitHub，这里也收录博客使用的工具与朋友们的站点。</p>
-		</div>
-	</section>
 	<section class="personal-links shell" aria-label="个人入口">
 		<a class="personal-entry" href={SITE.github} target="_blank" rel="noopener noreferrer">
 			<h2>GitHub <span aria-hidden="true">↗</span></h2>
@@ -54,8 +40,7 @@ import { SITE } from '../config';
 </BaseLayout>
 
 <style>
-	.about-grid.about-details { padding-bottom: 40px; }
-	.personal-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; padding-bottom: 48px; }
+	.personal-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; padding-top: 36px; padding-bottom: 48px; }
 	.personal-entry { padding: 24px 26px; border: 1px solid var(--line); background: var(--paper); }
 	.personal-entry h2 { display: flex; justify-content: space-between; align-items: baseline; gap: 20px; margin: 0 0 10px; font-family: var(--display); font-size: 28px; font-weight: 600; }
 	.personal-entry h2 span { color: var(--accent); font-family: inherit; font-size: 22px; }
@@ -87,8 +72,7 @@ import { SITE } from '../config';
 		.friend-card:hover .friend-action > span[aria-hidden] { transform: translate(2px, -2px); }
 	}
 	@media (max-width: 760px) {
-		.personal-links { grid-template-columns: 1fr; gap: 16px; padding-bottom: 36px; }
-		.about-grid.about-details { padding-bottom: 32px; }
+		.personal-links { grid-template-columns: 1fr; gap: 16px; padding-top: 28px; padding-bottom: 36px; }
 		.friend-links { padding-bottom: 48px; }
 		.friend-links-heading { margin-bottom: 20px; }
 		.friend-card { padding: 28px 24px 24px; }
