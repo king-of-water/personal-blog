@@ -1,0 +1,73 @@
+<div class="home-view-stat" data-site-views data-view-help>
+	<button class="view-help-trigger" type="button" aria-expanded="false" aria-controls="site-view-explanation" aria-describedby="site-view-explanation" data-view-help-trigger>
+		<span>总浏览量</span>
+		<span class="home-view-number" data-site-view-count aria-live="polite">—</span>
+		<span class="view-help-icon" aria-hidden="true">?</span>
+		<span class="visually-hidden">查看统计原理</span>
+	</button>
+	<div class="view-help-panel" id="site-view-explanation" role="tooltip" data-view-help-panel hidden>
+		<strong class="view-help-title">这些浏览量怎么算？</strong>
+		<dl>
+			<div><dt>统计范围</dt><dd>已有文章浏览量，加上首页、栏目等页面访问的累计。文章访问只计一处，不重复叠加。</dd></div>
+			<div><dt>怎样累计</dt><dd>页面打开后向统计接口上报，成功后数据库加 1；首页读取各项浏览量的总和。</dd></div>
+			<div><dt>怎样去重</dt><dd>浏览器用本地存储标记当天访问过的页面，避免刷新反复上报。按 UTC 日期换日，北京时间每天 08:00 开始新一天。</dd></div>
+		</dl>
+		<p class="view-help-note">不是独立访客人数。换浏览器、清除本地存储可能再次计入；前端去重并非严格防刷统计。服务不可用时显示「暂不可用」。</p>
+	</div>
+</div>
+
+<style>
+	.home-view-stat { position: relative; width: fit-content; }
+	.view-help-trigger { display: inline-flex; align-items: baseline; gap: 10px; padding: 2px 0; border: 0; background: transparent; color: var(--muted); font: inherit; cursor: help; }
+	.view-help-icon { display: inline-grid; place-items: center; align-self: center; width: 16px; height: 16px; border: 1px solid var(--line); border-radius: 50%; font-size: 10px; line-height: 1; transition: border-color 180ms ease, color 180ms ease; }
+	.view-help-trigger:is(:hover, :focus-visible, [aria-expanded="true"]) .view-help-icon { border-color: var(--accent); color: var(--accent); }
+	.view-help-panel { position: absolute; top: calc(100% + 10px); left: 0; z-index: 30; width: min(360px, calc(100vw - 48px)); padding: 20px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper); color: var(--text); box-shadow: 0 12px 32px rgba(83, 65, 42, 0.12); font-size: 12px; line-height: 1.7; }
+	.view-help-panel::before { content: ""; position: absolute; top: -12px; left: 0; width: 100%; height: 12px; }
+	.view-help-panel::after { content: ""; position: absolute; top: -5px; left: 28px; width: 8px; height: 8px; border-top: 1px solid var(--line); border-left: 1px solid var(--line); background: var(--paper); transform: rotate(45deg); }
+	.view-help-title { display: block; margin-bottom: 14px; color: var(--accent); font-family: var(--display); font-size: 17px; font-weight: 600; }
+	.view-help-panel dl { display: grid; gap: 12px; margin: 0; }
+	.view-help-panel dt { margin-bottom: 2px; font-weight: 600; }
+	.view-help-panel dd { margin: 0; color: var(--muted); }
+	.view-help-note { margin: 14px 0 0; padding-top: 12px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; }
+	@media (prefers-reduced-motion: no-preference) {
+		.view-help-panel:not([hidden]) { animation: view-help-in 160ms ease-out; }
+		@keyframes view-help-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+	}
+</style>
+
+<script>
+	const help = document.querySelector<HTMLElement>('[data-view-help]');
+	const trigger = help?.querySelector<HTMLButtonElement>('[data-view-help-trigger]');
+	const panel = help?.querySelector<HTMLElement>('[data-view-help-panel]');
+	if (help && trigger && panel) {
+		let pinned = false;
+		const show = (open: boolean) => {
+			panel.hidden = !open;
+			trigger.setAttribute('aria-expanded', String(open));
+		};
+		const close = () => { pinned = false; show(false); };
+		help.addEventListener('pointerenter', (event) => {
+			if (event.pointerType !== 'touch') show(true);
+		});
+		help.addEventListener('pointerleave', () => {
+			if (!pinned && !help.contains(document.activeElement)) show(false);
+		});
+		help.addEventListener('focusin', () => show(true));
+		help.addEventListener('focusout', (event) => {
+			if (!help.contains(event.relatedTarget as Node | null)) close();
+		});
+		trigger.addEventListener('click', () => {
+			pinned = !pinned;
+			show(pinned);
+		});
+		document.addEventListener('pointerdown', (event) => {
+			if (!help.contains(event.target as Node | null)) close();
+		});
+		document.addEventListener('keydown', (event) => {
+			if (event.key === 'Escape' && !panel.hidden) {
+				close();
+				event.stopPropagation();
+			}
+		});
+	}
+</script>

@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
+import SiteViewCounter from '../components/SiteViewCounter.astro';
 
 const allPosts = (await getCollection('posts', ({ data }) => !data.draft))
 	.sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
@@ -30,10 +31,7 @@ const featuredPosts = featuredPostIds.flatMap((id) => {
 		<div class="intro-main">
 			<h1>Hello, I am<br />king-of-water.</h1>
 			<p>从代码出发，理解系统与行业。</p>
-			<div class="home-view-stat" data-site-views title="已有文章浏览量与新增页面访问累计；同一浏览器同一页面每天计一次，非独立访客数">
-				<span>总浏览量</span>
-				<span class="home-view-number" data-site-view-count aria-live="polite">—</span>
-			</div>
+			<SiteViewCounter />
 		</div>
 		<div class="home-portrait-slot">
 			<a class="home-portrait" href="/about/" aria-label="了解 king-of-water">
