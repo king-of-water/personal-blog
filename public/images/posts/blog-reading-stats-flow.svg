@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 740" role="img" aria-labelledby="title desc">
+<title id="title">文章阅读与浏览量统计的两条路径</title><desc id="desc">先获取静态 HTML 显示正文。统计脚本检查当日标记：有标记只查询，无标记请求数据库加一。接口成功后更新数字，加一请求成功还写入本地标记。接口失败则保持正文可读，没有成功确认时不写标记，下次打开可能再次上报。</desc>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 1L8 5L0 9" fill="none" stroke="#8a7f6d" stroke-width="1.5"/></marker></defs><style>text{font-family:Arial,"PingFang SC","Microsoft YaHei",sans-serif;fill:#2b2620;text-anchor:middle;font-size:23px}.small{font-size:20px}.heading{font-size:29px;font-weight:600}.box{fill:#f5f0e4;stroke:#8a7f6d;stroke-width:2}.decision{fill:#ebe4d4;stroke:#8a7f6d;stroke-width:2}.done{fill:#dee3d6;stroke:#466b48;stroke-width:2}.link{fill:none;stroke:#8a7f6d;stroke-width:2;marker-end:url(#arrow)}</style><rect width="960" height="740" fill="#fdfaf3"/>
+<text x="480" y="46" class="heading">文章先显示，浏览量再独立请求</text>
+<rect x="290" y="85" width="380" height="80" rx="10" class="done"/><text x="480" y="118">收到静态 HTML，显示正文</text><text x="480" y="148" class="small">后续接口失败不阻止阅读</text>
+<path d="M480 165V205" class="link"/>
+<path d="M480 205L650 255L480 305L310 255Z" class="decision"/><text x="480" y="263">今天已计过这篇？</text>
+<path d="M310 255H185V335" class="link"/><text x="240" y="236" class="small">没有标记</text>
+<path d="M650 255H775V335" class="link"/><text x="721" y="236" class="small">有标记</text>
+<rect x="35" y="335" width="300" height="95" rx="10" class="box"/><text x="185" y="366">POST：请求增加浏览量</text><text x="185" y="396" class="small">接口执行 D1 的 views + 1</text><text x="185" y="422" class="small">再读取统计结果</text>
+<rect x="625" y="335" width="300" height="95" rx="10" class="box"/><text x="775" y="366">GET：只查询统计</text><text x="775" y="396" class="small">接口读取 D1 现有数字</text><text x="775" y="422" class="small">不增加浏览量</text>
+<path d="M185 430V495H330" class="link"/><path d="M775 430V495H630" class="link"/>
+<path d="M480 445L630 495L480 545L330 495Z" class="decision"/><text x="480" y="503">收到成功结果？</text>
+<path d="M480 545V560H185V590" class="link"/><text x="270" y="550" class="small">失败 / 超时</text>
+<path d="M480 545V560H775V590" class="link"/><text x="675" y="550" class="small">成功</text>
+<rect x="35" y="590" width="300" height="88" rx="10" class="box"/><text x="185" y="623">保持正文可读</text><text x="185" y="653" class="small">未确认时，不写入新标记</text>
+<rect x="625" y="590" width="300" height="88" rx="10" class="done"/><text x="775" y="623">更新浏览量与点赞状态</text><text x="775" y="653" class="small">首次计数成功后写本地标记</text>
+<text x="480" y="718" class="small">注意：数据库已加一但响应丢失，下次上报仍可能重复。</text></svg>
