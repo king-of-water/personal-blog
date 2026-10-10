@@ -11,7 +11,7 @@ const resolvedActivePath = activePath ?? (
 	pathname.startsWith('/agent/') ? '/agent/' :
 	pathname.startsWith('/industry/') ? '/industry/' :
 	pathname.startsWith('/projects/') ? '/projects/' :
-	pathname.startsWith('/toolbox/') ? '/toolbox/' :
+	pathname.startsWith('/toolbox/') ? '/about/' :
 	pathname.startsWith('/about/') ? '/about/' :
 	pathname.startsWith('/posts/') ? '/posts/' : ''
 );
@@ -22,8 +22,7 @@ const navItems = [
 	{ href: '/agent/', label: 'Agent' },
 	{ href: '/industry/', label: '行业' },
 	{ href: '/projects/', label: '项目' },
-	{ href: '/toolbox/', label: '工具箱' },
-	{ href: '/about/', label: '作者' },
+	{ href: '/about/', label: '个人' },
 	{ href: '/posts/', label: '归档' },
 ];
 ---
@@ -45,7 +44,6 @@ const navItems = [
 					aria-current={resolvedActivePath === item.href ? 'page' : undefined}
 				>{item.label}</a>
 			))}
-			<a href={SITE.github} target="_blank" rel="noreferrer">GitHub</a>
 		</div>
 	</nav>
 </header>
