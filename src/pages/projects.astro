@@ -9,18 +9,30 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 		<p>从灵感、设计到上线，记录每个自己动手完成的项目。</p>
 	</header>
 	<section class="project-section shell">
-		<a class="project-entry" href="/posts/how-this-blog-works/">
-			<div class="project-entry-top"><span>进行中</span><time>2026</time></div>
-			<h2>个人博客</h2>
-			<p>使用 Astro 生成文章与栏目页面，通过 GitHub 和 Cloudflare Pages 发布；浏览量与点赞由 Pages Functions 和 D1 保存。持续记录内容组织、阅读界面与实现过程。</p>
-			<div class="project-stack"><span>Astro</span><span>GitHub</span><span>Cloudflare Pages</span><span>D1</span></div>
-			<b>查看实现说明 →</b>
-		</a>
+		<div class="post-list">
+			<a class="post-card" href="/posts/how-this-blog-works/">
+				<div class="post-date"><time datetime="2026">2026</time><span class="project-status">持续维护</span></div>
+				<div class="post-main">
+					<h2>个人博客<span class="post-arrow" aria-hidden="true">↗</span></h2>
+					<p>记录技术、业务与个人项目，也记录这个站点的搭建和维护过程。</p>
+					<div class="tag-row"><span class="tag">Astro</span><span class="tag">GitHub</span><span class="tag">Cloudflare Pages</span><span class="tag">D1</span></div>
+					<span class="project-read">查看实现说明</span>
+				</div>
+			</a>
+		</div>
 	</section>
 </BaseLayout>
 
 <style>
 	.project-section { padding-bottom: 64px; }
+	.project-status { display: block; margin-top: 5px; }
+	.post-main h2 { margin: 2px 0 5px; font-family: var(--display); font-size: 20px; font-weight: 600; letter-spacing: -0.025em; }
+	.project-read { display: inline-block; margin-top: 14px; color: var(--accent); font-size: 13px; }
+	.post-card:is(:hover, :focus-visible) h2 { color: var(--accent); }
+	@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+		.post-main h2 { transition: color 180ms ease, transform 260ms ease; }
+		.post-card:is(:hover, :focus-visible) h2 { transform: translateX(3px); }
+	}
 	@media (max-width: 760px) {
 		.project-section { padding-bottom: 40px; }
 	}
