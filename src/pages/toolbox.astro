@@ -6,88 +6,34 @@ const tools = [
 		id: 'humanizer',
 		name: 'humanizer',
 		kind: '写作',
-		status: '正在使用',
-		date: '2026-09-30',
 		source: 'https://github.com/blader/humanizer',
 		repository: 'blader/humanizer',
-		stars: '52.9k',
-		description: '检查文章里的模板化句式、空泛总结和过度包装，让文字更接近真实作者的表达，同时保留原意。',
-		usage: '用于技术文章定稿前的语言检查。',
+		description: '检查模板化句式、空泛总结和过度包装，帮助文章表达得更自然。',
+		usage: '本站文章修改和定稿时，用它检查重复总结、书面化表达与不必要的强调。博客搭建说明的精简版也做了这一步；技术结论仍需另外核对。',
 	},
 	{
 		id: 'documd-visuals',
 		name: 'documd-visuals',
 		kind: '图示',
-		status: '正在使用',
-		date: '2026-09-30',
 		source: 'https://github.com/markdown-viewer/skills',
 		repository: 'markdown-viewer/skills',
-		stars: '3.3k',
-		description: '为技术文档设计架构图、流程图和对比图，重点是让每张图只回答一个明确问题。',
-		usage: '用于 RAG 技术地图等长文的结构图和方案对比图。',
-	},
-	{
-		id: 'frontend-design',
-		name: 'frontend-design',
-		kind: '视觉设计',
-		status: '已安装',
-		date: '2026-09-30',
-		source: 'https://github.com/anthropics/skills',
-		repository: 'anthropics/skills',
-		stars: '179k',
-		description: 'Anthropic 官方的前端设计 Skill，用明确的视觉方向、排版和布局减少千篇一律的 AI 页面感。',
-		usage: '后续博客页面新增或整体改版时，用它先确定视觉方向再写代码。',
-	},
-	{
-		id: 'web-design-guidelines',
-		name: 'web-design-guidelines',
-		kind: '界面审查',
-		status: '已安装',
-		date: '2026-09-30',
-		source: 'https://github.com/vercel-labs/agent-skills',
-		repository: 'vercel-labs/agent-skills',
-		stars: '31.7k',
-		description: 'Vercel 官方的 Web 界面检查清单，覆盖无障碍、响应式、交互、排版和性能等一百多项规则。',
-		usage: '页面完成后做一次系统审查，补齐键盘操作、焦点状态和移动端细节。',
-	},
-	{
-		id: 'writing-guidelines',
-		name: 'writing-guidelines',
-		kind: '技术写作',
-		status: '已安装',
-		date: '2026-09-30',
-		source: 'https://github.com/vercel-labs/agent-skills',
-		repository: 'vercel-labs/agent-skills',
-		stars: '31.7k',
-		description: 'Vercel 的技术写作规范，检查标题、结构、代码示例、术语和不同类型文档的语气。',
-		usage: '用于技术文章的结构审查，和负责语言质感的 humanizer 配合使用。',
-	},
-	{
-		id: 'systematic-debugging',
-		name: 'systematic-debugging',
-		kind: '工程调试',
-		status: '已安装',
-		date: '2026-09-30',
-		source: 'https://github.com/obra/superpowers',
-		repository: 'obra/superpowers',
-		stars: '291k',
-		description: '用复现、证据、单一假设和最小验证定位根因，避免看到报错后连续尝试互不相关的修补。',
-		usage: '构建失败、页面异常或后端故障排查时使用。',
+		description: '帮助组织技术文章中的流程图和对比图，明确步骤、分支和数据怎样流动。',
+		usage: '博客搭建说明里的两张流程图，用它组织了文章生成和浏览量统计的流程，再以 SVG 放进正文。图示保存在仓库中，可以随文章一起修改。',
 	},
 ];
 ---
 
-<BaseLayout title="工具箱" description="记录 king-of-water 实际使用过的 Skills、写作工具和开发工具。" activeNav="/toolbox/">
+<BaseLayout title="工具箱" description="记录本站写作和维护中实际采用的工具，以及具体使用场景。" activeNav="/toolbox/">
 	<section class="page-intro shell">
-		<p class="eyebrow">TOOLS I ACTUALLY USE</p>
+		<p class="eyebrow">TOOLS USED HERE</p>
 		<h1>工具箱</h1>
-		<p>这里记录已经安装并准备实际使用的 Skill，以及它们解决什么问题、适合用在什么地方。</p>
+		<p>记录本站写作和维护中实际采用的工具，说明它们用在了哪里。</p>
 	</section>
 
 	<section class="toolbox shell" aria-label="工具列表">
 		<div class="toolbox-note">
 			<strong>收录原则</strong>
-			<p>只收录已经安装或实际用过的工具。Star 数来自来源仓库，记录时会核验，之后可能变化。</p>
+			<p>只保留有具体使用记录的工具。仅安装、准备尝试的暂不收录；这里记录的是博客工作流，不代表作者个人日常使用清单。</p>
 		</div>
 		<div class="tool-list">
 			{tools.map((tool, index) => (
@@ -99,16 +45,12 @@ const tools = [
 								<span>{tool.kind}</span>
 								<h2>{tool.name}</h2>
 							</div>
-							<small>{tool.status}</small>
 						</div>
 						<p>{tool.description}</p>
-						<div class="tool-usage"><b>我怎么用</b><span>{tool.usage}</span></div>
+						<div class="tool-usage"><b>实际用途</b><span>{tool.usage}</span></div>
 						<div class="tool-footer">
-							<div>
-								<time datetime={tool.date}>记录于 {tool.date}</time>
-								<span>{tool.repository} · ★ {tool.stars}</span>
-							</div>
-							<a href={tool.source} target="_blank" rel="noreferrer">仓库主页 ↗</a>
+							<div><span>{tool.repository}</span></div>
+							<a href={tool.source} target="_blank" rel="noopener noreferrer">仓库主页 ↗</a>
 						</div>
 					</div>
 				</article>
