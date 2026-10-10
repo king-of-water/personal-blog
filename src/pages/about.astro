@@ -9,7 +9,7 @@ import { SITE } from '../config';
 		<h1>关于作者</h1>
 		<p>我是一名武汉大学本科生，主要关注后端工程、AI 应用与 Agent 工程。</p>
 	</header>
-	<section class="about-grid shell">
+	<section class="about-grid about-details shell">
 		<div class="info-card">
 			<h2>这个空间</h2>
 			<p>这里记录学习过程、技术实践和个人项目。内容不追求面面俱到，只保留亲自实践、真正理解过的部分。</p>
@@ -24,12 +24,57 @@ import { SITE } from '../config';
 			<a class="text-link" href={SITE.github} target="_blank" rel="noreferrer">访问 GitHub ↗</a>
 		</div>
 	</section>
-	<section class="section shell" aria-labelledby="friend-links-title">
-		<div class="section-label">
+	<section class="friend-links shell" aria-labelledby="friend-links-title">
+		<div class="friend-links-heading">
 			<h2 id="friend-links-title">友情链接</h2>
+			<span>1 位朋友</span>
 		</div>
-		<div class="info-card">
-			<h3><a class="text-link" href="https://n015.top/" target="_blank" rel="noopener noreferrer">n015.top ↗</a></h3>
-		</div>
+		<a class="friend-card" href="https://n015.top/" target="_blank" rel="noopener noreferrer">
+			<div class="friend-card-copy">
+				<h3>Elster Lee</h3>
+				<p>个人项目与随笔记录。</p>
+				<div class="friend-card-footer">
+					<span class="friend-domain">n015.top</span>
+					<span class="friend-action">访问博客 <span aria-hidden="true">↗</span><span class="visually-hidden">（在新标签页打开）</span></span>
+				</div>
+			</div>
+			<span class="friend-mark" aria-hidden="true">EL</span>
+		</a>
 	</section>
 </BaseLayout>
+
+<style>
+	.about-grid.about-details { padding-bottom: 40px; }
+	.friend-links { padding: 0 0 72px; }
+	.friend-links-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
+	.friend-links-heading h2 { margin: 0; font-family: var(--display); font-size: 22px; font-weight: 600; }
+	.friend-links-heading > span { color: var(--muted); font-size: 12px; }
+	.friend-card { position: relative; display: block; width: min(100%, 820px); overflow: hidden; padding: 36px 38px 26px; border: 1px solid var(--line); background: var(--paper); color: var(--text); }
+	.friend-card-copy { position: relative; z-index: 1; max-width: 490px; }
+	.friend-card h3 { margin: 0 0 12px; font-family: var(--display); font-size: clamp(32px, 4vw, 46px); font-weight: 600; line-height: 1.1; letter-spacing: -0.035em; }
+	.friend-card p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.7; }
+	.friend-card-footer { display: flex; flex-wrap: wrap; align-items: baseline; gap: 12px 26px; margin-top: 36px; font-size: 12px; }
+	.friend-domain { color: var(--muted); }
+	.friend-action { color: var(--accent); font-weight: 600; }
+	.friend-action > span[aria-hidden] { display: inline-block; margin-left: 4px; }
+	.friend-mark { position: absolute; right: 24px; top: 50%; transform: translateY(-50%) rotate(-7deg); width: 170px; height: 170px; display: grid; place-items: center; border: 1px solid var(--accent); border-radius: 50%; color: var(--accent); opacity: 0.12; font-family: var(--display); font-size: 108px; font-weight: 600; line-height: 1; letter-spacing: -0.09em; pointer-events: none; user-select: none; }
+	.friend-card:hover { border-color: var(--accent); }
+	.friend-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }
+	@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+		.friend-card { transition: transform 240ms ease, border-color 180ms ease, box-shadow 240ms ease; }
+		.friend-card:hover { transform: translateY(-3px); box-shadow: 0 8px 22px rgba(83, 65, 42, 0.07); }
+		.friend-mark { transition: opacity 240ms ease, transform 320ms ease; }
+		.friend-card:hover .friend-mark { opacity: 0.2; transform: translateY(-50%) rotate(0deg); }
+		.friend-action > span[aria-hidden] { transition: transform 240ms ease; }
+		.friend-card:hover .friend-action > span[aria-hidden] { transform: translate(2px, -2px); }
+	}
+	@media (max-width: 760px) {
+		.about-grid.about-details { padding-bottom: 32px; }
+		.friend-links { padding-bottom: 48px; }
+		.friend-links-heading { margin-bottom: 20px; }
+		.friend-card { padding: 28px 24px 24px; }
+		.friend-card-copy { max-width: 100%; }
+		.friend-card-footer { margin-top: 28px; }
+		.friend-mark { right: -32px; width: 132px; height: 132px; font-size: 84px; opacity: 0.08; }
+	}
+</style>
