@@ -6,6 +6,7 @@ subcategory: Agent 产品拆解
 articleClass: flagship
 seriesOrder: 30
 featured: false
+draft: true
 publishedAt: 2026-09-04T20:45:00+08:00
 updatedAt: 2026-09-04T20:45:00+08:00
 tags: [Codex, Agent Harness, Rust, Agent Loop, App Server, Sandbox, Context Engineering]

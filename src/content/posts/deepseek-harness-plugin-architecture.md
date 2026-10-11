@@ -6,6 +6,7 @@ subcategory: Agent 产品拆解
 articleClass: flagship
 seriesOrder: 40
 featured: false
+draft: true
 publishedAt: 2026-09-05T14:11:00+08:00
 updatedAt: 2026-09-05T14:11:00+08:00
 tags: [DeepSeek Harness, DSH, Cordis, Plugin Architecture, Agent Runtime]

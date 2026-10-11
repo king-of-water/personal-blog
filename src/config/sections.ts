@@ -29,14 +29,6 @@ export const agentSubcategories: Subcategory[] = [
 		description: '让知识可检索、可理解、可维护，并成为模型能够使用的上下文。',
 	},
 	{
-		name: 'Agent 产品拆解',
-		slug: 'agent-products',
-		description: '拆解 Codex、Claude Code、Hermes、OpenClaw 等真实系统的架构与实现。',
-		plannedTopics: [
-			'横向拆解：不同 Agent 怎样实现 Context、权限、记忆与任务恢复',
-		],
-	},
-	{
 		name: 'AI 应用与思考',
 		slug: 'ai-coding',
 		description: '从 AI 工具使用、AI Coding 到业务流程与组织协同，讨论 AI 怎样进入真实工作。',
