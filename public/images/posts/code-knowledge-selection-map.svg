@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="820" viewBox="0 0 1440 820" role="img" aria-labelledby="title desc">
+  <title id="title">RAG、Skills、Repo Map、FastCode 与 LLM Wiki 的核心产物和使用位置</title>
+  <desc id="desc">从长期维护到单次任务，LLM Wiki提供稳定页面，Skills提供任务规则，Repo Map提供仓库骨架，FastCode动态寻找代码路径，RAG按问题补充具体证据，最后共同进入Agent上下文。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#5b5245"/></marker>
+    <style>.t{font-family:Inter,"PingFang SC","Microsoft YaHei",sans-serif;fill:#2b2620}.h{font-size:34px;font-weight:700}.sub{font-size:18px;fill:#6f6659}.k{font-size:16px;font-weight:700;letter-spacing:.08em;fill:#7a5c33}.nh{font-size:22px;font-weight:700}.b{font-size:16px;fill:#554d42}.small{font-size:14px;fill:#6f6659}.box{fill:#f5f0e4;stroke:#b8aa94;stroke-width:2}.green{fill:#e4eee8;stroke:#56705e;stroke-width:2}.accent{fill:#e9dfca;stroke:#7a5c33;stroke-width:2}.line{stroke:#5b5245;stroke-width:2.2;fill:none;marker-end:url(#arrow)}</style>
+  </defs>
+  <rect width="1440" height="820" fill="#fdfaf3"/>
+  <text x="70" y="68" class="t h">五种方案，交付五种不同的上下文</text>
+  <text x="70" y="104" class="t sub">先判断任务缺什么，再决定加载哪种知识产物</text>
+  <text x="70" y="164" class="t k">长期知识产品</text>
+  <rect x="70" y="188" width="286" height="154" rx="10" class="green"/>
+  <text x="98" y="230" class="t nh">LLM Wiki</text><text x="98" y="268" class="t b">稳定的概览、流程和决策页</text><text x="98" y="302" class="t small">回答：这个领域整体怎样工作</text>
+  <rect x="390" y="188" width="286" height="154" rx="10" class="box"/>
+  <text x="418" y="230" class="t nh">Skills</text><text x="418" y="268" class="t b">任务规则、步骤和验收条件</text><text x="418" y="302" class="t small">回答：这类任务必须怎样做</text>
+  <text x="70" y="426" class="t k">代码导航与任务侦察</text>
+  <rect x="70" y="450" width="286" height="154" rx="10" class="box"/>
+  <text x="98" y="492" class="t nh">Repo Map</text><text x="98" y="530" class="t b">压缩的模块、符号和关系</text><text x="98" y="564" class="t small">回答：入口和结构在哪里</text>
+  <rect x="390" y="450" width="286" height="154" rx="10" class="box"/>
+  <text x="418" y="492" class="t nh">FastCode</text><text x="418" y="530" class="t b">当前任务涉及的代码路径</text><text x="418" y="564" class="t small">回答：这次到底要看哪些代码</text>
+  <text x="70" y="688" class="t k">按需证据</text>
+  <rect x="70" y="712" width="606" height="70" rx="10" class="box"/>
+  <text x="98" y="755" class="t nh">RAG　按问题取回具体文档、代码和事实片段</text>
+  <rect x="802" y="250" width="568" height="412" rx="12" class="accent"/>
+  <text x="834" y="294" class="t nh">Agent 当前任务上下文</text>
+  <rect x="834" y="330" width="504" height="68" rx="8" fill="#fffaf0" stroke="#b8aa94"/><text x="858" y="372" class="t b">背景：Wiki 中的领域解释</text>
+  <rect x="834" y="414" width="504" height="68" rx="8" fill="#fffaf0" stroke="#b8aa94"/><text x="858" y="456" class="t b">约束：Skill 中的规则与验收</text>
+  <rect x="834" y="498" width="504" height="68" rx="8" fill="#fffaf0" stroke="#b8aa94"/><text x="858" y="540" class="t b">范围：地图与侦察得到的代码路径</text>
+  <rect x="834" y="582" width="504" height="52" rx="8" fill="#fffaf0" stroke="#b8aa94"/><text x="858" y="616" class="t b">证据：RAG 按需补充的原文片段</text>
+  <path d="M676 265H776V350H802" class="line"/><path d="M676 527H750V498H802" class="line"/><path d="M676 747H776V606H802" class="line"/>
+  <text x="802" y="716" class="t small">不是每个任务都需要五种产物；只加载解决当前缺口的部分。</text>
+</svg>

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="860" viewBox="0 0 1440 860" role="img" aria-labelledby="title desc">
+  <title id="title">同一个退款改动中五种知识方案的协作顺序</title>
+  <desc id="desc">退款需求进入后，Skill先提供金额和幂等约束，LLM Wiki补充业务背景，Repo Map找到仓库入口，FastCode沿调用和数据关系侦察影响范围，RAG补充具体证据，随后编码并按验收条件验证。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#5b5245"/></marker>
+    <style>.t{font-family:Inter,"PingFang SC","Microsoft YaHei",sans-serif;fill:#2b2620}.h{font-size:34px;font-weight:700}.sub{font-size:18px;fill:#6f6659}.step{font-size:15px;font-weight:700;letter-spacing:.06em;fill:#7a5c33}.nh{font-size:21px;font-weight:700}.b{font-size:15px;fill:#554d42}.small{font-size:14px;fill:#6f6659}.box{fill:#f5f0e4;stroke:#b8aa94;stroke-width:2}.active{fill:#e9dfca;stroke:#7a5c33;stroke-width:2}.done{fill:#e4eee8;stroke:#56705e;stroke-width:2}.line{stroke:#5b5245;stroke-width:2.2;fill:none;marker-end:url(#arrow)}</style>
+  </defs>
+  <rect width="1440" height="860" fill="#fdfaf3"/>
+  <text x="70" y="68" class="t h">退款改动怎样依次获得规则、背景、范围和证据</text>
+  <text x="70" y="104" class="t sub">每一步解决一个明确缺口，失败时也知道该回到哪一层补信息</text>
+  <rect x="70" y="154" width="1300" height="86" rx="10" class="active"/>
+  <text x="98" y="187" class="t step">需求</text><text x="210" y="187" class="t nh">新增营销补贴，退款按支付快照计算，并保证重复回调不重复退款</text><text x="210" y="218" class="t small">初始状态：知道业务目标，不知道稳定约束、代码入口和完整影响范围</text>
+  <path d="M720 240V278" class="line"/>
+  <rect x="70" y="288" width="390" height="154" rx="10" class="box"/>
+  <text x="98" y="322" class="t step">01 SKILL 定规矩</text><text x="98" y="360" class="t b">金额基准：支付快照</text><text x="98" y="392" class="t b">幂等键：退款单业务键</text><text x="98" y="420" class="t small">验收：正常、超时、重复回调</text>
+  <rect x="525" y="288" width="390" height="154" rx="10" class="box"/>
+  <text x="553" y="322" class="t step">02 WIKI 补背景</text><text x="553" y="360" class="t b">理解金额规则与历史事故</text><text x="553" y="392" class="t b">核对产品和实现是否一致</text><text x="553" y="420" class="t small">证据不足时保留未知</text>
+  <rect x="980" y="288" width="390" height="154" rx="10" class="box"/>
+  <text x="1008" y="322" class="t step">03 REPO MAP 找入口</text><text x="1008" y="360" class="t b">退款服务、金额计算器</text><text x="1008" y="392" class="t b">渠道网关、退款流水表</text><text x="1008" y="420" class="t small">先看骨架，不展开全仓库</text>
+  <path d="M720 442V480" class="line"/>
+  <rect x="240" y="492" width="430" height="166" rx="10" class="box"/>
+  <text x="270" y="528" class="t step">04 FASTCODE 找完整路径</text><text x="270" y="568" class="t b">沿调用：入口 → 计算 → 渠道请求</text><text x="270" y="602" class="t b">沿数据：支付快照 → 补贴 → 退款单</text><text x="270" y="634" class="t small">范围过窄则继续侦察，过宽则按预算裁剪</text>
+  <rect x="770" y="492" width="430" height="166" rx="10" class="box"/>
+  <text x="800" y="528" class="t step">05 RAG 补具体证据</text><text x="800" y="568" class="t b">取回补贴规则、接口字段和代码片段</text><text x="800" y="602" class="t b">重排、去重并保留来源引用</text><text x="800" y="634" class="t small">召回不足时回到查询改写或人工补线索</text>
+  <path d="M720 658V696" class="line"/>
+  <rect x="240" y="708" width="960" height="94" rx="10" class="done"/>
+  <text x="270" y="744" class="t step">执行与验证</text><text x="400" y="744" class="t nh">修改代码 → 运行测试 → 核对证据 → 更新知识</text><text x="400" y="778" class="t small">失败后按类型返回：规则缺失补 Skill，范围遗漏补侦察，事实不足补 RAG，背景过期更新 Wiki</text>
+  <text x="70" y="838" class="t small">读图：顺序可以按任务裁剪。小改动可能从 Repo Map 直接进入代码，只有跨模块和高风险任务才需要完整链路。</text>
+</svg>

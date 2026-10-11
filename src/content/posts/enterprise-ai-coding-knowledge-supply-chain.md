@@ -106,7 +106,7 @@ tools:
 
 基础技术知识适合广泛复用，仓库事实必须绑定版本；业务规则可能跨仓库，却不能由代码单方面决定；团队习惯只应在所属范围内生效。把四层内容平铺进同一索引，会丢掉作用域和权威关系。
 
-已有文章《[让 Code Agent 读懂业务：把仓库知识做成可维护的 Skills](/posts/domain-knowledge-engineering-for-code-agents/)》讨论了单个仓库里怎样组织术语、规则、代码锚点和验证方式，《[LLM Wiki：把仓库编译成能读、能查、能更新的知识](/posts/llm-wiki-codebase-knowledge-system/)》讨论了代码知识自动生成。本篇再往上走一层：组织需要的不是一个更大的文档站，而是一条把多种来源加工成“可消费知识对象”的供给链。
+已有文章《[让 Code Agent 读懂业务：把仓库知识做成可维护的 Skills](/posts/domain-knowledge-engineering-for-code-agents/)》讨论了单个仓库里怎样组织术语、规则、代码锚点和验证方式，《[LLM Wiki：把代码、文档与业务知识编译成可维护的知识页](/posts/llm-wiki-codebase-knowledge-system/)》讨论了多种知识源怎样生成可追溯页面。本篇再往上走一层：组织需要的不是一个更大的文档站，而是一条把多种来源加工成“可消费知识对象”的供给链。
 
 ## 六、知识供给链如何工作
 
