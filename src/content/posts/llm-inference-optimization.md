@@ -3,6 +3,7 @@ title: 推理优化：Continuous Batching、量化与投机解码
 description: 从"为什么 GPU 在推理时经常空转"出发，拆解三类推理优化技术：Continuous Batching 让 GPU 不浪费等待，量化（INT8/INT4/GPTQ/AWQ）缩小模型降低带宽压力，投机解码用小模型草稿加速大模型验证。这些优化合起来能让推理吞吐量提升 10-30 倍。
 category: Agent
 subcategory: LLM 原理与训练
+draft: true
 articleClass: focused
 seriesOrder: 70
 featured: false

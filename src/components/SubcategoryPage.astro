@@ -13,9 +13,26 @@ interface Props {
 }
 
 const { category, name, description, plannedTopics = [] } = Astro.props;
-const posts = (await getCollection('posts', ({ data }) => (
-	!data.draft && data.category === category && data.subcategory === name
+const sectionPosts = (await getCollection('posts', ({ data }) => (
+	data.category === category && data.subcategory === name
 ))).sort(comparePostsBySeriesOrder);
+const posts = sectionPosts.filter((post) => !post.data.draft);
+const hiddenPosts = sectionPosts.filter((post) => post.data.draft);
+const publishedTitles = new Set(posts.map((post) => post.data.title));
+const hiddenTitles = new Set(hiddenPosts.map((post) => post.data.title));
+const seenTitles = new Set<string>();
+const futureTopics = [
+	...hiddenPosts.map((post) => ({ title: post.data.title, seriesOrder: post.data.seriesOrder ?? Number.MAX_SAFE_INTEGER, status: '待完善' })),
+	...plannedTopics.map((topic, index) => ({
+		title: typeof topic === 'string' ? topic : topic.title,
+		seriesOrder: typeof topic === 'string' ? Number.MAX_SAFE_INTEGER - plannedTopics.length + index : topic.seriesOrder,
+		status: '待深入',
+	})).filter((topic) => !hiddenTitles.has(topic.title)),
+].filter((topic) => {
+	if (publishedTitles.has(topic.title) || seenTitles.has(topic.title)) return false;
+	seenTitles.add(topic.title);
+	return true;
+}).sort((a, b) => a.seriesOrder - b.seriesOrder);
 ---
 
 <BaseLayout title={`${name} · ${category}`} description={description} activeNav={categoryPath(category)}>
@@ -44,17 +61,16 @@ const posts = (await getCollection('posts', ({ data }) => (
 			</div>
 		)}
 	</section>
-	{plannedTopics.length > 0 && (
+	{futureTopics.length > 0 && (
 		<section class="section shell topic-roadmap" aria-labelledby="planned-topics-title">
 			<div class="section-label">
-				<h2 id="planned-topics-title">后续专题</h2>
-				<span>{plannedTopics.length} 个选题</span>
+				<h2 id="planned-topics-title">后续深入</h2>
+				<span>{futureTopics.length} 个主题</span>
 			</div>
 			<ol>
-				{plannedTopics.map((topic, index) => {
-					const title = typeof topic === 'string' ? topic : topic.title;
-					const sequence = typeof topic === 'string' ? posts.length + index + 1 : Math.round(topic.seriesOrder / 10);
-					return <li><b>{String(sequence).padStart(2, '0')}</b><span>{title}</span><small>待深入</small></li>;
+				{futureTopics.map((topic, index) => {
+					const sequence = posts.length + index + 1;
+					return <li><b>{String(sequence).padStart(2, '0')}</b><span>{topic.title}</span><small>{topic.status}</small></li>;
 				})}
 			</ol>
 		</section>
