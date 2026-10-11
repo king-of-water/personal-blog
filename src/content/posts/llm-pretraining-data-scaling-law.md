@@ -3,6 +3,7 @@ title: LLM 预训练：数据、目标函数与 Scaling Law
 description: 从"为什么预测下一个 Token 能学会推理"出发，解释预训练的目标函数、数据配比与质量对模型能力的决定性影响，以及 Scaling Law 如何让研究者在训练前就能估算模型的最终表现。
 category: Agent
 subcategory: LLM 原理与训练
+draft: true
 articleClass: focused
 seriesOrder: 60
 featured: false
