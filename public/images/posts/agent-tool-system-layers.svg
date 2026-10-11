@@ -1,54 +1,49 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
-  <title id="title">Agent 工具调用从模型提议到环境结果的七层路径</title>
-  <desc id="desc">模型提出结构化动作，工具目录解析契约，策略层校验权限，适配器连接不同执行面，环境产生副作用，结果规范化后作为观察回到模型。</desc>
-  <rect width="1200" height="760" fill="#fdfaf3"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="840" viewBox="0 0 1200 840" role="img" aria-labelledby="title desc">
+  <title id="title">Function Calling、能力接入、执行能力和安全边界的四层关系</title>
+  <desc id="desc">模型用 Function Calling 提出动作，Agent Runtime 校验并路由，随后通过直接 RPC、CLI 或 MCP 接入浏览器、代码执行和业务服务，权限、沙箱、审计与恢复贯穿执行过程。</desc>
+  <rect width="1200" height="840" fill="#fdfaf3"/>
   <g font-family="system-ui, sans-serif">
-    <text x="60" y="62" fill="#2b2620" font-size="34" font-weight="700">工具不是一个函数，而是一条受控执行路径</text>
-    <text x="60" y="96" fill="#6f6659" font-size="17">从模型提议到真实动作，每层只负责一种判断</text>
+    <text x="60" y="62" fill="#2b2620" font-size="34" font-weight="700">Agent 工具系统不是一排并列名词</text>
+    <text x="60" y="96" fill="#6f6659" font-size="17">从模型提出动作，到 Runtime 接入能力，再到受控执行</text>
 
-    <rect x="60" y="138" width="1080" height="96" rx="16" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
-    <text x="88" y="172" fill="#2f5d8a" font-size="14" font-weight="700" letter-spacing="2">01 MODEL PROPOSAL</text>
-    <text x="88" y="207" fill="#2b2620" font-size="22" font-weight="700">Function Call：name + arguments + call_id</text>
-    <text x="850" y="192" fill="#554d42" font-size="16">只表达意图，不直接执行</text>
+    <text x="60" y="154" fill="#2f5d8a" font-size="13" font-weight="700" letter-spacing="2">01 模型动作协议</text>
+    <rect x="60" y="170" width="1080" height="92" rx="15" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="88" y="207" fill="#2b2620" font-size="23" font-weight="700">Function Calling</text>
+    <text x="88" y="237" fill="#554d42" font-size="16">模型返回 name + arguments + call_id，只提出动作，不执行外部操作</text>
 
-    <rect x="60" y="270" width="245" height="138" rx="16" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
-    <text x="86" y="306" fill="#2f5d8a" font-size="13" font-weight="700" letter-spacing="1.5">02 REGISTRY</text>
-    <text x="86" y="342" fill="#2b2620" font-size="21" font-weight="700">工具契约</text>
-    <text x="86" y="374" fill="#554d42" font-size="15">名称 · Schema · 版本</text>
+    <path d="M600 262 V294" stroke="#5b5245" stroke-width="3"/>
+    <path d="M600 294 l-8 -12 h16 z" fill="#5b5245"/>
 
-    <rect x="337" y="270" width="245" height="138" rx="16" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
-    <text x="363" y="306" fill="#2f5d8a" font-size="13" font-weight="700" letter-spacing="1.5">03 POLICY</text>
-    <text x="363" y="342" fill="#2b2620" font-size="21" font-weight="700">策略与审批</text>
-    <text x="363" y="374" fill="#554d42" font-size="15">主体 · 资源 · 副作用</text>
+    <text x="60" y="330" fill="#2f5d8a" font-size="13" font-weight="700" letter-spacing="2">02 AGENT RUNTIME</text>
+    <rect x="60" y="346" width="1080" height="98" rx="15" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="88" y="384" fill="#2b2620" font-size="22" font-weight="700">Registry · Schema 校验 · Policy · Dispatcher</text>
+    <text x="88" y="416" fill="#554d42" font-size="16">找到实现，检查身份和资源范围，选择 Adapter，管理超时、取消与 Tool Result</text>
 
-    <rect x="614" y="270" width="245" height="138" rx="16" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
-    <text x="640" y="306" fill="#2f5d8a" font-size="13" font-weight="700" letter-spacing="1.5">04 ADAPTER</text>
-    <text x="640" y="342" fill="#2b2620" font-size="21" font-weight="700">执行适配器</text>
-    <text x="640" y="374" fill="#554d42" font-size="15">CLI · Browser · Code · MCP</text>
+    <path d="M600 444 V476" stroke="#5b5245" stroke-width="3"/>
+    <path d="M600 476 l-8 -12 h16 z" fill="#5b5245"/>
 
-    <rect x="891" y="270" width="249" height="138" rx="16" fill="#ebe4d4" stroke="#8a7f6d" stroke-width="2"/>
-    <text x="917" y="306" fill="#2f5d8a" font-size="13" font-weight="700" letter-spacing="1.5">05 EXECUTION</text>
-    <text x="917" y="342" fill="#2b2620" font-size="21" font-weight="700">环境与沙箱</text>
-    <text x="917" y="374" fill="#554d42" font-size="15">文件 · 网络 · 凭据 · 资源</text>
+    <text x="60" y="512" fill="#2f5d8a" font-size="13" font-weight="700" letter-spacing="2">03 能力接入方式</text>
+    <rect x="60" y="528" width="334" height="112" rx="14" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="86" y="569" fill="#2b2620" font-size="21" font-weight="700">直接函数 / RPC</text>
+    <text x="86" y="601" fill="#554d42" font-size="15">当前应用直接调用 SDK 或服务</text>
+    <rect x="433" y="528" width="334" height="112" rx="14" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="459" y="569" fill="#2b2620" font-size="21" font-weight="700">CLI</text>
+    <text x="459" y="601" fill="#554d42" font-size="15">argv · stdout · stderr · exit code</text>
+    <rect x="806" y="528" width="334" height="112" rx="14" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="832" y="569" fill="#2b2620" font-size="21" font-weight="700">MCP</text>
+    <text x="832" y="601" fill="#554d42" font-size="15">tools/list · tools/call · JSON Schema</text>
 
-    <path d="M305 339 H327" stroke="#5b5245" stroke-width="3"/><path d="M327 339 l-12 -8 v16 z" fill="#5b5245"/>
-    <path d="M582 339 H604" stroke="#5b5245" stroke-width="3"/><path d="M604 339 l-12 -8 v16 z" fill="#5b5245"/>
-    <path d="M859 339 H881" stroke="#5b5245" stroke-width="3"/><path d="M881 339 l-12 -8 v16 z" fill="#5b5245"/>
-    <path d="M182 234 V260" stroke="#5b5245" stroke-width="3"/><path d="M182 260 l-8 -12 h16 z" fill="#5b5245"/>
+    <path d="M227 640 V672" stroke="#5b5245" stroke-width="2"/>
+    <path d="M600 640 V672" stroke="#5b5245" stroke-width="2"/>
+    <path d="M973 640 V672" stroke="#5b5245" stroke-width="2"/>
 
-    <rect x="142" y="488" width="420" height="116" rx="16" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
-    <text x="170" y="524" fill="#2f5d8a" font-size="13" font-weight="700" letter-spacing="1.5">06 NORMALIZE</text>
-    <text x="170" y="558" fill="#2b2620" font-size="21" font-weight="700">Tool Result + Artifact</text>
-    <text x="170" y="585" fill="#554d42" font-size="15">状态 · 摘要 · 证据 · 副作用 · 完整输出引用</text>
+    <text x="60" y="704" fill="#2f5d8a" font-size="13" font-weight="700" letter-spacing="2">04 具体能力与执行环境</text>
+    <rect x="60" y="720" width="1080" height="76" rx="14" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
+    <text x="92" y="752" fill="#2b2620" font-size="19" font-weight="700">业务 RPC · 浏览器 · 代码执行 · 文件系统 · 外部 SaaS</text>
+    <text x="92" y="780" fill="#554d42" font-size="15">权限、审批、沙箱、凭据、审计、Artifact 与故障恢复围绕真实动作生效</text>
 
-    <rect x="638" y="488" width="420" height="116" rx="16" fill="#dee3d6" stroke="#466b48" stroke-width="2"/>
-    <text x="666" y="524" fill="#3d6340" font-size="13" font-weight="700" letter-spacing="1.5">07 OBSERVATION</text>
-    <text x="666" y="558" fill="#2b2620" font-size="21" font-weight="700">有限结果回到下一轮 Context</text>
-    <text x="666" y="585" fill="#554d42" font-size="15">模型据此继续、修正、请求批准或停止</text>
-
-    <path d="M1016 408 V452 H352 V478" stroke="#5b5245" stroke-width="3" fill="none"/><path d="M352 478 l-8 -12 h16 z" fill="#5b5245"/>
-    <path d="M562 546 H628" stroke="#5b5245" stroke-width="3"/><path d="M628 546 l-12 -8 v16 z" fill="#5b5245"/>
-    <path d="M848 604 V674 H32 V186 H46" stroke="#295279" stroke-width="2" stroke-dasharray="8 7" fill="none"/><path d="M60 186 l-14 -8 v16 z" fill="#295279"/>
-    <text x="600" y="702" text-anchor="middle" fill="#6f6659" font-size="15">真正跨越信任边界的是 Dispatcher 与执行环境，不是模型生成的 JSON</text>
+    <path d="M227 672 H973" stroke="#5b5245" stroke-width="2"/>
+    <path d="M600 672 V710" stroke="#5b5245" stroke-width="3"/>
+    <path d="M600 710 l-8 -12 h16 z" fill="#5b5245"/>
   </g>
 </svg>
