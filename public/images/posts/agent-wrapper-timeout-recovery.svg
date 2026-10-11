@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 560" role="img" aria-labelledby="title desc">
+<title id="title">有副作用的工具超时后如何恢复</title>
+<desc id="desc">以提交补偿工单为例，先保存业务幂等键再执行。超时后查询回执，已执行则复用结果，确认未执行则使用相同键重试，无法确认则等待或转人工。运行时结束并不等于业务动作已经确认。</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#8a7f6d"/></marker></defs>
+<rect width="760" height="560" fill="#fdfaf3"/>
+<g fill="#2b2620" font-size="18" text-anchor="middle">
+<text x="380" y="35" font-size="23">提交工单超时：先查回执，不直接重试</text>
+<g stroke="#8a7f6d" fill="#f5f0e4"><rect x="210" y="60" width="340" height="58"/><rect x="210" y="150" width="340" height="58"/><rect x="210" y="245" width="340" height="65" fill="#dee3d6"/><rect x="24" y="374" width="218" height="70"/><rect x="271" y="374" width="218" height="70"/><rect x="518" y="374" width="218" height="70"/><rect x="210" y="481" width="340" height="55"/></g>
+<text x="380" y="94">保存逻辑动作和业务幂等键</text><text x="380" y="184">调用工单服务，等待回执</text>
+<text x="380" y="272">超时：保存“结果未知”</text><text x="380" y="297" font-size="15">按幂等键查询执行记录或远端回执</text>
+<text x="133" y="400">已经执行</text><text x="133" y="426" font-size="15">复用工单编号，不再提交</text>
+<text x="380" y="400">确认未执行</text><text x="380" y="426" font-size="15">相同键重试，限制次数</text>
+<text x="627" y="400">仍无法确认</text><text x="627" y="426" font-size="15">等待或人工核对</text>
+<text x="380" y="514">回执确认后，更新业务任务状态</text>
+</g>
+<g fill="none" stroke="#8a7f6d" stroke-width="2" marker-end="url(#arrow)"><path d="M380 118V150"/><path d="M380 208V245"/><path d="M380 310V341H133V374"/><path d="M380 310V374"/><path d="M380 310V341H627V374"/><path d="M133 444V508H210"/><path d="M489 409H503V179H550"/><path d="M627 444V467"/></g>
+<text x="518" y="225" fill="#554d42" font-size="15">重试后仍核对回执</text>
+</svg>

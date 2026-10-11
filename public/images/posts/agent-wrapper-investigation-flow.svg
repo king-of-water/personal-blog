@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 570" role="img" aria-labelledby="title desc">
+<title id="title">封装成熟 Agent 的排障调用流程</title>
+<desc id="desc">业务服务保存任务，成熟 Agent 提出查询，工具服务校验权限。拒绝时返回原因，允许时查询并保存证据，结果回到 Agent；候选结论交由业务服务验收。</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#8a7f6d"/></marker></defs>
+<rect width="760" height="570" fill="#fdfaf3"/>
+<g fill="#2b2620" font-size="19" text-anchor="middle">
+<text x="380" y="35" font-size="23">业务状态留在应用，调查循环交给执行器</text>
+<g stroke="#8a7f6d" fill="#f5f0e4"><rect x="210" y="60" width="340" height="62"/><rect x="210" y="158" width="340" height="62" fill="#dee3d6"/><rect x="210" y="255" width="340" height="70"/><rect x="30" y="370" width="280" height="64"/><rect x="450" y="370" width="280" height="64"/><rect x="210" y="476" width="340" height="62"/></g>
+<text x="380" y="86">业务服务：保存任务与授权范围</text><text x="380" y="109" font-size="15">启动或续接运行会话</text>
+<text x="380" y="184">Codex / Claude：提出查询</text><text x="380" y="207" font-size="15">根据已知证据决定下一步</text>
+<text x="380" y="284">工具服务：校验身份与查询范围</text><text x="380" y="308" font-size="15">检查服务端授权，不相信模型自报身份</text>
+<text x="170" y="397">拒绝查询，返回明确原因</text><text x="170" y="420" font-size="15">Agent 补问或结束调查</text>
+<text x="590" y="397">执行查询，保存原始证据</text><text x="590" y="420" font-size="15">工具结果返回 Agent，继续调查</text>
+<text x="380" y="503">提交候选结论：业务服务验收</text><text x="380" y="526" font-size="15">引用有效？范围正确？证据足够？</text>
+</g>
+<g fill="none" stroke="#8a7f6d" stroke-width="2" marker-end="url(#arrow)"><path d="M380 122V158"/><path d="M380 220V255"/><path d="M290 325V348H170V370"/><path d="M470 325V348H590V370"/><path d="M730 403H746V189H550"/><path d="M210 189H14V507H210"/></g>
+<g fill="#554d42" font-size="15"><text x="185" y="347">无权限</text><text x="513" y="347">允许</text><text x="28" y="465">候选结论</text></g>
+</svg>
