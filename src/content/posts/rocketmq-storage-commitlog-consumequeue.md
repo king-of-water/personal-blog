@@ -3,6 +3,7 @@ title: RocketMQ 存储架构：CommitLog 与 ConsumeQueue
 description: 以 RocketMQ 4.9.8 经典存储为边界，沿消息追加、索引分发、按队列读取和恢复清理解释 CommitLog、ConsumeQueue、IndexFile、内存映射与持久确认的分工。
 category: 后端
 subcategory: 消息队列
+draft: true
 articleClass: flagship
 seriesOrder: 80
 publishedAt: 2026-10-03T20:35:00+08:00

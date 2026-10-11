@@ -3,6 +3,7 @@ title: Kafka 底层：分区日志、复制与消费位点
 description: 沿订单事件从发送到业务提交的路径，解释 Kafka 分区日志、批次与稀疏索引、ISR 与复制确认、HW 与 LSO、消费组位点和 KRaft 的边界。
 category: 后端
 subcategory: 消息队列
+draft: true
 articleClass: flagship
 seriesOrder: 90
 publishedAt: 2026-10-03T22:05:00+08:00
