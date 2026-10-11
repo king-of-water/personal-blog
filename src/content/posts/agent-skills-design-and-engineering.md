@@ -1,13 +1,13 @@
 ---
 title: Agent Skills：能力如何封装、发现与按需加载
-description: 从一次真实的技术文章任务出发，解释 Agent Skill 怎样把触发条件、执行流程、工具、资料与验证组织成可复用的行为模块。
+description: 解释 Skill 的发现与按需加载，拆解高 Star 仓库中的设计示例，并比较 skill-creator、writing-skills 与 Skill Seekers 怎样帮助创建技能。
 category: Agent
 subcategory: Agent 开发
 articleClass: flagship
 seriesOrder: 80
 featured: false
 publishedAt: 2026-08-03T20:49:00+08:00
-updatedAt: 2026-08-03T20:49:00+08:00
+updatedAt: 2026-10-11T23:50:00+08:00
 tags: [Agent, Skills, Context Engineering, Codex, Workflow]
 tools:
   - name: humanizer
@@ -73,7 +73,11 @@ Skill 让长指令获得了地址和边界。运行时知道它叫什么、何�
 
 [OpenAI 文档](https://learn.chatgpt.com/docs/build-skills#how-chatgpt-and-codex-use-skills)说明，ChatGPT 和 Codex 启动时先看到 Skill 的名称与描述；决定使用后才读取完整 `SKILL.md`。Codex 的初始 Skill 列表还包含文件路径，并把列表限制在上下文窗口的 2%，无法得知窗口大小时上限为 8,000 个字符。技能过多时，系统会先缩短描述，也可能省略部分 Skill 并给出警告。
 
-这带来一个直接结论：`description` 是路由索引，正文才是执行程序。把触发条件只写在正文里，运行时在决定是否读取正文时看不到它；把完整步骤写进描述，Agent 又可能只凭摘要开始工作。
+这里的元数据主要是 `name` 和 `description`，用于告诉模型“有哪些能力、分别适合什么任务”。它们不是训练得到的参数，也不是把脚本预先运行一遍后的结果。正文保存执行指令；把触发条件只写在正文里，选择阶段就看不到，把全部步骤写进描述又会挤占初始上下文。
+
+以“填写这份 PDF 表单”为例：宿主先扫描可用 Skill，提供名称、描述和位置；模型根据请求选中 PDF Skill，再通过读取能力取得 `SKILL.md`；主文件指出表单任务需要另一份指南，Agent 才继续读取它。无关的 PDF 合并资料可以不读，附带脚本也只在任务需要时执行。宿主可以自动完成部分加载，具体读取形式随客户端而异。
+
+因此，发现和加载是两个动作：发现阶段知道技能存在，加载阶段才得到详细方法。`description` 是隐式选择的主要依据，但不保证每次正确触发，也不保证引用资料自动全部载入。显式点名、宿主策略和可用技能范围也会影响结果。脚本能否执行还要看工具与权限，不能从“已加载 Skill”推导出“已授予能力”。
 
 ### 显式调用与隐式匹配
 
@@ -294,7 +298,77 @@ Skill 会像代码一样演化。触发描述、步骤顺序、脚本参数和�
 
 第六步上线到最小作用域。先放在单个仓库或少量用户中，观察误触发、跳步和 Context 成本；问题稳定后再扩大分发。每个真实失败都进入回归集。
 
-## 十二、交付检查表
+## 十二、超过 10k Star 的项目里，哪些 Skill 值得读
+
+GitHub 的 Star 通常属于整个仓库，不能说其中某个 `SKILL.md` 单独有十万 Star。这里把超过 10k 作为项目筛选条件，再检查具体 Skill 的内容。以下数字是 2026 年 10 月 11 日查询仓库页面时显示的近似值，会继续变化；“值得读”是根据指令结构和边界作出的判断，不是对这些项目做过统一效果排名。
+
+| 仓库 | 查询时 Star | 类型 | 建议从哪里开始 |
+| --- | ---: | --- | --- |
+| [anthropics/skills](https://github.com/anthropics/skills) | 约 180.4k | 官方示例技能集合 | frontend-design、pdf、skill-creator |
+| [obra/superpowers](https://github.com/obra/superpowers) | 约 297.5k | 软件开发工作流与技能集合 | systematic-debugging、writing-skills |
+| [yusufkaraaslan/Skill_Seekers](https://github.com/yusufkaraaslan/Skill_Seekers) | 约 15.1k | 从资料生成技能包的工具 | 资料采集、整理、增强与打包流程 |
+
+### frontend-design：把模糊的审美要求变成判断步骤
+
+Anthropic 的 [frontend-design](https://github.com/anthropics/skills/blob/main/skills/frontend-design/SKILL.md)围绕页面主题、读者和用途选择字体、配色与布局，再检查方案是否机械套用了常见模板。它保留了设计判断空间，同时提出响应式、键盘焦点、减少动态效果等交付要求。
+
+我觉得值得学的是“怎样检查选择有没有依据”。只写“做得高级、漂亮”很难改变行为；要求先说明页面服务谁、为什么这样排版，至少能让设计接受检查。它也不能保证每次结果都好看，最终效果仍要看真实页面。
+
+对于我们的博客，可以借这种思路做局部调整：先保留已有视觉方向，再解释某个变化怎样改善阅读或导航。不能因为第三方 Skill 不喜欢某种常见风格，就推翻用户已经确认的设计。
+
+### pdf：主文件指路，专门任务再读专门资料
+
+Anthropic 的 [pdf](https://github.com/anthropics/skills/blob/main/skills/pdf/SKILL.md)提供常见 PDF 操作的方法，并把表单处理指向 `FORMS.md`，更多功能指向 `REFERENCE.md`。它适合观察资源如何组织：用户提出具体任务后，Agent 再沿主文件选择相关资料。
+
+可借鉴的是主干与分支的拆分，不必照搬所有工具。比如业务排障 Skill 可以只保留定位入口和共用规则，把支付、退款、发奖各自的字段含义放到独立参考文件。加载主文件后，才知道当前应读哪一份。
+
+这个 PDF Skill 的 frontmatter 标明专有许可证。能公开读源码不等于可以任意复制或再分发，采用前需要检查具体目录的许可，不能拿仓库中其他技能的许可证替代。
+
+### systematic-debugging：阻止 Agent 还没查明原因就开始改
+
+Superpowers 的 [systematic-debugging](https://github.com/obra/superpowers/blob/main/skills/systematic-debugging/SKILL.md)把复现与证据调查放在前面，再比较正常和异常路径、提出可验证假设、处理问题。它还指出一些危险行为，例如连改多个变量、连续失败后继续堆修复。
+
+这种写法适合拿来理解排障 Skill：正文不仅告诉 Agent 正常情况下做什么，还描述它什么时候正在偏离流程。对于奖励未到账，应先核对任务与流水，不能看到一个异常日志就建议补发。
+
+不过，这份技能包含修复阶段，而只读排障服务可能只允许查证与解释。迁入自己的系统时，要删去不适用的动作，明确何时转人工。整个 Superpowers 还带有开发流程和协作约定，不建议为了学习一个 Skill 就默认安装整套。
+
+## 十三、哪些工具能帮助生成 Skill
+
+这里要区分两类输入：你已经知道工作方法，只需要把它整理成 Skill；或者你只有大量文档，希望先生成一份可用的资料与指令草稿。前者更适合创建技能的 Skill，后者可以考虑资料转换工具。
+
+### Anthropic skill-creator：从任务意图到草稿，再检查实际效果
+
+[skill-creator](https://github.com/anthropics/skills/blob/main/skills/skill-creator/SKILL.md)本身也是 Skill。Agent 加载后，会按创建流程理解用途、编写指令，并用任务样例查看结果和改进。它还提供描述优化流程，检查哪些请求应该触发、哪些不该触发，而不只检查 Markdown 是否格式正确。
+
+这比较适合把已有经验整理出来。例如你提供几次奖励排障的步骤、常见误判和完成标准，创建器帮助提炼主干。公司字段含义和权限仍要你提供，不能让生成器凭空补齐业务规则。
+
+它的部分评测与描述优化依赖特定运行环境，例如 Claude CLI。可以借用创建方法，但不能假设所有脚本在任何 Agent 客户端都能直接运行，也不能把成功生成文件当作成功完成行为验证。
+
+### Superpowers writing-skills：针对已经出现的失误改规则
+
+[writing-skills](https://github.com/obra/superpowers/blob/main/skills/writing-skills/SKILL.md)把测试驱动开发的思路用在技能上：先观察没有该 Skill 时怎样失败，再写规则，然后检查是否减少相同失误。它关注的是指令能不能改变行为，不只是生成一个目录。
+
+如果已有 Skill 经常漏验收、跳过查证，这种方法比继续追加“务必认真”更有帮助。保留具体失败请求，针对遗漏修改，再检查相邻任务是否受到影响。没有复测的话，规则越写越长也未必更可靠。
+
+这仍是一种技能编写方法，不是一个自动理解业务的万能生成器。采用时要按自己的任务设计检查条件，不必照搬整套开发流程。
+
+### Skill Seekers：先把文档和仓库整理成可使用的素材
+
+[Skill Seekers](https://github.com/yusufkaraaslan/Skill_Seekers)支持从文档网站、GitHub 仓库、PDF 等来源整理资料，再进行增强和打包。它更适合“我有一套 SDK 文档，想让 Agent 更方便使用”的起点。
+
+它帮忙减少采集和整理工作，但生成结果仍要人工审查：主文件有没有清楚任务入口，哪些内容放在参考资料，指令有没有引用不存在的接口。生成一个很大的资料包，不代表按需加载已经设计好了。
+
+我的使用建议是限定来源和版本，先拿公开资料做小范围整理。内部资料还要检查许可、脱敏和是否会被发送给外部模型。资料转换可以帮助打底，真正的业务流程与完成条件仍要自己定义。
+
+### Codex 内置创建器与旧仓库，要区分当前入口
+
+Codex 也提供 `$skill-creator`。当前 [OpenAI 官方文档](https://learn.chatgpt.com/docs/build-skills#create-a-skill)介绍了这个入口，它会帮助明确任务、触发条件，以及是否需要脚本。
+
+GitHub 的 [openai/skills](https://github.com/openai/skills)查询时约 28.0k Star，超过筛选门槛，但 README 已标记弃用，并指向新的插件仓库。因此它可以作为历史结构参考，当前使用优先遵循官方文档，不建议按旧 README 直接建立安装方案。
+
+这里提到这些工具是为了帮助读者选择，没有在本文修改过程中安装或实际运行它们。要形成自己的 Skill，我会先提供几份真实请求和正确流程，用创建器整理第一版，再检查触发与资源入口；只有需要处理大量外部资料时，才增加 Skill Seekers 这类转换工具。
+
+## 十四、交付检查表
 
 | 检查面 | 需要回答的问题 |
 | --- | --- |
@@ -323,3 +397,6 @@ Skill 把一类任务的触发、执行方法、资源入口和验收标准放�
 - [Agent Skills：Specification](https://agentskills.io/specification)
 - [苏雄：AI Agent 的 Skill 系统设计](https://mp.weixin.qq.com/s/idzAV3XkWWm7GnFOFyZUBw)
 - [OpenAI：Plugins](https://developers.openai.com/plugins/build/plugins)
+- [Anthropic Skills 示例仓库](https://github.com/anthropics/skills)
+- [Superpowers 工作流与技能集合](https://github.com/obra/superpowers)
+- [Skill Seekers 资料转换工具](https://github.com/yusufkaraaslan/Skill_Seekers)
