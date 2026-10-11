@@ -31,7 +31,7 @@ tools:
 
 事实边界来自 OpenAI Function Calling 文档、MCP `2026-07-28` 规范、Python `subprocess`、Playwright Browser Context、Docker 与 gVisor 的官方资料。厂商字段仍会变化，文中重点讨论稳定的执行关系。
 
-## 一张图先把层次放对
+## 一、一张图先把层次放对
 
 ![Function Calling、能力接入、执行能力和安全边界的四层关系](/images/posts/agent-tool-system-layers.svg?v=20261011)
 
@@ -50,7 +50,7 @@ Sandbox / Policy：这次动作可以接触哪些资源
 
 后面所有概念都可以放回这四层，不需要把五六个术语记成一排。
 
-## Function Calling 只产生调用请求
+## 二、Function Calling 只产生调用请求
 
 Function Calling，也叫 Tool Calling，是模型与 Agent 程序之间的结构化动作协议。应用程序先把工具名称、描述和参数 Schema 提供给模型。模型认为需要外部信息或动作时，返回工具名与参数。
 
@@ -94,7 +94,7 @@ Browser Tool      → 日志平台网页
 
 Function Calling 也不是所有 Agent 的唯一实现。早期 Agent 会让模型输出固定文本，再由程序解析 `Action:` 和 `Action Input:`。现代模型通常提供原生 Tool Call，因为结构更稳定，也更容易关联参数和结果。无论协议字段叫什么，核心过程都是模型提出动作、外部 Runtime 执行动作、结果回到下一轮。
 
-## Agent Runtime 才是工具调用的执行者
+## 三、Agent Runtime 才是工具调用的执行者
 
 Agent Runtime 可以理解为模型外面的运行程序。Spring AI、Codex、Claude Code 或自建 Harness 都在承担这项工作，只是暴露的控制点不同。
 
@@ -156,7 +156,7 @@ Function Call → Spring AI Tool → RPC Client → 日志服务
 
 当同一项能力还要提供给人、脚本、Coding Agent 或其他 Agent Host 时，才需要考虑 CLI 或 MCP。它们增加了一层适配，也扩大了复用范围。
 
-## CLI 和 MCP 是同一个能力的两种入口
+## 四、CLI 和 MCP 是同一个能力的两种入口
 
 CLI 与 MCP 最容易被误解成两种不同能力。公司内部更常见的情况是：业务能力早已存在于 RPC 或 HTTP 服务，CLI 和 MCP 只是两层薄封装。
 
@@ -283,7 +283,7 @@ LogQueryService / RPC Client
 
 没有必要把查询逻辑复制两份。CLI 与 MCP 只负责参数转换、身份传递、结果转换和各自协议的错误处理。
 
-## 浏览器和代码执行描述的是具体能力
+## 五、浏览器和代码执行描述的是具体能力
 
 CLI 与 MCP主要回答“怎样接入”。浏览器和代码执行主要回答“Agent 能对环境做什么”。它们仍然通过 Tool Call 触发，也可以再套一层 CLI 或 MCP。
 
@@ -339,7 +339,7 @@ Function Call → CLI python script.py → 沙箱
 
 因此“代码执行”和“MCP”无法互相替代。一个描述能力，一个描述接入协议。MCP Server 可以提供代码执行工具，CLI 也可以启动同一个沙箱。
 
-## 沙箱与权限约束实际执行
+## 六、沙箱与权限约束实际执行
 
 Function Calling 的 Schema 只能限制参数形状。`path` 是字符串，不代表它一定属于工作区；`sql` 是合法字符串，也不代表当前用户能查询整张用户表。
 
@@ -371,7 +371,7 @@ Policy 至少需要这些输入：
 
 工具出现在模型的候选列表里，只表示模型可以提出调用。执行前仍要重新校验参数和资源范围。高影响动作还要向用户展示可理解的预览，例如“将向 `shop/checkout#4821` 发布以下评论”，而不是只展示一段 `tools/call` JSON。
 
-## 一次排障任务怎样走完整条链路
+## 七、一次排障任务怎样走完整条链路
 
 现在用一条任务把各层连接起来。
 
@@ -441,7 +441,7 @@ CLI 调用日志 RPC，返回 Trace ID 与下游支付错误。Runtime 保留完
 
 工具越多并不代表每个任务都要全部调用。这条排障链路优先使用稳定的结构化接口，浏览器负责补齐接口缺口，代码执行负责处理大量中间数据。
 
-## 工具结果必须让下一轮能够判断
+## 八、工具结果必须让下一轮能够判断
 
 把所有工具统一成 `success: true/false` 会丢失关键信息。至少需要区分成功、明确失败、权限拒绝、等待批准和结果未知：
 
@@ -478,7 +478,7 @@ type ToolResult = {
 
 权限拒绝不应交给模型换一种工具绕过。CLI 查询被拒绝后改用浏览器查询同一数据，仍然属于同一资源权限。Policy 需要约束目标资源，而不是只限制某个 Adapter。
 
-## 工具描述、结果和 Trace 怎样设计
+## 九、工具描述、结果和 Trace 怎样设计
 
 工具名称、描述与 Schema 共同决定模型是否会选对能力。名称只写 `search` 时，代码搜索、日志搜索、文档搜索和互联网搜索容易互相争抢。
 
@@ -533,7 +533,7 @@ type ToolResult = {
 
 保存去敏后的 Tool Request 和 Tool Result 后，还可以固定工具结果，只替换模型或 Prompt，观察选择和恢复能力；也可以固定请求，重放 Adapter，检查 CLI、MCP 或浏览器实现是否稳定。
 
-## 从最小工具系统开始
+## 十、从最小工具系统开始
 
 一个新的业务 Agent 不需要同时建设 CLI、MCP、浏览器和代码沙箱。可以按现有资产逐步扩展。
 
@@ -547,7 +547,7 @@ type ToolResult = {
 
 最后再处理规模问题，例如工具搜索、按需加载、Server 治理、版本兼容和分布式凭据。五个工具能够完成的系统，暂时不需要先建设一个复杂的企业 MCP 平台。
 
-## 设计检查表
+## 十一、设计检查表
 
 | 问题 | 需要确认的内容 |
 | --- | --- |
