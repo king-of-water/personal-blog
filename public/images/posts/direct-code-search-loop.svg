@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="820" viewBox="0 0 1440 820" role="img" aria-labelledby="title desc">
+  <title id="title">Coding Agent 使用搜索、文件读取与 Git 探索代码库的循环</title>
+  <desc id="desc">用户任务进入模型后，模型提出搜索、读取或 Git 查询，Harness 在本地工作区执行并裁剪结果，再把证据送回模型。模型基于新证据继续探索，直到证据足够后修改代码并运行验证。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#5b5245"/></marker>
+    <style>.t{font-family:Inter,"PingFang SC","Microsoft YaHei",sans-serif;fill:#2b2620}.h{font-size:34px;font-weight:700}.sub{font-size:18px;fill:#6f6659}.k{font-size:15px;font-weight:700;letter-spacing:.08em;fill:#7a5c33}.nh{font-size:22px;font-weight:700}.b{font-size:16px;fill:#554d42}.small{font-size:14px;fill:#6f6659}.box{fill:#f5f0e4;stroke:#b8aa94;stroke-width:2}.model{fill:#e9dfca;stroke:#7a5c33;stroke-width:2}.work{fill:#e4eee8;stroke:#56705e;stroke-width:2}.line{stroke:#5b5245;stroke-width:2.2;fill:none;marker-end:url(#arrow)}.dash{stroke:#9b8d78;stroke-width:2;stroke-dasharray:8 7;fill:none}</style>
+  </defs>
+  <rect width="1440" height="820" fill="#fdfaf3"/>
+  <text x="70" y="68" class="t h">“把仓库交给 LLM”其实是一轮轮选择上下文</text>
+  <text x="70" y="104" class="t sub">模型不直接看文件系统；Harness 执行工具，只把有限结果送回下一轮上下文</text>
+
+  <text x="70" y="162" class="t k">任务与推理</text>
+  <rect x="70" y="186" width="300" height="112" rx="10" class="box"/>
+  <text x="98" y="226" class="t nh">用户任务</text><text x="98" y="262" class="t b">“修复重复退款回调”</text>
+  <rect x="440" y="186" width="360" height="112" rx="10" class="model"/>
+  <text x="468" y="226" class="t nh">LLM 选择下一步</text><text x="468" y="262" class="t b">生成关键词、候选路径或验证动作</text>
+  <path d="M370 242H414" class="line"/>
+
+  <text x="70" y="370" class="t k">Harness 执行工具</text>
+  <rect x="70" y="394" width="252" height="120" rx="10" class="box"/>
+  <text x="98" y="434" class="t nh">搜索</text><text x="98" y="470" class="t b">rg -n "refund|退款"</text><text x="98" y="496" class="t small">缩小到候选文件</text>
+  <rect x="346" y="394" width="252" height="120" rx="10" class="box"/>
+  <text x="374" y="434" class="t nh">读取</text><text x="374" y="470" class="t b">read_file(40, 140)</text><text x="374" y="496" class="t small">恢复方法与分支语境</text>
+  <rect x="622" y="394" width="252" height="120" rx="10" class="box"/>
+  <text x="650" y="434" class="t nh">查询历史</text><text x="650" y="470" class="t b">git log -S / show</text><text x="650" y="496" class="t small">补充变化和线索</text>
+  <path d="M620 298V352H196V368" class="line"/><path d="M620 352H472V368" class="line"/><path d="M620 352H748V368" class="line"/>
+
+  <rect x="944" y="186" width="426" height="328" rx="12" class="work"/>
+  <text x="974" y="226" class="t nh">本地工作区</text>
+  <text x="974" y="270" class="t b">src/　真实源代码</text><text x="974" y="306" class="t b">test/　测试和行为样例</text><text x="974" y="342" class="t b">config/　运行配置</text><text x="974" y="378" class="t b">.git/　提交与差异</text>
+  <line x1="974" y1="406" x2="1340" y2="406" stroke="#9ab0a0"/>
+  <text x="974" y="440" class="t small">工作区不会一次进入模型</text><text x="974" y="470" class="t small">工具每轮只取一小段可核对事实</text>
+  <path d="M874 454H918" class="line"/><path d="M918 420H874" class="dash"/>
+
+  <rect x="250" y="612" width="680" height="106" rx="10" class="model"/>
+  <text x="280" y="652" class="t nh">把裁剪后的结果加入下一轮 Context</text>
+  <text x="280" y="688" class="t b">命中文件、相关行段、退出码、截断状态、已确认结论</text>
+  <path d="M472 514V586" class="line"/>
+  <path d="M590 612V566H620V324" class="line"/>
+
+  <rect x="1020" y="612" width="350" height="106" rx="10" class="work"/>
+  <text x="1050" y="652" class="t nh">证据足够后执行</text><text x="1050" y="688" class="t b">修改 → 测试 → 检查差异</text>
+  <path d="M930 665H994" class="line"/>
+  <text x="70" y="782" class="t small">读图：搜索只是入口。真正形成代码理解的是多轮选择、局部阅读、反例检查与外部验证。</text>
+</svg>
