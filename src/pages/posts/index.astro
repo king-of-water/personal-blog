@@ -6,7 +6,7 @@ import type { MainCategory } from '../../config/sections';
 
 const posts = (await getCollection('posts', ({ data }) => !data.draft))
 	.sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
-const categories: MainCategory[] = ['后端', 'Agent', '行业', '项目'];
+const categories: MainCategory[] = ['后端', 'Agent', '项目'];
 const tags = [...new Set(posts.flatMap((post) => post.data.tags))].sort((a, b) => a.localeCompare(b, 'zh-CN'));
 const countOf = (category: MainCategory) => posts.filter((post) => post.data.category === category).length;
 ---
