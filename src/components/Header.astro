@@ -44,6 +44,30 @@ const navItems = [
 					aria-current={resolvedActivePath === item.href ? 'page' : undefined}
 				>{item.label}</a>
 			))}
+			<button class="theme-toggle" type="button" aria-label="切换到夜间模式" title="切换到夜间模式" aria-pressed="false">
+				<span aria-hidden="true">☾</span>
+			</button>
 		</div>
 	</nav>
 </header>
+
+<script>
+	const themeToggle = document.querySelector<HTMLButtonElement>('.theme-toggle');
+	const syncThemeToggle = () => {
+		if (!themeToggle) return;
+		const isDark = document.documentElement.dataset.theme === 'dark';
+		themeToggle.setAttribute('aria-pressed', String(isDark));
+		themeToggle.setAttribute('aria-label', isDark ? '切换到日间模式' : '切换到夜间模式');
+		themeToggle.title = isDark ? '切换到日间模式' : '切换到夜间模式';
+		themeToggle.querySelector('span')!.textContent = isDark ? '☀' : '☾';
+		document.querySelector<HTMLMetaElement>('meta[name="theme-color"]')?.setAttribute('content', isDark ? '#17191b' : '#f7f7f4');
+	};
+
+	syncThemeToggle();
+	themeToggle?.addEventListener('click', () => {
+		const isDark = document.documentElement.dataset.theme !== 'dark';
+		document.documentElement.dataset.theme = isDark ? 'dark' : 'light';
+		try { localStorage.setItem('king-of-water-theme', isDark ? 'dark' : 'light'); } catch {}
+		syncThemeToggle();
+	});
+</script>

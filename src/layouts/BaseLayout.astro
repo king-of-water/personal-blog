@@ -12,6 +12,12 @@ const pageTitle = title ? `${title} · ${SITE.title}` : SITE.title;
 <!doctype html>
 <html lang="zh-CN">
 	<head>
+		<script is:inline>
+			try {
+				const savedTheme = localStorage.getItem('king-of-water-theme');
+				if (savedTheme === 'dark' || savedTheme === 'light') document.documentElement.dataset.theme = savedTheme;
+			} catch {}
+		</script>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
