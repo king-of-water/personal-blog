@@ -21,7 +21,7 @@ export const onRequestPost = async ({ env, request }) => {
 	// Article views already use /api/stats/:slug; never count them twice here.
 	const path = payload?.path;
 	if (typeof path !== 'string' || path.length > 160 ||
-		!/^\/(?:|(?:about|projects|toolbox|posts)\/|(?:backend|agent)\/(?:[a-z0-9-]+\/)?)$/.test(path)) {
+		!/^\/(?:|(?:about|projects|toolbox|industry|posts)\/|(?:backend|agent)\/(?:[a-z0-9-]+\/)?)$/.test(path)) {
 		return json({ error: 'invalid page path' }, 400);
 	}
 	// Reserved row cannot collide with a valid article slug. Reuse the existing DB

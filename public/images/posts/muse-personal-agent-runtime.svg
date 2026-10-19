@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="820" viewBox="0 0 1440 820" role="img" aria-labelledby="title desc">
+  <title id="title">Muse Personal Agent 的执行链</title>
+  <desc id="desc">用户把目标交给 Muse，Muse 在专属安全虚拟机中结合记忆制定计划，通过连接器或浏览器访问外部服务。独立的 Sentinel、权限范围、关键动作确认和审计记录共同限制执行。</desc>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#8a7f6d"/></marker></defs>
+  <rect width="1440" height="820" fill="#fdfaf3"/>
+  <g font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">
+    <text x="70" y="66" fill="#2b2620" font-size="34" font-weight="700">Personal Agent 的难点，是取得行动权以后仍然可控</text>
+    <text x="70" y="104" fill="#6f6659" font-size="19">模型只负责提出动作，真正的产品还需要身份、凭证、执行环境和责任边界</text>
+
+    <rect x="70" y="184" width="200" height="116" rx="20" fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="170" y="231" text-anchor="middle" fill="#2b2620" font-size="22" font-weight="700">用户目标</text>
+    <text x="170" y="265" text-anchor="middle" fill="#554d42" font-size="16">安排 · 购买 · 跟进</text>
+
+    <rect x="345" y="146" width="610" height="410" rx="30" fill="#fbf8f1" stroke="#295279" stroke-width="4"/>
+    <text x="650" y="194" text-anchor="middle" fill="#2f5d8a" font-size="24" font-weight="700">Muse Secure VM · 每人一台云端安全计算机</text>
+    <rect x="390" y="235" width="220" height="116" rx="18" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <rect x="690" y="235" width="220" height="116" rx="18" fill="#d8dee0" stroke="#295279" stroke-width="2"/>
+    <text x="500" y="278" text-anchor="middle" fill="#2b2620" font-size="20" font-weight="700">计划与长期记忆</text>
+    <text x="500" y="310" text-anchor="middle" fill="#554d42" font-size="15">理解偏好 · 拆解任务</text>
+    <text x="800" y="278" text-anchor="middle" fill="#2b2620" font-size="20" font-weight="700">凭证安全存储</text>
+    <text x="800" y="310" text-anchor="middle" fill="#554d42" font-size="15">Agent 不直接看见密码</text>
+    <rect x="390" y="397" width="220" height="112" rx="18" fill="#ebe4d4" stroke="#5b5245" stroke-width="2"/>
+    <rect x="690" y="397" width="220" height="112" rx="18" fill="#f4eace" stroke="#8a6b12" stroke-width="2"/>
+    <text x="500" y="438" text-anchor="middle" fill="#2b2620" font-size="20" font-weight="700">浏览器与连接器</text>
+    <text x="500" y="470" text-anchor="middle" fill="#554d42" font-size="15">API 优先 · 网页兜底</text>
+    <text x="800" y="438" text-anchor="middle" fill="#2b2620" font-size="20" font-weight="700">Sentinel</text>
+    <text x="800" y="470" text-anchor="middle" fill="#554d42" font-size="15">独立检查对外动作</text>
+
+    <g stroke="#8a7f6d" stroke-width="3" fill="none" marker-end="url(#arrow)">
+      <path d="M270 242 H330"/>
+      <path d="M610 293 H675"/>
+      <path d="M500 351 V382"/>
+      <path d="M800 351 V382"/>
+      <path d="M610 453 H675"/>
+      <path d="M955 453 H1035"/>
+    </g>
+
+    <rect x="1050" y="164" width="320" height="372" rx="26" fill="#dee3d6" stroke="#466b48" stroke-width="3"/>
+    <text x="1210" y="211" text-anchor="middle" fill="#3d6340" font-size="23" font-weight="700">外部服务</text>
+    <g fill="#f5f0e4" stroke="#8a7f6d" stroke-width="2">
+      <rect x="1090" y="246" width="120" height="66" rx="13"/><rect x="1230" y="246" width="100" height="66" rx="13"/>
+      <rect x="1090" y="332" width="120" height="66" rx="13"/><rect x="1230" y="332" width="100" height="66" rx="13"/>
+      <rect x="1090" y="418" width="240" height="66" rx="13"/>
+    </g>
+    <g fill="#2b2620" font-size="17" font-weight="700" text-anchor="middle">
+      <text x="1150" y="286">邮箱 / 日历</text><text x="1280" y="286">购物</text>
+      <text x="1150" y="372">工作软件</text><text x="1280" y="372">出行</text>
+      <text x="1210" y="458">支付与身份服务</text>
+    </g>
+
+    <rect x="170" y="625" width="1100" height="116" rx="22" fill="#ebe4d4" stroke="#8a7f6d" stroke-width="2"/>
+    <text x="720" y="668" text-anchor="middle" fill="#2b2620" font-size="21" font-weight="700">三道责任边界</text>
+    <text x="365" y="707" text-anchor="middle" fill="#554d42" font-size="17">授权范围：哪些应用、读还是写</text>
+    <text x="720" y="707" text-anchor="middle" fill="#554d42" font-size="17">动作确认：发送、发布、付款前询问</text>
+    <text x="1075" y="707" text-anchor="middle" fill="#554d42" font-size="17">审计记录：做过什么、准备做什么</text>
+  </g>
+</svg>

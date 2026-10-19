@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="560" viewBox="0 0 800 560" role="img" aria-labelledby="title desc">
+  <title id="title">增长策略的候选、控制面与执行证据</title>
+  <desc id="desc">AI 或规则生成候选，控制面验证资格、预算、频控、内容、审批与实验，再执行投放、页面和发送。证据评估支持降级、回滚和停止。</desc>
+  <rect width="800" height="560" rx="16" fill="#fdfaf3"/>
+  <text x="36" y="49" font-size="26" font-weight="700" fill="#2b2620">模型可以提案，平台决定是否执行</text>
+  <text x="36" y="80" font-size="17" fill="#6f6659">约束在模型之外；合法结构不等于合法业务动作</text>
+  <g stroke="#8a7f6d" stroke-width="1.5" fill="#f5f0e4"><rect x="36" y="115" width="728" height="70" rx="8"/><rect x="36" y="360" width="728" height="70" rx="8"/><rect x="36" y="460" width="728" height="64" rx="8"/></g>
+  <rect x="36" y="215" width="728" height="115" rx="8" fill="#dee3d6" stroke="#466b48" stroke-width="1.5"/>
+  <g fill="#2b2620" text-anchor="middle">
+    <text x="400" y="145" font-size="23" font-weight="700">候选层：规则 / 预测排序 / 生成式 AI</text><text x="400" y="171" font-size="18">使用授权特征与候选集合，输出带版本的策略提案</text>
+    <text x="400" y="248" font-size="23" font-weight="700">控制面：硬边界与发布决策</text><text x="400" y="280" font-size="19">资格与退订 · 预算与频控 · 内容事实与兼容性</text><text x="400" y="309" font-size="19">预览与审批 · 固定实验分配 · 灰度与停止开关</text>
+    <text x="400" y="390" font-size="23" font-weight="700">执行层：投放计划 / 页面渲染 / 渠道发送</text><text x="400" y="416" font-size="18">稳定动作身份，保留受理、失败和未知结果</text>
+    <text x="400" y="487" font-size="21" font-weight="700">证据与评估：链路质量、业务增量、长期护栏</text><text x="400" y="513" font-size="17">异常时降级 / 回滚 / 停止，并核对在途动作</text>
+  </g>
+  <g stroke="#8a7f6d" stroke-width="1.5" fill="none"><path d="M400 185v30m-6-6 6 6 6-6"/><path d="M400 330v30m-6-6 6 6 6-6"/><path d="M400 430v30m-6-6 6 6 6-6"/></g>
+  <text x="36" y="547" font-size="16" fill="#6f6659">通用设计：预算和渠道结果的保证范围取决于实际协议</text>
+</svg>

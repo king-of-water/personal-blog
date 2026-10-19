@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="510" viewBox="0 0 800 510" role="img" aria-labelledby="title desc">
+  <title id="title">增长旅程与证据回流</title>
+  <desc id="desc">渠道获客、个性化承接与生命周期触达连接用户旅程。它们的行为与成本事件进入数据、归因和实验评估，评估结果再用于调整策略。</desc>
+  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0l8 4-8 4" fill="#8a7f6d"/></marker></defs>
+  <rect width="800" height="510" rx="16" fill="#fdfaf3"/>
+  <text x="36" y="49" font-size="26" font-weight="700" fill="#2b2620">动作向前，证据回流</text>
+  <text x="36" y="80" font-size="17" fill="#6f6659">评估额外收益，再调整投入与体验</text>
+  <g fill="#f5f0e4" stroke="#8a7f6d" stroke-width="1.5"><rect x="36" y="115" width="218" height="116" rx="8"/><rect x="291" y="115" width="218" height="116" rx="8"/><rect x="546" y="115" width="218" height="116" rx="8"/></g>
+  <g fill="#2b2620" text-anchor="middle">
+    <text x="145" y="154" font-size="24" font-weight="700">渠道获客</text><text x="145" y="186" font-size="18">人群 / 素材 / 预算</text><text x="145" y="214" font-size="17">为什么让这个人进来</text>
+    <text x="400" y="154" font-size="24" font-weight="700">个性化承接</text><text x="400" y="186" font-size="18">容器 / 内容 / 路径</text><text x="400" y="214" font-size="17">怎样获得首次价值</text>
+    <text x="655" y="154" font-size="24" font-weight="700">生命周期触达</text><text x="655" y="186" font-size="18">时机 / 渠道 / 内容</text><text x="655" y="214" font-size="17">是否值得再次联系</text>
+  </g>
+  <g stroke="#8a7f6d" stroke-width="1.5" fill="none" marker-end="url(#arrow)"><path d="M254 173h34"/><path d="M509 173h34"/><path d="M145 231v67"/><path d="M400 231v67"/><path d="M655 231v67"/></g>
+  <rect x="36" y="305" width="728" height="113" rx="8" fill="#dee3d6" stroke="#466b48" stroke-width="1.5"/>
+  <g fill="#2b2620" text-anchor="middle"><text x="400" y="341" font-size="23" font-weight="700">事件与成本 → 数据口径 → 归因与实验</text><text x="400" y="375" font-size="19">归因解释路径；随机对照估计增量</text><text x="400" y="402" font-size="17">同时检查用户负反馈、预算和执行质量</text></g>
+  <path d="M400 418v37H20V173h10" fill="none" stroke="#8a7f6d" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="420" y="460" font-size="17" fill="#6f6659">版本化调整 / 保留基线 / 暂停无收益策略</text>
+  <text x="36" y="491" font-size="16" fill="#6f6659">通用模型：记录转化不等于证明该动作造成了转化</text>
+</svg>
