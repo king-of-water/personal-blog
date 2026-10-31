@@ -41,3 +41,9 @@ performs. Describe failure and recovery paths, acknowledgment boundaries, and
 remaining limitations; mentioning a mechanism's name alone is not sufficient.
 Use compact flowcharts showing operations, branches, and retries rather than
 large diagrams consisting only of conceptual labels.
+
+Start technical articles with a brief end-to-end overview and a compact flowchart,
+then expand each stage in the same order using one consistent example. Put
+advanced details and failure branches after the normal path is clear. Do not add
+hands-on experiments, setup commands, or local test walkthroughs to articles
+unless the user explicitly requests them.
