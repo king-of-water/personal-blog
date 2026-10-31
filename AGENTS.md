@@ -8,6 +8,13 @@ astro dev --background
 
 Manage the background server with `astro dev stop`, `astro dev status`, and `astro dev logs`.
 
+## Completion
+
+After completing requested changes and passing the required checks, commit and
+push the task's changes without asking for another confirmation. Keep changes
+local only when the user explicitly requests it. Exclude unrelated user changes
+from the commit.
+
 ## Documentation
 
 Full documentation: https://docs.astro.build
